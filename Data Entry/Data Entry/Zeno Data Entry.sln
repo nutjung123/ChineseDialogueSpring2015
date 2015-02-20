@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zeno Data Entry", "Lost Manuscript II Data Entry\Zeno Data Entry.csproj", "{9A2AEE58-F8D9-4E1F-8B02-305675C7230A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9A2AEE58-F8D9-4E1F-8B02-305675C7230A}.Debug|x86.ActiveCfg = Debug|x86
+		{9A2AEE58-F8D9-4E1F-8B02-305675C7230A}.Debug|x86.Build.0 = Debug|x86
+		{9A2AEE58-F8D9-4E1F-8B02-305675C7230A}.Release|x86.ActiveCfg = Release|x86
+		{9A2AEE58-F8D9-4E1F-8B02-305675C7230A}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
