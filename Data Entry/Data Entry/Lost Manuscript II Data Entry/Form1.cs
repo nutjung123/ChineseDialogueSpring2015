@@ -31,6 +31,7 @@ namespace Lost_Manuscript_II_Data_Entry
             toChange = null;
             currentFileName = "";
             InitializeComponent();
+            //Add enter method
             textBox1.KeyDown += new KeyEventHandler(this.featureCreateTextBox1_KeyDown);
             if (backgroundWorker1.IsBusy != true)
             {
