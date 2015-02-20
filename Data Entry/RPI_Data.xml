@@ -1,0 +1,157 @@
+<AIMind>
+<Root id="0"/>
+<Feature id="0" data="R.P.I.">
+<neighbor dest="23" weight="0"/>
+<neighbor dest="13" weight="0"/>
+<neighbor dest="24" weight="0"/>
+<neighbor dest="22" weight="0"/>
+<neighbor dest="7" weight="0"/>
+<neighbor dest="25" weight="0"/>
+<neighbor dest="12" weight="0"/>
+<neighbor dest="15" weight="0"/>
+<neighbor dest="21" weight="0"/>
+<neighbor dest="3" weight="0"/>
+<neighbor dest="2" weight="0"/>
+<neighbor dest="10" weight="0"/>
+<neighbor dest="8" weight="0"/>
+<neighbor dest="20" weight="0"/>
+<neighbor dest="1" weight="0"/>
+<neighbor dest="14" weight="0"/>
+<neighbor dest="3" weight="0"/>
+<neighbor dest="2" weight="0"/>
+<neighbor dest="10" weight="0"/>
+<neighbor dest="8" weight="0"/>
+<neighbor dest="20" weight="0"/>
+<neighbor dest="1" weight="0"/>
+<neighbor dest="19" weight="0"/>
+<neighbor dest="28" weight="0"/>
+<neighbor dest="27" weight="0"/>
+<neighbor dest="18" weight="0"/>
+<neighbor dest="26" weight="0"/>
+<neighbor dest="17" weight="0"/>
+<neighbor dest="16" weight="0"/>
+<tag key="Located" value="Troy NY" type="Base (in)"/>
+<tag key="President" value="Shirley Ann Jackson" type="Property (is)"/>
+<tag key="Founder" value="Stephen Van Rensselaer" type="Property (is)"/>
+<tag key="Founded" value="1824" type="Base Past (in)"/>
+<tag key="Best Club" value="RPI Ambulance" type="Property (is)"/>
+<tag key="Best Dept." value="Computer Science" type="Property (is)"/>
+</Feature>
+<Feature id="1" data="The Lally Building">
+<neighbor dest="4" weight="0"/>
+</Feature>
+<Feature id="2" data="The Amos Eaton Building">
+<neighbor dest="5" weight="0"/>
+</Feature>
+<Feature id="3" data="Russell Sage Labs">
+<neighbor dest="6" weight="0"/>
+</Feature>
+<Feature id="4" data="The CS Dept.">
+</Feature>
+<Feature id="5" data="The Math Dept.">
+</Feature>
+<Feature id="6" data="The HASS Core">
+</Feature>
+<Feature id="7" data="EMPAC">
+</Feature>
+<Feature id="8" data="The Greene Building">
+<neighbor dest="9" weight="0"/>
+</Feature>
+<Feature id="9" data="The Architecture Dept.">
+</Feature>
+<Feature id="10" data="The Carnegie Building">
+<neighbor dest="11" weight="0"/>
+</Feature>
+<Feature id="11" data="The CogSci Dept.">
+</Feature>
+<Feature id="12" data="JROWL Science Center">
+<neighbor dest="29" weight="0"/>
+<neighbor dest="39" weight="0"/>
+<neighbor dest="30" weight="0"/>
+<neighbor dest="40" weight="0"/>
+</Feature>
+<Feature id="13" data="Biotech">
+<neighbor dest="29" weight="0"/>
+</Feature>
+<Feature id="14" data="The Pittsburgh Building">
+<neighbor dest="15" weight="0"/>
+</Feature>
+<Feature id="15" data="Lally School of Management">
+</Feature>
+<Feature id="16" data="West Hall">
+<neighbor dest="31" weight="0"/>
+</Feature>
+<Feature id="17" data="Walker Labs">
+<neighbor dest="39" weight="0"/>
+</Feature>
+<Feature id="18" data="The Troy Building">
+<neighbor dest="34" weight="0"/>
+<neighbor dest="32" weight="0"/>
+</Feature>
+<Feature id="19" data="The Ricketts Building">
+<neighbor dest="33" weight="0"/>
+</Feature>
+<Feature id="20" data="The Jonsson Engineering Center">
+<neighbor dest="36" weight="0"/>
+<neighbor dest="38" weight="0"/>
+<neighbor dest="35" weight="0"/>
+<neighbor dest="37" weight="0"/>
+</Feature>
+<Feature id="21" data="Low Center for Industrial Innovation">
+</Feature>
+<Feature id="22" data="Darrin Communications Center">
+</Feature>
+<Feature id="23" data="Academy Hall">
+</Feature>
+<Feature id="24" data="Cogswell Labs">
+<neighbor dest="41" weight="0"/>
+<neighbor dest="40" weight="0"/>
+</Feature>
+<Feature id="25" data="Folsom Library">
+</Feature>
+<Feature id="26" data="Vorhees Computing Center">
+</Feature>
+<Feature id="27" data="The School of Science">
+<neighbor dest="29" weight="0"/>
+<neighbor dest="39" weight="0"/>
+<neighbor dest="30" weight="0"/>
+<neighbor dest="11" weight="0"/>
+<neighbor dest="4" weight="0"/>
+<neighbor dest="41" weight="0"/>
+<neighbor dest="5" weight="0"/>
+<neighbor dest="40" weight="0"/>
+</Feature>
+<Feature id="28" data="The School of Engineering">
+<neighbor dest="36" weight="0"/>
+<neighbor dest="33" weight="0"/>
+<neighbor dest="38" weight="0"/>
+<neighbor dest="35" weight="0"/>
+<neighbor dest="37" weight="0"/>
+</Feature>
+<Feature id="29" data="The Biochemistry Dept.">
+</Feature>
+<Feature id="30" data="The Chemistry Dept.">
+</Feature>
+<Feature id="31" data="The Music Dept.">
+</Feature>
+<Feature id="32" data="The Civil Enginnering Dept.">
+</Feature>
+<Feature id="33" data="The Chemical Engineering Dept.">
+</Feature>
+<Feature id="34" data="President Shirley Ann Jackson's Office">
+</Feature>
+<Feature id="35" data="The Mechanical Engineering Dept.">
+</Feature>
+<Feature id="36" data="The Aerospace Engineering Dept.">
+</Feature>
+<Feature id="37" data="The Nuclear Enginnering Dept.">
+</Feature>
+<Feature id="38" data="The Computer Systems Engineering Dept.">
+</Feature>
+<Feature id="39" data="The Biology Dept.">
+</Feature>
+<Feature id="40" data="The Physics Dept.">
+</Feature>
+<Feature id="41" data="The Materials Science Dept.">
+</Feature>
+</AIMind>

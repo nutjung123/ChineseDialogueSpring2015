@@ -1,0 +1,30 @@
+<AIMind>
+<Root id="0"/>
+<Feature id="0" data="Person">
+<neighbor dest="1" weight="0"/>
+<neighbor dest="2" weight="0"/>
+<neighbor dest="3" weight="0"/>
+<tag key="Age" value="18"/>
+<tag key="height" value="6 ft 1 in"/>
+<tag key="DOB" value="6/22/1994"/>
+<tag key="Name" value="Thomas"/>
+</Feature>
+<Feature id="1" data="Family">
+<tag key="Father" value="Aldo"/>
+<tag key="Mother" value="Robyn"/>
+<tag key="Sister" value="Sabina"/>
+<tag key="Dog" value="Hope"/>
+</Feature>
+<Feature id="2" data="Faves">
+<tag key="Food" value="Pasta"/>
+<tag key="Drink" value="Water"/>
+<tag key="Month" value="June"/>
+<tag key="Car" value="Lambroghini"/>
+<tag key="Band" value="Approaching Nirvanna"/>
+<tag key="Sport" value="Soccer"/>
+<tag key="Activity" value="Video Games"/>
+<tag key="Day" value="Friday"/>
+</Feature>
+<Feature id="3" data="hometown">
+</Feature>
+</AIMind>

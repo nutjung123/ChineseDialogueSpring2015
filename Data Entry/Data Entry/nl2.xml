@@ -1,0 +1,27 @@
+<AIMind>
+<Root id="3"/>
+<Feature id="0" data="1">
+</Feature>
+<Feature id="1" data="2">
+</Feature>
+<Feature id="2" data="3">
+</Feature>
+<Feature id="3" data="numbers">
+<neighbor dest="4" weight="0"/>
+<neighbor dest="5" weight="0"/>
+<neighbor dest="6" weight="0"/>
+<tag key="Start" value="e^2" type="is"/>
+</Feature>
+<Feature id="4" data="a">
+</Feature>
+<Feature id="5" data="b">
+</Feature>
+<Feature id="6" data="c">
+</Feature>
+<Feature id="7" data="letters">
+<neighbor dest="0" weight="0"/>
+<neighbor dest="1" weight="0"/>
+<neighbor dest="2" weight="0"/>
+<tag key="Start" value="pi" type="is"/>
+</Feature>
+</AIMind>
