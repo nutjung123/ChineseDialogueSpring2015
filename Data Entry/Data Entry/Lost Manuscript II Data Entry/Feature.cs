@@ -155,7 +155,7 @@ namespace LostManuscriptII
         }
         public void editSpeak(int toEdit, string edit)
         {
-            if (toEdit < 0 || toEdit > this.speaks.Count)
+            if (toEdit < 0 || toEdit >= this.speaks.Count)
             {
                 return;
             }

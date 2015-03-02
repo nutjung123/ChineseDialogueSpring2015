@@ -100,7 +100,12 @@ namespace Lost_Manuscript_II_Data_Entry
         {
             if (currentFileName != "")
             {
-                XMLFilerForFeatureGraph.readFeatureGraph(currentFileName);
+                featGraph = XMLFilerForFeatureGraph.readFeatureGraph(currentFileName);
+                refreshAllButUpdateFeature();
+                listBox2.Items.Clear();
+                checkedListBox2.Items.Clear();
+                clearAllTextBoxes();
+                myQController = new QueryController(featGraph);
             }
         }
         private void quitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -409,13 +414,16 @@ namespace Lost_Manuscript_II_Data_Entry
                 MessageBox.Show("You haven't selected anything to edit yet", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            string featureKey = listBox2.Items[listBox2.SelectedIndex].ToString();
-            string keyValue = toChange.getTag(featureKey).Item2;
-            string type = toChange.getTag(featureKey).Item3;
-            textBox3.Text = featureKey;
-            textBox4.Text = keyValue;
-            comboBox2.Text = type;
-            editorKeySelected = featureKey;
+            if (listBox2.SelectedIndex != -1)
+            {
+                string featureKey = listBox2.Items[listBox2.SelectedIndex].ToString();
+                string keyValue = toChange.getTag(featureKey).Item2;
+                string type = toChange.getTag(featureKey).Item3;
+                textBox3.Text = featureKey;
+                textBox4.Text = keyValue;
+                comboBox2.Text = type;
+                editorKeySelected = featureKey;
+            }
         }
         private void button1_Click_1(object sender, EventArgs e)
         {
@@ -580,19 +588,19 @@ namespace Lost_Manuscript_II_Data_Entry
                 MessageBox.Show("You haven't selected anything to edit yet", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            if (this.textBox7.Text.Contains("<") || this.textBox7.Text.Contains(">"))
+            if (hasBadChar(this.textBox7.Text))
             {
-                MessageBox.Show("You cannot use \"<\" or \">\" in your patterns", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("The values you have entered contain characters that are not allowed\nThe characters that you cannot use are " + BAD_CHARS, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
             if (this.textBox7.Text != "")
             {
                 toChange.addSpeak(this.textBox7.Text);
             }
-            refreshListBoxes();
+            refreshFeatureSpeaksListBox(listBox3);
             textBox7.Clear();
         }
-
+        //Edit speak button
         private void button6_Click(object sender, EventArgs e)
         {
             if (toChange == null)
@@ -600,9 +608,9 @@ namespace Lost_Manuscript_II_Data_Entry
                 MessageBox.Show("You haven't selected anything to edit yet", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            if (this.textBox7.Text.Contains("<") || this.textBox7.Text.Contains(">"))
+            if (hasBadChar(this.textBox7.Text))
             {
-                MessageBox.Show("You cannot use \"<\" or \">\" in your patterns", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("The values you have entered contain characters that are not allowed\nThe characters that you cannot use are " + BAD_CHARS, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
             int index = toChange.Speaks.Count - listBox3.SelectedIndex - 1;
@@ -610,10 +618,10 @@ namespace Lost_Manuscript_II_Data_Entry
             {
                 toChange.editSpeak(index, this.textBox7.Text);
             }
-            refreshListBoxes();
+            refreshFeatureSpeaksListBox(listBox3);
             textBox7.Clear();
         }
-
+        //Remove speak button
         private void button5_Click(object sender, EventArgs e)
         {
             if (toChange == null)
@@ -622,13 +630,16 @@ namespace Lost_Manuscript_II_Data_Entry
                 return;
             }
             toChange.removeSpeak(toChange.Speaks.Count - listBox3.SelectedIndex - 1);
-            refreshListBoxes();
+            refreshFeatureSpeaksListBox(listBox3);
             textBox7.Clear();
         }
 
         private void listBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            textBox7.Text = (string)listBox3.Items[listBox3.SelectedIndex];
+            if (listBox3.SelectedIndex != -1)
+            {
+                textBox7.Text = (string)listBox3.Items[listBox3.SelectedIndex];
+            }
         }
 
         private void mergeToolStripMenuItem_Click(object sender, EventArgs e)

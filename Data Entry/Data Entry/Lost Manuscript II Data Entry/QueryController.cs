@@ -68,6 +68,7 @@ namespace Lost_Manuscript_II_Data_Entry
                     maxIndex = i;
                 }
             }
+            //FeatureSpeaker 
             FeatureSpeaker mySpeaker = new FeatureSpeaker();
             tellMeMore = mySpeaker.getTagSpeak(featuresDict.Keys.ElementAt(maxIndex));
             return mySpeaker.getChildSpeak(featuresDict.Keys.ElementAt(maxIndex));
@@ -116,6 +117,46 @@ namespace Lost_Manuscript_II_Data_Entry
         {
             query = query.ToLower();
             return query.Contains("more") && query.Contains("tell");
+        }
+
+        //Nut's stuff below 
+
+        private string Breath_travel(FeatureGraph myGraph)
+        {
+            string speak = "";
+            List<Feature> myQueue = new List<Feature>();
+            myQueue.Add(myGraph.Root);
+            while (myQueue.Count != 0)
+            {
+                Feature currentFeature = myQueue[0];
+                speak += currentFeature.Data + "\r\n";
+                myQueue.RemoveAt(0);
+                for (int i = 0; i < currentFeature.Neighbors.Count; i++)
+                {
+                    myQueue.Add(currentFeature.Neighbors[i].Item1);
+                }
+            }
+            return speak;
+        }
+
+        private void Depth_travel_helper(Feature currentFeature, ref string speak)
+        {
+            speak += currentFeature.Data + "\r\n";
+            if (currentFeature.Neighbors.Count == 0)
+            {
+                return;
+            }
+            for (int i = 0; i < currentFeature.Neighbors.Count; i++)
+            {
+                Depth_travel_helper(currentFeature.Neighbors[i].Item1, ref speak);
+            }
+        }
+
+        private string Depth_travel(FeatureGraph myGraph)
+        {
+            string speak = "";
+            Depth_travel_helper(myGraph.Root, ref speak);
+            return speak;
         }
     }
 }

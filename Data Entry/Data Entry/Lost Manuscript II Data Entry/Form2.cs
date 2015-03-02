@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using LostManuscriptII;
 using System.IO;
+using System.Collections;
 
 namespace Lost_Manuscript_II_Data_Entry
 {
