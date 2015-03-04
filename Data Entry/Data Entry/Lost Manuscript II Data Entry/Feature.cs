@@ -15,7 +15,7 @@ namespace LostManuscriptII
         private List<Tuple<string, string, string>>  tags;       // This is a list of tuples that are used to store the tags (generic, single use pices of information). The first element is the key, and the second element is the Data. This will simply operate as a map.
         private List<string> speaks;
         public bool flag;                                // This is a public general use flag that can be used for things like traversals and stuff like that
-
+       
         public Feature(string data)
         {
             this.speaks = new List<string>();

@@ -18,6 +18,7 @@ namespace Lost_Manuscript_II_Data_Entry
         private QueryController myController;
         private float featureWeight;
         private float tagKeyWeight;
+
         public Form2(FeatureGraph myGraph)
         {
             InitializeComponent();
@@ -46,7 +47,10 @@ namespace Lost_Manuscript_II_Data_Entry
         private void query_Click(object sender, EventArgs e)
         {
             string query = inputBox.Text;
-            QueryController myController = new QueryController(featGraph);
+            if (myController == null)
+            {
+                myController = new QueryController(featGraph);
+            }
             chatBox.AppendText(myController.makeQuery(query) +"\r\n");
         }
     }

@@ -538,7 +538,7 @@ namespace Lost_Manuscript_II_Data_Entry
             MessageBox.Show(mySpeaker.getChildSpeak(toChange));
             MessageBox.Show(mySpeaker.getTagSpeak(toChange));
         }
-
+        //Read query from file and write response to file
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;

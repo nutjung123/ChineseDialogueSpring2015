@@ -9,11 +9,41 @@ namespace LostManuscriptII
     {
         private List<Feature> features;
         private Feature root;
+        private int maxDepth;
         public FeatureGraph()
         {
             features = new List<Feature>();
             root = null;
+            maxDepth = -1;
         }
+
+        private void helperMaxDepth(Feature current, int depth)
+        {
+            if (current.Neighbors.Count == 0)
+            {
+                if (depth > this.maxDepth)
+                {
+                    this.maxDepth = depth;
+                }
+            }
+            for (int x = 0; x < current.Neighbors.Count; x++)
+            {
+                helperMaxDepth(current.Neighbors[x].Item1, depth + 1);
+            }
+        }
+
+        public int getMaxDepth()
+        {
+            if(maxDepth==-1)
+            {
+                if (root != null)
+                {
+                    helperMaxDepth(root, 0);
+                }
+            }
+            return maxDepth;
+        }
+
         public bool addFeature(Feature toAdd)
         {
             features.Add(toAdd);

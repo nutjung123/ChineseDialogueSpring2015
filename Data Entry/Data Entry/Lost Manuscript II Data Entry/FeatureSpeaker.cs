@@ -11,6 +11,111 @@ namespace Lost_Manuscript_II_Data_Entry
         public FeatureSpeaker()
         { }
 
+        //call this function with answer =-1;
+        private void getHeight(FeatureGraph featGraph, Feature current, Feature target,int h, ref int answer)
+        {
+            if (current == target)
+            {
+                answer = h;
+            }
+            if (answer != -1)
+            {
+                return;
+            }
+            for (int x = 0; x < current.Neighbors.Count; x++)
+            {
+                getHeight(featGraph,current.Neighbors[x].Item1,target,h+1,ref answer);
+            }
+        }
+
+        private double getScore(FeatureGraph featGraph, Feature current,Feature oldTopic, int h,int oldh)
+        {
+            double score =0;
+            //check dramatic goal value
+
+            //check mentionCount
+            float DiscussedAmount = current.DiscussedAmount;
+
+            //check hierachical consistency
+            int FathertoChild = 0; //old is a father
+            int ChildtoFather = 0; //old is a child
+            if(!(oldTopic==current))
+            {
+                if(oldTopic.canReachFeature(current.Data))
+                {
+                    FathertoChild = 1;
+                }
+                if(current.canReachFeature(oldTopic.Data))
+                {
+                    ChildtoFather = 1;
+                }
+            }
+            //check difference distance 
+            int diffDist = Math.Abs(h - oldh);
+
+            //Score calculation
+            score = DiscussedAmount * -1 + FathertoChild * 0.5 + ChildtoFather * 0.5 + diffDist/featGraph.getMaxDepth();
+
+            return score;
+        }
+
+        private void travelGraph(FeatureGraph featGraph,Feature current, Feature oldTopic,int h,
+            int oldh, int limit, ref List<Tuple<Feature,double> > listScore)
+        {
+             //base case
+            if (h > limit)
+            {
+                return;
+            }
+            //Calculate score and add to list
+            listScore.Add(new Tuple<Feature, double>(current, getScore(featGraph, current, oldTopic,h,oldh)));
+            for (int x = 0; x < current.Neighbors.Count; x++) 
+            {
+                travelGraph(featGraph, current.Neighbors[x].Item1, oldTopic, h, oldh,limit, ref listScore);
+            }
+        }
+
+        public Feature getNextTopic(FeatureGraph featGraph, Feature oldTopic, string query, int turn)
+        {
+            if (turn == 1)
+            {
+                //initial case
+                return featGraph.Root;
+
+            }else if(turn > 1 && query =="")
+            {
+                //next topic case
+                int height = -1;
+                int limit = 999; 
+                getHeight(featGraph, featGraph.Root, oldTopic, 0, ref height);
+                //search the next topic
+                List<Tuple<Feature, double>> listScore = new List<Tuple<Feature,double>>();
+                travelGraph(featGraph, featGraph.Root, oldTopic, 0, height, limit, ref listScore);
+                
+                //find max score
+                if (listScore.Count == 0)
+                {
+                    return null;
+                }
+                double maxScore = listScore[0].Item2;
+                int maxIndex = 0;
+                for (int x = 1; x < listScore.Count; x++)
+                {
+                    if (listScore[x].Item2 > maxScore)
+                    {
+                        maxScore = listScore[x].Item2;
+                        maxIndex = x;
+                    }
+                }
+                return listScore[maxIndex].Item1;
+
+            }else if(turn >1 && query != "")
+            {
+                //answer question case
+            }
+            return null;
+        }
+
         public string getChildSpeak(Feature toSpeak)
         {
             string result = toSpeak.Data;

@@ -10,14 +10,22 @@ namespace Lost_Manuscript_II_Data_Entry
     {
         private FeatureGraph featGraph;
         private string tellMeMore;
+        private int turn;
+        private Feature currentTopic;
         public QueryController(FeatureGraph graph)
         {
             featGraph = graph;
             tellMeMore = "";
+            turn = 1;
+            currentTopic = null;
         }
 
         public string makeQuery(string query)
         {
+            if (this.currentTopic == null)
+            {
+                this.currentTopic = featGraph.Root;
+            }
             if (isTellMeMoreQuery(query))
             {
                 string tmp = tellMeMore;
@@ -58,6 +66,7 @@ namespace Lost_Manuscript_II_Data_Entry
                     }
                 }
             }
+
             float maxScore = 0.0f;
             int maxIndex = -1;
             for (int i = 0; i < featuresDict.Values.Count; i++)
@@ -68,6 +77,7 @@ namespace Lost_Manuscript_II_Data_Entry
                     maxIndex = i;
                 }
             }
+
             //FeatureSpeaker 
             FeatureSpeaker mySpeaker = new FeatureSpeaker();
             tellMeMore = mySpeaker.getTagSpeak(featuresDict.Keys.ElementAt(maxIndex));
@@ -75,9 +85,16 @@ namespace Lost_Manuscript_II_Data_Entry
             }
             catch
             {
+                //don't understand anything in sentence (don't use tellMeMore yet)
                 FeatureSpeaker mySpeaker = new FeatureSpeaker();
-                tellMeMore = mySpeaker.getTagSpeak(featGraph.Root);
-                return mySpeaker.getChildSpeak(featGraph.Root);
+                //tellMeMore = mySpeaker.getTagSpeak(featGraph.Root);
+                Feature nextTopic = mySpeaker.getNextTopic(featGraph, this.currentTopic, "", this.turn);
+                nextTopic.DiscussedAmount += 1;
+                featGraph.setFeature(nextTopic.Data,nextTopic);
+                this.currentTopic = nextTopic;
+                this.turn += 1;
+                //return mySpeaker.getChildSpeak(featGraph.Root);
+                return nextTopic.Data;
             }
         }
 
@@ -86,6 +103,10 @@ namespace Lost_Manuscript_II_Data_Entry
         public List<Feature> getFeatureResults(string query)
         {
             List<Feature> result = new List<Feature>();
+            if (query == "")
+            {
+                return result;
+            }
             //result.Add("========== Features ==========");
             for (int x = 0; x < featGraph.Features.Count; x++)
             {
@@ -96,9 +117,26 @@ namespace Lost_Manuscript_II_Data_Entry
             }
             return result;
         }
+        //input is the whole sentence
+        public Feature getFeatureFromSentence(string query)
+        {
+            for (int x = 0; x < featGraph.Features.Count;x++ )
+            {
+                if (query.ToLower().Contains(featGraph.Features[x].Data.ToLower()))
+                {
+                    return featGraph.Features[x];
+                }
+            }
+            return null;
+        }
+
         public List<Feature> getTagKeyResults(string query)
         {
             List<Feature> result = new List<Feature>();
+            if (query == "")
+            {
+                return result;
+            }
             //result.Add("========== Tag Keys ==========");
             for (int x = 0; x < featGraph.Features.Count; x++)
             {
