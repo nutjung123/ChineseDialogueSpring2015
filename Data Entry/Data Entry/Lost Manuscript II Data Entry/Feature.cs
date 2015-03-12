@@ -12,6 +12,8 @@ namespace LostManuscriptII
         private float discussedThreshold;                // This is the threshold that when reached the topic will have beed exhausted
         private string data;                             // This is the data for this feature, it is essentially all of the information that needs to be represented
         private List<Tuple<Feature, double>> neighbors;  // This is a list of tuples that contain all of the features that can be reached from this topic and a weight that defines how distanced they are from the parent feature (this feature)
+        private HashSet<Feature> parents;                   // This is a HashSet of features that can be reached to this feature node
+        private List<Feature> listParents; 
         private List<Tuple<string, string, string>>  tags;       // This is a list of tuples that are used to store the tags (generic, single use pices of information). The first element is the key, and the second element is the Data. This will simply operate as a map.
         private List<string> speaks;
         public bool flag;                                // This is a public general use flag that can be used for things like traversals and stuff like that
@@ -23,6 +25,7 @@ namespace LostManuscriptII
             this.neighbors = new List<Tuple<Feature, double>>();
             this.tags = new List<Tuple<string, string, string>>();
             this.flag = false;
+            this.parents = new HashSet<Feature>();
         }
 
         // This function is used to get a Feature that is a neighbor of this Feature, it takes a string and preforms a binary search over the list
@@ -86,7 +89,8 @@ namespace LostManuscriptII
         {
             return this.neighbors.Count;
         }
-        // This function will add a new feature to the neighbors given a new feature and a weight (weight is defaulted to zero). This function will add a neighbor in order (insert)
+        // This function will add a new feature to the neighbors given a new feature and a weight (weight is defaulted to zero). 
+        // This function will add a neighbor in order (insert)
         public bool addNeighbor(Feature neighbor, double weight = 0.0)
         {
             if (neighbors.Count == 0)
@@ -311,6 +315,19 @@ namespace LostManuscriptII
                 this.speaks = value;
             }
         }
+
+        public HashSet<Feature> Parents
+        {
+            get
+            {
+                return this.parents;
+            }
+            set
+            {
+                this.parents = value;
+            }
+        }
+
         public Feature NearestNeighbor
         {
             get

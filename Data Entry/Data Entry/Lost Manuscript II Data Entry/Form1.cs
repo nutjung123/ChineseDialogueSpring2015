@@ -23,6 +23,9 @@ namespace Lost_Manuscript_II_Data_Entry
         private string currentQueryFolderName;
         private int queryCounter;
         private const string BAD_CHARS = "<>,()\"";
+        private int tIndex = -1;
+        private ToolTip toolTip1;
+
         public Form1()
         {
             queryCounter = 0;
@@ -31,8 +34,17 @@ namespace Lost_Manuscript_II_Data_Entry
             toChange = null;
             currentFileName = "";
             InitializeComponent();
+            //set up tooltip
+            toolTip1 = new ToolTip();
+            toolTip1.AutoPopDelay = 5000;
+            toolTip1.InitialDelay = 1000;
+            toolTip1.ReshowDelay = 500;
+            toolTip1.ShowAlways = true;
+
             //Add enter method
             textBox1.KeyDown += new KeyEventHandler(this.featureCreateTextBox1_KeyDown);
+            checkedListBox2.MouseHover += new EventHandler(checkedListBox2_MouseHover);
+            checkedListBox2.MouseMove += new MouseEventHandler(checkedListBox2_MouseMove);
             if (backgroundWorker1.IsBusy != true)
             {
                 backgroundWorker1.RunWorkerAsync();
@@ -61,6 +73,7 @@ namespace Lost_Manuscript_II_Data_Entry
                 featGraph = XMLFilerForFeatureGraph.readFeatureGraph(openFileDialog1.FileName);
                 refreshAllButUpdateFeature();
                 listBox2.Items.Clear();
+                listBox3.Items.Clear();
                 checkedListBox2.Items.Clear();
                 clearAllTextBoxes();
                 myQController = new QueryController(featGraph);
@@ -231,7 +244,7 @@ namespace Lost_Manuscript_II_Data_Entry
             textBox3.Clear();
             textBox4.Clear();
             textBox5.Clear();
-            textBox6.Clear();
+            //textBox6.Clear();
             textBox7.Clear();
             maskedTextBox1.Clear();
         }
@@ -290,6 +303,7 @@ namespace Lost_Manuscript_II_Data_Entry
             for (int x = 0; x < checkedListBox1.CheckedItems.Count; x++)
             {
                 toAdd.addNeighbor(featGraph.getFeature(checkedListBox1.CheckedItems[x].ToString()));
+                featGraph.getFeature(checkedListBox1.CheckedItems[x].ToString()).Parents.Add(toAdd);
             }
             featGraph.addFeature(toAdd);
             refreshAllButUpdateFeature();
@@ -336,6 +350,7 @@ namespace Lost_Manuscript_II_Data_Entry
                     if (checkedListBox2.GetItemCheckState(x) == CheckState.Checked)
                     {
                         toChange.addNeighbor(featGraph.getFeature(str));
+                        featGraph.getFeature(str).Parents.Add(toChange);
                     }
                     else
                     {
@@ -350,6 +365,7 @@ namespace Lost_Manuscript_II_Data_Entry
                 {
                     featGraph.Root = featGraph.getFeature(toChange.Data);
                 }
+                /*
                 refreshAllButUpdateFeature();
                 clearAllTextBoxes();
                 checkedListBox2.Items.Clear();
@@ -357,8 +373,8 @@ namespace Lost_Manuscript_II_Data_Entry
                 listBox3.Items.Clear();
                 checkBox1.Checked = false;
                 checkBox1.Refresh();
-                editorFeatureSelected = "";
-                toChange = null;
+                editorFeatureSelected = "";*/
+                //toChange = null;
             }
         }
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -501,6 +517,29 @@ namespace Lost_Manuscript_II_Data_Entry
             refreshFeatureTagListBox(listBox2);
         }
 
+        private void checkedListBox2_MouseMove(object sender, MouseEventArgs e)
+        {
+            int index = checkedListBox2.IndexFromPoint(e.Location);
+            if (tIndex != index)
+            {
+                GetToolTip();
+            }
+        }
+
+        private void checkedListBox2_MouseHover(object sender, EventArgs e)
+        {
+            GetToolTip();
+        }
+
+        private void GetToolTip()
+        {
+            Point pos = checkedListBox2.PointToClient(MousePosition);
+            tIndex = checkedListBox2.IndexFromPoint(pos);
+            if (tIndex > -1)
+            {
+                toolTip1.SetToolTip(checkedListBox2, checkedListBox2.Items[tIndex].ToString());
+            }
+        }
         //Feature Removal Methods
         private void checkedListBox3_SelectedIndexChanged(object sender, EventArgs e)
         {

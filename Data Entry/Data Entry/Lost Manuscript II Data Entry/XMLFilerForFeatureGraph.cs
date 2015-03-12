@@ -79,6 +79,8 @@ namespace Lost_Manuscript_II_Data_Entry
                         int id = Convert.ToInt32(neighborNode.Attributes["dest"].Value);
                         double weight = Convert.ToDouble(neighborNode.Attributes["weight"].Value);
                         tmp.addNeighbor(result.Features[id], weight);
+
+                        result.Features[id].Parents.Add(tmp);
                     }
                     XmlNodeList tags = node.SelectNodes("tag");
                     foreach (XmlNode tag in tags)
@@ -150,6 +152,7 @@ namespace Lost_Manuscript_II_Data_Entry
                         int id = Convert.ToInt32(neighborNode.Attributes["dest"].Value) + countUp;// + countUp);
                         double weight = Convert.ToDouble(neighborNode.Attributes["weight"].Value);
                         tmp.addNeighbor(result.Features[id], weight);
+                        result.Features[id].Parents.Add(tmp);
                     }
                     XmlNodeList tags = node.SelectNodes("tag");
                     foreach (XmlNode tag in tags)
@@ -183,6 +186,7 @@ namespace Lost_Manuscript_II_Data_Entry
                         int id = Convert.ToInt32(neighborNode.Attributes["dest"].Value);// +countUp;// + countUp);
                         double weight = Convert.ToDouble(neighborNode.Attributes["weight"].Value);
                         tmp.addNeighbor(result.Features[id], weight);
+                        result.Features[id].Parents.Add(tmp);
                     }
                     XmlNodeList tags = node.SelectNodes("tag");
                     foreach (XmlNode tag in tags)

@@ -103,6 +103,7 @@ namespace LostManuscriptII
             if (getFeature(A) == null || getFeature(B) == null) { throw new Exception("You cannot create a connection between two features if one of them is not in this FeatureGraph"); }
             if (A == B) { throw new Exception("You cannot connect a Feature to itself"); }
             getFeature(A).addNeighbor(getFeature(B), weight);
+            getFeature(B).Parents.Add(getFeature(A));
             return true;
         }
         public void print()
