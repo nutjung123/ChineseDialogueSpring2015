@@ -139,6 +139,7 @@ namespace Lost_Manuscript_II_Data_Entry
                 {
                     string data = node.Attributes["data"].Value;
                     result.addFeature(new Feature(data));
+              
                     countD++;
                 }
 
@@ -177,40 +178,94 @@ namespace Lost_Manuscript_II_Data_Entry
                     }
                 }
 
-                foreach (XmlNode node in features2)
-                {
+                foreach (XmlNode node in features2){
                     Feature tmp = result.getFeature(node.Attributes["data"].Value);
                     XmlNodeList neighbors = node.SelectNodes("neighbor");
-                    foreach (XmlNode neighborNode in neighbors)
-                    {
+                    foreach (XmlNode neighborNode in neighbors){
                         int id = Convert.ToInt32(neighborNode.Attributes["dest"].Value);// +countUp;// + countUp);
                         double weight = Convert.ToDouble(neighborNode.Attributes["weight"].Value);
                         tmp.addNeighbor(result.Features[id], weight);
                         result.Features[id].Parents.Add(tmp);
                     }
                     XmlNodeList tags = node.SelectNodes("tag");
-                    foreach (XmlNode tag in tags)
-                    {
+                    foreach (XmlNode tag in tags){
                         string key = tag.Attributes["key"].Value;
                         string val = tag.Attributes["value"].Value;
                         string type = "0";
-                        if (tag.Attributes["type"].Value == null)
-                        {
+                        if (tag.Attributes["type"].Value == null){
                             type = "0";
-                        }
-                        else
-                        {
+                        }else{
                             type = tag.Attributes["type"].Value;
                         }
                         tmp.addTag(key, val, type);
                     }
                     XmlNodeList speaks = node.SelectNodes("speak");
-                    foreach (XmlNode speak in speaks)
-                    {
+                    foreach (XmlNode speak in speaks){
                         tmp.addSpeak(speak.Attributes["value"].Value);
                     }
                 }
 
+                bool doneWithMerge = false;
+                foreach (XmlNode node in features){
+                    foreach (XmlNode node2 in features2){
+                        string data = node.Attributes["data"].Value;
+                        string data2 = node2.Attributes["data"].Value;
+                        if (data == data2 && doneWithMerge == false){
+                            //doneWithMerge = true;
+                            
+                            Feature tmp = result.getFeature(node.Attributes["data"].Value);
+                            XmlNodeList neighbors = node.SelectNodes("neighbor");
+                            foreach (XmlNode neighborNode in neighbors){
+                                int id = Convert.ToInt32(neighborNode.Attributes["dest"].Value);// +countUp;// + countUp);
+                                double weight = Convert.ToDouble(neighborNode.Attributes["weight"].Value);
+                                tmp.addNeighbor(result.Features[id], weight);
+                                result.Features[id].Parents.Add(tmp);
+                            }
+                            neighbors = node2.SelectNodes("neighbor");
+                            foreach (XmlNode neighborNode in neighbors){
+                                int id = Convert.ToInt32(neighborNode.Attributes["dest"].Value);// +countUp;// + countUp);
+                                double weight = Convert.ToDouble(neighborNode.Attributes["weight"].Value);
+                                tmp.addNeighbor(result.Features[id], weight);
+                                result.Features[id].Parents.Add(tmp);
+                            }
+                            XmlNodeList tags = node.SelectNodes("tag");
+                            foreach (XmlNode tag in tags){
+                                string key = tag.Attributes["key"].Value;
+                                string val = tag.Attributes["value"].Value;
+                                string type = "0";
+                                if (tag.Attributes["type"].Value == null){
+                                    type = "0";
+                                }else{
+                                    type = tag.Attributes["type"].Value;
+                                }
+                                //tmp.addTag(key, val, type);
+                            }
+                            tags = node2.SelectNodes("tag");
+                            foreach (XmlNode tag in tags){
+                                string key = tag.Attributes["key"].Value;
+                                string val = tag.Attributes["value"].Value;
+                                string type = "0";
+                                if (tag.Attributes["type"].Value == null){
+                                    type = "0";
+                                }else{
+                                    type = tag.Attributes["type"].Value;
+                                }
+                                //tmp.addTag(key, val, type);
+                            }
+                            XmlNodeList speaks = node.SelectNodes("speak");
+                            foreach (XmlNode speak in speaks){
+                                tmp.addSpeak(speak.Attributes["value"].Value);
+                            }
+                            speaks = node2.SelectNodes("speak");
+                            foreach (XmlNode speak in speaks){
+                                tmp.addSpeak(speak.Attributes["value"].Value);
+                            }
+                            result.removeDouble(data);
+                            //result.removeDouble(data2);
+                        }
+                    }
+                }
+                
                 int rootId = -1;
                 try
                 {

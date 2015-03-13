@@ -64,3 +64,14 @@ C:\Users\nutjung\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entr
 C:\Users\nutjung\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Lost_Manuscript_II_Data_Entry.Searcher.resources
 C:\Users\nutjung\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Lost_Manuscript_II_Data_Entry.TreeFrom.resources
 C:\Users\nutjung\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Zeno Data Entry.csproj.GenerateResource.Cache
+C:\Users\justkingl4\Desktop\RPI\junior\S2\newResearch\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Lost Manuscript II Data Entry.exe
+C:\Users\justkingl4\Desktop\RPI\junior\S2\newResearch\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Lost Manuscript II Data Entry.pdb
+C:\Users\justkingl4\Desktop\RPI\junior\S2\newResearch\Data Entry\Data Entry\Lost Manuscript II Data Entry\bin\Debug\Lost Manuscript II Data Entry.exe
+C:\Users\justkingl4\Desktop\RPI\junior\S2\newResearch\Data Entry\Data Entry\Lost Manuscript II Data Entry\bin\Debug\Lost Manuscript II Data Entry.pdb
+C:\Users\justkingl4\Desktop\RPI\junior\S2\newResearch\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Zeno Data Entry.csprojResolveAssemblyReference.cache
+C:\Users\justkingl4\Desktop\RPI\junior\S2\newResearch\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Lost_Manuscript_II_Data_Entry.Form1.resources
+C:\Users\justkingl4\Desktop\RPI\junior\S2\newResearch\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Lost_Manuscript_II_Data_Entry.Form2.resources
+C:\Users\justkingl4\Desktop\RPI\junior\S2\newResearch\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Lost_Manuscript_II_Data_Entry.Properties.Resources.resources
+C:\Users\justkingl4\Desktop\RPI\junior\S2\newResearch\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Lost_Manuscript_II_Data_Entry.Searcher.resources
+C:\Users\justkingl4\Desktop\RPI\junior\S2\newResearch\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Lost_Manuscript_II_Data_Entry.TreeFrom.resources
+C:\Users\justkingl4\Desktop\RPI\junior\S2\newResearch\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Zeno Data Entry.csproj.GenerateResource.Cache

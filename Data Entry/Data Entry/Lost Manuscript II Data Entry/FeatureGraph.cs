@@ -146,6 +146,25 @@ namespace LostManuscriptII
             }
             return false;
         }
+
+        public bool removeDouble(string data)
+        {
+          
+            for (int x = 0; x < features.Count; x++)
+            {
+                if (features[x].Data == data)
+                {
+                    features.RemoveAt(x);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+
+
+
         public int Count
         {
             get { return this.features.Count; }
