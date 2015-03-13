@@ -365,6 +365,7 @@ namespace Lost_Manuscript_II_Data_Entry
                 {
                     featGraph.Root = featGraph.getFeature(toChange.Data);
                 }
+                
                 /*
                 refreshAllButUpdateFeature();
                 clearAllTextBoxes();
