@@ -41,7 +41,8 @@ namespace Lost_Manuscript_II_Data_Entry
                     this.canDisplay = false;
                     return;
                 }
-                treeDrillFillHelper(treeView1.Nodes.Add(featGraph.Root.Data), featGraph.Root);
+                bool[] checkEntry = new bool[featGraph.Count];
+                treeDrillFillHelper(treeView1.Nodes.Add(featGraph.Root.Data), featGraph.Root,checkEntry);
             }
             treeView1.Refresh();
         }
@@ -55,16 +56,23 @@ namespace Lost_Manuscript_II_Data_Entry
             }
             for (int x = 0; x < toFill.Count; x++)
             {
-                treeDrillFillHelper(toRefresh.Nodes.Add(toFill[x].Data), toFill[x]);
+                bool[] checkEntry = new bool[featGraph.Count];
+                treeDrillFillHelper(toRefresh.Nodes.Add(toFill[x].Data), toFill[x],checkEntry);
             }
         }
-        private void treeDrillFillHelper(TreeNode toRefresh, Feature toFill)
+        private void treeDrillFillHelper(TreeNode toRefresh, Feature toFill, bool[] checkEntry)
         {
+            int index = featGraph.getFeatureIndex(toFill.Data);
+            if (checkEntry[index])
+            {
+                return;
+            }
+            checkEntry[index] = true;
             for (int x = 0; x < toFill.Neighbors.Count; x++)
             {
                 if (toRefresh.Parent == null || toRefresh.Parent.Text != toFill.Neighbors[x].Item1.Data)
                 {
-                    treeDrillFillHelper(toRefresh.Nodes.Add(toFill.Neighbors[x].Item1.Data), toFill.Neighbors[x].Item1);
+                    treeDrillFillHelper(toRefresh.Nodes.Add(toFill.Neighbors[x].Item1.Data), toFill.Neighbors[x].Item1,checkEntry);
                 }
                 else
                 {

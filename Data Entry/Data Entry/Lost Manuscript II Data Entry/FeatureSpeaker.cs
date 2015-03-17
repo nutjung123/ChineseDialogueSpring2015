@@ -12,19 +12,19 @@ namespace Lost_Manuscript_II_Data_Entry
         { }
 
         //call this function with answer =-1;
-        private void getHeight(FeatureGraph featGraph, Feature current, Feature target,int h, ref int answer)
+        private void getHeight(FeatureGraph featGraph, Feature current, Feature target, int h, ref int height)
         {
             if (current == target)
             {
-                answer = h;
+                height = h;
             }
-            if (answer != -1)
+            if (height != -1)
             {
                 return;
             }
             for (int x = 0; x < current.Neighbors.Count; x++)
             {
-                getHeight(featGraph,current.Neighbors[x].Item1,target,h+1,ref answer);
+                getHeight(featGraph, current.Neighbors[x].Item1, target, h + 1, ref height);
             }
         }
 

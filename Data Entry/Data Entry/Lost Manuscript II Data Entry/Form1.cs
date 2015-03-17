@@ -366,7 +366,6 @@ namespace Lost_Manuscript_II_Data_Entry
                     featGraph.Root = featGraph.getFeature(toChange.Data);
                 }
                 
-                /*
                 refreshAllButUpdateFeature();
                 clearAllTextBoxes();
                 checkedListBox2.Items.Clear();
@@ -374,8 +373,8 @@ namespace Lost_Manuscript_II_Data_Entry
                 listBox3.Items.Clear();
                 checkBox1.Checked = false;
                 checkBox1.Refresh();
-                editorFeatureSelected = "";*/
-                //toChange = null;
+                editorFeatureSelected = "";
+                toChange = null;
             }
         }
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)

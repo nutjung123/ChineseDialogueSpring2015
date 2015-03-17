@@ -236,7 +236,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(788, 410);
+            this.label18.Location = new System.Drawing.Point(642, 393);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(128, 13);
             this.label18.TabIndex = 38;
@@ -244,18 +244,18 @@
             // 
             // textBox7
             // 
-            this.textBox7.Location = new System.Drawing.Point(790, 428);
+            this.textBox7.Location = new System.Drawing.Point(645, 410);
             this.textBox7.Multiline = true;
             this.textBox7.Name = "textBox7";
             this.textBox7.ShortcutsEnabled = false;
-            this.textBox7.Size = new System.Drawing.Size(176, 70);
+            this.textBox7.Size = new System.Drawing.Size(280, 98);
             this.textBox7.TabIndex = 37;
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(790, 537);
+            this.button6.Location = new System.Drawing.Point(645, 552);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(176, 23);
+            this.button6.Size = new System.Drawing.Size(280, 23);
             this.button6.TabIndex = 36;
             this.button6.Text = "Edit Selected Pattern";
             this.button6.UseVisualStyleBackColor = true;
@@ -263,9 +263,9 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(790, 568);
+            this.button5.Location = new System.Drawing.Point(645, 585);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(176, 23);
+            this.button5.Size = new System.Drawing.Size(280, 23);
             this.button5.TabIndex = 35;
             this.button5.Text = "Remove Selected Pattern";
             this.button5.UseVisualStyleBackColor = true;
@@ -273,9 +273,9 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(790, 509);
+            this.button4.Location = new System.Drawing.Point(645, 523);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(176, 23);
+            this.button4.Size = new System.Drawing.Size(280, 23);
             this.button4.TabIndex = 34;
             this.button4.Text = "Add Pattern";
             this.button4.UseVisualStyleBackColor = true;
@@ -296,7 +296,7 @@
             this.listBox3.HorizontalScrollbar = true;
             this.listBox3.Location = new System.Drawing.Point(230, 409);
             this.listBox3.Name = "listBox3";
-            this.listBox3.Size = new System.Drawing.Size(545, 199);
+            this.listBox3.Size = new System.Drawing.Size(405, 199);
             this.listBox3.TabIndex = 32;
             this.listBox3.SelectedIndexChanged += new System.EventHandler(this.listBox3_SelectedIndexChanged);
             // 
@@ -363,7 +363,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(645, 356);
+            this.button3.Location = new System.Drawing.Point(645, 355);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(130, 23);
             this.button3.TabIndex = 27;
@@ -383,7 +383,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(645, 312);
+            this.button2.Location = new System.Drawing.Point(645, 316);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(130, 23);
             this.button2.TabIndex = 25;
