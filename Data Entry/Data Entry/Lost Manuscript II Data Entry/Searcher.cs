@@ -116,6 +116,7 @@ namespace Lost_Manuscript_II_Data_Entry
             }
             return result;
         }
+        //button to open selection in search funciton
         private void button2_Click(object sender, EventArgs e)
         {
             if (listBox1.Items[0].ToString() == "Finished Searching the Feature Graph with no results" ||

@@ -22,13 +22,16 @@ namespace Lost_Manuscript_II_Data_Entry
         private string currentFileName;
         private string currentQueryFolderName;
         private int queryCounter;
+        private int selectedIndex;
         private const string BAD_CHARS = "<>,()\"";
         private int tIndex = -1;
         private ToolTip toolTip1;
+        private bool shouldIgnoreCheckEvent;
 
         public Form1()
         {
             queryCounter = 0;
+            selectedIndex = -1;
             myQController = new QueryController(featGraph);
             featGraph = new FeatureGraph();
             toChange = null;
@@ -43,8 +46,21 @@ namespace Lost_Manuscript_II_Data_Entry
 
             //Add enter method
             textBox1.KeyDown += new KeyEventHandler(this.featureCreateTextBox1_KeyDown);
+            //Add tooltip method to checkedListBox2
             checkedListBox2.MouseHover += new EventHandler(checkedListBox2_MouseHover);
             checkedListBox2.MouseMove += new MouseEventHandler(checkedListBox2_MouseMove);
+            //check event handle
+            checkedListBox2.ItemCheck += new ItemCheckEventHandler(CheckedListBox2_ItemCheck);
+            //Add tooltip method to createTagComboBox
+            createTagComboBox.DrawMode = DrawMode.OwnerDrawFixed;
+            createTagComboBox.DrawItem += createTagComboBox_DrawItem;
+            createTagComboBox.DropDownClosed += createTagComboBox_DropDownClosed;
+            //Add tooltip method to editTagComboBox
+            editTagComboBox.DrawMode = DrawMode.OwnerDrawFixed;
+            editTagComboBox.DrawItem += editTagComboBox_DrawItem;
+            editTagComboBox.DropDownClosed += createTagComboBox_DropDownClosed;
+
+            shouldIgnoreCheckEvent = true;
             if (backgroundWorker1.IsBusy != true)
             {
                 backgroundWorker1.RunWorkerAsync();
@@ -56,6 +72,7 @@ namespace Lost_Manuscript_II_Data_Entry
         {
             featGraph = new FeatureGraph();
             toChange = null;
+            selectedIndex = -1;
             editorFeatureSelected = "";
             refreshAll();
         }
@@ -71,6 +88,7 @@ namespace Lost_Manuscript_II_Data_Entry
             {
                 currentFileName = openFileDialog1.FileName;
                 featGraph = XMLFilerForFeatureGraph.readFeatureGraph(openFileDialog1.FileName);
+                selectedIndex = -1;
                 refreshAllButUpdateFeature();
                 listBox2.Items.Clear();
                 listBox3.Items.Clear();
@@ -177,7 +195,7 @@ namespace Lost_Manuscript_II_Data_Entry
             myTreeForm.Show();
         }
 
-        //Helper functions
+        //Helper functions to refresh listbox that contains a list of feature
         private void refreshFeatureListBox(ListBox toRefresh, string toIgnore = null)
         {
             toRefresh.Items.Clear();
@@ -198,8 +216,8 @@ namespace Lost_Manuscript_II_Data_Entry
         private void refreshFeatureTagListBox(ListBox toRefresh)
         {
             toRefresh.Items.Clear();
-            if (toChange == null) { toRefresh.Refresh(); return; }
-            List<string> tmp = toChange.getTagKeys();
+            if (selectedIndex == -1) { toRefresh.Refresh(); return; }
+            List<string> tmp = featGraph.Features[selectedIndex].getTagKeys();
             for (int x = tmp.Count-1; x >= 0; x--)
             {
                 toRefresh.Items.AddRange(new object[] { tmp[x] });
@@ -209,8 +227,8 @@ namespace Lost_Manuscript_II_Data_Entry
         private void refreshFeatureSpeaksListBox(ListBox toRefresh)
         {
             toRefresh.Items.Clear();
-            if (toChange == null) { toRefresh.Refresh(); return; }
-            List<string> tmp = toChange.Speaks;
+            if (selectedIndex==-1) { toRefresh.Refresh(); return; }
+            List<string> tmp = featGraph.Features[selectedIndex].Speaks;
             for (int x = tmp.Count - 1; x >= 0; x--)
             {
                 toRefresh.Items.AddRange(new object[] { tmp[x] });
@@ -242,12 +260,11 @@ namespace Lost_Manuscript_II_Data_Entry
             textBox1.Clear();
             textBox2.Clear();
             textBox3.Clear();
-            textBox4.Clear();
-            textBox5.Clear();
             //textBox6.Clear();
             textBox7.Clear();
             maskedTextBox1.Clear();
         }
+        //open feature from search function
         public void openFeature(string featureData, string tagData = "")
         {
             refreshListBoxes();
@@ -258,11 +275,12 @@ namespace Lost_Manuscript_II_Data_Entry
             {
                 initEditor(toChange);
                 listBox1.SelectedIndex = (indexOfIn(featureData, listBox1));
+                selectedIndex = listBox1.SelectedIndex;
             }
             if (tagData != "")
             {
                 textBox3.Text = tagData;
-                textBox4.Text = toChange.getTag(tagData).Item2;
+                editTagComboBox.Text = toChange.getTag(tagData).Item2;
                 editorKeySelected = tagData;
                 listBox2.SelectedIndex = (indexOfIn(tagData, listBox2));
             }
@@ -322,7 +340,7 @@ namespace Lost_Manuscript_II_Data_Entry
         //Feature Editor Methods
         private void featureUpdateButton_Click(object sender, EventArgs e)
         {
-            if (toChange == null)
+            if (selectedIndex == -1)
             {
                 MessageBox.Show("You haven't selected anything to edit yet", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -339,33 +357,11 @@ namespace Lost_Manuscript_II_Data_Entry
             }
             if (editorFeatureSelected != "")
             {
-                if (maskedTextBox1.Text != "")
-                {
-                    toChange.DiscussedThreshold = float.Parse(maskedTextBox1.Text);
-                }
-                toChange.Data = textBox2.Text;
-                for (int x = 0; x < checkedListBox2.Items.Count; x++)
-                {
-                    string str = checkedListBox2.Items[x].ToString();
-                    if (checkedListBox2.GetItemCheckState(x) == CheckState.Checked)
-                    {
-                        toChange.addNeighbor(featGraph.getFeature(str));
-                        featGraph.getFeature(str).Parents.Add(toChange);
-                    }
-                    else
-                    {
-                        if (toChange.getNeighbor(str) != null)
-                        {
-                            toChange.removeNeighbor(str);
-                        }
-                    }
-                }
-                featGraph.setFeature(editorFeatureSelected, toChange);
+                featGraph.Features[selectedIndex].Data = textBox2.Text;
                 if (checkBox1.Checked)
                 {
-                    featGraph.Root = featGraph.getFeature(toChange.Data);
+                    featGraph.Root = featGraph.getFeature(selectedIndex);
                 }
-                
                 refreshAllButUpdateFeature();
                 clearAllTextBoxes();
                 checkedListBox2.Items.Clear();
@@ -374,9 +370,9 @@ namespace Lost_Manuscript_II_Data_Entry
                 checkBox1.Checked = false;
                 checkBox1.Refresh();
                 editorFeatureSelected = "";
-                toChange = null;
             }
         }
+        //feature list selection
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listBox1.SelectedItem == null)
@@ -384,21 +380,37 @@ namespace Lost_Manuscript_II_Data_Entry
                 MessageBox.Show("You haven't selected anything to edit yet", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            toChange = featGraph.getFeature(listBox1.SelectedItem.ToString()).deepCopy();
-            initEditor(toChange);
+            selectedIndex = listBox1.SelectedIndex;
+            //toChange = featGraph.getFeature(listBox1.SelectedItem.ToString()).deepCopy();
+            
+            initEditor(featGraph.Features[selectedIndex]);
         }
+
         private void initEditor(Feature toEdit)
         {
             try
             {
                 checkBox1.Checked = false;
                 clearAllTextBoxes();
+                createTagComboBox.Items.Clear();
+                for (int i = 0; i < featGraph.Features.Count; i++)
+                {
+                    createTagComboBox.Items.Add(featGraph.Features[i].Data);
+                }
+                createTagComboBox.Text = "";
+                editTagComboBox.Items.Clear();
+                for (int i = 0; i < featGraph.Features.Count; i++)
+                {
+                    editTagComboBox.Items.Add(featGraph.Features[i].Data);
+                }
+                editTagComboBox.Text = "";
                 maskedTextBox1.Text = toEdit.DiscussedThreshold.ToString();
                 textBox2.Text = toEdit.Data;
                 editorFeatureSelected = toEdit.Data;
                 refreshFeatureListBox(checkedListBox2, toEdit.Data);
                 refreshFeatureSpeaksListBox(listBox3);
                 refreshFeatureTagListBox(listBox2);
+                shouldIgnoreCheckEvent = true;
                 for (int x = 0; x < toEdit.Neighbors.Count; x++)
                 {
                     for (int y = 0; y < checkedListBox2.Items.Count; y++)
@@ -409,7 +421,9 @@ namespace Lost_Manuscript_II_Data_Entry
                         }
                     }
                 }
+                shouldIgnoreCheckEvent = false;
                 checkedListBox2.Refresh();
+
                 if (featGraph.Root != null && toEdit.Data == featGraph.Root.Data)
                 {
                     checkBox1.Checked = true;
@@ -422,43 +436,46 @@ namespace Lost_Manuscript_II_Data_Entry
             }
         }
 
-            //All of the operations needed for the tag editor
+        //All of the operations needed for the tag editor
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (toChange == null)
+            if (selectedIndex == -1)
             {
                 MessageBox.Show("You haven't selected anything to edit yet", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
             if (listBox2.SelectedIndex != -1)
             {
+                //setup the edit tag field
                 string featureKey = listBox2.Items[listBox2.SelectedIndex].ToString();
-                string keyValue = toChange.getTag(featureKey).Item2;
-                string type = toChange.getTag(featureKey).Item3;
+                string keyValue = featGraph.Features[selectedIndex].getTag(featureKey).Item2;
+                string type = featGraph.Features[selectedIndex].getTag(featureKey).Item3;
                 textBox3.Text = featureKey;
-                textBox4.Text = keyValue;
+                editTagComboBox.Text = keyValue;
                 comboBox2.Text = type;
                 editorKeySelected = featureKey;
             }
         }
+
+        //create tag button
         private void button1_Click_1(object sender, EventArgs e)
         {
-            if (toChange == null)
+            if (selectedIndex == -1)
             {
                 MessageBox.Show("You haven't selected anything to edit yet", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            else if (textBox6.Text == "" || textBox5.Text == "")
+            else if (textBox6.Text == "" || createTagComboBox.Text == "")
             {
                 MessageBox.Show("You cannot create a tag with an empty key or value", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            else if (toChange.hasTagWithKey(textBox6.Text))
+            else if (featGraph.Features[selectedIndex].hasTagWithKey(textBox6.Text))
             {
                 MessageBox.Show("There is already a tag with that key in this feature\nPlease choose another key", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            else if (hasBadChar(textBox5.Text) || hasBadChar(textBox6.Text))
+            else if (hasBadChar(createTagComboBox.Text) || hasBadChar(textBox6.Text))
             {
                 MessageBox.Show("The values you have entered contain characters that are not allowed\nThe characters that you cannot use are " + BAD_CHARS, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -470,30 +487,32 @@ namespace Lost_Manuscript_II_Data_Entry
             }
             else
             {
-                toChange.addTag(textBox6.Text, textBox5.Text, comboBox1.Text);
+                featGraph.Features[selectedIndex].addTag(textBox6.Text, createTagComboBox.Text, comboBox1.Text);
             }
             textBox6.Text = "";
-            textBox5.Text = "";
+            comboBox1.Text = "";
+            createTagComboBox.Text = "";
             refreshFeatureTagListBox(listBox2);
         }
+        //edit tag button
         private void button2_Click_1(object sender, EventArgs e)
         {
-            if (toChange == null || editorKeySelected == "")
+            if (selectedIndex == -1 || editorKeySelected == "")
             {
                 MessageBox.Show("You haven't selected anything to edit yet", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            else if (textBox3.Text == "" || textBox4.Text == "")
+            else if (textBox3.Text == "" || editTagComboBox.Text == "")
             {
                 MessageBox.Show("You cannot create a tag with an empty key or value", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            if (toChange.hasTagWithKey(textBox3.Text) && editorKeySelected != textBox3.Text)
+            if (featGraph.Features[selectedIndex].hasTagWithKey(textBox3.Text) && editorKeySelected != textBox3.Text)
             {
                 MessageBox.Show("There is already a tag with that key in this feature\nPlease choose another key", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            else if (hasBadChar(textBox3.Text) || hasBadChar(textBox4.Text))
+            else if (hasBadChar(textBox3.Text) || hasBadChar(editTagComboBox.Text))
             {
                 MessageBox.Show("The values you have entered contain characters that are not allowed\nThe characters that you cannot use are " + BAD_CHARS, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -505,18 +524,26 @@ namespace Lost_Manuscript_II_Data_Entry
             }
             else
             {
-                toChange.removeTag(editorKeySelected);
-                toChange.addTag(textBox3.Text, textBox4.Text, comboBox2.Text);
+                featGraph.Features[selectedIndex].removeTag(editorKeySelected);
+                featGraph.Features[selectedIndex].addTag(textBox3.Text, editTagComboBox.Text, comboBox2.Text);
+                textBox3.Text = "";
+                comboBox2.Text = "";
+                editTagComboBox.Text = "";
+                refreshFeatureTagListBox(listBox2);
+            }
+         
+        }
+        //remove tag button
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if(editorKeySelected!=""&&selectedIndex!=-1){
+                featGraph.Features[selectedIndex].removeTag(editorKeySelected);
+                editorKeySelected = "";
                 refreshFeatureTagListBox(listBox2);
             }
         }
-        private void button3_Click(object sender, EventArgs e)
-        {
-            toChange.removeTag(editorKeySelected);
-            editorKeySelected = "";
-            refreshFeatureTagListBox(listBox2);
-        }
 
+        //tooltip helper function 
         private void checkedListBox2_MouseMove(object sender, MouseEventArgs e)
         {
             int index = checkedListBox2.IndexFromPoint(e.Location);
@@ -525,12 +552,12 @@ namespace Lost_Manuscript_II_Data_Entry
                 GetToolTip();
             }
         }
-
+        //tooltip helper function
         private void checkedListBox2_MouseHover(object sender, EventArgs e)
         {
             GetToolTip();
         }
-
+        //show tooltip 
         private void GetToolTip()
         {
             Point pos = checkedListBox2.PointToClient(MousePosition);
@@ -540,11 +567,47 @@ namespace Lost_Manuscript_II_Data_Entry
                 toolTip1.SetToolTip(checkedListBox2, checkedListBox2.Items[tIndex].ToString());
             }
         }
+
+        //Two function to create tooltip for createTagComboBox
+        private void createTagComboBox_DropDownClosed(object sender, EventArgs e)
+        {
+            toolTip1.Hide(createTagComboBox);
+        }
+        private void createTagComboBox_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0) { return;  }
+            string text = createTagComboBox.GetItemText(createTagComboBox.Items[e.Index]);
+            e.DrawBackground();
+            using (SolidBrush br = new SolidBrush(e.ForeColor))
+            { e.Graphics.DrawString(text, e.Font, br, e.Bounds); }
+            if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+            { toolTip1.Show(text, createTagComboBox, e.Bounds.Right, e.Bounds.Bottom); }
+            e.DrawFocusRectangle();
+        }
+
+        //Two functions to create tooltip for editTagComboBox
+        private void editTagComBox_DropDownClosed(object sender, EventArgs e)
+        {
+            toolTip1.Hide(editTagComboBox);
+        }
+        private void editTagComboBox_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0) { return; }
+            string text = createTagComboBox.GetItemText(editTagComboBox.Items[e.Index]);
+            e.DrawBackground();
+            using (SolidBrush br = new SolidBrush(e.ForeColor))
+            { e.Graphics.DrawString(text, e.Font, br, e.Bounds); }
+            if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+            { toolTip1.Show(text, editTagComboBox, e.Bounds.Right, e.Bounds.Bottom); }
+            e.DrawFocusRectangle();
+        }
+
         //Feature Removal Methods
         private void checkedListBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
+        
         private void removeFeatureButton_Click(object sender, EventArgs e)
         {
             if (checkedListBox3.CheckedItems.Count == 0)
@@ -570,7 +633,7 @@ namespace Lost_Manuscript_II_Data_Entry
         {
 
         }
-
+        //unused function
         private void button4_Click(object sender, EventArgs e)
         {
             FeatureSpeaker mySpeaker = new FeatureSpeaker();
@@ -619,10 +682,10 @@ namespace Lost_Manuscript_II_Data_Entry
         {
 
         }
-
+        //Add speak button
         private void button4_Click_1(object sender, EventArgs e)
         {
-            if (toChange == null)
+            if (selectedIndex == -1)
             {
                 MessageBox.Show("You haven't selected anything to edit yet", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -634,7 +697,8 @@ namespace Lost_Manuscript_II_Data_Entry
             }
             if (this.textBox7.Text != "")
             {
-                toChange.addSpeak(this.textBox7.Text);
+                //toChange.addSpeak(this.textBox7.Text);
+                featGraph.Features[selectedIndex].Speaks.Add(this.textBox7.Text);
             }
             refreshFeatureSpeaksListBox(listBox3);
             textBox7.Clear();
@@ -642,7 +706,7 @@ namespace Lost_Manuscript_II_Data_Entry
         //Edit speak button
         private void button6_Click(object sender, EventArgs e)
         {
-            if (toChange == null)
+            if (selectedIndex == -1)
             {
                 MessageBox.Show("You haven't selected anything to edit yet", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -652,10 +716,11 @@ namespace Lost_Manuscript_II_Data_Entry
                 MessageBox.Show("The values you have entered contain characters that are not allowed\nThe characters that you cannot use are " + BAD_CHARS, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            int index = toChange.Speaks.Count - listBox3.SelectedIndex - 1;
             if (this.textBox7.Text != "")
             {
-                toChange.editSpeak(index, this.textBox7.Text);
+                //toChange.editSpeak(index, this.textBox7.Text);
+                int editIndex = featGraph.Features[selectedIndex].Speaks.Count - listBox3.SelectedIndex - 1;
+                featGraph.Features[selectedIndex].editSpeak(editIndex,this.textBox7.Text);
             }
             refreshFeatureSpeaksListBox(listBox3);
             textBox7.Clear();
@@ -663,16 +728,22 @@ namespace Lost_Manuscript_II_Data_Entry
         //Remove speak button
         private void button5_Click(object sender, EventArgs e)
         {
-            if (toChange == null)
+            if (selectedIndex == -1)
             {
                 MessageBox.Show("You haven't selected anything to edit yet", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            toChange.removeSpeak(toChange.Speaks.Count - listBox3.SelectedIndex - 1);
-            refreshFeatureSpeaksListBox(listBox3);
+            if (listBox3.SelectedIndex != -1)
+            {
+                //toChange.removeSpeak(toChange.Speaks.Count - listBox3.SelectedIndex - 1);
+                int removedIndex = featGraph.Features[selectedIndex].Speaks.Count - listBox3.SelectedIndex - 1;
+                featGraph.Features[selectedIndex].removeSpeak(removedIndex);
+                refreshFeatureSpeaksListBox(listBox3);
+            }
             textBox7.Clear();
         }
 
+        //speak list box
         private void listBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listBox3.SelectedIndex != -1)
@@ -706,6 +777,32 @@ namespace Lost_Manuscript_II_Data_Entry
         {
             Form2 myQuery = new Form2(featGraph);
             myQuery.Show();
+        }
+
+        // add neighbor checkedListBox method (+ parent)
+        private void CheckedListBox2_ItemCheck(Object sender, ItemCheckEventArgs e)
+        {
+            if (!shouldIgnoreCheckEvent && selectedIndex!=-1)
+            {
+                if (e.NewValue == CheckState.Checked && e.CurrentValue == CheckState.Unchecked)
+                {
+                    //if check insert the new neighbor 
+                    int neighborIndex = featGraph.getFeatureIndex(checkedListBox2.Items[e.Index].ToString());
+                    featGraph.Features[selectedIndex].addNeighbor(featGraph.Features[neighborIndex]);
+                    featGraph.Features[neighborIndex].Parents.Add(featGraph.Features[selectedIndex]);
+                }
+                else if (e.NewValue == CheckState.Unchecked && e.CurrentValue == CheckState.Checked)
+                {
+                    //if uncheck remove the neighbor
+                    int neighborIndex = featGraph.getFeatureIndex(checkedListBox2.Items[e.Index].ToString());
+                    featGraph.Features[selectedIndex].removeNeighbor(featGraph.Features[neighborIndex].Data);
+                    featGraph.Features[neighborIndex].Parents.Remove(featGraph.Features[selectedIndex]);
+                }
+            }
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
         }
     }
 }

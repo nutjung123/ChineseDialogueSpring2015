@@ -64,8 +64,38 @@ namespace LostManuscriptII
                 return true;
             }
             return false;
-
         }
+
+        public bool setFeatureData(int index, string newName)
+        {
+            if (index >= 0 && index < features.Count)
+            {
+                features[index].Data = newName;
+                return true;
+            }
+            return false;
+        }
+        public bool setFeatureNeighbors(int index, List<Tuple<Feature, double>> newNeighbors)
+        {
+            if (index >= 0 && index < features.Count)
+            {
+                features[index].Neighbors = newNeighbors;
+                return true;
+            }
+            return false;
+        }
+        public bool setFeatureTags(int index, List<Tuple<string, string, string>> newTags)
+        {
+            if (index >= 0 && index < features.Count)
+            {
+                features[index].Tags = newTags;
+                return true;
+            }
+            return false;
+        }
+
+
+
         public Feature getFeature(string data)
         {
             for (int x = 0; x < features.Count; x++)
@@ -88,6 +118,7 @@ namespace LostManuscriptII
                 }
             }
             return -1;
+            throw new Exception("If you see this msg when you save the file. Please report and don't close your program.");
         }
         public bool hasNodeData(string data)
         {
@@ -161,10 +192,6 @@ namespace LostManuscriptII
             return false;
         }
 
-
-
-
-
         public int Count
         {
             get { return this.features.Count; }
@@ -189,7 +216,7 @@ namespace LostManuscriptII
         }
         public List<Feature> Features
         {
-            get { return features; }
+            get { return this.features; }
         }
     }
 }

@@ -53,11 +53,9 @@
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.textBox5 = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.textBox6 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
@@ -100,6 +98,8 @@
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.createTagComboBox = new System.Windows.Forms.ComboBox();
+            this.editTagComboBox = new System.Windows.Forms.ComboBox();
             this.tabControl1.SuspendLayout();
             this.FeatureCreator.SuspendLayout();
             this.FeatureEditor.SuspendLayout();
@@ -190,6 +190,8 @@
             // 
             // FeatureEditor
             // 
+            this.FeatureEditor.Controls.Add(this.editTagComboBox);
+            this.FeatureEditor.Controls.Add(this.createTagComboBox);
             this.FeatureEditor.Controls.Add(this.label18);
             this.FeatureEditor.Controls.Add(this.textBox7);
             this.FeatureEditor.Controls.Add(this.button6);
@@ -205,11 +207,9 @@
             this.FeatureEditor.Controls.Add(this.checkBox1);
             this.FeatureEditor.Controls.Add(this.button2);
             this.FeatureEditor.Controls.Add(this.button1);
-            this.FeatureEditor.Controls.Add(this.textBox5);
             this.FeatureEditor.Controls.Add(this.label13);
             this.FeatureEditor.Controls.Add(this.label14);
             this.FeatureEditor.Controls.Add(this.textBox6);
-            this.FeatureEditor.Controls.Add(this.textBox4);
             this.FeatureEditor.Controls.Add(this.label12);
             this.FeatureEditor.Controls.Add(this.label11);
             this.FeatureEditor.Controls.Add(this.textBox3);
@@ -236,7 +236,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(642, 393);
+            this.label18.Location = new System.Drawing.Point(644, 396);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(128, 13);
             this.label18.TabIndex = 38;
@@ -244,39 +244,39 @@
             // 
             // textBox7
             // 
-            this.textBox7.Location = new System.Drawing.Point(645, 410);
+            this.textBox7.Location = new System.Drawing.Point(645, 413);
             this.textBox7.Multiline = true;
             this.textBox7.Name = "textBox7";
             this.textBox7.ShortcutsEnabled = false;
-            this.textBox7.Size = new System.Drawing.Size(280, 98);
-            this.textBox7.TabIndex = 37;
+            this.textBox7.Size = new System.Drawing.Size(280, 127);
+            this.textBox7.TabIndex = 30;
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(645, 552);
+            this.button6.Location = new System.Drawing.Point(645, 585);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(280, 23);
-            this.button6.TabIndex = 36;
+            this.button6.TabIndex = 32;
             this.button6.Text = "Edit Selected Pattern";
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(645, 585);
+            this.button5.Location = new System.Drawing.Point(645, 614);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(280, 23);
-            this.button5.TabIndex = 35;
+            this.button5.TabIndex = 34;
             this.button5.Text = "Remove Selected Pattern";
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(645, 523);
+            this.button4.Location = new System.Drawing.Point(645, 556);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(280, 23);
-            this.button4.TabIndex = 34;
+            this.button4.TabIndex = 31;
             this.button4.Text = "Add Pattern";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click_1);
@@ -284,7 +284,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(227, 393);
+            this.label17.Location = new System.Drawing.Point(227, 395);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(191, 13);
             this.label17.TabIndex = 33;
@@ -294,10 +294,10 @@
             // 
             this.listBox3.FormattingEnabled = true;
             this.listBox3.HorizontalScrollbar = true;
-            this.listBox3.Location = new System.Drawing.Point(230, 409);
+            this.listBox3.Location = new System.Drawing.Point(230, 412);
             this.listBox3.Name = "listBox3";
-            this.listBox3.Size = new System.Drawing.Size(405, 199);
-            this.listBox3.TabIndex = 32;
+            this.listBox3.Size = new System.Drawing.Size(405, 225);
+            this.listBox3.TabIndex = 29;
             this.listBox3.SelectedIndexChanged += new System.EventHandler(this.listBox3_SelectedIndexChanged);
             // 
             // label16
@@ -328,7 +328,7 @@
             this.comboBox2.Location = new System.Drawing.Point(800, 230);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(121, 21);
-            this.comboBox2.TabIndex = 30;
+            this.comboBox2.TabIndex = 25;
             // 
             // label15
             // 
@@ -359,14 +359,14 @@
             this.comboBox1.Location = new System.Drawing.Point(800, 91);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 28;
+            this.comboBox1.TabIndex = 21;
             // 
             // button3
             // 
             this.button3.Location = new System.Drawing.Point(645, 355);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(130, 23);
-            this.button3.TabIndex = 27;
+            this.button3.TabIndex = 28;
             this.button3.Text = "Remove selected Tag";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
@@ -374,19 +374,20 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(311, 619);
+            this.checkBox1.Location = new System.Drawing.Point(645, 25);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(138, 17);
-            this.checkBox1.TabIndex = 26;
+            this.checkBox1.TabIndex = 9;
             this.checkBox1.Text = "Make this node the root";
             this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(645, 316);
+            this.button2.Location = new System.Drawing.Point(645, 311);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(130, 23);
-            this.button2.TabIndex = 25;
+            this.button2.TabIndex = 27;
             this.button2.Text = "Edit Existing Tag";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click_1);
@@ -396,22 +397,15 @@
             this.button1.Location = new System.Drawing.Point(645, 169);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(130, 23);
-            this.button1.TabIndex = 24;
+            this.button1.TabIndex = 23;
             this.button1.Text = "Create New Tag";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
-            // textBox5
-            // 
-            this.textBox5.Location = new System.Drawing.Point(645, 143);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(130, 20);
-            this.textBox5.TabIndex = 23;
-            // 
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(642, 127);
+            this.label13.Location = new System.Drawing.Point(642, 121);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(108, 13);
             this.label13.TabIndex = 22;
@@ -433,17 +427,10 @@
             this.textBox6.Size = new System.Drawing.Size(130, 20);
             this.textBox6.TabIndex = 20;
             // 
-            // textBox4
-            // 
-            this.textBox4.Location = new System.Drawing.Point(645, 269);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(130, 20);
-            this.textBox4.TabIndex = 19;
-            // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(642, 253);
+            this.label12.Location = new System.Drawing.Point(642, 259);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(133, 13);
             this.label12.TabIndex = 18;
@@ -463,7 +450,7 @@
             this.textBox3.Location = new System.Drawing.Point(645, 230);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(130, 20);
-            this.textBox3.TabIndex = 16;
+            this.textBox3.TabIndex = 24;
             // 
             // maskedTextBox1
             // 
@@ -471,7 +458,7 @@
             this.maskedTextBox1.Mask = "00000";
             this.maskedTextBox1.Name = "maskedTextBox1";
             this.maskedTextBox1.Size = new System.Drawing.Size(141, 20);
-            this.maskedTextBox1.TabIndex = 15;
+            this.maskedTextBox1.TabIndex = 8;
             // 
             // label9
             // 
@@ -502,10 +489,10 @@
             // 
             // featureUpdateButton
             // 
-            this.featureUpdateButton.Location = new System.Drawing.Point(230, 615);
+            this.featureUpdateButton.Location = new System.Drawing.Point(800, 21);
             this.featureUpdateButton.Name = "featureUpdateButton";
-            this.featureUpdateButton.Size = new System.Drawing.Size(75, 23);
-            this.featureUpdateButton.TabIndex = 11;
+            this.featureUpdateButton.Size = new System.Drawing.Size(120, 23);
+            this.featureUpdateButton.TabIndex = 10;
             this.featureUpdateButton.Text = "Update";
             this.featureUpdateButton.UseVisualStyleBackColor = true;
             this.featureUpdateButton.Click += new System.EventHandler(this.featureUpdateButton_Click);
@@ -517,7 +504,7 @@
             this.checkedListBox2.Location = new System.Drawing.Point(230, 75);
             this.checkedListBox2.Name = "checkedListBox2";
             this.checkedListBox2.Size = new System.Drawing.Size(200, 304);
-            this.checkedListBox2.TabIndex = 9;
+            this.checkedListBox2.TabIndex = 11;
             // 
             // label6
             // 
@@ -735,7 +722,7 @@
             this.treeTrunkToolStripMenuItem,
             this.fullTreeToolStripMenuItem});
             this.treeToolStripMenuItem.Name = "treeToolStripMenuItem";
-            this.treeToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.treeToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.treeToolStripMenuItem.Text = "Tree";
             // 
             // treeTrunkToolStripMenuItem
@@ -758,8 +745,7 @@
             // visualizerToolStripMenuItem
             // 
             this.visualizerToolStripMenuItem.Name = "visualizerToolStripMenuItem";
-            this.visualizerToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.visualizerToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.visualizerToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.visualizerToolStripMenuItem.Text = "Visualizer";
             this.visualizerToolStripMenuItem.Click += new System.EventHandler(this.visualizerToolStripMenuItem_Click);
             // 
@@ -795,6 +781,26 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1057, 636);
             this.panel1.TabIndex = 6;
+            // 
+            // createTagComboBox
+            // 
+            this.createTagComboBox.FormattingEnabled = true;
+            this.createTagComboBox.IntegralHeight = false;
+            this.createTagComboBox.Location = new System.Drawing.Point(645, 139);
+            this.createTagComboBox.MaxDropDownItems = 15;
+            this.createTagComboBox.Name = "createTagComboBox";
+            this.createTagComboBox.Size = new System.Drawing.Size(130, 21);
+            this.createTagComboBox.TabIndex = 22;
+            // 
+            // editTagComboBox
+            // 
+            this.editTagComboBox.FormattingEnabled = true;
+            this.editTagComboBox.IntegralHeight = false;
+            this.editTagComboBox.Location = new System.Drawing.Point(645, 279);
+            this.editTagComboBox.MaxDropDownItems = 15;
+            this.editTagComboBox.Name = "editTagComboBox";
+            this.editTagComboBox.Size = new System.Drawing.Size(130, 21);
+            this.editTagComboBox.TabIndex = 26;
             // 
             // Form1
             // 
@@ -865,7 +871,6 @@
         private System.Windows.Forms.ToolStripMenuItem visualizerToolStripMenuItem;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ListBox listBox2;
-        private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox textBox3;
@@ -873,7 +878,6 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.TextBox textBox6;
@@ -896,6 +900,8 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ToolStripMenuItem queryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem chatToolStripMenuItem;
+        private System.Windows.Forms.ComboBox editTagComboBox;
+        private System.Windows.Forms.ComboBox createTagComboBox;
     }
 }
 
