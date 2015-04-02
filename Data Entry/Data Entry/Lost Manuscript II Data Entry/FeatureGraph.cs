@@ -184,8 +184,8 @@ namespace LostManuscriptII
             for (int x = 0; x < features.Count; x++)
             {
                 if (features[x].Data == data)
-                {
-                    features.RemoveAt(x);
+                { 
+                   features.RemoveAt(x);
                     return true;
                 }
             }
