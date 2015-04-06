@@ -27,6 +27,7 @@ namespace Lost_Manuscript_II_Data_Entry
         private int tIndex = -1;
         private ToolTip toolTip1;
         private bool shouldIgnoreCheckEvent;
+        private Form2 myQuery;
 
         public Form1()
         {
@@ -775,7 +776,7 @@ namespace Lost_Manuscript_II_Data_Entry
 
         private void chatToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form2 myQuery = new Form2(featGraph);
+            myQuery = new Form2(featGraph);
             myQuery.Show();
         }
 

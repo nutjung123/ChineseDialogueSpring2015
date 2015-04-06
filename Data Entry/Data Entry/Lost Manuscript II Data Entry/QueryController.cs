@@ -76,6 +76,7 @@ namespace Lost_Manuscript_II_Data_Entry
 
         public string makeQuery(string query)
         {
+            string answer = "";
             if (this.currentTopic == null)
             {
                 this.currentTopic = featGraph.Root;
@@ -84,21 +85,18 @@ namespace Lost_Manuscript_II_Data_Entry
             if (continueNextTopic(query))
             {
                 FeatureSpeaker mySpeaker = new FeatureSpeaker();
-                //tellMeMore = mySpeaker.getTagSpeak(featGraph.Root);
                 Feature nextTopic = mySpeaker.getNextTopic(featGraph, this.currentTopic, "", this.turn);
                 nextTopic.DiscussedAmount += 1;
-                featGraph.setFeature(nextTopic.Data, nextTopic);
+                featGraph.setFeatureDiscussedAmount(nextTopic.Data, nextTopic.DiscussedAmount);
                 this.currentTopic = nextTopic;
-                this.turn += 1;
                 //return mySpeaker.getChildSpeak(featGraph.Root);
-                return nextTopic.Data;
+                answer = nextTopic.Data;
             } //Tell me more about the current topic
             else if (isTellMeMoreQuery(query))
             {
                 this.currentTopic.DiscussedAmount += 1;
-                featGraph.setFeature(this.currentTopic.Data,this.currentTopic);
-                this.turn += 1;
-                return this.currentTopic.Data;
+                featGraph.setFeatureDiscussedAmount(this.currentTopic.Data,this.currentTopic.DiscussedAmount);
+                answer = this.currentTopic.Data;
             } //question, query or don't understand query
             else 
             {
@@ -106,18 +104,18 @@ namespace Lost_Manuscript_II_Data_Entry
                 if (target == null)
                 {
                     //don't understand query case
+                    answer = "No answer for the query.";
                 }else
                 {
                     //question or query
                     target.DiscussedAmount += 1;
-                    featGraph.setFeature(target.Data, target);
+                    featGraph.setFeatureDiscussedAmount(target.Data, target.DiscussedAmount);
                     this.currentTopic = target;
-                    this.turn += 1;
-                    return target.Data;
+                    answer =  target.Data;
                 }
             }
-
-            return "";
+            this.turn += 1;
+            return answer;
         }
 
         public string makeQuery2(string query)

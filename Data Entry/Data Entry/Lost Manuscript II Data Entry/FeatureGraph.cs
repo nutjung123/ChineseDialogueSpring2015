@@ -66,6 +66,17 @@ namespace LostManuscriptII
             return false;
         }
 
+        public bool setFeatureDiscussedAmount(string data, float amount)
+        {
+            int i = getFeatureIndex(data);
+            if (i != -1)
+            {
+                features[i].DiscussedAmount = amount;
+                return true;
+            }
+            return false;
+        }
+
         public bool setFeatureData(int index, string newName)
         {
             if (index >= 0 && index < features.Count)

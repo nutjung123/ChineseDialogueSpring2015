@@ -9,13 +9,11 @@ namespace Lost_Manuscript_II_Data_Entry
     class FeatureSpeaker
     {
         private float[] dramaticFunction;
-        private int turn;
 
         public FeatureSpeaker()
         {
             //define dramaticFunction manually here
             dramaticFunction = new float[10] {1,2,3,2,1,2,3,4,5,3};
-            turn = 0;
         }
 
         //call this function with answer =-1;

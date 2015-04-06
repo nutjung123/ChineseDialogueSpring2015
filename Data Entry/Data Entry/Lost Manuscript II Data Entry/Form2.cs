@@ -24,6 +24,11 @@ namespace Lost_Manuscript_II_Data_Entry
             InitializeComponent();
             myController = new QueryController(myGraph);
             featGraph = myGraph;
+            //clear discussedAmount
+            for (int x = 0; x < featGraph.Features.Count(); x++)
+            {
+                featGraph.Features[x].DiscussedAmount = 0;
+            }
             featureWeight = .6f;
             tagKeyWeight = .2f;
             chatBox.AppendText("Hello, and Welcome to the Query. \r\n");

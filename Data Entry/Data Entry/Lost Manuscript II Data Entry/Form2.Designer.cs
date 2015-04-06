@@ -81,6 +81,7 @@
             this.Controls.Add(this.queryButton);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.inputBox);
+            this.MaximizeBox = false;
             this.Name = "Form2";
             this.Text = "Query";
             this.ResumeLayout(false);
