@@ -23,11 +23,12 @@ namespace Lost_Manuscript_II_Data_Entry
         private string currentQueryFolderName;
         private int queryCounter;
         private int selectedIndex;
-        private const string BAD_CHARS = "<>,()\"";
+        private const string BAD_CHARS = "<>()\"\'";
         private int tIndex = -1;
         private ToolTip toolTip1;
         private bool shouldIgnoreCheckEvent;
         private Form2 myQuery;
+        private bool updateFlag;
 
         public Form1()
         {
@@ -37,7 +38,9 @@ namespace Lost_Manuscript_II_Data_Entry
             featGraph = new FeatureGraph();
             toChange = null;
             currentFileName = "";
+            updateFlag = false;
             InitializeComponent();
+
             //set up tooltip
             toolTip1 = new ToolTip();
             toolTip1.AutoPopDelay = 5000;
@@ -60,7 +63,8 @@ namespace Lost_Manuscript_II_Data_Entry
             editTagComboBox.DrawMode = DrawMode.OwnerDrawFixed;
             editTagComboBox.DrawItem += editTagComboBox_DrawItem;
             editTagComboBox.DropDownClosed += createTagComboBox_DropDownClosed;
-
+            //Add closing method
+            this.FormClosing += Window_Closing;
             shouldIgnoreCheckEvent = true;
             if (backgroundWorker1.IsBusy != true)
             {
@@ -107,11 +111,11 @@ namespace Lost_Manuscript_II_Data_Entry
             if (currentFileName != "")
             {
                 XMLFilerForFeatureGraph.writeFeatureGraph(featGraph, currentFileName);
+                updateFlag = false;
             }
             else
             {
                 this.saveAs();
-
             }
         }
         private void saveAs()
@@ -126,6 +130,7 @@ namespace Lost_Manuscript_II_Data_Entry
             {
                 XMLFilerForFeatureGraph.writeFeatureGraph(featGraph, saveFileDialog1.FileName);
                 currentFileName = saveFileDialog1.FileName;
+                updateFlag = false;
             }
         }
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
@@ -140,9 +145,40 @@ namespace Lost_Manuscript_II_Data_Entry
                 myQController = new QueryController(featGraph);
             }
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (updateFlag == true)
+            {
+                DialogResult result = MessageBox.Show("Do you want to save changes you made?", "Warning", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+                if (result == DialogResult.Yes)
+                {
+                    saveToolStripMenuItem_Click(sender, e);
+                }
+                else if (result == DialogResult.Cancel)
+                {
+                    e.Cancel = true;
+                }
+            }
+        }
         private void quitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Close();
+            if (updateFlag == true)
+            {
+                DialogResult result = MessageBox.Show("Do you want to save changes you made?", "Warning", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+                if (result == DialogResult.Yes)
+                {
+                    saveToolStripMenuItem_Click(sender, e);
+                    this.Close();
+                }
+                else if (result == DialogResult.No)
+                {
+                    this.Close();
+                }
+            }else
+            {
+                this.Close();
+            }
         }
 
         //All of the operations for the Search dropdown menu
@@ -261,7 +297,6 @@ namespace Lost_Manuscript_II_Data_Entry
             textBox1.Clear();
             textBox2.Clear();
             textBox3.Clear();
-            //textBox6.Clear();
             textBox7.Clear();
             maskedTextBox1.Clear();
         }
@@ -317,6 +352,11 @@ namespace Lost_Manuscript_II_Data_Entry
                 MessageBox.Show("You cannot create two features with the same name", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
+            if (hasBadChar(data))
+            {
+                MessageBox.Show("The values you have entered contain characters that are not allowed\nThe characters that you cannot use are " + BAD_CHARS, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
             textBox1.Clear();
             Feature toAdd = new Feature(data);
             for (int x = 0; x < checkedListBox1.CheckedItems.Count; x++)
@@ -326,6 +366,7 @@ namespace Lost_Manuscript_II_Data_Entry
             }
             featGraph.addFeature(toAdd);
             refreshAllButUpdateFeature();
+            updateFlag = true;
         }
 
         //Feature Creation Methods using Enter Key
@@ -371,6 +412,7 @@ namespace Lost_Manuscript_II_Data_Entry
                 checkBox1.Checked = false;
                 checkBox1.Refresh();
                 editorFeatureSelected = "";
+                updateFlag = true;
             }
         }
         //feature list selection
@@ -489,11 +531,13 @@ namespace Lost_Manuscript_II_Data_Entry
             else
             {
                 featGraph.Features[selectedIndex].addTag(textBox6.Text, createTagComboBox.Text, comboBox1.Text);
+                updateFlag = true;
+                textBox6.Text = "";
+                comboBox1.Text = "";
+                createTagComboBox.Text = "";
+                refreshFeatureTagListBox(listBox2);
             }
-            textBox6.Text = "";
-            comboBox1.Text = "";
-            createTagComboBox.Text = "";
-            refreshFeatureTagListBox(listBox2);
+            
         }
         //edit tag button
         private void button2_Click_1(object sender, EventArgs e)
@@ -531,6 +575,7 @@ namespace Lost_Manuscript_II_Data_Entry
                 comboBox2.Text = "";
                 editTagComboBox.Text = "";
                 refreshFeatureTagListBox(listBox2);
+                updateFlag = true;
             }
          
         }
@@ -541,6 +586,7 @@ namespace Lost_Manuscript_II_Data_Entry
                 featGraph.Features[selectedIndex].removeTag(editorKeySelected);
                 editorKeySelected = "";
                 refreshFeatureTagListBox(listBox2);
+                updateFlag = true;
             }
         }
 
@@ -628,6 +674,7 @@ namespace Lost_Manuscript_II_Data_Entry
                 featGraph.removeFeature(checkedListBox3.CheckedItems[x].ToString());
             }
             refreshAllButUpdateFeature();
+            updateFlag = true;
         }
 
         private void viewToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -700,6 +747,7 @@ namespace Lost_Manuscript_II_Data_Entry
             {
                 //toChange.addSpeak(this.textBox7.Text);
                 featGraph.Features[selectedIndex].Speaks.Add(this.textBox7.Text);
+                updateFlag = true;
             }
             refreshFeatureSpeaksListBox(listBox3);
             textBox7.Clear();
@@ -722,6 +770,7 @@ namespace Lost_Manuscript_II_Data_Entry
                 //toChange.editSpeak(index, this.textBox7.Text);
                 int editIndex = featGraph.Features[selectedIndex].Speaks.Count - listBox3.SelectedIndex - 1;
                 featGraph.Features[selectedIndex].editSpeak(editIndex,this.textBox7.Text);
+                updateFlag = true;
             }
             refreshFeatureSpeaksListBox(listBox3);
             textBox7.Clear();
@@ -740,6 +789,7 @@ namespace Lost_Manuscript_II_Data_Entry
                 int removedIndex = featGraph.Features[selectedIndex].Speaks.Count - listBox3.SelectedIndex - 1;
                 featGraph.Features[selectedIndex].removeSpeak(removedIndex);
                 refreshFeatureSpeaksListBox(listBox3);
+                updateFlag = true;
             }
             textBox7.Clear();
         }
@@ -791,6 +841,7 @@ namespace Lost_Manuscript_II_Data_Entry
                     int neighborIndex = featGraph.getFeatureIndex(checkedListBox2.Items[e.Index].ToString());
                     featGraph.Features[selectedIndex].addNeighbor(featGraph.Features[neighborIndex]);
                     featGraph.Features[neighborIndex].Parents.Add(featGraph.Features[selectedIndex]);
+                    updateFlag = true;
                 }
                 else if (e.NewValue == CheckState.Unchecked && e.CurrentValue == CheckState.Checked)
                 {
@@ -798,6 +849,7 @@ namespace Lost_Manuscript_II_Data_Entry
                     int neighborIndex = featGraph.getFeatureIndex(checkedListBox2.Items[e.Index].ToString());
                     featGraph.Features[selectedIndex].removeNeighbor(featGraph.Features[neighborIndex].Data);
                     featGraph.Features[neighborIndex].Parents.Remove(featGraph.Features[selectedIndex]);
+                    updateFlag = true;
                 }
             }
         }

@@ -62,7 +62,7 @@ namespace Lost_Manuscript_II_Data_Entry
             int targetLen = 0;
             for (int x = 0; x < featGraph.Features.Count; x++)
             {
-                if (fullContain(query, featGraph.Features[x].Data))
+                if (fullContain(query.ToLower(), featGraph.Features[x].Data.ToLower()))
                 {
                     if (featGraph.Features[x].Data.Length > targetLen)
                     {
@@ -72,6 +72,15 @@ namespace Lost_Manuscript_II_Data_Entry
                 }
             }
             return target;
+        }
+
+        private string getSpeak(Feature feat)
+        {
+            if (feat.Speaks.Count() != 0)
+            {
+                return feat.Speaks[this.turn%feat.Speaks.Count()];
+            }
+            return feat.Data;
         }
 
         public string makeQuery(string query)
@@ -90,13 +99,13 @@ namespace Lost_Manuscript_II_Data_Entry
                 featGraph.setFeatureDiscussedAmount(nextTopic.Data, nextTopic.DiscussedAmount);
                 this.currentTopic = nextTopic;
                 //return mySpeaker.getChildSpeak(featGraph.Root);
-                answer = nextTopic.Data;
+                answer = getSpeak(nextTopic);
             } //Tell me more about the current topic
             else if (isTellMeMoreQuery(query))
             {
                 this.currentTopic.DiscussedAmount += 1;
                 featGraph.setFeatureDiscussedAmount(this.currentTopic.Data,this.currentTopic.DiscussedAmount);
-                answer = this.currentTopic.Data;
+                answer = getSpeak(this.currentTopic);
             } //question, query or don't understand query
             else 
             {
@@ -111,7 +120,7 @@ namespace Lost_Manuscript_II_Data_Entry
                     target.DiscussedAmount += 1;
                     featGraph.setFeatureDiscussedAmount(target.Data, target.DiscussedAmount);
                     this.currentTopic = target;
-                    answer =  target.Data;
+                    answer =  getSpeak(target);
                 }
             }
             this.turn += 1;
