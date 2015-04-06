@@ -180,14 +180,15 @@ namespace LostManuscriptII
 
         public bool removeDouble(string data)
         {
+
             bool xyz = false;
             for (int x = 0; x < features.Count; x++)
             {
-               
+
                 if (features[x].Data == data && xyz == false)
                 {
                     xyz = true;
-                   features.RemoveAt(x);
+                    features.RemoveAt(x);
                     return true;
                 }
             }

@@ -75,3 +75,5 @@ C:\Users\justkingl4\Desktop\RPI\junior\S2\newResearch\Data Entry\Data Entry\Lost
 C:\Users\justkingl4\Desktop\RPI\junior\S2\newResearch\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Lost_Manuscript_II_Data_Entry.Searcher.resources
 C:\Users\justkingl4\Desktop\RPI\junior\S2\newResearch\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Lost_Manuscript_II_Data_Entry.TreeFrom.resources
 C:\Users\justkingl4\Desktop\RPI\junior\S2\newResearch\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Zeno Data Entry.csproj.GenerateResource.Cache
+C:\Users\nutjung\Desktop\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Lost Manuscript II Data Entry.exe
+C:\Users\nutjung\Desktop\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Lost Manuscript II Data Entry.pdb

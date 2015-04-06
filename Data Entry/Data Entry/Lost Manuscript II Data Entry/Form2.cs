@@ -39,7 +39,6 @@ namespace Lost_Manuscript_II_Data_Entry
         {
             if (e.KeyCode == Keys.Enter)
             {
-                //(Note): not sure will there be any problem when sending KeyEventArgs to EventArgs 
                 query_Click(sender, e);
             }
         }
@@ -52,6 +51,7 @@ namespace Lost_Manuscript_II_Data_Entry
                 myController = new QueryController(featGraph);
             }
             chatBox.AppendText(myController.makeQuery(query) +"\r\n");
+            inputBox.Clear();
         }
     }
 }

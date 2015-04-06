@@ -20,7 +20,107 @@ namespace Lost_Manuscript_II_Data_Entry
             currentTopic = null;
         }
 
+        //return true if target is in sentence, false otherwise
+        private bool fullContain(string sentence, string target)
+        {
+            string[] sentences = sentence.Split();
+            string[] targets = target.Split();
+            for (int x = 0; x < sentences.Count()-targets.Count()+1; x++)
+            {
+                if (sentences[x] == targets[0])
+                {
+                    bool check = true; 
+                    for (int y = 0; y < targets.Count(); y++)
+                    {
+                        if (sentences[x + y] != targets[y])
+                        {
+                            check = false;
+                            break;
+                        }
+                    }
+                    if (check)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public bool continueNextTopic(string query)
+        {
+            if (query == "")
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public Feature queryHandle(string query)
+        {
+            Feature target = null;
+            int targetLen = 0;
+            for (int x = 0; x < featGraph.Features.Count; x++)
+            {
+                if (fullContain(query, featGraph.Features[x].Data))
+                {
+                    if (featGraph.Features[x].Data.Length > targetLen)
+                    {
+                        target = featGraph.Features[x];
+                        targetLen = featGraph.Features[x].Data.Length;
+                    }
+                }
+            }
+            return target;
+        }
+
         public string makeQuery(string query)
+        {
+            if (this.currentTopic == null)
+            {
+                this.currentTopic = featGraph.Root;
+            }
+            //no query or continue to next topic case
+            if (continueNextTopic(query))
+            {
+                FeatureSpeaker mySpeaker = new FeatureSpeaker();
+                //tellMeMore = mySpeaker.getTagSpeak(featGraph.Root);
+                Feature nextTopic = mySpeaker.getNextTopic(featGraph, this.currentTopic, "", this.turn);
+                nextTopic.DiscussedAmount += 1;
+                featGraph.setFeature(nextTopic.Data, nextTopic);
+                this.currentTopic = nextTopic;
+                this.turn += 1;
+                //return mySpeaker.getChildSpeak(featGraph.Root);
+                return nextTopic.Data;
+            } //Tell me more about the current topic
+            else if (isTellMeMoreQuery(query))
+            {
+                this.currentTopic.DiscussedAmount += 1;
+                featGraph.setFeature(this.currentTopic.Data,this.currentTopic);
+                this.turn += 1;
+                return this.currentTopic.Data;
+            } //question, query or don't understand query
+            else 
+            {
+                Feature target = queryHandle(query);
+                if (target == null)
+                {
+                    //don't understand query case
+                }else
+                {
+                    //question or query
+                    target.DiscussedAmount += 1;
+                    featGraph.setFeature(target.Data, target);
+                    this.currentTopic = target;
+                    this.turn += 1;
+                    return target.Data;
+                }
+            }
+
+            return "";
+        }
+
+        public string makeQuery2(string query)
         {
             if (this.currentTopic == null)
             {

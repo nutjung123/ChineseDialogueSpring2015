@@ -8,8 +8,15 @@ namespace Lost_Manuscript_II_Data_Entry
 {
     class FeatureSpeaker
     {
+        private float[] dramaticFunction;
+        private int turn;
+
         public FeatureSpeaker()
-        { }
+        {
+            //define dramaticFunction manually here
+            dramaticFunction = new float[10] {1,2,3,2,1,2,3,4,5,3};
+            turn = 0;
+        }
 
         //call this function with answer =-1;
         private void getHeight(FeatureGraph featGraph, Feature current, Feature target, int h, ref int height)
@@ -31,7 +38,10 @@ namespace Lost_Manuscript_II_Data_Entry
         private double getScore(FeatureGraph featGraph, Feature current,Feature oldTopic, int h,int oldh)
         {
             double score =0;
+            
             //check dramatic goal value
+
+
 
             //check mentionCount
             float DiscussedAmount = current.DiscussedAmount;
@@ -51,27 +61,35 @@ namespace Lost_Manuscript_II_Data_Entry
                 }
             }
             //check difference distance 
-            int diffDist = Math.Abs(h - oldh);
+            double diffDist = Math.Abs(h - oldh);
 
             //Score calculation
-            score = DiscussedAmount * -1 + FathertoChild * 0.5 + ChildtoFather * 0.5 + diffDist/featGraph.getMaxDepth();
+            double maxDepth = (double) featGraph.getMaxDepth();
+            score = DiscussedAmount * -1.0 + FathertoChild * 1.0 + ChildtoFather * 1.0 + (maxDepth-diffDist)/maxDepth;
 
             return score;
         }
 
         private void travelGraph(FeatureGraph featGraph,Feature current, Feature oldTopic,int h,
-            int oldh, int limit, ref List<Tuple<Feature,double> > listScore)
+            int oldh, int limit, ref List<Tuple<Feature,double> > listScore,bool[] checkEntry)
         {
-             //base case
+             //current's height is higher than the limit
             if (h > limit)
             {
                 return;
             }
+            int index = featGraph.getFeatureIndex(current.Data);
+            if (checkEntry[index])
+            {
+                return;
+            }
+            checkEntry[index] = true;
             //Calculate score and add to list
             listScore.Add(new Tuple<Feature, double>(current, getScore(featGraph, current, oldTopic,h,oldh)));
+            //search children of current node
             for (int x = 0; x < current.Neighbors.Count; x++) 
             {
-                travelGraph(featGraph, current.Neighbors[x].Item1, oldTopic, h, oldh,limit, ref listScore);
+                travelGraph(featGraph, current.Neighbors[x].Item1, oldTopic, h+1, oldh,limit, ref listScore,checkEntry);
             }
         }
 
@@ -86,11 +104,12 @@ namespace Lost_Manuscript_II_Data_Entry
             {
                 //next topic case
                 int height = -1;
-                int limit = 999; 
+                int limit = 999;
+                bool[] checkEntry = new bool[featGraph.Count]; 
                 getHeight(featGraph, featGraph.Root, oldTopic, 0, ref height);
                 //search the next topic
                 List<Tuple<Feature, double>> listScore = new List<Tuple<Feature,double>>();
-                travelGraph(featGraph, featGraph.Root, oldTopic, 0, height, limit, ref listScore);
+                travelGraph(featGraph, featGraph.Root, oldTopic, 0, height, limit, ref listScore,checkEntry);
                 
                 //find max score
                 if (listScore.Count == 0)
