@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using LostManuscriptII;
+using Dialogue_Data_Entry;
 
-namespace Lost_Manuscript_II_Data_Entry
+namespace Dialogue_Data_Entry
 {
     class QueryController
     {

@@ -1,4 +1,4 @@
-﻿namespace Lost_Manuscript_II_Data_Entry
+﻿namespace Dialogue_Data_Entry
 {
     partial class Form1
     {
@@ -38,6 +38,8 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.FeatureEditor = new System.Windows.Forms.TabPage();
+            this.editTagComboBox = new System.Windows.Forms.ComboBox();
+            this.createTagComboBox = new System.Windows.Forms.ComboBox();
             this.label18 = new System.Windows.Forms.Label();
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.button6 = new System.Windows.Forms.Button();
@@ -98,8 +100,6 @@
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.createTagComboBox = new System.Windows.Forms.ComboBox();
-            this.editTagComboBox = new System.Windows.Forms.ComboBox();
             this.tabControl1.SuspendLayout();
             this.FeatureCreator.SuspendLayout();
             this.FeatureEditor.SuspendLayout();
@@ -137,7 +137,7 @@
             // 
             // featureCreateButton
             // 
-            this.featureCreateButton.Location = new System.Drawing.Point(164, 20);
+            this.featureCreateButton.Location = new System.Drawing.Point(248, 20);
             this.featureCreateButton.Name = "featureCreateButton";
             this.featureCreateButton.Size = new System.Drawing.Size(75, 23);
             this.featureCreateButton.TabIndex = 5;
@@ -176,7 +176,7 @@
             // 
             this.textBox1.Location = new System.Drawing.Point(10, 23);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(143, 20);
+            this.textBox1.Size = new System.Drawing.Size(229, 20);
             this.textBox1.TabIndex = 1;
             // 
             // label1
@@ -233,6 +233,26 @@
             this.FeatureEditor.UseVisualStyleBackColor = true;
             this.FeatureEditor.Click += new System.EventHandler(this.FeatureEditor_Click);
             // 
+            // editTagComboBox
+            // 
+            this.editTagComboBox.FormattingEnabled = true;
+            this.editTagComboBox.IntegralHeight = false;
+            this.editTagComboBox.Location = new System.Drawing.Point(645, 279);
+            this.editTagComboBox.MaxDropDownItems = 15;
+            this.editTagComboBox.Name = "editTagComboBox";
+            this.editTagComboBox.Size = new System.Drawing.Size(130, 21);
+            this.editTagComboBox.TabIndex = 26;
+            // 
+            // createTagComboBox
+            // 
+            this.createTagComboBox.FormattingEnabled = true;
+            this.createTagComboBox.IntegralHeight = false;
+            this.createTagComboBox.Location = new System.Drawing.Point(645, 139);
+            this.createTagComboBox.MaxDropDownItems = 15;
+            this.createTagComboBox.Name = "createTagComboBox";
+            this.createTagComboBox.Size = new System.Drawing.Size(130, 21);
+            this.createTagComboBox.TabIndex = 22;
+            // 
             // label18
             // 
             this.label18.AutoSize = true;
@@ -284,7 +304,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(227, 395);
+            this.label17.Location = new System.Drawing.Point(227, 396);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(191, 13);
             this.label17.TabIndex = 33;
@@ -374,7 +394,7 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(645, 25);
+            this.checkBox1.Location = new System.Drawing.Point(645, 27);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(138, 17);
             this.checkBox1.TabIndex = 9;
@@ -454,7 +474,7 @@
             // 
             // maskedTextBox1
             // 
-            this.maskedTextBox1.Location = new System.Drawing.Point(441, 23);
+            this.maskedTextBox1.Location = new System.Drawing.Point(468, 22);
             this.maskedTextBox1.Mask = "00000";
             this.maskedTextBox1.Name = "maskedTextBox1";
             this.maskedTextBox1.Size = new System.Drawing.Size(141, 20);
@@ -463,7 +483,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(438, 7);
+            this.label9.Location = new System.Drawing.Point(465, 7);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(193, 13);
             this.label9.TabIndex = 14;
@@ -472,7 +492,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(439, 46);
+            this.label5.Location = new System.Drawing.Point(465, 46);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(144, 26);
             this.label5.TabIndex = 13;
@@ -481,9 +501,9 @@
             // listBox2
             // 
             this.listBox2.FormattingEnabled = true;
-            this.listBox2.Location = new System.Drawing.Point(441, 75);
+            this.listBox2.Location = new System.Drawing.Point(468, 75);
             this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(194, 303);
+            this.listBox2.Size = new System.Drawing.Size(167, 303);
             this.listBox2.TabIndex = 12;
             this.listBox2.SelectedIndexChanged += new System.EventHandler(this.listBox2_SelectedIndexChanged);
             // 
@@ -503,23 +523,24 @@
             this.checkedListBox2.HorizontalScrollbar = true;
             this.checkedListBox2.Location = new System.Drawing.Point(230, 75);
             this.checkedListBox2.Name = "checkedListBox2";
-            this.checkedListBox2.Size = new System.Drawing.Size(200, 304);
+            this.checkedListBox2.Size = new System.Drawing.Size(217, 304);
             this.checkedListBox2.TabIndex = 11;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(227, 46);
+            this.label6.Location = new System.Drawing.Point(228, 46);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(147, 26);
+            this.label6.Size = new System.Drawing.Size(214, 26);
             this.label6.TabIndex = 8;
-            this.label6.Text = "Select the other features that \r\nthis one will link to. (Children)";
+            this.label6.Text = "Select children to link to the editting feature.\n\"Right click\" to edit the relati" +
+    "onship.";
             // 
             // textBox2
             // 
             this.textBox2.Location = new System.Drawing.Point(230, 23);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(188, 20);
+            this.textBox2.Size = new System.Drawing.Size(217, 20);
             this.textBox2.TabIndex = 7;
             // 
             // label7
@@ -781,26 +802,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1057, 636);
             this.panel1.TabIndex = 6;
-            // 
-            // createTagComboBox
-            // 
-            this.createTagComboBox.FormattingEnabled = true;
-            this.createTagComboBox.IntegralHeight = false;
-            this.createTagComboBox.Location = new System.Drawing.Point(645, 139);
-            this.createTagComboBox.MaxDropDownItems = 15;
-            this.createTagComboBox.Name = "createTagComboBox";
-            this.createTagComboBox.Size = new System.Drawing.Size(130, 21);
-            this.createTagComboBox.TabIndex = 22;
-            // 
-            // editTagComboBox
-            // 
-            this.editTagComboBox.FormattingEnabled = true;
-            this.editTagComboBox.IntegralHeight = false;
-            this.editTagComboBox.Location = new System.Drawing.Point(645, 279);
-            this.editTagComboBox.MaxDropDownItems = 15;
-            this.editTagComboBox.Name = "editTagComboBox";
-            this.editTagComboBox.Size = new System.Drawing.Size(130, 21);
-            this.editTagComboBox.TabIndex = 26;
             // 
             // Form1
             // 

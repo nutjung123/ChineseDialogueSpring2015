@@ -5,7 +5,7 @@ using System.Text;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
-namespace LostManuscriptII
+namespace Dialogue_Data_Entry
 {
     class DeepClone
     {

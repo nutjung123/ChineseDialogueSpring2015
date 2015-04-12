@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace LostManuscriptII
+namespace Dialogue_Data_Entry
 {
     public class FeatureGraph
     {
@@ -17,7 +17,7 @@ namespace LostManuscriptII
             maxDepth = -1;
         }
 
-        private void helperMaxDepth(Feature current, int depth)
+        private void helperMaxDepth(Feature current, int depth, bool[] checkEntry)
         {
             if (current.Neighbors.Count == 0)
             {
@@ -26,9 +26,17 @@ namespace LostManuscriptII
                     this.maxDepth = depth;
                 }
             }
+            
+            int index = this.getFeatureIndex(current.Data);
+            if (checkEntry[index])
+            {
+                return;
+            }
+            checkEntry[index] = true;
+
             for (int x = 0; x < current.Neighbors.Count; x++)
             {
-                helperMaxDepth(current.Neighbors[x].Item1, depth + 1);
+                helperMaxDepth(current.Neighbors[x].Item1, depth + 1,checkEntry);
             }
         }
 
@@ -38,7 +46,8 @@ namespace LostManuscriptII
             {
                 if (root != null)
                 {
-                    helperMaxDepth(root, 0);
+                    bool[] checkEntry = new bool[this.Count]; 
+                    helperMaxDepth(root, 0, checkEntry);
                 }
             }
             return maxDepth;
@@ -86,7 +95,7 @@ namespace LostManuscriptII
             }
             return false;
         }
-        public bool setFeatureNeighbors(int index, List<Tuple<Feature, double>> newNeighbors)
+        public bool setFeatureNeighbors(int index, List<Tuple<Feature, double,string>> newNeighbors)
         {
             if (index >= 0 && index < features.Count)
             {

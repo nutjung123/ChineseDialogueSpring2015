@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Xml;
-using LostManuscriptII;
+using Dialogue_Data_Entry;
 using System.Windows.Forms;
 
-namespace Lost_Manuscript_II_Data_Entry
+namespace Dialogue_Data_Entry
 {
 
     class XMLFilerForFeatureGraph
@@ -30,7 +30,7 @@ namespace Lost_Manuscript_II_Data_Entry
                     for (int y = 0; y < tmp.Neighbors.Count; y++)
                     {
                         int id = toWrite.getFeatureIndex(tmp.Neighbors[y].Item1.Data);
-                        writer.WriteLine("<neighbor dest=\"" + id + "\" weight=\"" + tmp.Neighbors[y].Item2 + "\"/>");
+                        writer.WriteLine("<neighbor dest=\"" + id + "\" weight=\"" + tmp.Neighbors[y].Item2 + "\" relationship=\""+tmp.Neighbors[y].Item3+"\"/>");
                     }
                     List<Tuple<string, string, string>> tags = tmp.Tags;
                     for (int y = 0; y < tags.Count; y++)
@@ -78,7 +78,12 @@ namespace Lost_Manuscript_II_Data_Entry
                     {
                         int id = Convert.ToInt32(neighborNode.Attributes["dest"].Value);
                         double weight = Convert.ToDouble(neighborNode.Attributes["weight"].Value);
-                        tmp.addNeighbor(result.Features[id], weight);
+                        string relationship = "";
+                        if (neighborNode.Attributes["relationship"] != null)
+                        {
+                            relationship = Convert.ToString(neighborNode.Attributes["relationship"].Value);
+                        }
+                        tmp.addNeighbor(result.Features[id], weight,relationship);
 
                         result.Features[id].Parents.Add(tmp);
                     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Lost_Manuscript_II_Data_Entry
+namespace Dialogue_Data_Entry
 {
     static class Program
     {

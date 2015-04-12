@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace LostManuscriptII
+namespace Dialogue_Data_Entry
 {
     [Serializable]
     public class Feature
@@ -11,7 +11,7 @@ namespace LostManuscriptII
         private float discussedAmount;                   // This is the "ammount" that this feature has beed the topic of the conversation
         private float discussedThreshold;                // This is the threshold that when reached the topic will have beed exhausted
         private string data;                             // This is the data for this feature, it is essentially all of the information that needs to be represented
-        private List<Tuple<Feature, double>> neighbors;  // This is a list of tuples that contain all of the features that can be reached from this topic and a weight that defines how distanced they are from the parent feature (this feature)
+        private List<Tuple<Feature, double, string>> neighbors;  // This is a list of tuples that contain all of the features that can be reached from this topic and a weight that defines how distanced they are from the parent feature (this feature)
         private HashSet<Feature> parents;                   // This is a HashSet of features that can be reached to this feature node 
         private List<Tuple<string, string, string>>  tags;       // This is a list of tuples that are used to store the tags (generic, single use pices of information). The first element is the key, and the second element is the Data. This will simply operate as a map.
         private List<string> speaks;
@@ -21,7 +21,7 @@ namespace LostManuscriptII
         {
             this.speaks = new List<string>();
             this.data = data;
-            this.neighbors = new List<Tuple<Feature, double>>();
+            this.neighbors = new List<Tuple<Feature, double, string>>();
             this.tags = new List<Tuple<string, string, string>>();
             this.flag = false;
             this.parents = new HashSet<Feature>();
@@ -90,11 +90,11 @@ namespace LostManuscriptII
         }
         // This function will add a new feature to the neighbors given a new feature and a weight (weight is defaulted to zero). 
         // This function will add a neighbor in alphabet order (insert)
-        public bool addNeighbor(Feature neighbor, double weight = 0.0)
+        public bool addNeighbor(Feature neighbor, double weight = 0.0, string relationship="")
         {
             if (neighbors.Count == 0)
             {
-                neighbors.Add(new Tuple<Feature, double>(neighbor, weight));
+                neighbors.Add(new Tuple<Feature, double, string>(neighbor, weight,relationship));
                 return true;
             }
             for (int x = 0; x < neighbors.Count; x++)
@@ -102,19 +102,48 @@ namespace LostManuscriptII
                 if (String.Compare(neighbor.Data, neighbors[x].Item1.Data) == 0) { return false; }
                 if (String.Compare(neighbor.Data, neighbors[x].Item1.Data) < 0)
                 {
-                    neighbors.Insert(x, new Tuple<Feature, double>(neighbor, weight));
+                    neighbors.Insert(x, new Tuple<Feature, double, string>(neighbor, weight,relationship));
                     return true;
                 }
             }
-            neighbors.Add(new Tuple<Feature, double>(neighbor, weight));
+            neighbors.Add(new Tuple<Feature, double, string>(neighbor, weight, relationship));
             return true;
         }
+
+        public string getRelationship(string neighbor)
+        {
+            for (int x = 0; x < neighbors.Count; x++)
+            {
+                if (neighbors[x].Item1.Data == neighbor)
+                {
+                    return neighbors[x].Item3;
+                }
+            }
+            return "";
+        }
+
+        //set relationship between this feature and the neighbor
+        public bool setRelationship(Feature neighbor,string relationship)
+        {
+            //removeNeighbor(neighbor.Data);
+            //addNeighbor(neighbor, 0.0, relationship);
+            for (int x = 0; x < neighbors.Count; x++)
+            {
+                if (neighbors[x].Item1.Data == neighbor.Data)
+                {
+                    neighbors[x] = new Tuple<Feature, double, string>(neighbors[x].Item1, neighbors[x].Item2, relationship);
+                    return true;
+                }
+            }
+            return false;
+        }
+
         // This function will remove a neighbor that has the string data as its data
         public bool removeNeighbor(string data)
         {
             for (int x = 0; x < neighbors.Count; x++)
             {
-                System.Console.WriteLine(data);
+                //System.Console.WriteLine(data);
                 if (neighbors[x].Item1.Data == data)
                 {
                     neighbors.RemoveAt(x);
@@ -287,7 +316,7 @@ namespace LostManuscriptII
                 this.data = value;
             }
         }
-        public List<Tuple<Feature, double>> Neighbors
+        public List<Tuple<Feature, double, string>> Neighbors
         {
             get { return this.neighbors; }
             set { this.neighbors = value; }

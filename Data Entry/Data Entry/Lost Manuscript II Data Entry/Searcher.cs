@@ -6,9 +6,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using LostManuscriptII;
+using Dialogue_Data_Entry;
 
-namespace Lost_Manuscript_II_Data_Entry
+namespace Dialogue_Data_Entry
 {
     public partial class Searcher : Form
     {

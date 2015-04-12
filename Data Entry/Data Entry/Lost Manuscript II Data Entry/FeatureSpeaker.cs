@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using LostManuscriptII;
+using Dialogue_Data_Entry;
 
-namespace Lost_Manuscript_II_Data_Entry
+namespace Dialogue_Data_Entry
 {
     class FeatureSpeaker
     {
@@ -17,7 +17,7 @@ namespace Lost_Manuscript_II_Data_Entry
         }
 
         //call this function with answer =-1;
-        private void getHeight(FeatureGraph featGraph, Feature current, Feature target, int h, ref int height)
+        private void getHeight(FeatureGraph featGraph, Feature current, Feature target, int h, ref int height,bool[] checkEntry)
         {
             if (current == target)
             {
@@ -27,9 +27,17 @@ namespace Lost_Manuscript_II_Data_Entry
             {
                 return;
             }
+            
+            int index = featGraph.getFeatureIndex(current.Data);
+            if (checkEntry[index])
+            {
+                return;
+            }
+            checkEntry[index] = true;
+
             for (int x = 0; x < current.Neighbors.Count; x++)
             {
-                getHeight(featGraph, current.Neighbors[x].Item1, target, h + 1, ref height);
+                getHeight(featGraph, current.Neighbors[x].Item1, target, h + 1, ref height,checkEntry);
             }
         }
 
@@ -103,8 +111,9 @@ namespace Lost_Manuscript_II_Data_Entry
                 //next topic case
                 int height = -1;
                 int limit = 999;
-                bool[] checkEntry = new bool[featGraph.Count]; 
-                getHeight(featGraph, featGraph.Root, oldTopic, 0, ref height);
+                bool[] checkEntry = new bool[featGraph.Count]; //checkEntry is to check that it won't check the same node again
+                getHeight(featGraph, featGraph.Root, oldTopic, 0, ref height,checkEntry);
+                checkEntry = new bool[featGraph.Count];
                 //search the next topic
                 List<Tuple<Feature, double>> listScore = new List<Tuple<Feature,double>>();
                 travelGraph(featGraph, featGraph.Root, oldTopic, 0, height, limit, ref listScore,checkEntry);
@@ -148,10 +157,10 @@ namespace Lost_Manuscript_II_Data_Entry
             }
 
             //select the elements
-            List<Tuple<Feature, double>> toDirect = toSpeak.Neighbors;
+            List<Tuple<Feature, double,string>> toDirect = toSpeak.Neighbors;
             if (toSpeak.Neighbors.Count > 5)
             {
-                toDirect = new List<Tuple<Feature,double>>();
+                toDirect = new List<Tuple<Feature,double,string>>();
                 int choice = 0;
                 while(toDirect.Count < 5)
                 {

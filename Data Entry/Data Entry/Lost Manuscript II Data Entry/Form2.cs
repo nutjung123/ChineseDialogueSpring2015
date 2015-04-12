@@ -6,11 +6,11 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using LostManuscriptII;
+using Dialogue_Data_Entry;
 using System.IO;
 using System.Collections;
 
-namespace Lost_Manuscript_II_Data_Entry
+namespace Dialogue_Data_Entry
 {
     public partial class Form2 : Form
     {
@@ -55,7 +55,8 @@ namespace Lost_Manuscript_II_Data_Entry
             {
                 myController = new QueryController(featGraph);
             }
-            chatBox.AppendText(myController.makeQuery(query) +"\r\n");
+            chatBox.AppendText("User: "+query+"\r\n");
+            chatBox.AppendText("System:"+myController.makeQuery(query) +"\r\n");
             inputBox.Clear();
         }
     }

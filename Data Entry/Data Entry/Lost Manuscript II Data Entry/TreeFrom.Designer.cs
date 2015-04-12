@@ -1,4 +1,4 @@
-﻿namespace Lost_Manuscript_II_Data_Entry
+﻿namespace Dialogue_Data_Entry
 {
     partial class TreeFrom
     {

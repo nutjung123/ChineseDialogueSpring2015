@@ -8,9 +8,9 @@ using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
-using LostManuscriptII;
+using Dialogue_Data_Entry;
 
-namespace Lost_Manuscript_II_Data_Entry
+namespace Dialogue_Data_Entry
 {
     public partial class Form1 : Form
     {
@@ -55,6 +55,9 @@ namespace Lost_Manuscript_II_Data_Entry
             checkedListBox2.MouseMove += new MouseEventHandler(checkedListBox2_MouseMove);
             //check event handle
             checkedListBox2.ItemCheck += new ItemCheckEventHandler(CheckedListBox2_ItemCheck);
+            //right click event for adding relationship
+            checkedListBox2.MouseDown += new MouseEventHandler(CheckedListBox2_RightClick);
+
             //Add tooltip method to createTagComboBox
             createTagComboBox.DrawMode = DrawMode.OwnerDrawFixed;
             createTagComboBox.DrawItem += createTagComboBox_DrawItem;
@@ -70,6 +73,7 @@ namespace Lost_Manuscript_II_Data_Entry
             {
                 backgroundWorker1.RunWorkerAsync();
             }
+
         }
 
         //All of the operations for the File dropdown menu
@@ -79,6 +83,7 @@ namespace Lost_Manuscript_II_Data_Entry
             toChange = null;
             selectedIndex = -1;
             editorFeatureSelected = "";
+            currentFileName = "";
             refreshAll();
         }
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -248,8 +253,61 @@ namespace Lost_Manuscript_II_Data_Entry
                     toRefresh.Items.AddRange(new object[] { tmp[x] });
                 }
             }
+
             toRefresh.Refresh();
         }
+        /* 
+        private void refreshNeighborPanel(string toIgnore = null)
+        {
+            panelTest.Controls.Clear();
+
+            listNeighborComboBox.Clear();
+            listNeighborCheckBox.Clear();
+            listNeighborButton.Clear();
+
+            //add all the new components to the panel
+            List<string> temp = featGraph.getFeatureNames();
+            int counter = 0;
+            for (int x = 0; x < temp.Count; x++)
+            {
+                if (temp[x] == toIgnore)
+                {
+                    counter = 1;
+                    continue;
+                }
+                CheckBox checkBoxTemp = new CheckBox();
+                checkBoxTemp.AutoSize = true;
+                checkBoxTemp.Location = new System.Drawing.Point(3, 3 + (49 * (x-counter) ) );
+                checkBoxTemp.Name = "checkBoxNeighbor" + x.ToString();
+                checkBoxTemp.Size = new System.Drawing.Size(80, 17);
+                checkBoxTemp.Text = temp[x];
+                checkBoxTemp.UseVisualStyleBackColor = true;
+                panelTest.Controls.Add(checkBoxTemp);
+                listNeighborCheckBox.Add(checkBoxTemp);
+
+                ComboBox comboBoxTemp = new ComboBox();
+                comboBoxTemp.FormattingEnabled = true;
+                comboBoxTemp.Location = new System.Drawing.Point(3, 25 + (49 * (x-counter) ) );
+                comboBoxTemp.Name = "comboBoxNeighbor" + x.ToString();
+                comboBoxTemp.Size = new System.Drawing.Size(141, 21);
+                comboBoxTemp.Enabled = false;
+                panelTest.Controls.Add(comboBoxTemp);
+                listNeighborComboBox.Add(comboBoxTemp);
+
+                Button buttonTemp = new Button();
+                buttonTemp.Location = new System.Drawing.Point(150, 25 + (49 * (x-counter) ) );
+                buttonTemp.Name = "buttonNeighbor" + x.ToString();
+                buttonTemp.Size = new System.Drawing.Size(44, 21);
+                buttonTemp.TabIndex = 13;
+                buttonTemp.Text = "Add";
+                buttonTemp.UseVisualStyleBackColor = true;
+                buttonTemp.Enabled = false;
+                panelTest.Controls.Add(buttonTemp);
+                listNeighborButton.Add(buttonTemp);
+            }
+        }
+        */
+
         private void refreshFeatureTagListBox(ListBox toRefresh)
         {
             toRefresh.Items.Clear();
@@ -451,9 +509,11 @@ namespace Lost_Manuscript_II_Data_Entry
                 textBox2.Text = toEdit.Data;
                 editorFeatureSelected = toEdit.Data;
                 refreshFeatureListBox(checkedListBox2, toEdit.Data);
+
                 refreshFeatureSpeaksListBox(listBox3);
                 refreshFeatureTagListBox(listBox2);
                 shouldIgnoreCheckEvent = true;
+                
                 for (int x = 0; x < toEdit.Neighbors.Count; x++)
                 {
                     for (int y = 0; y < checkedListBox2.Items.Count; y++)
@@ -464,6 +524,7 @@ namespace Lost_Manuscript_II_Data_Entry
                         }
                     }
                 }
+
                 shouldIgnoreCheckEvent = false;
                 checkedListBox2.Refresh();
 
@@ -472,6 +533,7 @@ namespace Lost_Manuscript_II_Data_Entry
                     checkBox1.Checked = true;
                 }
                 checkBox1.Refresh();
+
             }
             catch (Exception err)
             {
@@ -849,6 +911,41 @@ namespace Lost_Manuscript_II_Data_Entry
                     int neighborIndex = featGraph.getFeatureIndex(checkedListBox2.Items[e.Index].ToString());
                     featGraph.Features[selectedIndex].removeNeighbor(featGraph.Features[neighborIndex].Data);
                     featGraph.Features[neighborIndex].Parents.Remove(featGraph.Features[selectedIndex]);
+                    updateFlag = true;
+                }
+            }
+        }
+
+        private void CheckedListBox2_RightClick(Object sender, MouseEventArgs e)
+        {
+            checkedListBox2.SelectedIndex = checkedListBox2.IndexFromPoint(e.X, e.Y);
+            if (checkedListBox2.SelectedIndex == -1)
+            {
+                return;
+            }
+            string selectedName = checkedListBox2.Items[checkedListBox2.SelectedIndex].ToString();
+            if (e.Button == MouseButtons.Right 
+                && checkedListBox2.GetItemCheckState(checkedListBox2.SelectedIndex) == CheckState.Checked )
+            {
+                string existedRelationship = featGraph.Features[selectedIndex].getRelationship(selectedName);
+                Form3 relationshipDialog = new Form3(featGraph.Features[selectedIndex].Data, selectedName, existedRelationship);
+                relationshipDialog.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
+                string textResult = "";
+                if (relationshipDialog.ShowDialog(this) == DialogResult.OK)
+                {
+                    textResult = relationshipDialog.comboBoxRelationship.Text; 
+                }
+                relationshipDialog.Dispose();
+
+                if (hasBadChar(textResult))
+                {
+                    MessageBox.Show("The values you have entered contain characters that are not allowed\nThe characters that you cannot use are " + BAD_CHARS, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return;
+                }
+                //add relationship
+                featGraph.Features[selectedIndex].setRelationship(featGraph.getFeature(selectedName),textResult);
+                if (existedRelationship != textResult)
+                {
                     updateFlag = true;
                 }
             }
