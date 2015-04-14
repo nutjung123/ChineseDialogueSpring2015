@@ -9,6 +9,7 @@ namespace Dialogue_Data_Entry
     class FeatureSpeaker
     {
         private float[] dramaticFunction;
+        private bool printCalculation = true;
 
         public FeatureSpeaker()
         {
@@ -57,11 +58,11 @@ namespace Dialogue_Data_Entry
             int ChildtoFather = 0; //old is a child
             if(!(oldTopic==current))
             {
-                if(oldTopic.canReachFeature(current.Data))
+                if(oldTopic.canReachFeature(current.Data,true))
                 {
                     FathertoChild = 1;
                 }
-                if(current.canReachFeature(oldTopic.Data))
+                if(current.canReachFeature(oldTopic.Data,true))
                 {
                     ChildtoFather = 1;
                 }
@@ -71,8 +72,16 @@ namespace Dialogue_Data_Entry
 
             //Score calculation
             double maxDepth = (double) featGraph.getMaxDepth();
+
             score = DiscussedAmount * -1.0 + FathertoChild * 1.0 + ChildtoFather * 1.0 + (maxDepth-diffDist)/maxDepth;
 
+            if (printCalculation)
+            {
+                System.Console.WriteLine("DiscussedAmount: " + DiscussedAmount);
+                System.Console.WriteLine("FathertoChild: " + FathertoChild + " ChildretoFather: " + ChildtoFather);
+                System.Console.WriteLine("diffDist: " + diffDist + " (maxDepth: " + maxDepth + ")");
+                System.Console.WriteLine("score (DiscussedAmount * -1.0 + FathertoChild * 1.0 + ChildtoFather * 1.0 + (maxDepth-diffDist)/maxDepth): " + score);
+            }
             return score;
         }
 
@@ -91,6 +100,10 @@ namespace Dialogue_Data_Entry
             }
             checkEntry[index] = true;
             //Calculate score and add to list
+            if (printCalculation)
+            {
+                System.Console.WriteLine("\nNode: "+current.Data);
+            }
             listScore.Add(new Tuple<Feature, double>(current, getScore(featGraph, current, oldTopic,h,oldh)));
             //search children of current node
             for (int x = 0; x < current.Neighbors.Count; x++) 
@@ -98,7 +111,7 @@ namespace Dialogue_Data_Entry
                 travelGraph(featGraph, current.Neighbors[x].Item1, oldTopic, h+1, oldh,limit, ref listScore,checkEntry);
             }
         }
-
+        //Return the next topic
         public Feature getNextTopic(FeatureGraph featGraph, Feature oldTopic, string query, int turn)
         {
             if (turn == 1)
@@ -132,6 +145,12 @@ namespace Dialogue_Data_Entry
                         maxScore = listScore[x].Item2;
                         maxIndex = x;
                     }
+                }
+                if (printCalculation)
+                {
+                    System.Console.WriteLine("\n\nMax score: "+maxScore);
+                    System.Console.WriteLine("Node: "+listScore[maxIndex].Item1.Data);
+                    System.Console.WriteLine("==========================================");
                 }
                 return listScore[maxIndex].Item1;
 

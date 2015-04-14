@@ -12,6 +12,7 @@ namespace Dialogue_Data_Entry
         private string tellMeMore;
         private int turn;
         private Feature currentTopic;
+        private string[] punctuaion = new string[] { ",", ";", ".", "?", "!", "\'", "\"","(",")","-" };
         public QueryController(FeatureGraph graph)
         {
             featGraph = graph;
@@ -20,19 +21,28 @@ namespace Dialogue_Data_Entry
             currentTopic = null;
         }
 
-        //return true if target is in sentence, false otherwise
-        private bool fullContain(string sentence, string target)
+        private string PunctuationHandle(string str)
         {
-            string[] sentences = sentence.Split();
-            string[] targets = target.Split();
-            for (int x = 0; x < sentences.Count()-targets.Count()+1; x++)
+            string temp = str;
+            for (int x = 0; x < punctuaion.Length; x++)
             {
-                if (sentences[x] == targets[0])
+                temp = temp.Replace(punctuaion[x]," "+punctuaion[x]);
+            }
+            return temp;
+        }
+
+        //return true if target is in sentence, false otherwise
+        private bool fullContain(string[] sentence, string target)
+        {
+            string[] targets = target.Split();
+            for (int x = 0; x < sentence.Count()-targets.Count()+1; x++)
+            {
+                if (sentence[x] == targets[0])
                 {
                     bool check = true; 
                     for (int y = 0; y < targets.Count(); y++)
                     {
-                        if (sentences[x + y] != targets[y])
+                        if (sentence[x + y] != targets[y])
                         {
                             check = false;
                             break;
@@ -60,9 +70,13 @@ namespace Dialogue_Data_Entry
         {
             Feature target = null;
             int targetLen = 0;
+            //preprocess query
+            query = query.ToLower();
+            query = PunctuationHandle(query);
+            string[] sentence = query.Split();
             for (int x = 0; x < featGraph.Features.Count; x++)
             {
-                if (fullContain(query.ToLower(), featGraph.Features[x].Data.ToLower()))
+                if (fullContain(sentence, PunctuationHandle(featGraph.Features[x].Data.ToLower()) ))
                 {
                     if (featGraph.Features[x].Data.Length > targetLen)
                     {

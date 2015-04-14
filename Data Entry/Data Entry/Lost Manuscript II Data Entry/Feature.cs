@@ -15,6 +15,7 @@ namespace Dialogue_Data_Entry
         private HashSet<Feature> parents;                   // This is a HashSet of features that can be reached to this feature node 
         private List<Tuple<string, string, string>>  tags;       // This is a list of tuples that are used to store the tags (generic, single use pices of information). The first element is the key, and the second element is the Data. This will simply operate as a map.
         private List<string> speaks;
+        private int level;
         public bool flag;                                // This is a public general use flag that can be used for things like traversals and stuff like that
        
         public Feature(string data)
@@ -25,6 +26,7 @@ namespace Dialogue_Data_Entry
             this.tags = new List<Tuple<string, string, string>>();
             this.flag = false;
             this.parents = new HashSet<Feature>();
+            this.level = 0;
         }
 
         // This function is used to get a Feature that is a neighbor of this Feature, it takes a string and preforms a binary search over the list
@@ -153,15 +155,16 @@ namespace Dialogue_Data_Entry
             return false;
         }
         // This function will check through all of the features that can be reached from its neighbors and if it finds the one that we are looking for it return true, false otherwise
-        private bool canReachHelper(string destData)
+        private bool canReachHelper(string destData,bool checkLevel)
         {
             this.flag = true;
             if (this.data == destData) { return true; }
             for (int x = 0; x < neighbors.Count; x++)
             {
-                if(neighbors[x].Item1.flag == false)
+                // checkLevel -> (this.Level < neighbors[x].Item1.Level) {material condition}
+                if (neighbors[x].Item1.flag == false && (!checkLevel ||(this.Level < neighbors[x].Item1.Level)) )
                 {
-                    if (neighbors[x].Item1.canReachHelper(destData)) 
+                    if (neighbors[x].Item1.canReachHelper(destData,checkLevel)) 
                     {
                         return true; 
                     }
@@ -170,9 +173,9 @@ namespace Dialogue_Data_Entry
             return false;
         }
         // This function will call and return the canReachHelper method, but it will also rest all of the flags before it is done
-        public bool canReachFeature(string destData)
+        public bool canReachFeature(string destData,bool checkLevel=false)
         {
-            bool tmp = canReachHelper(destData);
+            bool tmp = canReachHelper(destData,checkLevel);
             resetReachableFlags();
             return tmp;
         }
@@ -341,6 +344,18 @@ namespace Dialogue_Data_Entry
             set
             {
                 this.speaks = value;
+            }
+        }
+
+        public int Level
+        {
+            get
+            {
+                return this.level;
+            }
+            set
+            {
+                this.level = value;
             }
         }
 

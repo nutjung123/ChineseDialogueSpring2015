@@ -888,6 +888,7 @@ namespace Dialogue_Data_Entry
 
         private void chatToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            featGraph.setMaxDepth(-1); //so that we force them to recalculate every time you call query in case of updating graph
             myQuery = new Form2(featGraph);
             myQuery.Show();
         }

@@ -17,7 +17,7 @@ namespace Dialogue_Data_Entry
             maxDepth = -1;
         }
 
-        private void helperMaxDepth(Feature current, int depth, bool[] checkEntry)
+        private void helperMaxDepthDSF(Feature current, int depth, bool[] checkEntry)
         {
             if (current.Neighbors.Count == 0)
             {
@@ -36,7 +36,34 @@ namespace Dialogue_Data_Entry
 
             for (int x = 0; x < current.Neighbors.Count; x++)
             {
-                helperMaxDepth(current.Neighbors[x].Item1, depth + 1,checkEntry);
+                helperMaxDepthDSF(current.Neighbors[x].Item1, depth + 1,checkEntry);
+            }
+        }
+
+        private void helperMaxDepthBFS()
+        {
+            Feature current = this.Root;
+            bool[] checkEntry = new bool[this.Count];
+            List<Feature> queue = new List<Feature>();
+            queue.Add(current);
+            int index=0;
+            while (queue.Count > index)
+            {
+                current = queue[index]; index++;
+                if (current.Level > maxDepth)
+                {
+                    maxDepth = current.Level;
+                }
+                int ind = this.getFeatureIndex(current.Data);
+                if (!checkEntry[ind])
+                {
+                    checkEntry[ind] = true;
+                    for (int x = 0; x < current.Neighbors.Count; x++)
+                    {
+                        current.Neighbors[x].Item1.Level = current.Level + 1;
+                        queue.Add(current.Neighbors[x].Item1);
+                    }
+                }
             }
         }
 
@@ -46,12 +73,18 @@ namespace Dialogue_Data_Entry
             {
                 if (root != null)
                 {
-                    bool[] checkEntry = new bool[this.Count]; 
-                    helperMaxDepth(root, 0, checkEntry);
+                    //bool[] checkEntry = new bool[this.Count]; 
+                    //helperMaxDepthDSF(root, 0, checkEntry);
+                    helperMaxDepthBFS();
                 }
             }
             return maxDepth;
         }
+        public void setMaxDepth(int h)
+        {
+            maxDepth = h;
+        }
+
 
         public bool addFeature(Feature toAdd)
         {
