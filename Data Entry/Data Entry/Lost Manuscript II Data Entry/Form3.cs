@@ -12,11 +12,15 @@ namespace Dialogue_Data_Entry
     public partial class Form3 : Form
     {
 
-        public Form3(string from, string to,string relationship="")
+        public Form3(string from, string to,string relationshipFT="",string relationshipTF="",string weight="")
         {
             InitializeComponent();
             this.label1.Text = "Type in the key word of relationship between " +from+ " and "+to+".";
-            this.comboBoxRelationship.Text = relationship;
+            this.label2.Text = from+" --> "+to;
+            this.label3.Text = to + " --> " + from;
+            this.comboBoxRelationshipFT.Text = relationshipFT;
+            this.comboBoxRelationshipTF.Text = relationshipTF;
+            this.textBox1.Text = weight;
         }
     }
 }

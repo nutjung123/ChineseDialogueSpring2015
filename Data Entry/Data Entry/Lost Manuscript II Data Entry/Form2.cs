@@ -22,6 +22,8 @@ namespace Dialogue_Data_Entry
         public Form2(FeatureGraph myGraph)
         {
             InitializeComponent();
+            //pre-process shortest distance
+            myGraph.getMaxDistance();           
             myController = new QueryController(myGraph);
             featGraph = myGraph;
             //clear discussedAmount

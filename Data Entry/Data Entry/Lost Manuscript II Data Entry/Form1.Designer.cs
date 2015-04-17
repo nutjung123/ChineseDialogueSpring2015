@@ -38,8 +38,7 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.FeatureEditor = new System.Windows.Forms.TabPage();
-            this.editTagComboBox = new System.Windows.Forms.ComboBox();
-            this.createTagComboBox = new System.Windows.Forms.ComboBox();
+            this.tagValueTextBox = new System.Windows.Forms.TextBox();
             this.label18 = new System.Windows.Forms.Label();
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.button6 = new System.Windows.Forms.Button();
@@ -47,28 +46,23 @@
             this.button4 = new System.Windows.Forms.Button();
             this.label17 = new System.Windows.Forms.Label();
             this.listBox3 = new System.Windows.Forms.ListBox();
-            this.label16 = new System.Windows.Forms.Label();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.label15 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.tagTypeComboBox = new System.Windows.Forms.ComboBox();
             this.button3 = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.label13 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.tagKeyTextBox = new System.Windows.Forms.TextBox();
             this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.listBox2 = new System.Windows.Forms.ListBox();
+            this.tagListBox = new System.Windows.Forms.ListBox();
             this.featureUpdateButton = new System.Windows.Forms.Button();
             this.checkedListBox2 = new System.Windows.Forms.CheckedListBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.editFeatureDataTextBox = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.listBox1 = new System.Windows.Forms.ListBox();
@@ -97,9 +91,14 @@
             this.visualizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.queryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.sortedSelectFeatureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sortedSelectChildrenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sortedFeatureComboBox = new System.Windows.Forms.ToolStripComboBox();
+            this.sortedChildrenComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.tabControl1.SuspendLayout();
             this.FeatureCreator.SuspendLayout();
             this.FeatureEditor.SuspendLayout();
@@ -190,8 +189,7 @@
             // 
             // FeatureEditor
             // 
-            this.FeatureEditor.Controls.Add(this.editTagComboBox);
-            this.FeatureEditor.Controls.Add(this.createTagComboBox);
+            this.FeatureEditor.Controls.Add(this.tagValueTextBox);
             this.FeatureEditor.Controls.Add(this.label18);
             this.FeatureEditor.Controls.Add(this.textBox7);
             this.FeatureEditor.Controls.Add(this.button6);
@@ -199,28 +197,23 @@
             this.FeatureEditor.Controls.Add(this.button4);
             this.FeatureEditor.Controls.Add(this.label17);
             this.FeatureEditor.Controls.Add(this.listBox3);
-            this.FeatureEditor.Controls.Add(this.label16);
-            this.FeatureEditor.Controls.Add(this.comboBox2);
             this.FeatureEditor.Controls.Add(this.label15);
-            this.FeatureEditor.Controls.Add(this.comboBox1);
+            this.FeatureEditor.Controls.Add(this.tagTypeComboBox);
             this.FeatureEditor.Controls.Add(this.button3);
             this.FeatureEditor.Controls.Add(this.checkBox1);
             this.FeatureEditor.Controls.Add(this.button2);
             this.FeatureEditor.Controls.Add(this.button1);
             this.FeatureEditor.Controls.Add(this.label13);
             this.FeatureEditor.Controls.Add(this.label14);
-            this.FeatureEditor.Controls.Add(this.textBox6);
-            this.FeatureEditor.Controls.Add(this.label12);
-            this.FeatureEditor.Controls.Add(this.label11);
-            this.FeatureEditor.Controls.Add(this.textBox3);
+            this.FeatureEditor.Controls.Add(this.tagKeyTextBox);
             this.FeatureEditor.Controls.Add(this.maskedTextBox1);
             this.FeatureEditor.Controls.Add(this.label9);
             this.FeatureEditor.Controls.Add(this.label5);
-            this.FeatureEditor.Controls.Add(this.listBox2);
+            this.FeatureEditor.Controls.Add(this.tagListBox);
             this.FeatureEditor.Controls.Add(this.featureUpdateButton);
             this.FeatureEditor.Controls.Add(this.checkedListBox2);
             this.FeatureEditor.Controls.Add(this.label6);
-            this.FeatureEditor.Controls.Add(this.textBox2);
+            this.FeatureEditor.Controls.Add(this.editFeatureDataTextBox);
             this.FeatureEditor.Controls.Add(this.label7);
             this.FeatureEditor.Controls.Add(this.label4);
             this.FeatureEditor.Controls.Add(this.listBox1);
@@ -233,25 +226,13 @@
             this.FeatureEditor.UseVisualStyleBackColor = true;
             this.FeatureEditor.Click += new System.EventHandler(this.FeatureEditor_Click);
             // 
-            // editTagComboBox
+            // tagValueTextBox
             // 
-            this.editTagComboBox.FormattingEnabled = true;
-            this.editTagComboBox.IntegralHeight = false;
-            this.editTagComboBox.Location = new System.Drawing.Point(645, 279);
-            this.editTagComboBox.MaxDropDownItems = 15;
-            this.editTagComboBox.Name = "editTagComboBox";
-            this.editTagComboBox.Size = new System.Drawing.Size(130, 21);
-            this.editTagComboBox.TabIndex = 26;
-            // 
-            // createTagComboBox
-            // 
-            this.createTagComboBox.FormattingEnabled = true;
-            this.createTagComboBox.IntegralHeight = false;
-            this.createTagComboBox.Location = new System.Drawing.Point(645, 139);
-            this.createTagComboBox.MaxDropDownItems = 15;
-            this.createTagComboBox.Name = "createTagComboBox";
-            this.createTagComboBox.Size = new System.Drawing.Size(130, 21);
-            this.createTagComboBox.TabIndex = 22;
+            this.tagValueTextBox.Location = new System.Drawing.Point(647, 140);
+            this.tagValueTextBox.Multiline = true;
+            this.tagValueTextBox.Name = "tagValueTextBox";
+            this.tagValueTextBox.Size = new System.Drawing.Size(278, 142);
+            this.tagValueTextBox.TabIndex = 22;
             // 
             // label18
             // 
@@ -320,49 +301,19 @@
             this.listBox3.TabIndex = 29;
             this.listBox3.SelectedIndexChanged += new System.EventHandler(this.listBox3_SelectedIndexChanged);
             // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(798, 214);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(127, 13);
-            this.label16.TabIndex = 31;
-            this.label16.Text = "Edit the selected tag type";
-            // 
-            // comboBox2
-            // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Items.AddRange(new object[] {
-            "has",
-            "had",
-            "to",
-            "in",
-            "on",
-            "is",
-            "by",
-            "for",
-            "near",
-            "around",
-            "towards",
-            "away"});
-            this.comboBox2.Location = new System.Drawing.Point(800, 230);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(121, 21);
-            this.comboBox2.TabIndex = 25;
-            // 
             // label15
             // 
             this.label15.AutoSize = true;
             this.label15.Location = new System.Drawing.Point(797, 75);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(102, 13);
+            this.label15.Size = new System.Drawing.Size(49, 13);
             this.label15.TabIndex = 29;
-            this.label15.Text = "Create new tag type";
+            this.label15.Text = "Tag type";
             // 
-            // comboBox1
+            // tagTypeComboBox
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.tagTypeComboBox.FormattingEnabled = true;
+            this.tagTypeComboBox.Items.AddRange(new object[] {
             "has",
             "had",
             "to",
@@ -376,16 +327,16 @@
             "towards",
             "away",
             ""});
-            this.comboBox1.Location = new System.Drawing.Point(800, 91);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 21;
+            this.tagTypeComboBox.Location = new System.Drawing.Point(800, 91);
+            this.tagTypeComboBox.Name = "tagTypeComboBox";
+            this.tagTypeComboBox.Size = new System.Drawing.Size(121, 21);
+            this.tagTypeComboBox.TabIndex = 21;
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(645, 355);
+            this.button3.Location = new System.Drawing.Point(647, 355);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(130, 23);
+            this.button3.Size = new System.Drawing.Size(278, 23);
             this.button3.TabIndex = 28;
             this.button3.Text = "Remove selected Tag";
             this.button3.UseVisualStyleBackColor = true;
@@ -404,9 +355,9 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(645, 311);
+            this.button2.Location = new System.Drawing.Point(647, 326);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(130, 23);
+            this.button2.Size = new System.Drawing.Size(278, 23);
             this.button2.TabIndex = 27;
             this.button2.Text = "Edit Existing Tag";
             this.button2.UseVisualStyleBackColor = true;
@@ -414,9 +365,9 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(645, 169);
+            this.button1.Location = new System.Drawing.Point(647, 297);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(130, 23);
+            this.button1.Size = new System.Drawing.Size(278, 23);
             this.button1.TabIndex = 23;
             this.button1.Text = "Create New Tag";
             this.button1.UseVisualStyleBackColor = true;
@@ -425,52 +376,27 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(642, 121);
+            this.label13.Location = new System.Drawing.Point(644, 124);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(108, 13);
+            this.label13.Size = new System.Drawing.Size(55, 13);
             this.label13.TabIndex = 22;
-            this.label13.Text = "Create new tag value";
+            this.label13.Text = "Tag value";
             // 
             // label14
             // 
             this.label14.AutoSize = true;
             this.label14.Location = new System.Drawing.Point(642, 75);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(99, 13);
+            this.label14.Size = new System.Drawing.Size(46, 13);
             this.label14.TabIndex = 21;
-            this.label14.Text = "Create new tag key";
+            this.label14.Text = "Tag key";
             // 
-            // textBox6
+            // tagKeyTextBox
             // 
-            this.textBox6.Location = new System.Drawing.Point(645, 91);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(130, 20);
-            this.textBox6.TabIndex = 20;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(642, 259);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(133, 13);
-            this.label12.TabIndex = 18;
-            this.label12.Text = "Edit the selected tag value";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(642, 214);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(124, 13);
-            this.label11.TabIndex = 17;
-            this.label11.Text = "Edit the selected tag key";
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(645, 230);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(130, 20);
-            this.textBox3.TabIndex = 24;
+            this.tagKeyTextBox.Location = new System.Drawing.Point(645, 91);
+            this.tagKeyTextBox.Name = "tagKeyTextBox";
+            this.tagKeyTextBox.Size = new System.Drawing.Size(130, 20);
+            this.tagKeyTextBox.TabIndex = 20;
             // 
             // maskedTextBox1
             // 
@@ -498,14 +424,14 @@
             this.label5.TabIndex = 13;
             this.label5.Text = "Select the tags of the current\r\nFeature (Attributes)";
             // 
-            // listBox2
+            // tagListBox
             // 
-            this.listBox2.FormattingEnabled = true;
-            this.listBox2.Location = new System.Drawing.Point(468, 75);
-            this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(167, 303);
-            this.listBox2.TabIndex = 12;
-            this.listBox2.SelectedIndexChanged += new System.EventHandler(this.listBox2_SelectedIndexChanged);
+            this.tagListBox.FormattingEnabled = true;
+            this.tagListBox.Location = new System.Drawing.Point(468, 75);
+            this.tagListBox.Name = "tagListBox";
+            this.tagListBox.Size = new System.Drawing.Size(167, 303);
+            this.tagListBox.TabIndex = 12;
+            this.tagListBox.SelectedIndexChanged += new System.EventHandler(this.listBox2_SelectedIndexChanged);
             // 
             // featureUpdateButton
             // 
@@ -536,12 +462,12 @@
             this.label6.Text = "Select children to link to the editting feature.\n\"Right click\" to edit the relati" +
     "onship.";
             // 
-            // textBox2
+            // editFeatureDataTextBox
             // 
-            this.textBox2.Location = new System.Drawing.Point(230, 23);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(217, 20);
-            this.textBox2.TabIndex = 7;
+            this.editFeatureDataTextBox.Location = new System.Drawing.Point(230, 23);
+            this.editFeatureDataTextBox.Name = "editFeatureDataTextBox";
+            this.editFeatureDataTextBox.Size = new System.Drawing.Size(217, 20);
+            this.editFeatureDataTextBox.TabIndex = 7;
             // 
             // label7
             // 
@@ -629,6 +555,7 @@
             this.menuStrip1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
+            this.settingToolStripMenuItem,
             this.viewToolStripMenuItem,
             this.viewToolStripMenuItem1,
             this.queryToolStripMenuItem});
@@ -785,6 +712,15 @@
             this.chatToolStripMenuItem.Text = "Chat";
             this.chatToolStripMenuItem.Click += new System.EventHandler(this.chatToolStripMenuItem_Click);
             // 
+            // settingToolStripMenuItem
+            // 
+            this.settingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sortedSelectFeatureToolStripMenuItem,
+            this.sortedSelectChildrenToolStripMenuItem});
+            this.settingToolStripMenuItem.Name = "settingToolStripMenuItem";
+            this.settingToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
+            this.settingToolStripMenuItem.Text = "Setting";
+            // 
             // backgroundWorker1
             // 
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
@@ -802,6 +738,40 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1057, 636);
             this.panel1.TabIndex = 6;
+            // 
+            // sortedSelectFeatureToolStripMenuItem
+            // 
+            this.sortedSelectFeatureToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sortedFeatureComboBox});
+            this.sortedSelectFeatureToolStripMenuItem.Name = "sortedSelectFeatureToolStripMenuItem";
+            this.sortedSelectFeatureToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.sortedSelectFeatureToolStripMenuItem.Text = "Sort Select Feature";
+            // 
+            // sortedSelectChildrenToolStripMenuItem
+            // 
+            this.sortedSelectChildrenToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sortedChildrenComboBox});
+            this.sortedSelectChildrenToolStripMenuItem.Name = "sortedSelectChildrenToolStripMenuItem";
+            this.sortedSelectChildrenToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.sortedSelectChildrenToolStripMenuItem.Text = "Sort Select Children";
+            // 
+            // sortedFeatureComboBox
+            // 
+            this.sortedFeatureComboBox.Items.AddRange(new object[] {
+            "Sorted by Alphabet",
+            "Sorted by ID"});
+            this.sortedFeatureComboBox.Name = "sortedFeatureComboBox";
+            this.sortedFeatureComboBox.Size = new System.Drawing.Size(121, 23);
+            this.sortedFeatureComboBox.Text = "Sorted by Alphabet";
+            // 
+            // sortedChildrenComboBox
+            // 
+            this.sortedChildrenComboBox.Items.AddRange(new object[] {
+            "Sorted by Alphabet",
+            "Sorted by ID"});
+            this.sortedChildrenComboBox.Name = "sortedChildrenComboBox";
+            this.sortedChildrenComboBox.Size = new System.Drawing.Size(121, 23);
+            this.sortedChildrenComboBox.Text = "Sorted by Alphabet";
             // 
             // Form1
             // 
@@ -845,7 +815,7 @@
         private System.Windows.Forms.Button featureUpdateButton;
         private System.Windows.Forms.CheckedListBox checkedListBox2;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox editFeatureDataTextBox;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ListBox listBox1;
@@ -871,23 +841,18 @@
         private System.Windows.Forms.ToolStripMenuItem fullTreeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem visualizerToolStripMenuItem;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ListBox listBox2;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.ListBox tagListBox;
         private System.Windows.Forms.MaskedTextBox maskedTextBox1;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.TextBox tagKeyTextBox;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox tagTypeComboBox;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Button button5;
@@ -901,8 +866,12 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ToolStripMenuItem queryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem chatToolStripMenuItem;
-        private System.Windows.Forms.ComboBox editTagComboBox;
-        private System.Windows.Forms.ComboBox createTagComboBox;
+        private System.Windows.Forms.TextBox tagValueTextBox;
+        private System.Windows.Forms.ToolStripMenuItem settingToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sortedSelectFeatureToolStripMenuItem;
+        private System.Windows.Forms.ToolStripComboBox sortedFeatureComboBox;
+        private System.Windows.Forms.ToolStripMenuItem sortedSelectChildrenToolStripMenuItem;
+        private System.Windows.Forms.ToolStripComboBox sortedChildrenComboBox;
     }
 }
 

@@ -32,6 +32,11 @@ namespace Dialogue_Data_Entry
                         int id = toWrite.getFeatureIndex(tmp.Neighbors[y].Item1.Data);
                         writer.WriteLine("<neighbor dest=\"" + id + "\" weight=\"" + tmp.Neighbors[y].Item2 + "\" relationship=\""+tmp.Neighbors[y].Item3+"\"/>");
                     }
+                    for (int y = 0; y < tmp.Parents.Count; y++)
+                    {
+                        int id = toWrite.getFeatureIndex(tmp.Parents[y].Item1.Data);
+                        writer.WriteLine("<parent dest=\"" + id + "\" weight=\"" + tmp.Parents[y].Item2 + "\" relationship=\"" + tmp.Parents[y].Item3 + "\"/>");
+                    }
                     List<Tuple<string, string, string>> tags = tmp.Tags;
                     for (int y = 0; y < tags.Count; y++)
                     {
@@ -85,7 +90,31 @@ namespace Dialogue_Data_Entry
                         }
                         tmp.addNeighbor(result.Features[id], weight,relationship);
 
-                        result.Features[id].Parents.Add(tmp);
+                        //pre-process in case no parent exist
+                        foreach (XmlNode tempNode in features)
+                        {
+                            if (tempNode.Attributes["data"].Value == result.Features[id].Data)
+                            {
+                                XmlNodeList tempParents = tempNode.SelectNodes("parent");
+                                if (tempParents.Count == 0)
+                                {
+                                    result.Features[id].addParent(tmp);
+                                }
+                            }
+                        }
+                        //result.Features[id].addNeighbor(tmp,weight);
+                    }
+                    XmlNodeList parents = node.SelectNodes("parent");
+                    foreach (XmlNode parentNode in parents)
+                    {
+                        int id = Convert.ToInt32(parentNode.Attributes["dest"].Value);
+                        double weight = Convert.ToDouble(parentNode.Attributes["weight"].Value);
+                        string relationship = "";
+                        if (parentNode.Attributes["relationship"] != null)
+                        {
+                            relationship = Convert.ToString(parentNode.Attributes["relationship"].Value);
+                        }
+                        tmp.addParent(result.Features[id], weight, relationship);
                     }
                     XmlNodeList tags = node.SelectNodes("tag");
                     foreach (XmlNode tag in tags)
@@ -164,8 +193,8 @@ namespace Dialogue_Data_Entry
                                 int id = Convert.ToInt32(neighborNode.Attributes["dest"].Value);// +countUp;// + countUp);
                                 double weight = Convert.ToDouble(neighborNode.Attributes["weight"].Value);
                                 tmp.addNeighbor(result.Features[id], weight);
-                                result.Features[id].Parents.Add(tmp);
-                           
+                                result.Features[id].addParent(tmp);
+                                //result.Features[id].addNeighbor(tmp, weight);
                         }
                         XmlNodeList tags = node.SelectNodes("tag");
                             foreach (XmlNode tag in tags)
@@ -201,7 +230,8 @@ namespace Dialogue_Data_Entry
                             int id = Convert.ToInt32(neighborNode.Attributes["dest"].Value);// +countUp;// + countUp);
                             double weight = Convert.ToDouble(neighborNode.Attributes["weight"].Value);
                             tmp.addNeighbor(result.Features[id], weight);
-                            result.Features[id].Parents.Add(tmp);
+                            result.Features[id].addParent(tmp);
+                            //result.Features[id].addNeighbor(tmp,weight);
                         }
 
                         XmlNodeList tags = node.SelectNodes("tag");
@@ -242,7 +272,8 @@ namespace Dialogue_Data_Entry
                         double weight = Convert.ToDouble(neighborNode.Attributes["weight"].Value);
                         
                           tmp.addNeighbor(result.Features[id], weight);
-                        result.Features[id].Parents.Add(tmp);//add neighbors to node
+                          result.Features[id].addParent(tmp);//add neighbors to node
+                        //result.Features[id].addNeighbor(tmp,weight);
                     }
                     XmlNodeList tags = node.SelectNodes("tag");
                     foreach (XmlNode tag in tags)

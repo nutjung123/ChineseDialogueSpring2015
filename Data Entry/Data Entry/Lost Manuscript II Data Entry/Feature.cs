@@ -12,10 +12,11 @@ namespace Dialogue_Data_Entry
         private float discussedThreshold;                // This is the threshold that when reached the topic will have beed exhausted
         private string data;                             // This is the data for this feature, it is essentially all of the information that needs to be represented
         private List<Tuple<Feature, double, string>> neighbors;  // This is a list of tuples that contain all of the features that can be reached from this topic and a weight that defines how distanced they are from the parent feature (this feature)
-        private HashSet<Feature> parents;                   // This is a HashSet of features that can be reached to this feature node 
+        private List<Tuple<Feature, double, string>> parents;    // This is a HashSet of features that can be reached to this feature node 
         private List<Tuple<string, string, string>>  tags;       // This is a list of tuples that are used to store the tags (generic, single use pices of information). The first element is the key, and the second element is the Data. This will simply operate as a map.
         private List<string> speaks;
-        private int level;
+        private List<double> shortestDistance;         //list of shortestDistance to all nodes (index == id)
+        private int level, dist;
         public bool flag;                                // This is a public general use flag that can be used for things like traversals and stuff like that
        
         public Feature(string data)
@@ -25,8 +26,10 @@ namespace Dialogue_Data_Entry
             this.neighbors = new List<Tuple<Feature, double, string>>();
             this.tags = new List<Tuple<string, string, string>>();
             this.flag = false;
-            this.parents = new HashSet<Feature>();
+            this.parents = new List<Tuple<Feature, double, string>>();
             this.level = 0;
+            this.dist = 0;
+            this.shortestDistance = new List<double>();
         }
 
         // This function is used to get a Feature that is a neighbor of this Feature, it takes a string and preforms a binary search over the list
@@ -90,9 +93,9 @@ namespace Dialogue_Data_Entry
         {
             return this.neighbors.Count;
         }
-        // This function will add a new feature to the neighbors given a new feature and a weight (weight is defaulted to zero). 
+        // This function will add a new feature to the neighbors given a new feature and a weight (weight is defaulted to one). 
         // This function will add a neighbor in alphabet order (insert)
-        public bool addNeighbor(Feature neighbor, double weight = 0.0, string relationship="")
+        public bool addNeighbor(Feature neighbor, double weight = 1.0, string relationship="")
         {
             if (neighbors.Count == 0)
             {
@@ -112,7 +115,27 @@ namespace Dialogue_Data_Entry
             return true;
         }
 
-        public string getRelationship(string neighbor)
+        public bool addParent(Feature parent, double weight = 1.0, string relationship = "")
+        {
+            if (parents.Count == 0)
+            {
+                parents.Add(new Tuple<Feature, double, string>(parent, weight, relationship));
+                return true;
+            }
+            for (int x = 0; x < parents.Count; x++)
+            {
+                if (String.Compare(parent.Data, parents[x].Item1.Data) == 0) { return false; }
+                if (String.Compare(parent.Data, parents[x].Item1.Data) < 0)
+                {
+                    parents.Insert(x, new Tuple<Feature, double, string>(parent, weight, relationship));
+                    return true;
+                }
+            }
+            this.parents.Add(new Tuple<Feature, double, string>(parent, weight, relationship));
+            return true;
+        }
+
+        public string getRelationshipNeighbor(string neighbor)
         {
             for (int x = 0; x < neighbors.Count; x++)
             {
@@ -124,8 +147,32 @@ namespace Dialogue_Data_Entry
             return "";
         }
 
+        public string getRelationshipParent(string parent)
+        {
+            for (int x = 0; x < parents.Count; x++)
+            {
+                if (parents[x].Item1.Data == parent)
+                {
+                    return parents[x].Item3;
+                }
+            }
+            return "";
+        }
+
+        public string getWeight(string neighbor)
+        {
+            for (int x = 0; x < neighbors.Count; x++)
+            {
+                if (neighbors[x].Item1.Data == neighbor)
+                {
+                    return Convert.ToString(neighbors[x].Item2);
+                }
+            }
+            return "";
+        }
+
         //set relationship between this feature and the neighbor
-        public bool setRelationship(Feature neighbor,string relationship)
+        public bool setNeighbor(Feature neighbor, double weight, string relationship)
         {
             //removeNeighbor(neighbor.Data);
             //addNeighbor(neighbor, 0.0, relationship);
@@ -133,7 +180,21 @@ namespace Dialogue_Data_Entry
             {
                 if (neighbors[x].Item1.Data == neighbor.Data)
                 {
-                    neighbors[x] = new Tuple<Feature, double, string>(neighbors[x].Item1, neighbors[x].Item2, relationship);
+                    neighbors[x] = new Tuple<Feature, double, string>(neighbors[x].Item1, weight, relationship);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        //set relationship between this feature and the neighbor
+        public bool setParent(Feature parent, double weight, string relationship)
+        {
+            for (int x = 0; x < parents.Count; x++)
+            {
+                if (parents[x].Item1.Data == parent.Data)
+                {
+                    parents[x] = new Tuple<Feature, double, string>(parents[x].Item1, weight, relationship);
                     return true;
                 }
             }
@@ -154,6 +215,20 @@ namespace Dialogue_Data_Entry
             }
             return false;
         }
+
+        public bool removeParent(string data)
+        {
+            for (int x = 0; x < parents.Count; x++)
+            {
+                if (parents[x].Item1.Data == data)
+                {
+                    parents.RemoveAt(x);
+                    return true;
+                }
+            }
+            return false;
+        }
+
         // This function will check through all of the features that can be reached from its neighbors and if it finds the one that we are looking for it return true, false otherwise
         private bool canReachHelper(string destData,bool checkLevel)
         {
@@ -319,6 +394,18 @@ namespace Dialogue_Data_Entry
                 this.data = value;
             }
         }
+        public int Dist
+        {
+            get
+            {
+                return this.dist;
+            }
+            set
+            {
+                this.dist = value;
+            }
+        }
+
         public List<Tuple<Feature, double, string>> Neighbors
         {
             get { return this.neighbors; }
@@ -359,7 +446,19 @@ namespace Dialogue_Data_Entry
             }
         }
 
-        public HashSet<Feature> Parents
+        public List<double> ShortestDistance
+        {
+            get
+            {
+                return this.shortestDistance;
+            }
+            set
+            {
+                this.shortestDistance = value;
+            }
+        }
+
+        public List<Tuple<Feature, double, string>> Parents
         {
             get
             {

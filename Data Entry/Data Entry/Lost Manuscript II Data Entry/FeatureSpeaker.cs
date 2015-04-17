@@ -42,17 +42,64 @@ namespace Dialogue_Data_Entry
             }
         }
 
+        private double getNeighborAmount(FeatureGraph featGraph, Feature target)
+        {
+            double sumTalk = 0.0;
+            double sumNotTalk = 0.0;
+            for (int x = 0; x < target.Parents.Count;x++)
+            {
+                List<Tuple<Feature,double,string>> neighbors = target.Parents[x].Item1.Neighbors;
+                for (int y = 0; y < neighbors.Count; y++)
+                {
+                    //check all other nodes except itself
+                    if (neighbors[y].Item1.Data != target.Data)
+                    {
+                        if (neighbors[y].Item1.DiscussedAmount >= 1)
+                        {
+                            sumTalk++;
+                        }
+                        else
+                        {
+                            sumNotTalk++;
+                        }
+                    }
+                }
+            }
+            //about itself
+            if (target.DiscussedAmount>=1)
+            {
+                sumTalk++;
+            }
+            else
+            {
+                sumNotTalk++;
+            }
+            Console.WriteLine("Sum not Talk: " + sumNotTalk + ", Sum Talk: "+sumTalk);
+            return sumNotTalk/(sumTalk+sumNotTalk);
+        }
+
         private double getScore(FeatureGraph featGraph, Feature current,Feature oldTopic, int h,int oldh)
         {
             double score =0;
             
             //check dramatic goal value
 
+            // novelty
+            
+            //// distance
+            double dist = oldTopic.ShortestDistance[featGraph.getFeatureIndex(current.Data)]/featGraph.MaxDistance;
 
+            //// previous talk
+            double previousTalkPercentage = getNeighborAmount(featGraph, current);
+
+            // joke & other thing
+
+            double dramaticValue = dist * 0.5 + previousTalkPercentage * 0.5;
 
             //check mentionCount
             float DiscussedAmount = current.DiscussedAmount;
 
+            /*
             //check hierachical consistency
             int FathertoChild = 0; //old is a father
             int ChildtoFather = 0; //old is a child
@@ -68,19 +115,21 @@ namespace Dialogue_Data_Entry
                 }
             }
             //check difference distance 
-            double diffDist = Math.Abs(h - oldh);
+            double diffDist = Math.Abs(h - oldh); 
+             */
 
             //Score calculation
             double maxDepth = (double) featGraph.getMaxDepth();
 
-            score = DiscussedAmount * -1.0 + FathertoChild * 1.0 + ChildtoFather * 1.0 + (maxDepth-diffDist)/maxDepth;
+            score = DiscussedAmount * -1.0 + dramaticValue;
 
             if (printCalculation)
             {
                 System.Console.WriteLine("DiscussedAmount: " + DiscussedAmount);
-                System.Console.WriteLine("FathertoChild: " + FathertoChild + " ChildretoFather: " + ChildtoFather);
-                System.Console.WriteLine("diffDist: " + diffDist + " (maxDepth: " + maxDepth + ")");
-                System.Console.WriteLine("score (DiscussedAmount * -1.0 + FathertoChild * 1.0 + ChildtoFather * 1.0 + (maxDepth-diffDist)/maxDepth): " + score);
+                System.Console.WriteLine("Distance from "+oldTopic.Data+" to "+current.Data+": "+dist+", Max Distance: "+featGraph.MaxDistance);
+                System.Console.WriteLine("Percentage of previous close topic: "+ previousTalkPercentage);
+                System.Console.WriteLine("Dramatic Value: " + dramaticValue);
+                System.Console.WriteLine("score (DiscussedAmount * -1.0 + dramaticValue) : " + score);
             }
             return score;
         }
@@ -109,6 +158,10 @@ namespace Dialogue_Data_Entry
             for (int x = 0; x < current.Neighbors.Count; x++) 
             {
                 travelGraph(featGraph, current.Neighbors[x].Item1, oldTopic, h+1, oldh,limit, ref listScore,checkEntry);
+            }
+            for (int x = 0; x < current.Parents.Count; x++)
+            {
+                travelGraph(featGraph, current.Parents[x].Item1, oldTopic, h + 1, oldh, limit, ref listScore, checkEntry);
             }
         }
         //Return the next topic
