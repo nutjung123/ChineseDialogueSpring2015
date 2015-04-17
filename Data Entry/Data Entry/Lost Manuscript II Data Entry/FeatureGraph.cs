@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 
 namespace Dialogue_Data_Entry
 {
@@ -105,13 +106,19 @@ namespace Dialogue_Data_Entry
                     node.ShortestDistance[ind] = current.Dist;
                     for (int x = 0; x < current.Neighbors.Count; x++)
                     {
-                        current.Neighbors[x].Item1.Dist = current.Dist + 1;
-                        queue.Add(current.Neighbors[x].Item1);
+                        if (current.Neighbors[x].Item1.Dist == 0)
+                        {
+                            current.Neighbors[x].Item1.Dist = current.Dist + 1;
+                            queue.Add(current.Neighbors[x].Item1);
+                        }
                     }
                     for (int x = 0; x < current.Parents.Count;x++)
                     {
-                        current.Parents[x].Item1.Dist = current.Dist + 1;
-                        queue.Add(current.Parents[x].Item1);
+                        if (current.Parents[x].Item1.Dist == 0)
+                        {
+                            current.Parents[x].Item1.Dist = current.Dist + 1;
+                            queue.Add(current.Parents[x].Item1);
+                        }
                     }
                 }
             }
@@ -144,6 +151,7 @@ namespace Dialogue_Data_Entry
             //for each edge (u,v) [if there is an edge connect between two nodes)
             for (int x = 0; x < this.Count; x++)
             {
+                //Children edge
                 for (int y = 0; y < this.Features[x].Neighbors.Count; y++)
                 {
                     int ind = this.getFeatureIndex(this.Features[x].Neighbors[y].Item1.Data);
@@ -155,6 +163,7 @@ namespace Dialogue_Data_Entry
                     }
                     this.Features[x].ShortestDistance[ind] = dist;
                 }
+                //Parent edge
                 for (int y = 0; y < this.Features[x].Parents.Count;y++)
                 {
                     int ind = this.getFeatureIndex(this.Features[x].Parents[y].Item1.Data);
@@ -162,6 +171,8 @@ namespace Dialogue_Data_Entry
                     this.Features[x].ShortestDistance[ind] = dist;
                 }
             }
+
+            //All-pair shortest path
             for (int k = 0; k < this.Count; k++)
             {
                 for (int i = 0; i < this.Count; i++)
@@ -192,17 +203,14 @@ namespace Dialogue_Data_Entry
 
         public void getMaxDistance()
         {
-            //find all the shortest distance from every node to every other node 
-            /*for (int x = 0; x < this.Count; x++)
-            {
-                double temp = maxDistBFS(this.Features[x]);
-                if (this.maxDistance < temp)
-                {
-                    this.maxDistance = temp;
-                }
-            }*/
-            //printShortestDistance();
+            //var sw = new Stopwatch();
+            //sw.Start();
+            
             allPairShortestPath();
+            
+            //sw.Stop();
+            //Console.WriteLine("All-pair took "+sw.Elapsed);
+            
             //find max distance
             for (int x = 0; x < this.Count;x++)
             {
