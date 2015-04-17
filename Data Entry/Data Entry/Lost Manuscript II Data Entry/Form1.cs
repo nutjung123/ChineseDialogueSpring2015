@@ -356,6 +356,7 @@ namespace Dialogue_Data_Entry
             textBox7.Clear();
             maskedTextBox1.Clear();
             tagValueTextBox.Clear();
+            tagKeyTextBox.Clear();
         }
         //open feature from search function
         public void openFeature(string featureData, string tagData = "")
@@ -491,6 +492,7 @@ namespace Dialogue_Data_Entry
             {
                 checkBox1.Checked = false;
                 clearAllTextBoxes();
+                tagTypeComboBox.Text = "";
                 maskedTextBox1.Text = toEdit.DiscussedThreshold.ToString();
                 editFeatureDataTextBox.Text = toEdit.Data;
                 editorFeatureSelected = toEdit.Data;

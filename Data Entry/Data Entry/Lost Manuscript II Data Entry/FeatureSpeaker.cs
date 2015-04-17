@@ -9,7 +9,7 @@ namespace Dialogue_Data_Entry
     class FeatureSpeaker
     {
         private float[] dramaticFunction;
-        private bool printCalculation = true;
+        private bool printCalculation = false;
 
         public FeatureSpeaker()
         {
