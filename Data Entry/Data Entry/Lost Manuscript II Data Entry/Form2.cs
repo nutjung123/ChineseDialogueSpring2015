@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using Dialogue_Data_Entry;
 using System.IO;
 using System.Collections;
+using System.Net;
+using System.Net.Sockets;
 
 namespace Dialogue_Data_Entry
 {
@@ -18,6 +20,8 @@ namespace Dialogue_Data_Entry
         private QueryController myController;
         private float featureWeight;
         private float tagKeyWeight;
+        private SynchronousSocketListener myServer;
+
 
         public Form2(FeatureGraph myGraph)
         {
@@ -58,8 +62,40 @@ namespace Dialogue_Data_Entry
                 myController = new QueryController(featGraph);
             }
             chatBox.AppendText("User: "+query+"\r\n");
-            chatBox.AppendText("System:"+myController.makeQuery(query) +"\r\n");
+            string answer = myController.makeQuery(query);
+            chatBox.AppendText("System:"+answer+"\r\n");
             inputBox.Clear();
+        }
+
+        private void ServerModeButton_Click(object sender, EventArgs e)
+        {
+            myServer = new SynchronousSocketListener();
+            chatBox.AppendText("Waiting for client to connet...");
+            myServer.StartListening();
+            myServer.SendDataToClient("Connected");
+            chatBox.AppendText("Connected!");
+            //Console.WriteLine("Connected.");
+
+            while (true)
+            {
+                string query = myServer.ReceieveDataFromClient();
+                query = query.Replace("<EOF>", "");
+                if (query == "QUIT")
+                {
+                    break;
+                }
+                if (myController == null)
+                {
+                    myController = new QueryController(featGraph);
+                }
+                //Console.WriteLine("Query: " + query);
+                chatBox.AppendText("Client: " + query + "\r\n");
+                string answer = myController.makeQuery(query);
+                chatBox.AppendText("System:" + answer + "\r\n");
+                //Console.WriteLine("Send: " + answer);
+                myServer.SendDataToClient(answer);
+            }
+            myServer.CloseServer();
         }
     }
 }

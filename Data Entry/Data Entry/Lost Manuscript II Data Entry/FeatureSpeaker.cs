@@ -74,7 +74,10 @@ namespace Dialogue_Data_Entry
             {
                 sumNotTalk++;
             }
-            Console.WriteLine("Sum not Talk: " + sumNotTalk + ", Sum Talk: "+sumTalk);
+            if (printCalculation)
+            {
+                Console.WriteLine("Sum not Talk: " + sumNotTalk + ", Sum Talk: " + sumTalk);
+            }
             return sumNotTalk/(sumTalk+sumNotTalk);
         }
 
@@ -170,7 +173,7 @@ namespace Dialogue_Data_Entry
             if (turn == 1)
             {
                 //initial case
-                return featGraph.Root;
+                return oldTopic; 
 
             }else if(turn > 1 && query =="")
             {

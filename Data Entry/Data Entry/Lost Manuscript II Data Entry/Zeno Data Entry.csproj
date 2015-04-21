@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SynchronousSocketClient.cs" />
+    <Compile Include="SynchronousSocketListener.cs" />
     <Compile Include="Form3.cs">
       <SubType>Form</SubType>
     </Compile>

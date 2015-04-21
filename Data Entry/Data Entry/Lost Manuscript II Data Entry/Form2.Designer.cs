@@ -32,6 +32,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.queryButton = new System.Windows.Forms.Button();
             this.chatBox = new System.Windows.Forms.TextBox();
+            this.ServerModeButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // inputBox
@@ -72,11 +73,22 @@
             this.chatBox.Size = new System.Drawing.Size(614, 288);
             this.chatBox.TabIndex = 3;
             // 
+            // ServerModeButton
+            // 
+            this.ServerModeButton.Location = new System.Drawing.Point(649, 18);
+            this.ServerModeButton.Name = "ServerModeButton";
+            this.ServerModeButton.Size = new System.Drawing.Size(75, 46);
+            this.ServerModeButton.TabIndex = 4;
+            this.ServerModeButton.Text = "Server Mode";
+            this.ServerModeButton.UseVisualStyleBackColor = true;
+            this.ServerModeButton.Click += new System.EventHandler(this.ServerModeButton_Click);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(736, 370);
+            this.Controls.Add(this.ServerModeButton);
             this.Controls.Add(this.chatBox);
             this.Controls.Add(this.queryButton);
             this.Controls.Add(this.label1);
@@ -95,5 +107,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button queryButton;
         private System.Windows.Forms.TextBox chatBox;
+        private System.Windows.Forms.Button ServerModeButton;
     }
 }

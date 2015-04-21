@@ -13,6 +13,8 @@ namespace Dialogue_Data_Entry
         private int turn;
         private Feature currentTopic;
         private string[] punctuaion = new string[] { ",", ";", ".", "?", "!", "\'", "\"","(",")","-" };
+        private string startTopic = ""; //Can change to the name of the node that you want this t
+
         public QueryController(FeatureGraph graph)
         {
             featGraph = graph;
@@ -92,17 +94,22 @@ namespace Dialogue_Data_Entry
         {
             if (feat.Speaks.Count() != 0)
             {
-                return feat.Speaks[this.turn%feat.Speaks.Count()];
+                return "ID:"+ featGraph.getFeatureIndex(feat.Data) + ":Speak:" + feat.Speaks[this.turn%feat.Speaks.Count()];
             }
-            return feat.Data;
+            return "ID:"+featGraph.getFeatureIndex(feat.Data)+":Speak:"+feat.Data;
         }
 
         public string makeQuery(string query)
         {
             string answer = "";
+            //first turn set currentTopic to the root or pre-define topic
             if (this.currentTopic == null)
             {
-                this.currentTopic = featGraph.Root;
+                this.currentTopic = featGraph.getFeature(this.startTopic);
+                if (this.startTopic == "" || this.currentTopic == null)
+                {
+                    this.currentTopic = featGraph.Root;
+                }
             }
             //no query or continue to next topic case
             if (continueNextTopic(query))
