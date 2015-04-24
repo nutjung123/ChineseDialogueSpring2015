@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AIMLbot">
+      <HintPath>lib\AIMLbot.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="QueryHandler.cs" />
     <Compile Include="SynchronousSocketClient.cs" />
     <Compile Include="SynchronousSocketListener.cs" />
     <Compile Include="Form3.cs">

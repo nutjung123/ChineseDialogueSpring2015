@@ -13,9 +13,9 @@ namespace Dialogue_Data_Entry
         private bool printCalculation = false;
         private int currentTurn;
         private string[] spatialKey = new string[8] { "east","north","northeast","northwest","south","southeast","southwest","west"};
-        private string[] hierarchyKey = new string[2] { "contain","belong"};
-        private string SPATIAL = "spatial";
-        private string HIERACHY = "hierachy";
+        private string[] hierarchyKey = new string[2] { "contain","won"};
+        private const string SPATIAL = "spatial";
+        private const string HIERACHY = "hierachy";
 
         public FeatureSpeaker()
         {

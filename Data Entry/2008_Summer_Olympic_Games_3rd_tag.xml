@@ -1,0 +1,272 @@
+<AIMind>
+<Root id="30"/>
+<Feature id="0" data="Beijing National Aquatics Center">
+<neighbor dest="3" weight="1" relationship=""/>
+<neighbor dest="1" weight="1" relationship="west"/>
+<neighbor dest="2" weight="1" relationship="southeast"/>
+<neighbor dest="9" weight="1" relationship="hosted"/>
+<neighbor dest="6" weight="1" relationship="hosted"/>
+<neighbor dest="7" weight="1" relationship="hosted"/>
+<neighbor dest="8" weight="1" relationship="hosted"/>
+<neighbor dest="10" weight="1" relationship="hosted"/>
+<neighbor dest="11" weight="1" relationship="hosted"/>
+<neighbor dest="15" weight="1" relationship="hosted"/>
+<neighbor dest="12" weight="1" relationship="hosted"/>
+<neighbor dest="13" weight="1" relationship="hosted"/>
+<neighbor dest="14" weight="1" relationship="hosted"/>
+<parent dest="30" weight="1" relationship=""/>
+<parent dest="1" weight="1" relationship="west"/>
+<parent dest="2" weight="1" relationship="southeast"/>
+<speak value="The Beijing National Aquatics Center, also officially known as the National Aquatics Center, and colloquially known as the Water Cube, is an aquatics center that was built alongside Beijing National Stadium in the Olympic Green for the swimming competitions of the 2008 Summer Olympic Games."/>
+</Feature>
+<Feature id="1" data="Beijing National Stadium">
+<neighbor dest="4" weight="1" relationship=""/>
+<neighbor dest="0" weight="1" relationship="east"/>
+<neighbor dest="2" weight="1" relationship="southeast"/>
+<neighbor dest="17" weight="1" relationship="hosted"/>
+<neighbor dest="18" weight="1" relationship="hosted"/>
+<neighbor dest="16" weight="1" relationship="hosted"/>
+<parent dest="30" weight="1" relationship=""/>
+<parent dest="0" weight="1" relationship="east"/>
+<parent dest="2" weight="1" relationship="southeast"/>
+<speak value="The Beijing National Stadium, officially the National Stadium, also known as the Nest of Bird, is a stadium in Beijing, China.  The stadium was designed for use throughout the 2008 Summer Olympic Games and Paralympics.  The stadium is currently used mostly for football matches."/>
+</Feature>
+<Feature id="2" data="Olympic Green Tennis Center">
+<neighbor dest="0" weight="1" relationship="northwest"/>
+<neighbor dest="1" weight="1" relationship="northwest"/>
+<neighbor dest="5" weight="1" relationship=""/>
+<neighbor dest="19" weight="1" relationship="hosted"/>
+<parent dest="30" weight="1" relationship=""/>
+<parent dest="0" weight="1" relationship="northwest"/>
+<parent dest="1" weight="1" relationship="northwest"/>
+<speak value="The Olympic Green Tennis Center opened on October 1, 2007.  It hosted the tennis preliminaries and finals of singles and doubles for men and women at the 2008 Summer Olympic Games as well as the Paralympic wheelchair tennis competitions."/>
+</Feature>
+<Feature id="3" data="Aquatics">
+<neighbor dest="9" weight="1" relationship="contain"/>
+<neighbor dest="6" weight="1" relationship="contain"/>
+<neighbor dest="7" weight="1" relationship="contain"/>
+<neighbor dest="8" weight="1" relationship="contain"/>
+<neighbor dest="10" weight="1" relationship="contain"/>
+<neighbor dest="11" weight="1" relationship="contain"/>
+<neighbor dest="15" weight="1" relationship="contain"/>
+<neighbor dest="12" weight="1" relationship="contain"/>
+<neighbor dest="13" weight="1" relationship="contain"/>
+<neighbor dest="14" weight="1" relationship="contain"/>
+<parent dest="0" weight="1" relationship=""/>
+<speak value="The sport played in or on water."/>
+</Feature>
+<Feature id="4" data="Athletics">
+<neighbor dest="17" weight="1" relationship="contain"/>
+<neighbor dest="18" weight="1" relationship="contain"/>
+<neighbor dest="16" weight="1" relationship="contain"/>
+<parent dest="1" weight="1" relationship=""/>
+<speak value="The sport of competing in track and field events, including running races and various competitions in jumping and throwing."/>
+</Feature>
+<Feature id="5" data="Tennis">
+<neighbor dest="19" weight="1" relationship="contain"/>
+<parent dest="2" weight="1" relationship=""/>
+<speak value="The sport in which two or four players strike a ball with rackets over a net stretched across a court."/>
+</Feature>
+<Feature id="6" data="Swimming - Mens 100 m Backstroke">
+<neighbor dest="20" weight="1" relationship=""/>
+<parent dest="20" weight="1" relationship=""/>
+<parent dest="3" weight="1" relationship=""/>
+<parent dest="0" weight="1" relationship="was hosted at"/>
+<speak value="The mens 100-meter backstroke event at the 2008 Summer Olympic Games took place on 10-12 August at the Beijing National Aquatics Center."/>
+</Feature>
+<Feature id="7" data="Swimming - Mens 100 m Butterfly">
+<neighbor dest="24" weight="1" relationship=""/>
+<parent dest="3" weight="1" relationship=""/>
+<parent dest="0" weight="1" relationship="was hosted at"/>
+<parent dest="24" weight="1" relationship=""/>
+<speak value="The mens 100-meter butterfly event at the 2008 Summer Olympic Games took place on 14-16 August at the Beijing National Aquatics Center."/>
+</Feature>
+<Feature id="8" data="Swimming - Mens 200 m Backstroke">
+<neighbor dest="25" weight="1" relationship=""/>
+<parent dest="3" weight="1" relationship=""/>
+<parent dest="0" weight="1" relationship="was hosted at"/>
+<parent dest="25" weight="1" relationship=""/>
+<speak value="The mens 200-meter backstroke event at the 2008 Summer Olympic Games took place on 13-15 August at the Beijing National Aquatics Center."/>
+</Feature>
+<Feature id="9" data="Swimming - Men 200s m Butterfly">
+<neighbor dest="24" weight="1" relationship=""/>
+<parent dest="3" weight="1" relationship=""/>
+<parent dest="0" weight="1" relationship="was hosted at"/>
+<parent dest="24" weight="1" relationship=""/>
+<speak value="The mens 200-meter butterfly event at the 2008 Summer Olympic Games took place on 11-13 August at the Beijing National Aquatics Center."/>
+</Feature>
+<Feature id="10" data="Swimming - Mens 200 m Freestyle">
+<neighbor dest="24" weight="1" relationship=""/>
+<parent dest="3" weight="1" relationship=""/>
+<parent dest="0" weight="1" relationship="was hosted at"/>
+<parent dest="24" weight="1" relationship=""/>
+<speak value="The mens 200-meter freestyle event at the 2008 Summer Olympic Games took place on 10-12 August at the Beijing National Aquatics Center."/>
+</Feature>
+<Feature id="11" data="Swimming - Mens 200 m Individual Medley">
+<neighbor dest="24" weight="1" relationship=""/>
+<parent dest="3" weight="1" relationship=""/>
+<parent dest="0" weight="1" relationship="was hosted at"/>
+<parent dest="24" weight="1" relationship=""/>
+<speak value="The mens 200-meter individual medley event at the 2008 Summer Olympic Games took place on 11-13 August at the Beijing National Aquatics Center."/>
+</Feature>
+<Feature id="12" data="Swimming - Mens 4x100 m Freestyle Relay">
+<neighbor dest="21" weight="1" relationship=""/>
+<neighbor dest="22" weight="1" relationship=""/>
+<neighbor dest="23" weight="1" relationship=""/>
+<neighbor dest="24" weight="1" relationship=""/>
+<parent dest="3" weight="1" relationship=""/>
+<parent dest="0" weight="1" relationship="was hosted at"/>
+<parent dest="21" weight="1" relationship=""/>
+<parent dest="22" weight="1" relationship=""/>
+<parent dest="23" weight="1" relationship=""/>
+<parent dest="24" weight="1" relationship=""/>
+<speak value="The mens 4x100-meter freestyle relay event at the 2008 Summer Olympic Games took place on 10-11 August at the Beijing National Aquatics Center."/>
+</Feature>
+<Feature id="13" data="Swimming - Mens 4x100 m Medley Relay">
+<neighbor dest="20" weight="1" relationship=""/>
+<neighbor dest="21" weight="1" relationship=""/>
+<neighbor dest="22" weight="1" relationship=""/>
+<neighbor dest="23" weight="1" relationship=""/>
+<neighbor dest="24" weight="1" relationship=""/>
+<parent dest="20" weight="1" relationship=""/>
+<parent dest="3" weight="1" relationship=""/>
+<parent dest="0" weight="1" relationship="was hosted at"/>
+<parent dest="21" weight="1" relationship=""/>
+<parent dest="22" weight="1" relationship=""/>
+<parent dest="23" weight="1" relationship=""/>
+<parent dest="24" weight="1" relationship=""/>
+<speak value="The mens 4x100-meter medley relay event at the 2008 Summer Olympic Games took place on 15 and 17 August at the Beijing National Aquatics Center."/>
+</Feature>
+<Feature id="14" data="Swimming - Mens 4x200 m Freestyle Relay">
+<neighbor dest="24" weight="1" relationship=""/>
+<neighbor dest="25" weight="1" relationship=""/>
+<parent dest="3" weight="1" relationship=""/>
+<parent dest="0" weight="1" relationship="was hosted at"/>
+<parent dest="24" weight="1" relationship=""/>
+<parent dest="25" weight="1" relationship=""/>
+<speak value="The mens 4x200-meter freestyle relay event at the 2008 Summer Olympic Games took place on 12-13 August at the Beijing National Aquatics Center."/>
+</Feature>
+<Feature id="15" data="Swimming - Mens 400 m Individual Medley">
+<neighbor dest="24" weight="1" relationship=""/>
+<parent dest="3" weight="1" relationship=""/>
+<parent dest="0" weight="1" relationship="was hosted at"/>
+<parent dest="24" weight="1" relationship=""/>
+<speak value="The mens 400-meter individual medley event at the 2008 Summer Olympic Games took place on 9-10 August at the Beijing National Aquatics Center."/>
+</Feature>
+<Feature id="16" data="Track and Field - Mens 4x400 m Relay">
+<neighbor dest="26" weight="1" relationship=""/>
+<neighbor dest="27" weight="1" relationship=""/>
+<parent dest="26" weight="1" relationship=""/>
+<parent dest="4" weight="1" relationship=""/>
+<parent dest="1" weight="1" relationship="was hosted at"/>
+<parent dest="27" weight="1" relationship=""/>
+<speak value="The mens 4x400-meter relay event at the 2008 Summer Olympic Games took place on 22 and 23 August at the Beijing National Stadium."/>
+</Feature>
+<Feature id="17" data="Track and Field - Mens 400 m">
+<neighbor dest="27" weight="1" relationship=""/>
+<parent dest="4" weight="1" relationship=""/>
+<parent dest="1" weight="1" relationship="was hosted at"/>
+<parent dest="27" weight="1" relationship=""/>
+<speak value="The mens 400-meter event at the 2008 Summer Olympic Games took place on 18-21 August at the Beijing National Stadium."/>
+</Feature>
+<Feature id="18" data="Track and Field - Mens 400 m Hurdles">
+<neighbor dest="26" weight="1" relationship=""/>
+<parent dest="26" weight="1" relationship=""/>
+<parent dest="4" weight="1" relationship=""/>
+<parent dest="1" weight="1" relationship="was hosted at"/>
+<speak value="The mens 400-meter hurdles event at the 2008 Summer Olympic Games took place on 16-18 August at the Beijing National Stadium."/>
+</Feature>
+<Feature id="19" data="Tennis - Womens Doubles">
+<neighbor dest="28" weight="1" relationship=""/>
+<neighbor dest="29" weight="1" relationship=""/>
+<parent dest="2" weight="1" relationship="was hosted at"/>
+<parent dest="28" weight="1" relationship=""/>
+<parent dest="5" weight="1" relationship=""/>
+<parent dest="29" weight="1" relationship=""/>
+<speak value="The womens doubles event at the 2008 Summer Olympic Games took place on 10-17 August at the Olympic Green Tennis Center."/>
+</Feature>
+<Feature id="20" data="Aaron Peirsol">
+<neighbor dest="6" weight="1" relationship="won"/>
+<neighbor dest="13" weight="1" relationship="won"/>
+<parent dest="6" weight="1" relationship=""/>
+<parent dest="13" weight="1" relationship=""/>
+<speak value="Aaron Wells Peirsol is a former competition swimmer and backstroke specialist who is a former world champion and world record-holder.  He is a three-time Olympian and seven-time Olympic medalist.  As a member of the U.S. national team, he holds the world record in the mens 4x100 meter medley relay.  Individually, he currently holds the world record in the 100-meter and 200-meter backstroke events.  In February 2011, Peirsol announced his retirement, saying, he ended up doing everything he set out to do."/>
+</Feature>
+<Feature id="21" data="Garrett Weber-Gale">
+<neighbor dest="12" weight="1" relationship="won"/>
+<neighbor dest="13" weight="1" relationship="won"/>
+<parent dest="12" weight="1" relationship=""/>
+<parent dest="13" weight="1" relationship=""/>
+<speak value="Garrett Weber-Gale won the 100 and 50-meter freestyles at the 2008 U.S. Olympic Trials in 47.92 and 21.47 seconds respectively.  His time of 21.47 in the 50-meter was an American record.  By clocking a time of 47.78 in the prelims of the 100-meter freestyle at the Trials, he became the first American to break 48 seconds in that event."/>
+</Feature>
+<Feature id="22" data="Jason Lezak">
+<neighbor dest="12" weight="1" relationship="won"/>
+<neighbor dest="13" weight="1" relationship="won"/>
+<parent dest="12" weight="1" relationship=""/>
+<parent dest="13" weight="1" relationship=""/>
+<speak value="Jason Edward Lezak is a competition swimmer who is a four-time Olympic gold medalist.  He formerly swam for Irvine Novaquatics.  He graduated from Irvine High School in 1994, and then from the University of California, Santa Barbara in 1999."/>
+</Feature>
+<Feature id="23" data="Matt Grevers">
+<neighbor dest="12" weight="1" relationship="won"/>
+<neighbor dest="13" weight="1" relationship="won"/>
+<parent dest="12" weight="1" relationship=""/>
+<parent dest="13" weight="1" relationship=""/>
+<speak value="Mattew Grevers is a competition swimmer who competes in the backstroke and freestyle events, and is a six-time Olympic medalist.  He has won a total of twenty-four medals in major international competition, twelve gold, nine silver, and three bronze spanning the Olympics, World Championships, and the Universiade.  At the 2008 Summer Olympic Games, Grevers won gold medals as a member of the U.S. teams in the 4x100-meter freestyle and 4x100-meter medley relays, and a silver medal in the 100-meter backstroke.  Four years later at the 2012 Summer Olympic Games, he won a gold in the 100-meter backstroke."/>
+</Feature>
+<Feature id="24" data="Michael Phelps">
+<neighbor dest="9" weight="1" relationship="won"/>
+<neighbor dest="7" weight="1" relationship="won"/>
+<neighbor dest="10" weight="1" relationship="won"/>
+<neighbor dest="11" weight="1" relationship="won"/>
+<neighbor dest="15" weight="1" relationship="won"/>
+<neighbor dest="12" weight="1" relationship="won"/>
+<neighbor dest="13" weight="1" relationship="won"/>
+<neighbor dest="14" weight="1" relationship="won"/>
+<parent dest="9" weight="1" relationship=""/>
+<parent dest="7" weight="1" relationship=""/>
+<parent dest="10" weight="1" relationship=""/>
+<parent dest="11" weight="1" relationship=""/>
+<parent dest="15" weight="1" relationship=""/>
+<parent dest="12" weight="1" relationship=""/>
+<parent dest="13" weight="1" relationship=""/>
+<parent dest="14" weight="1" relationship=""/>
+<speak value="Michael Fred Phelps II is a competition swimmer and the most decorated Olympian of all time, with a total of 22 medals.  Phelps also holds the all-time records for Olympic gold medals, Olympic gold medals in individual events, and Olympic medals in individual events for a male.  In winning eight gold medals at the 2008 Summer Olympic Games, Phelps took the record for the most first-place finishes at any single Olympic Games.  Five of those victories were in individual events, tying the single Games record.  In the 2012 Summer Olympic Games in London, Phelps won four golds and two silver medals, making him the most successful athlete of the Games for the third Olympics in a row."/>
+</Feature>
+<Feature id="25" data="Ryan Lochte">
+<neighbor dest="8" weight="1" relationship="won"/>
+<neighbor dest="14" weight="1" relationship="won"/>
+<parent dest="8" weight="1" relationship=""/>
+<parent dest="14" weight="1" relationship=""/>
+<speak value="Ryan Steven Lochte is a competitive swimmer and an 11-time Olympic medalist.  His seven individual Olympic medals ranks near the top in mens swimming.  As part of the American team, he holds the world record in the 4x200-meter freestyle relay.  Individually, he currently holds the world record in the 100-meter individual medley, 200-meter individual medley, and the 400-meter individual medley."/>
+</Feature>
+<Feature id="26" data="Angelo Taylor">
+<neighbor dest="18" weight="1" relationship="won"/>
+<neighbor dest="16" weight="1" relationship="won"/>
+<parent dest="18" weight="1" relationship=""/>
+<parent dest="16" weight="1" relationship=""/>
+<speak value="Angelo F. Taylor is a track and field athlete, winner of 400-meter hurdles at the 2000 and 2008 Summer Olympic Games.  His personal record for the hurdles event is 47.25 seconds and he has a 400-meter dash best of 44.05 seconds."/>
+</Feature>
+<Feature id="27" data="LaShawn Merritt">
+<neighbor dest="17" weight="1" relationship="won"/>
+<neighbor dest="16" weight="1" relationship="won"/>
+<parent dest="17" weight="1" relationship=""/>
+<parent dest="16" weight="1" relationship=""/>
+<speak value="LaShawn Merritt is a track and field athlete who competes in sprinting events, specializing in the 400-meter.  His personal best of 43.74 seconds makes him the fifth fastest of all time."/>
+</Feature>
+<Feature id="28" data="Serena Williams">
+<neighbor dest="19" weight="1" relationship="won"/>
+<parent dest="19" weight="1" relationship=""/>
+<speak value="Serena Jameka Williams is currently ranked No. 1 in womens singles tennis.  The Womens Tennis Association has ranked her World No. 1 in singles on six separate occasions.  She became the World No. 1 for the first time on July 8, 2002, and regained this ranking for the sixth time on February 18, 2013, becoming the oldest world No. 1 player in the history of WTA.  Williams is also regarded by some experts and former tennis players to be the greatest female tennis player in history.  She is the only female player to have won over $60 million in prize money, and is the reigning Australian Open, US Open, WTA Tour Championships and Olympic ladies singles champion."/>
+</Feature>
+<Feature id="29" data="Venus Williams">
+<neighbor dest="19" weight="1" relationship="won"/>
+<parent dest="19" weight="1" relationship=""/>
+<speak value="Venus Ebony Starr Williams is a former World No. 1 and is ranked World No. 11 in singles as of February 1, 2015.  She has been ranked World No. 1 in singles by the Womens Tennis Association on three separate occasions. She became the World No. 1 for the first time on February 25, 2002, becoming the first American black woman to achieve this feat during the Open Era.  She is credited as changing the womens game and ushering a new, modern era of power and athleticism on the womens professional tennis tour.  She is also regarded as the best grass court player of her generation and she is widely considered as one of the all-time greats of womens tennis."/>
+</Feature>
+<Feature id="30" data="2008 Summer Olympic Games">
+<neighbor dest="0" weight="1" relationship=""/>
+<neighbor dest="1" weight="1" relationship=""/>
+<neighbor dest="2" weight="1" relationship=""/>
+<speak value="The 2008 Summer Olympic Games, officially known as the Games of the XXIX Olympiad and commonly known as Beijing 2008, was a major international multi-sport event that took place in Beijing, China, from August 8 to 24, 2008."/>
+</Feature>
+</AIMind>

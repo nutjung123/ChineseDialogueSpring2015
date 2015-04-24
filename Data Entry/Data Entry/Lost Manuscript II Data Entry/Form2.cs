@@ -18,6 +18,7 @@ namespace Dialogue_Data_Entry
     {
         private FeatureGraph featGraph;
         private QueryController myController;
+        private QueryHandler myHandler;
         private float featureWeight;
         private float tagKeyWeight;
         private SynchronousSocketListener myServer;
@@ -57,12 +58,14 @@ namespace Dialogue_Data_Entry
         private void query_Click(object sender, EventArgs e)
         {
             string query = inputBox.Text;
-            if (myController == null)
+            /*if (myController == null)
             {
                 myController = new QueryController(featGraph);
-            }
+            }*/
+            if (myHandler == null)
+                myHandler = new QueryHandler(featGraph);
             chatBox.AppendText("User: "+query+"\r\n");
-            string answer = myController.makeQuery(query);
+            string answer = myHandler.ParseInput(query,false);
             chatBox.AppendText("System:"+answer+"\r\n");
             inputBox.Clear();
         }
@@ -84,13 +87,15 @@ namespace Dialogue_Data_Entry
                 {
                     break;
                 }
-                if (myController == null)
+                /*if (myController == null)
                 {
                     myController = new QueryController(featGraph);
-                }
+                }*/
+                if (myHandler == null)
+                    myHandler = new QueryHandler(featGraph);
                 //Console.WriteLine("Query: " + query);
                 chatBox.AppendText("Client: " + query + "\r\n");
-                string answer = myController.makeQuery(query);
+                string answer = myHandler.ParseInput(query, true);
                 chatBox.AppendText("System:" + answer + "\r\n");
                 //Console.WriteLine("Send: " + answer);
                 myServer.SendDataToClient(answer);
