@@ -8,13 +8,19 @@ namespace Dialogue_Data_Entry
 {
     class FeatureSpeaker
     {
-        private float[] dramaticFunction;
+        private double[] expectedDramaticV;
+        private FeatureGraph featGraph;
         private bool printCalculation = false;
+        private int currentTurn;
+        private string[] spatialKey = new string[8] { "east","north","northeast","northwest","south","southeast","southwest","west"};
+        private string[] hierarchyKey = new string[2] { "contain","belong"};
+        private string SPATIAL = "spatial";
+        private string HIERACHY = "hierachy";
 
         public FeatureSpeaker()
         {
             //define dramaticFunction manually here
-            dramaticFunction = new float[10] {1,2,3,2,1,2,3,4,5,3};
+            expectedDramaticV = new double[20] {0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5};
         }
 
         //call this function with answer =-1;
@@ -40,6 +46,51 @@ namespace Dialogue_Data_Entry
             {
                 getHeight(featGraph, current.Neighbors[x].Item1, target, h + 1, ref height,checkEntry);
             }
+        }
+
+        private bool relationshipConstraint(FeatureGraph featGraph, Feature current, Feature oldTopic,string relationship)
+        {
+            string[] relationshipKey = null;
+            if (relationship == SPATIAL)
+            {
+                relationshipKey = spatialKey;
+            }
+            else if (relationship == HIERACHY)
+            {
+                relationshipKey = hierarchyKey;
+            }
+            else
+            {
+                return false;
+            }
+            for (int x = 0; x < current.Neighbors.Count;x++)
+            {
+                if (current.Neighbors[x].Item1.Data == oldTopic.Data)
+                {
+                    for (int y = 0; y < relationshipKey.Length; y++)
+                    {
+                        if (relationshipKey[y] == current.Neighbors[x].Item3)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            for (int x = 0; x < current.Parents.Count;x++)
+            {
+                if (current.Parents[x].Item1.Data == oldTopic.Data)
+                {
+                    for (int y = 0; y < relationshipKey.Length; y++)
+                    {
+                        if (relationshipKey[y] == current.Parents[x].Item3)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
         }
 
         private double getNeighborAmount(FeatureGraph featGraph, Feature target)
@@ -84,7 +135,12 @@ namespace Dialogue_Data_Entry
         private double getScore(FeatureGraph featGraph, Feature current,Feature oldTopic, int h,int oldh)
         {
             double score =0;
-            
+
+            double discussAmountW = -3.0;
+            double dramaticValueW = -1.0;
+            double spatialConstraintW = 1.0;
+            double hierachyConstraintW = 1.0;
+
             //check dramatic goal value
 
             // novelty
@@ -99,32 +155,29 @@ namespace Dialogue_Data_Entry
 
             double dramaticValue = dist * 0.5 + previousTalkPercentage * 0.5;
 
+            //spatial Constraint
+            double spatialConstraintValue = 0.0;
+            if (relationshipConstraint(featGraph, current, oldTopic, SPATIAL))
+            {
+                spatialConstraintValue = 1.0;
+            }
+            //hierachy Constraint
+            double hierachyConstraintValue = 0.0;
+            if (relationshipConstraint(featGraph, current, oldTopic, HIERACHY))
+            {
+                hierachyConstraintValue = 1.0;
+            }
+
             //check mentionCount
             float DiscussedAmount = current.DiscussedAmount;
-
-            /*
-            //check hierachical consistency
-            int FathertoChild = 0; //old is a father
-            int ChildtoFather = 0; //old is a child
-            if(!(oldTopic==current))
-            {
-                if(oldTopic.canReachFeature(current.Data,true))
-                {
-                    FathertoChild = 1;
-                }
-                if(current.canReachFeature(oldTopic.Data,true))
-                {
-                    ChildtoFather = 1;
-                }
-            }
-            //check difference distance 
-            double diffDist = Math.Abs(h - oldh); 
-             */
 
             //Score calculation
             double maxDepth = (double) featGraph.getMaxDepth();
 
-            score = DiscussedAmount * -1.0 + dramaticValue;
+            score += (DiscussedAmount * discussAmountW); 
+            score += (Math.Abs(expectedDramaticV[currentTurn % expectedDramaticV.Count()] - dramaticValue) * dramaticValueW);
+            score += spatialConstraintValue * spatialConstraintW;
+            score += hierachyConstraintValue * hierachyConstraintW;
 
             if (printCalculation)
             {
@@ -132,7 +185,14 @@ namespace Dialogue_Data_Entry
                 System.Console.WriteLine("Distance from "+oldTopic.Data+" to "+current.Data+": "+dist+", Max Distance: "+featGraph.MaxDistance);
                 System.Console.WriteLine("Percentage of previous close topic: "+ previousTalkPercentage);
                 System.Console.WriteLine("Dramatic Value: " + dramaticValue);
-                System.Console.WriteLine("score (DiscussedAmount * -1.0 + dramaticValue) : " + score);
+                System.Console.WriteLine("Spatial Constraint: "+spatialConstraintValue);
+                System.Console.WriteLine("Hierachy Constraint: "+hierachyConstraintValue);
+                string scoreFormula = "";
+                scoreFormula += "score = DiscussedAmount * " + discussAmountW + " + abs(expectedDramaticV["+currentTurn+"] - dramaticValue)*"+dramaticValueW;
+                scoreFormula += " + spatialConstraint*" +spatialConstraintW;
+                scoreFormula += " + hierachyConstraint*"+hierachyConstraintW; 
+                scoreFormula += " = " + score;
+                System.Console.WriteLine(scoreFormula);
             }
             return score;
         }
@@ -170,6 +230,9 @@ namespace Dialogue_Data_Entry
         //Return the next topic
         public Feature getNextTopic(FeatureGraph featGraph, Feature oldTopic, string query, int turn)
         {
+            //set up the variables
+            currentTurn = turn;
+            this.featGraph = featGraph;
             if (turn == 1)
             {
                 //initial case
