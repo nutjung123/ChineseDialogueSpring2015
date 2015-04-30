@@ -16,6 +16,7 @@ namespace Dialogue_Data_Entry
         private string[] hierarchyKey = new string[2] { "contain","won"};
         private const string SPATIAL = "spatial";
         private const string HIERACHY = "hierachy";
+        private double[] novelty;
 
         public FeatureSpeaker()
         {
@@ -141,6 +142,8 @@ namespace Dialogue_Data_Entry
             double spatialConstraintW = 1.0;
             double hierachyConstraintW = 1.0;
 
+            //current.Tags;
+
             //check dramatic goal value
 
             // novelty
@@ -154,6 +157,12 @@ namespace Dialogue_Data_Entry
             // joke & other thing
 
             double dramaticValue = dist * 0.5 + previousTalkPercentage * 0.5;
+
+            //getting novelty information
+            if (novelty != null)
+            {
+                novelty[featGraph.getFeatureIndex(current.Data)] = dramaticValue;
+            }
 
             //spatial Constraint
             double spatialConstraintValue = 0.0;
@@ -227,6 +236,40 @@ namespace Dialogue_Data_Entry
                 travelGraph(featGraph, current.Parents[x].Item1, oldTopic, h + 1, oldh, limit, ref listScore, checkEntry);
             }
         }
+
+        public string getNovelty(FeatureGraph featGraph, Feature currentTopic, int turn,int amount=5)
+        {
+            string answer = "Novelty:";
+            if (novelty == null)
+            {
+                novelty = new double[featGraph.Features.Count()];
+                if (turn == 1)
+                {
+                    turn++;
+                }
+                this.getNextTopic(featGraph,currentTopic,"",turn);
+            }
+            if (novelty != null)
+            {
+                var sorted = novelty.Select((x, i) => new KeyValuePair<double, int>(x, i)).OrderByDescending(x => x.Key).ToList();
+                List<int> idx = sorted.Select(x => x.Value).ToList();
+                for (int x = 0; x < amount; x++)
+                {
+                    if (x >= novelty.Count())
+                    {
+                        break;
+                    }
+                    answer += idx[x];
+                    if (x < amount && x < novelty.Count())
+                    {
+                        answer += " ";
+                    }
+                }
+            }
+            novelty = null;
+            return answer;
+        }
+
         //Return the next topic
         public Feature getNextTopic(FeatureGraph featGraph, Feature oldTopic, string query, int turn)
         {
@@ -247,6 +290,7 @@ namespace Dialogue_Data_Entry
                 getHeight(featGraph, featGraph.Root, oldTopic, 0, ref height,checkEntry);
                 checkEntry = new bool[featGraph.Count];
                 //search the next topic
+
                 List<Tuple<Feature, double>> listScore = new List<Tuple<Feature,double>>();
                 travelGraph(featGraph, featGraph.Root, oldTopic, 0, height, limit, ref listScore,checkEntry);
                 

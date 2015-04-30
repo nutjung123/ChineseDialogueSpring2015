@@ -58,7 +58,7 @@
 </category>
 <category>
 	<pattern>WHAT CONTAINS OF *</pattern>
-	<template><think><set name="direction">CONTAINS</set><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:WHAT <get name="direction"/> OF <get name="topic"/></template>
+	<template><think><set name="direction">CONTAIN</set><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:WHAT <get name="direction"/> OF <get name="topic"/></template>
 </category>
 <category>
 	<pattern>WHAT CONTAINS *</pattern>
@@ -239,14 +239,34 @@
 
 <category>
 	<pattern>WHO IS *</pattern>
-	<template>FORMAT:WHO <star/></template>
+	<template><srai>WHAT IS <star/></srai></template>
 </category>
 <category>
 	<pattern>WHO WON *</pattern>
-	<template>FORMAT:WHO WON <star/></template>
+	<template><think><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:WHAT WON <star/></template>
 </category>
 <category>
 	<pattern>WHICH * WON *</pattern>
-	<template>FORMAT:WHO <star index="2"/></template>
+	<template><srai>WHO WON <star index="2"/></srai></template>
+</category>
+
+<category>
+	<pattern>WHAT DID * WIN</pattern>
+	<template><think><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:WHAT <star/> WON</template>
+</category>
+
+<category>
+	<pattern>WHAT * DID * WIN</pattern>
+	<template><srai>WHAT DID <star index="2"/> WIN</srai></template>
+</category>
+
+<category>
+	<pattern>WHERE WAS * HOSTED AT</pattern>
+	<template><think><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:WHERE <star/> WAS_HOSTED_AT</template>
+</category>
+
+<category>
+	<pattern>WHAT DID * HOST</pattern>
+	<template><think><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:WHAT <star/> HOSTED</template>
 </category>
 </aiml>
