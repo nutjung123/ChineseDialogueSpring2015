@@ -15,7 +15,9 @@ namespace Dialogue_Data_Entry
         EAST = 2, WEST = -2,
         NORTHEAST = 3, SOUTHWEST = -3,
         NORTHWEST = 4, SOUTHEAST = -4,
-        CONTAINS = 5, INSIDE = -5
+        CONTAIN = 5, INSIDE = -5,
+        HOSTED = 6, WAS_HOSTED_AT = -6,
+        WON = 0
     }
     enum Question : int
     {
@@ -33,8 +35,7 @@ namespace Dialogue_Data_Entry
         public bool IsQuestion { get { return QuestionType != null; } }
         // The type of Question
         public Question? QuestionType { get; private set; }
-        // The directions asked about.
-        // Currently only 1 direction is used, but maybe they will ask about more than 1.
+        // The direction/relationship asked about.
         public Direction? Direction { get; private set; }
         public bool HasDirection { get { return Direction != null; } }
 
@@ -62,8 +63,9 @@ namespace Dialogue_Data_Entry
         private const string IDK = "I'm afraid I don't know anything about that topic.";
         private string[] punctuation = { ",", ";", ".", "?", "!", "\'", "\"", "(", ")", "-" };
         private string[] questionWords = { "?", "what", "where", "when" };
-        private string[] directionWords = {"inside", "contains", "north", "east", "west", "south",
-                                      "northeast", "northwest", "southeast", "southwest"};
+        private string[] directionWords = {"inside", "contain", "north", "east", "west", "south",
+                                      "northeast", "northwest", "southeast", "southwest",
+                                      "hosted", "was_hosted_at", "won"};
         // "is in" -> contains?
         private Bot bot;
         private User user;
@@ -74,6 +76,7 @@ namespace Dialogue_Data_Entry
         private string[] buffer { get { return _buffer; } set { _buffer = value; b = 0; } }
         private int b;  // buffer index gets reset when buffer does
         private int turn;
+        private int noveltyAmount = 5;
 
         /// <summary>
         /// Create a converter for the specified XML file
@@ -99,29 +102,29 @@ namespace Dialogue_Data_Entry
             this.topic = null;
         }
 
-        private string MessageToServer(Feature feat, string speak)
+        private string MessageToServer(Feature feat, string speak, string noveltyInfo)
         {
-            return "ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + speak;
+            return "ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + speak + ":" + noveltyInfo;
         }
 
         public string ParseInput(string input, bool messageToServer = false)
         {
             string answer = IDK;
-
+            string noveltyInfo = "";
             // Pre-processing
             // Lowercase for comparisons
             input = input.Trim().ToLower();
 
-            if(!string.IsNullOrEmpty(input))
+            if (!string.IsNullOrEmpty(input))
             {
                 // Check to see if the AIML Bot has anything to say
                 Request request = new Request(input, this.user, this.bot);
                 Result result = bot.Chat(request);
                 string output = result.Output;
 
-                if(output.Length > 0)
+                if (output.Length > 0)
                 {
-                    if(!output.StartsWith(FORMAT))
+                    if (!output.StartsWith(FORMAT))
                         return output;
 
                     // MessageBox.Show("Converted output reads: " + output);
@@ -130,21 +133,22 @@ namespace Dialogue_Data_Entry
             }
 
             // Spread out punctuation
-            input = ParsePunctuation(input);
+            input = PadPunctuation(input);
 
             // Check
-            if(this.topic == null)
+            if (this.topic == null)
                 this.topic = this.graph.Root;
-
+            FeatureSpeaker speaker = new FeatureSpeaker();
             // CASE: Nothing / Move on to next topic
-            if(string.IsNullOrEmpty(input))
+            if (string.IsNullOrEmpty(input))
             {
-                FeatureSpeaker speaker = new FeatureSpeaker();
                 Feature nextTopic = this.topic;
                 string[] newBuffer;
 
                 // Can't guarantee it'll actually move on to anything...
                 nextTopic = speaker.getNextTopic(this.graph, nextTopic, "", this.turn);
+                noveltyInfo = speaker.getNovelty(this.graph, nextTopic, this.turn, noveltyAmount);
+
                 newBuffer = FindStuffToSay(nextTopic);
                 //MessageBox.Show("Explored " + nextTopic.Data + " with " + newBuffer.Length + " speaks.");
 
@@ -156,21 +160,22 @@ namespace Dialogue_Data_Entry
                 answer = this.buffer[b++];
             }
             // CASE: Tell me more / Continue speaking
-            else if(input.Contains("more") && input.Contains("tell"))
+            else if (input.Contains("more") && input.Contains("tell"))
             {
                 this.topic.DiscussedAmount += 1;
                 this.graph.setFeatureDiscussedAmount(this.topic.Data, this.topic.DiscussedAmount);
                 // talk about
-                if(b < this.buffer.Length)
+                if (b < this.buffer.Length)
                     answer = this.buffer[b++];
                 else
                     answer = "I've said all I can about that topic!";
+                noveltyInfo = speaker.getNovelty(this.graph, this.topic, this.turn, noveltyAmount);
             }
             // CASE: New topic/question
             else
             {
                 Query query = BuildQuery(input);
-                if(query == null)
+                if (query == null)
                 {
                     answer = "I'm sorry, but I don't understand what you are asking.";
                 }
@@ -182,11 +187,12 @@ namespace Dialogue_Data_Entry
                     this.topic = feature;
                     this.buffer = ParseQuery(query);
                     answer = this.buffer[b++];
+                    noveltyInfo = speaker.getNovelty(this.graph, this.topic, this.turn, noveltyAmount);
                 }
             }
-            
+
             this.turn++;
-            
+
             if (answer.Length == 0)
             {
                 return IDK;
@@ -195,9 +201,9 @@ namespace Dialogue_Data_Entry
             {
                 if (messageToServer)
                 {
-                    return MessageToServer(this.topic, answer);
+                    return MessageToServer(this.topic, answer, noveltyInfo);
                 }
-                return answer;
+                return answer + " " + noveltyInfo;
             }
         }
 
@@ -215,32 +221,40 @@ namespace Dialogue_Data_Entry
 
             // Find the main topic!
             Feature f = FindFeature(input);
-            if(f == null)
+            if (f == null)
+            {
+                //MessageBox.Show("FindFeature returned null for input: " + input);
                 return null;
+            }
             this.topic = f;
             mainTopic = this.topic.Data;
-            if(string.IsNullOrEmpty(mainTopic))
+            if (string.IsNullOrEmpty(mainTopic))
+            {
+                //MessageBox.Show("mainTopic IsNullOrEmpty");
                 return null;
+            }
 
             // Is the input a question?
-            if(input.Contains("where"))
+            if (input.Contains("where"))
             {
                 questionType = Question.WHERE;
+                if (input.Contains("was_hosted_at"))
+                {
+                    directionType = Direction.WAS_HOSTED_AT;
+                }
             }
-            else if(input.Contains("when"))
+            else if (input.Contains("when"))
             {
                 questionType = Question.WHEN;
             }
-            else if(input.Contains("what") || input.Contains("?"))
+            else if (input.Contains("what") || input.Contains("?"))
             {
                 questionType = Question.WHAT;
                 // Check for direction words
-                foreach(string direction in directionWords)
+                foreach (string direction in directionWords)
                 {
                     // Ideally only one direction is specified
-                    // e.g. "What is north of XYZ Pavilion?"
-                    // e.g. "south from XYZ Pavilion"
-                    if(input.Contains(direction))
+                    if (input.Contains(direction))
                     {
                         directionType = (Direction)Enum.Parse(typeof(Direction), direction, true);
                         // Don't break. If "northwest" is asked, "north" will match first
@@ -251,7 +265,7 @@ namespace Dialogue_Data_Entry
             else
             {
                 int t = input.IndexOf("tell"), m = input.IndexOf("me"), a = input.IndexOf("about");
-                if(0 <= t && t < m && m < a)
+                if (0 <= t && t < m && m < a)
                 {
                     // "Tell me about" in that order, with any words or so in between
                     // TODO:  Anything?  Should just talk about the topic, then.
@@ -260,13 +274,22 @@ namespace Dialogue_Data_Entry
             return new Query(this.graph.getFeature(mainTopic), questionType, directionType);
         }
 
-        private string ParsePunctuation(string s)
+        private string PadPunctuation(string s)
         {
-            foreach(string p in punctuation)
+            foreach (string p in punctuation)
             {
                 s = s.Replace(p, " " + p);
             }
             return s;
+        }
+        private string RemovePunctuation(string s)
+        {
+            foreach (string p in punctuation)
+            {
+                s = s.Replace(p, "");
+            }
+            string[] s0 = s.Split(' ');
+            return string.Join(" ", s0);
         }
 
         private Feature FindFeature(string input)
@@ -274,11 +297,11 @@ namespace Dialogue_Data_Entry
             Feature target = null;
             int targetLen = 0;
             input = input.ToLower();
-            foreach(string item in this.features)
+            foreach (string item in this.features)
             {
-                if(input.Contains(ParsePunctuation(item.ToLower())))
+                if (input.Contains(RemovePunctuation(item.ToLower())))
                 {
-                    if(item.Length > targetLen)
+                    if (item.Length > targetLen)
                     {
                         target = this.graph.getFeature(item);
                         targetLen = target.Data.Length;
@@ -297,38 +320,85 @@ namespace Dialogue_Data_Entry
         /// <returns>List of output strings.</returns>
         public string[] ParseQuery(Query query)
         {
-            if(query == null)
+            if (query == null)
                 return new string[] { "I don't know." };
 
             List<string> output = new List<string>();
 
-            if(query.IsQuestion)
+            if (query.IsQuestion)
             {
-                switch(query.QuestionType)
+                switch (query.QuestionType)
                 {
                     case Question.WHAT:
-                        if(query.HasDirection)
+                        if (query.HasDirection)
                         {
                             // e.g. What is Direction of Topic?
                             // Find names of features that is DIRECTION of MainTopic
                             // Get list of <neighbor> tags
                             string dir = query.Direction.ToString().ToLower();
-                            string[] neighbors = FindNeighborsByRelationship(query.MainTopic, dir);
-                            output.Add(string.Format("{0} of {1} {2} {3}", dir.ToUpperFirst(), query.MainTopic.Data,
-                                (neighbors.Length > 1) ? "are" : "is", neighbors.ToList().JoinAnd()));
+                            if (query.Direction == Direction.WON)
+                            {
+                                string[] neighbors = FindNeighborsByRelationship(query.MainTopic, dir);
+                                // If the topic has no "won" links, then it is the event
+                                if (neighbors.Length == 0)
+                                {
+                                    // So find the winner among its available neighbors
+                                    neighbors = FindNeighborsByRelationship(query.MainTopic, "");
+                                    foreach (string neighbor in neighbors)
+                                    {
+                                        // Look at ITS neighbors and see if there is a "won" whose name matches this one
+                                        Feature nf = this.graph.getFeature(neighbor);
+                                        foreach (var triple in nf.Neighbors)
+                                        {
+                                            if (triple.Item1.Data == query.MainTopic.Data && triple.Item3 == "won")
+                                                output.Add(string.Format("{0} won {1}.", neighbor, query.MainTopic.Data));
+                                        }
+                                    }
+                                }
+                                // Otherwise it is the winner
+                                else
+                                {
+                                    output.Add(string.Format("{0} won {1}.", query.MainTopic.Data, neighbors.ToList().JoinAnd()));
+                                }
+                            }
+                            else if (query.Direction == Direction.HOSTED)
+                            {
+                                string[] neighbors = FindNeighborsByRelationship(query.MainTopic, dir);
+                                if (neighbors.Length > 0)
+                                    output.Add(string.Format("{0} hosted {1}.", query.MainTopic.Data, neighbors.ToList().JoinAnd()));
+                            }
+                            else
+                            {
+                                string[] neighbors = FindNeighborsByRelationship(query.MainTopic, dir);
+                                if (neighbors.Length > 0)
+                                    output.Add(string.Format("{0} of {1} {2} {3}", dir.ToUpperFirst(), query.MainTopic.Data,
+                                        (neighbors.Length > 1) ? "are" : "is", neighbors.ToList().JoinAnd()));
+                            }
                         }
                         else
                         {
                             // e.g. What is Topic?
                             // Get the <speak> attribute, if able
                             string[] speak = FindStuffToSay(query.MainTopic);
-                            output.AddRange(speak);
+                            if (speak.Length > 0)
+                                output.AddRange(speak);
                         }
                         break;
                     case Question.WHERE:
-                        // e.g. Where is Topic?
-                        // Get all the neighbors from this feature and the "opposite" directions
-                        output.AddRange((SpeakNeighborRelations(query.MainTopic.Data, FindAllNeighbors(query.MainTopic))));
+                        // e.g. "Where was Topic hosted at?"
+                        if (query.HasDirection && query.Direction == Direction.WAS_HOSTED_AT)
+                        {
+                            string[] hostedAt = FindNeighborsByRelationship(query.MainTopic, query.Direction.ToString());
+                            // Should only have one host, but treat it as an array
+                            foreach (string host in hostedAt)
+                                output.Add(query.MainTopic + " was hosted at " + host + ".");
+                        }
+                        else
+                        {
+                            // e.g. Where is Topic?
+                            // Get all the neighbors from this feature and the "opposite" directions
+                            output.AddRange((SpeakNeighborRelations(query.MainTopic.Data, FindAllNeighbors(query.MainTopic))));
+                        }
                         break;
                     case Question.WHEN:
                         // e.g. When was Topic made/built/etc.?
@@ -355,7 +425,7 @@ namespace Dialogue_Data_Entry
         {
             List<string> stuff = new List<string>();
             string[] speaks = FindSpeak(feature);
-            if(speaks.Length > 0)
+            if (speaks.Length > 0)
                 stuff.AddRange(speaks);
             stuff.AddRange(SpeakNeighborRelations(feature.Data, FindAllNeighbors(feature)));
             if (stuff.Count() == 0)
@@ -369,28 +439,28 @@ namespace Dialogue_Data_Entry
         {
             List<string> neighborNames = new List<string>();
             var neighbors = feature.Neighbors;
-            for(int i = 0; i < neighbors.Count; i++)
+            for (int i = 0; i < neighbors.Count; i++)
             {
                 var triple = neighbors[i];
                 Feature neighbor = triple.Item1;
                 string relation = triple.Item3;
-                if(relation.ToLower() == relationship.ToLower())
+                if (relation.ToLower().Replace(' ', '_') == relationship.ToLower())
                     neighborNames.Add(neighbor.Data);
             }
             return neighborNames.ToArray();
         }
 
-        private Tuple<string,Direction>[] FindAllNeighbors(Feature feature)
+        private Tuple<string, Direction>[] FindAllNeighbors(Feature feature)
         {
             var _neighbors = feature.Neighbors;
             var neighbors = new List<Tuple<string, Direction>>();
-            foreach(var triple in _neighbors)
+            foreach (var triple in _neighbors)
             {
                 string neighborName = triple.Item1.Data;
                 string relationship = triple.Item3;
-                if(directionWords.Contains(relationship))
-                    neighbors.Add(new Tuple<string,Direction>(neighborName,
-                        ((Direction)Enum.Parse(typeof(Direction), relationship.ToUpper()))));
+                if (directionWords.Contains(relationship))
+                    neighbors.Add(new Tuple<string, Direction>(neighborName,
+                        ((Direction)Enum.Parse(typeof(Direction), relationship.ToUpper().Replace(' ', '_')))));
             }
             return neighbors.ToArray();
         }
@@ -399,8 +469,8 @@ namespace Dialogue_Data_Entry
         {
             string[] neighborRelations = new string[neighbors.Length];
             if (neighborRelations.Length == 0)
-                return new string[] {};
-            for(int i = 0; i < neighborRelations.Length; i++)
+                return new string[] { };
+            for (int i = 0; i < neighborRelations.Length; i++)
                 neighborRelations[i] = string.Format("{0} is {1} of {2}.",
                     (i == 0) ? featureName : "It",
                     neighbors[i].Item2.Invert().ToString().ToLower(),
@@ -413,7 +483,7 @@ namespace Dialogue_Data_Entry
     {
         public static Direction Invert(this Direction d)
         {
-            return (Direction) (-(int)d);
+            return (Direction)(-(int)d);
         }
 
         public static string ToUpperFirst(this string s)
@@ -423,7 +493,7 @@ namespace Dialogue_Data_Entry
 
         public static string JoinAnd(this List<string> items)
         {
-            switch(items.Count())
+            switch (items.Count())
             {
                 case 0:
                     return "";

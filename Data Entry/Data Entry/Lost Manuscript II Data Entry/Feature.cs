@@ -298,6 +298,20 @@ namespace Dialogue_Data_Entry
             }
             return null;                                                              // If we never did find it, then return null
         }
+        //find the tag type from the input
+        //return the tuple of that tag if exist, otherwise null
+        public Tuple<string,string,string> findTagType(string type)
+        {
+            for (int x = 0; x < this.tags.Count();x++)
+            {
+                if (tags[x].Item3 == type)
+                {
+                    return tags[x];
+                }
+            }
+            return null;
+        }
+
         // This function will add a new tag to the list of tags, it does NOT do this in order and simply appends this to the end of the list.
         public void addTag(string key, string value, string type)
         {

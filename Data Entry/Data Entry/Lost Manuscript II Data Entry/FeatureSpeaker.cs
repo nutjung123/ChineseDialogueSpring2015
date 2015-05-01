@@ -10,22 +10,23 @@ namespace Dialogue_Data_Entry
     {
         private double[] expectedDramaticV;
         private FeatureGraph featGraph;
-        private bool printCalculation = false;
+        private bool printCalculation = true;
         private int currentTurn;
-        private string[] spatialKey = new string[8] { "east","north","northeast","northwest","south","southeast","southwest","west"};
-        private string[] hierarchyKey = new string[2] { "contain","won"};
+        private string[] spatialKey = new string[8] { "east", "north", "northeast", "northwest", "south", "southeast", "southwest", "west" };
+        private string[] hierarchyKey = new string[2] { "contain", "won" };
         private const string SPATIAL = "spatial";
         private const string HIERACHY = "hierachy";
+        private const string FUN_FACT = "Fun Fact";
         private double[] novelty;
 
         public FeatureSpeaker()
         {
             //define dramaticFunction manually here
-            expectedDramaticV = new double[20] {0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5};
+            expectedDramaticV = new double[20] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
         }
 
         //call this function with answer =-1;
-        private void getHeight(FeatureGraph featGraph, Feature current, Feature target, int h, ref int height,bool[] checkEntry)
+        private void getHeight(FeatureGraph featGraph, Feature current, Feature target, int h, ref int height, bool[] checkEntry)
         {
             if (current == target)
             {
@@ -35,7 +36,7 @@ namespace Dialogue_Data_Entry
             {
                 return;
             }
-            
+
             int index = featGraph.getFeatureIndex(current.Data);
             if (checkEntry[index])
             {
@@ -45,11 +46,11 @@ namespace Dialogue_Data_Entry
 
             for (int x = 0; x < current.Neighbors.Count; x++)
             {
-                getHeight(featGraph, current.Neighbors[x].Item1, target, h + 1, ref height,checkEntry);
+                getHeight(featGraph, current.Neighbors[x].Item1, target, h + 1, ref height, checkEntry);
             }
         }
 
-        private bool relationshipConstraint(FeatureGraph featGraph, Feature current, Feature oldTopic,string relationship)
+        private bool relationshipConstraint(FeatureGraph featGraph, Feature current, Feature oldTopic, string relationship)
         {
             string[] relationshipKey = null;
             if (relationship == SPATIAL)
@@ -64,7 +65,7 @@ namespace Dialogue_Data_Entry
             {
                 return false;
             }
-            for (int x = 0; x < current.Neighbors.Count;x++)
+            for (int x = 0; x < current.Neighbors.Count; x++)
             {
                 if (current.Neighbors[x].Item1.Data == oldTopic.Data)
                 {
@@ -77,7 +78,7 @@ namespace Dialogue_Data_Entry
                     }
                 }
             }
-            for (int x = 0; x < current.Parents.Count;x++)
+            for (int x = 0; x < current.Parents.Count; x++)
             {
                 if (current.Parents[x].Item1.Data == oldTopic.Data)
                 {
@@ -98,9 +99,9 @@ namespace Dialogue_Data_Entry
         {
             double sumTalk = 0.0;
             double sumNotTalk = 0.0;
-            for (int x = 0; x < target.Parents.Count;x++)
+            for (int x = 0; x < target.Parents.Count; x++)
             {
-                List<Tuple<Feature,double,string>> neighbors = target.Parents[x].Item1.Neighbors;
+                List<Tuple<Feature, double, string>> neighbors = target.Parents[x].Item1.Neighbors;
                 for (int y = 0; y < neighbors.Count; y++)
                 {
                     //check all other nodes except itself
@@ -118,7 +119,7 @@ namespace Dialogue_Data_Entry
                 }
             }
             //about itself
-            if (target.DiscussedAmount>=1)
+            if (target.DiscussedAmount >= 1)
             {
                 sumTalk++;
             }
@@ -126,16 +127,18 @@ namespace Dialogue_Data_Entry
             {
                 sumNotTalk++;
             }
-            if (printCalculation)
-            {
-                Console.WriteLine("Sum not Talk: " + sumNotTalk + ", Sum Talk: " + sumTalk);
-            }
-            return sumNotTalk/(sumTalk+sumNotTalk);
+            /*
+             if (printCalculation)
+             {
+                 Console.WriteLine("Number of Neighbors Not Talked: " + sumNotTalk + ", Number of Neighbors Talked: " + sumTalk);
+             }
+             * */
+            return sumNotTalk / (sumTalk + sumNotTalk);
         }
 
-        private double getScore(FeatureGraph featGraph, Feature current,Feature oldTopic, int h,int oldh)
+        private double getScore(FeatureGraph featGraph, Feature current, Feature oldTopic, int h, int oldh)
         {
-            double score =0;
+            double score = 0;
 
             double discussAmountW = -3.0;
             double dramaticValueW = -1.0;
@@ -147,16 +150,21 @@ namespace Dialogue_Data_Entry
             //check dramatic goal value
 
             // novelty
-            
+
             //// distance
-            double dist = oldTopic.ShortestDistance[featGraph.getFeatureIndex(current.Data)]/featGraph.MaxDistance;
+            double dist = oldTopic.ShortestDistance[featGraph.getFeatureIndex(current.Data)] / featGraph.MaxDistance;
 
             //// previous talk
             double previousTalkPercentage = getNeighborAmount(featGraph, current);
 
-            // joke & other thing
+            // tags
+            double funFactTag = 0.0;
+            if (current.findTagType(FUN_FACT)!=null)
+            {
+                funFactTag = 1.0;
+            }
 
-            double dramaticValue = dist * 0.5 + previousTalkPercentage * 0.5;
+            double dramaticValue = dist * 0.5 + previousTalkPercentage * 0.5 + funFactTag*0.5;
 
             //getting novelty information
             if (novelty != null)
@@ -181,35 +189,37 @@ namespace Dialogue_Data_Entry
             float DiscussedAmount = current.DiscussedAmount;
 
             //Score calculation
-            double maxDepth = (double) featGraph.getMaxDepth();
+            double maxDepth = (double)featGraph.getMaxDepth();
 
-            score += (DiscussedAmount * discussAmountW); 
+            score += (DiscussedAmount * discussAmountW);
             score += (Math.Abs(expectedDramaticV[currentTurn % expectedDramaticV.Count()] - dramaticValue) * dramaticValueW);
             score += spatialConstraintValue * spatialConstraintW;
             score += hierachyConstraintValue * hierachyConstraintW;
 
             if (printCalculation)
             {
-                System.Console.WriteLine("DiscussedAmount: " + DiscussedAmount);
-                System.Console.WriteLine("Distance from "+oldTopic.Data+" to "+current.Data+": "+dist+", Max Distance: "+featGraph.MaxDistance);
-                System.Console.WriteLine("Percentage of previous close topic: "+ previousTalkPercentage);
-                System.Console.WriteLine("Dramatic Value: " + dramaticValue);
-                System.Console.WriteLine("Spatial Constraint: "+spatialConstraintValue);
-                System.Console.WriteLine("Hierachy Constraint: "+hierachyConstraintValue);
+                System.Console.WriteLine("Have been addressed before: " + DiscussedAmount);
+                //System.Console.WriteLine("Distance from "+oldTopic.Data+" to "+current.Data+": "+dist+", Max Distance: "+featGraph.MaxDistance);
+                System.Console.WriteLine("Distance from current topic: " + dist);
+                System.Console.WriteLine("Percentage of related topics NOT covered: " + previousTalkPercentage);
+                System.Console.WriteLine("Fun fact: " + funFactTag);
+                System.Console.WriteLine("Dramatic Value (0.5* distance + 0.5* % of related topics Not covered + 0.5*fun fact): " + dramaticValue);
+                System.Console.WriteLine("Spatial Constraint Satisfied: " + spatialConstraintValue);
+                System.Console.WriteLine("Hierachy Constraint Satisfied: " + hierachyConstraintValue);
                 string scoreFormula = "";
-                scoreFormula += "score = DiscussedAmount * " + discussAmountW + " + abs(expectedDramaticV["+currentTurn+"] - dramaticValue)*"+dramaticValueW;
-                scoreFormula += " + spatialConstraint*" +spatialConstraintW;
-                scoreFormula += " + hierachyConstraint*"+hierachyConstraintW; 
+                scoreFormula += "score = Have Been Addressed * " + discussAmountW + " + abs(expectedDramaticV[" + currentTurn + "] - dramaticValue)*" + dramaticValueW;
+                scoreFormula += " + spatialConstraint*" + spatialConstraintW;
+                scoreFormula += " + hierachyConstraint*" + hierachyConstraintW;
                 scoreFormula += " = " + score;
                 System.Console.WriteLine(scoreFormula);
             }
             return score;
         }
 
-        private void travelGraph(FeatureGraph featGraph,Feature current, Feature oldTopic,int h,
-            int oldh, int limit, ref List<Tuple<Feature,double> > listScore,bool[] checkEntry)
+        private void travelGraph(FeatureGraph featGraph, Feature current, Feature oldTopic, int h,
+            int oldh, int limit, ref List<Tuple<Feature, double>> listScore, bool[] checkEntry)
         {
-             //current's height is higher than the limit
+            //current's height is higher than the limit
             if (h > limit)
             {
                 return;
@@ -223,13 +233,13 @@ namespace Dialogue_Data_Entry
             //Calculate score and add to list
             if (printCalculation)
             {
-                System.Console.WriteLine("\nNode: "+current.Data);
+                System.Console.WriteLine("\nNode: " + current.Data);
             }
-            listScore.Add(new Tuple<Feature, double>(current, getScore(featGraph, current, oldTopic,h,oldh)));
+            listScore.Add(new Tuple<Feature, double>(current, getScore(featGraph, current, oldTopic, h, oldh)));
             //search children of current node
-            for (int x = 0; x < current.Neighbors.Count; x++) 
+            for (int x = 0; x < current.Neighbors.Count; x++)
             {
-                travelGraph(featGraph, current.Neighbors[x].Item1, oldTopic, h+1, oldh,limit, ref listScore,checkEntry);
+                travelGraph(featGraph, current.Neighbors[x].Item1, oldTopic, h + 1, oldh, limit, ref listScore, checkEntry);
             }
             for (int x = 0; x < current.Parents.Count; x++)
             {
@@ -237,7 +247,7 @@ namespace Dialogue_Data_Entry
             }
         }
 
-        public string getNovelty(FeatureGraph featGraph, Feature currentTopic, int turn,int amount=5)
+        public string getNovelty(FeatureGraph featGraph, Feature currentTopic, int turn, int amount = 5)
         {
             string answer = "Novelty:";
             if (novelty == null)
@@ -247,7 +257,7 @@ namespace Dialogue_Data_Entry
                 {
                     turn++;
                 }
-                this.getNextTopic(featGraph,currentTopic,"",turn);
+                this.getNextTopic(featGraph, currentTopic, "", turn);
             }
             if (novelty != null)
             {
@@ -279,21 +289,22 @@ namespace Dialogue_Data_Entry
             if (turn == 1)
             {
                 //initial case
-                return oldTopic; 
+                return oldTopic;
 
-            }else if(turn > 1 && query =="")
+            }
+            else if (turn > 1 && query == "")
             {
                 //next topic case
                 int height = -1;
                 int limit = 999;
                 bool[] checkEntry = new bool[featGraph.Count]; //checkEntry is to check that it won't check the same node again
-                getHeight(featGraph, featGraph.Root, oldTopic, 0, ref height,checkEntry);
+                getHeight(featGraph, featGraph.Root, oldTopic, 0, ref height, checkEntry);
                 checkEntry = new bool[featGraph.Count];
                 //search the next topic
 
-                List<Tuple<Feature, double>> listScore = new List<Tuple<Feature,double>>();
-                travelGraph(featGraph, featGraph.Root, oldTopic, 0, height, limit, ref listScore,checkEntry);
-                
+                List<Tuple<Feature, double>> listScore = new List<Tuple<Feature, double>>();
+                travelGraph(featGraph, featGraph.Root, oldTopic, 0, height, limit, ref listScore, checkEntry);
+
                 //find max score
                 if (listScore.Count == 0)
                 {
@@ -311,13 +322,14 @@ namespace Dialogue_Data_Entry
                 }
                 if (printCalculation)
                 {
-                    System.Console.WriteLine("\n\nMax score: "+maxScore);
-                    System.Console.WriteLine("Node: "+listScore[maxIndex].Item1.Data);
+                    System.Console.WriteLine("\n\nMax score: " + maxScore);
+                    System.Console.WriteLine("Node: " + listScore[maxIndex].Item1.Data);
                     System.Console.WriteLine("==========================================");
                 }
                 return listScore[maxIndex].Item1;
 
-            }else if(turn >1 && query != "")
+            }
+            else if (turn > 1 && query != "")
             {
                 //answer question case
             }
@@ -339,15 +351,15 @@ namespace Dialogue_Data_Entry
             }
 
             //select the elements
-            List<Tuple<Feature, double,string>> toDirect = toSpeak.Neighbors;
+            List<Tuple<Feature, double, string>> toDirect = toSpeak.Neighbors;
             if (toSpeak.Neighbors.Count > 5)
             {
-                toDirect = new List<Tuple<Feature,double,string>>();
+                toDirect = new List<Tuple<Feature, double, string>>();
                 int choice = 0;
-                while(toDirect.Count < 5)
+                while (toDirect.Count < 5)
                 {
                     choice = myRand.Next(0, 5);
-                    if(!toDirect.Contains(toSpeak.Neighbors[choice]))
+                    if (!toDirect.Contains(toSpeak.Neighbors[choice]))
                     {
                         toDirect.Add(toSpeak.Neighbors[choice]);
                     }
