@@ -5,6 +5,7 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace Dialogue_Data_Entry
 {
@@ -24,6 +25,8 @@ namespace Dialogue_Data_Entry
             IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
             IPAddress ipAddress = ipHostInfo.AddressList[0];
             IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 4510);
+
+            MessageBox.Show(ipHostInfo.HostName);
 
             // Create a TCP/IP socket.
             Socket listener = new Socket(AddressFamily.InterNetwork,
@@ -80,7 +83,7 @@ namespace Dialogue_Data_Entry
               Console.WriteLine("Text received : {0}", data);
               return data;  
             }
-            return "";
+            return data; // return "";
         }
 
         public void SendDataToClient(string data)
