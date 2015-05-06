@@ -10,14 +10,16 @@ namespace Dialogue_Data_Entry
     {
         private double[] expectedDramaticV;
         private FeatureGraph featGraph;
-        private bool printCalculation = true;
+        private bool printCalculation = false;
         private int currentTurn;
         private string[] spatialKey = new string[8] { "east", "north", "northeast", "northwest", "south", "southeast", "southwest", "west" };
         private string[] hierarchyKey = new string[2] { "contain", "won" };
         private const string SPATIAL = "spatial";
         private const string HIERACHY = "hierachy";
         private const string FUN_FACT = "Fun Fact";
-        private double[] novelty;
+        private double[] nextNovelty;
+        private double[] currentNovelty;
+        private double currentTopicNovelty = -1;
 
         public FeatureSpeaker()
         {
@@ -139,6 +141,7 @@ namespace Dialogue_Data_Entry
         private double getScore(FeatureGraph featGraph, Feature current, Feature oldTopic, int h, int oldh)
         {
             double score = 0;
+            int currentIndex = featGraph.getFeatureIndex(current.Data);
 
             double discussAmountW = -3.0;
             double dramaticValueW = -1.0;
@@ -167,10 +170,15 @@ namespace Dialogue_Data_Entry
             double dramaticValue = dist * 0.5 + previousTalkPercentage * 0.5 + funFactTag*0.5;
 
             //getting novelty information
-            if (novelty != null)
+            if (nextNovelty != null)
             {
-                novelty[featGraph.getFeatureIndex(current.Data)] = dramaticValue;
+                nextNovelty[currentIndex] = dramaticValue;
             }
+            if (currentNovelty != null)
+            {
+                currentNovelty[currentIndex] = dramaticValue;
+            }
+
 
             //spatial Constraint
             double spatialConstraintValue = 0.0;
@@ -250,33 +258,36 @@ namespace Dialogue_Data_Entry
         public string getNovelty(FeatureGraph featGraph, Feature currentTopic, int turn, int amount = 5)
         {
             string answer = "Novelty:";
-            if (novelty == null)
+            bool oldPrintFlag = printCalculation;
+            printCalculation = false;
+            if (nextNovelty == null)
             {
-                novelty = new double[featGraph.Features.Count()];
+                nextNovelty = new double[featGraph.Features.Count()];
                 if (turn == 1)
                 {
                     turn++;
                 }
                 this.getNextTopic(featGraph, currentTopic, "", turn);
             }
-            if (novelty != null)
+            if (nextNovelty != null)
             {
-                var sorted = novelty.Select((x, i) => new KeyValuePair<double, int>(x, i)).OrderByDescending(x => x.Key).ToList();
+                var sorted = nextNovelty.Select((x, i) => new KeyValuePair<double, int>(x, i)).OrderByDescending(x => x.Key).ToList();
                 List<int> idx = sorted.Select(x => x.Value).ToList();
                 for (int x = 0; x < amount; x++)
                 {
-                    if (x >= novelty.Count())
+                    if (x >= nextNovelty.Count())
                     {
                         break;
                     }
-                    answer += idx[x];
-                    if (x < amount && x < novelty.Count())
+                    answer += idx[x]+" "+nextNovelty[idx[x]];
+                    if (x < amount-1 && x < nextNovelty.Count())
                     {
                         answer += " ";
                     }
                 }
             }
-            novelty = null;
+            nextNovelty = null;
+            printCalculation = oldPrintFlag;
             return answer;
         }
 
@@ -295,6 +306,10 @@ namespace Dialogue_Data_Entry
             else if (turn > 1 && query == "")
             {
                 //next topic case
+                if (currentNovelty == null)
+                {
+                    currentNovelty = new double[featGraph.Features.Count()];
+                }
                 int height = -1;
                 int limit = 999;
                 bool[] checkEntry = new bool[featGraph.Count]; //checkEntry is to check that it won't check the same node again
@@ -303,6 +318,7 @@ namespace Dialogue_Data_Entry
                 //search the next topic
 
                 List<Tuple<Feature, double>> listScore = new List<Tuple<Feature, double>>();
+                //list score order is based on the traveling (DFS) order.
                 travelGraph(featGraph, featGraph.Root, oldTopic, 0, height, limit, ref listScore, checkEntry);
 
                 //find max score
@@ -320,9 +336,11 @@ namespace Dialogue_Data_Entry
                         maxIndex = x;
                     }
                 }
+                currentTopicNovelty = currentNovelty[featGraph.getFeatureIndex(listScore[maxIndex].Item1.Data)];
                 if (printCalculation)
                 {
                     System.Console.WriteLine("\n\nMax score: " + maxScore);
+                    System.Console.WriteLine("Novelty: "+ currentTopicNovelty);
                     System.Console.WriteLine("Node: " + listScore[maxIndex].Item1.Data);
                     System.Console.WriteLine("==========================================");
                 }
@@ -334,6 +352,16 @@ namespace Dialogue_Data_Entry
                 //answer question case
             }
             return null;
+        }
+
+        public double getCurrentTopicNovelty()
+        {
+            if (currentTopicNovelty == -1)
+            {
+                System.Console.WriteLine("ERROR currentTopicNovelty has not been calculated.");
+                return -1;
+            }
+            return currentTopicNovelty;
         }
 
         public string getChildSpeak(Feature toSpeak)

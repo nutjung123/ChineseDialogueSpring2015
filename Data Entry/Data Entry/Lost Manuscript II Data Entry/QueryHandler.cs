@@ -111,6 +111,7 @@ namespace Dialogue_Data_Entry
         {
             string answer = IDK;
             string noveltyInfo = "";
+            double currentTopicNovelty = -1;
             // Pre-processing
             // Lowercase for comparisons
             input = input.Trim().ToLower();
@@ -148,7 +149,7 @@ namespace Dialogue_Data_Entry
                 // Can't guarantee it'll actually move on to anything...
                 nextTopic = speaker.getNextTopic(this.graph, nextTopic, "", this.turn);
                 noveltyInfo = speaker.getNovelty(this.graph, nextTopic, this.turn, noveltyAmount);
-
+                currentTopicNovelty = speaker.getCurrentTopicNovelty();
                 newBuffer = FindStuffToSay(nextTopic);
                 //MessageBox.Show("Explored " + nextTopic.Data + " with " + newBuffer.Length + " speaks.");
 
