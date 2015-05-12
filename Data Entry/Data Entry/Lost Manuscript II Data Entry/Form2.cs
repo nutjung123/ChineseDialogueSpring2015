@@ -22,7 +22,7 @@ namespace Dialogue_Data_Entry
         private QueryHandler myHandler;
         private float featureWeight;
         private float tagKeyWeight;
-        private SynchronousSocketListener myServer;
+        private SynchronousSocketListener myServer = null;
         private Thread serverThread = null;
         private volatile bool _shouldStop = false;
 
@@ -85,15 +85,15 @@ namespace Dialogue_Data_Entry
             myServer = new SynchronousSocketListener();
             
             this.Invoke((MethodInvoker)delegate {
-                chatBox.AppendText("Waiting for client to connet...");
+                chatBox.AppendText("Waiting for client to connect...");
             });
 
             myServer.StartListening();
-            myServer.SendDataToClient("Connected");
+            //myServer.SendDataToClient("Connected");
             
             this.Invoke((MethodInvoker)delegate
             {
-                chatBox.AppendText("Connected!");
+                chatBox.AppendText("\nConnected!");
             });
             this._shouldStop = false;
             //Console.WriteLine("Connected.");
@@ -103,6 +103,10 @@ namespace Dialogue_Data_Entry
                 query = query.Replace("<EOF>", "");
                 if (query == "QUIT")
                 {
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        chatBox.AppendText("Client: " + query + "\r\n");
+                    });
                     break;
                 }
                 if (myHandler == null)
@@ -125,6 +129,7 @@ namespace Dialogue_Data_Entry
                 myServer.SendDataToClient(answer);
             }
             myServer.CloseServer();
+            myServer = null;
         }
 
         public void RequestDoWorkStop()
@@ -136,9 +141,12 @@ namespace Dialogue_Data_Entry
         {
             //(Doesn't seem to stop the loop)
             this.RequestDoWorkStop();
-            myServer.CloseServer();
-            this.serverThread.Abort(); //To Do: Not use Abort and terminate by existing function DoWork
-            this.serverThread.Join();
+            if (myServer != null)
+            {
+                myServer.CloseServer();
+                this.serverThread.Abort(); //To Do: Not use Abort and terminate by existing function DoWork
+                this.serverThread.Join();
+            }
         }
 
     }

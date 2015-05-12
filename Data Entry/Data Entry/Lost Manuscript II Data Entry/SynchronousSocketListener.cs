@@ -23,7 +23,7 @@ namespace Dialogue_Data_Entry
             // Dns.GetHostName returns the name of the 
             // host running the application.
             IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
-           //IPAddress ipAddress = ipHostInfo.AddressList[0];
+            //IPAddress ipAddress = ipHostInfo.AddressList[0];
             IPAddress ipAddress = IPAddress.Parse("127.0.0.1"); 
             IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 4510);
 
