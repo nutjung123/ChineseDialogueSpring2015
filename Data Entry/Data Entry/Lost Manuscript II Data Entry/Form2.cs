@@ -42,7 +42,7 @@ namespace Dialogue_Data_Entry
             tagKeyWeight = .2f;
             chatBox.AppendText("Hello, and Welcome to the Query. \r\n");
             inputBox.KeyDown += new KeyEventHandler(this.inputBox_KeyDown);
-            
+            this.FormClosing += Window_Closing;
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -139,14 +139,19 @@ namespace Dialogue_Data_Entry
 
         private void StopServerbutton_Click(object sender, EventArgs e)
         {
-            //(Doesn't seem to stop the loop)
-            this.RequestDoWorkStop();
             if (myServer != null)
             {
+                //(Doesn't seem to stop the loop)
+                this.RequestDoWorkStop();
                 myServer.CloseServer();
                 this.serverThread.Abort(); //To Do: Not use Abort and terminate by existing function DoWork
                 this.serverThread.Join();
             }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            StopServerbutton_Click(sender, e);
         }
 
     }
