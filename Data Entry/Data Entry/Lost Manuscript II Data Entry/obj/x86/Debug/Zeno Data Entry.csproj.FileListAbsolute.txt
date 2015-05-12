@@ -74,8 +74,8 @@ C:\Users\nutjung\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entr
 C:\Users\nutjung\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Dialogue Data Entry.exe
 C:\Users\nutjung\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Dialogue Data Entry.pdb
 C:\Users\nutjung\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Dialogue_Data_Entry.Form1.resources
-C:\Users\nutjung\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Dialogue_Data_Entry.Form2.resources
 C:\Users\nutjung\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Dialogue_Data_Entry.Form3.resources
 C:\Users\nutjung\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Dialogue_Data_Entry.Searcher.resources
 C:\Users\nutjung\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Dialogue_Data_Entry.TreeFrom.resources
 C:\Users\nutjung\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\bin\Debug\AIMLbot.dll
+C:\Users\nutjung\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Dialogue_Data_Entry.Form2.resources

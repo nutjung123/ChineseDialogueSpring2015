@@ -32,7 +32,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.queryButton = new System.Windows.Forms.Button();
             this.chatBox = new System.Windows.Forms.TextBox();
-            this.ServerModeButton = new System.Windows.Forms.Button();
+            this.StartServerButton = new System.Windows.Forms.Button();
+            this.StopServerbutton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // inputBox
@@ -73,22 +74,33 @@
             this.chatBox.Size = new System.Drawing.Size(614, 288);
             this.chatBox.TabIndex = 3;
             // 
-            // ServerModeButton
+            // StartServerButton
             // 
-            this.ServerModeButton.Location = new System.Drawing.Point(649, 18);
-            this.ServerModeButton.Name = "ServerModeButton";
-            this.ServerModeButton.Size = new System.Drawing.Size(75, 46);
-            this.ServerModeButton.TabIndex = 4;
-            this.ServerModeButton.Text = "Server Mode";
-            this.ServerModeButton.UseVisualStyleBackColor = true;
-            this.ServerModeButton.Click += new System.EventHandler(this.ServerModeButton_Click);
+            this.StartServerButton.Location = new System.Drawing.Point(649, 18);
+            this.StartServerButton.Name = "StartServerButton";
+            this.StartServerButton.Size = new System.Drawing.Size(75, 46);
+            this.StartServerButton.TabIndex = 4;
+            this.StartServerButton.Text = "Start Server";
+            this.StartServerButton.UseVisualStyleBackColor = true;
+            this.StartServerButton.Click += new System.EventHandler(this.ServerModeButton_Click);
+            // 
+            // StopServerbutton
+            // 
+            this.StopServerbutton.Location = new System.Drawing.Point(649, 81);
+            this.StopServerbutton.Name = "StopServerbutton";
+            this.StopServerbutton.Size = new System.Drawing.Size(74, 45);
+            this.StopServerbutton.TabIndex = 5;
+            this.StopServerbutton.Text = "Stop Server";
+            this.StopServerbutton.UseVisualStyleBackColor = true;
+            this.StopServerbutton.Click += new System.EventHandler(this.StopServerbutton_Click);
             // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(736, 370);
-            this.Controls.Add(this.ServerModeButton);
+            this.Controls.Add(this.StopServerbutton);
+            this.Controls.Add(this.StartServerButton);
             this.Controls.Add(this.chatBox);
             this.Controls.Add(this.queryButton);
             this.Controls.Add(this.label1);
@@ -107,6 +119,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button queryButton;
         private System.Windows.Forms.TextBox chatBox;
-        private System.Windows.Forms.Button ServerModeButton;
+        private System.Windows.Forms.Button StartServerButton;
+        private System.Windows.Forms.Button StopServerbutton;
     }
 }

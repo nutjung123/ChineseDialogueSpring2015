@@ -11,6 +11,7 @@ using System.IO;
 using System.Collections;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace Dialogue_Data_Entry
 {
@@ -22,7 +23,8 @@ namespace Dialogue_Data_Entry
         private float featureWeight;
         private float tagKeyWeight;
         private SynchronousSocketListener myServer;
-
+        private Thread serverThread = null;
+        private volatile bool _shouldStop = false;
 
         public Form2(FeatureGraph myGraph)
         {
@@ -40,6 +42,7 @@ namespace Dialogue_Data_Entry
             tagKeyWeight = .2f;
             chatBox.AppendText("Hello, and Welcome to the Query. \r\n");
             inputBox.KeyDown += new KeyEventHandler(this.inputBox_KeyDown);
+            
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -72,14 +75,29 @@ namespace Dialogue_Data_Entry
 
         private void ServerModeButton_Click(object sender, EventArgs e)
         {
+            //Start new thread for server
+            this.serverThread = new Thread(this.DoWork);
+            this.serverThread.Start();
+        }
+
+        public void DoWork()
+        {
             myServer = new SynchronousSocketListener();
-            chatBox.AppendText("Waiting for client to connet...");
+            
+            this.Invoke((MethodInvoker)delegate {
+                chatBox.AppendText("Waiting for client to connet...");
+            });
+
             myServer.StartListening();
             myServer.SendDataToClient("Connected");
-            chatBox.AppendText("Connected!");
+            
+            this.Invoke((MethodInvoker)delegate
+            {
+                chatBox.AppendText("Connected!");
+            });
+            this._shouldStop = false;
             //Console.WriteLine("Connected.");
-
-            while (true)
+            while (!this._shouldStop)
             {
                 string query = myServer.ReceieveDataFromClient();
                 query = query.Replace("<EOF>", "");
@@ -87,20 +105,41 @@ namespace Dialogue_Data_Entry
                 {
                     break;
                 }
-                /*if (myController == null)
-                {
-                    myController = new QueryController(featGraph);
-                }*/
                 if (myHandler == null)
                     myHandler = new QueryHandler(featGraph);
                 //Console.WriteLine("Query: " + query);
-                chatBox.AppendText("Client: " + query + "\r\n");
+                
+                this.Invoke((MethodInvoker)delegate
+                {
+                    chatBox.AppendText("Client: " + query + "\r\n");
+                });
+                
                 string answer = myHandler.ParseInput(query, true);
-                chatBox.AppendText("System:" + answer + "\r\n");
+                
+                this.Invoke((MethodInvoker)delegate
+                {
+                    chatBox.AppendText("System:" + answer + "\r\n");
+                });
+
                 //Console.WriteLine("Send: " + answer);
                 myServer.SendDataToClient(answer);
             }
             myServer.CloseServer();
         }
+
+        public void RequestDoWorkStop()
+        {
+            this._shouldStop = true;
+        }
+
+        private void StopServerbutton_Click(object sender, EventArgs e)
+        {
+            //(Doesn't seem to stop the loop)
+            this.RequestDoWorkStop();
+            myServer.CloseServer();
+            this.serverThread.Abort(); //To Do: Not use Abort and terminate by existing function DoWork
+            this.serverThread.Join();
+        }
+
     }
 }
