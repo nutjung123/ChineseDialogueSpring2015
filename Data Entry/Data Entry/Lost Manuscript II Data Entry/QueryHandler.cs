@@ -133,8 +133,8 @@ namespace Dialogue_Data_Entry
                 }
             }
 
-            // Spread out punctuation
-            input = PadPunctuation(input);
+            // Remove punctuation
+            input = RemovePunctuation(input);
 
             // Check
             if (this.topic == null)
