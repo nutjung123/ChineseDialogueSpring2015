@@ -114,8 +114,8 @@ namespace Dialogue_Data_Entry
             //no query or continue to next topic case
             if (continueNextTopic(query))
             {
-                FeatureSpeaker mySpeaker = new FeatureSpeaker();
-                Feature nextTopic = mySpeaker.getNextTopic(featGraph, this.currentTopic, "", this.turn);
+                FeatureSpeaker mySpeaker = new FeatureSpeaker(this.featGraph);
+                Feature nextTopic = mySpeaker.getNextTopic(this.currentTopic, "", this.turn);
                 nextTopic.DiscussedAmount += 1;
                 featGraph.setFeatureDiscussedAmount(nextTopic.Data, nextTopic.DiscussedAmount);
                 this.currentTopic = nextTopic;
@@ -147,86 +147,6 @@ namespace Dialogue_Data_Entry
             this.turn += 1;
             return answer;
         }
-
-        public string makeQuery2(string query)
-        {
-            if (this.currentTopic == null)
-            {
-                this.currentTopic = featGraph.Root;
-            }
-            if (isTellMeMoreQuery(query))
-            {
-                string tmp = tellMeMore;
-                tellMeMore = "I don't know anything else about that__EOT__";
-                return tmp;
-            }
-            try{
-            float featureWeight = .6f;
-            float tagKeyWeight = .2f;
-            List<string> words = query.Split().ToList<string>();
-            Dictionary<Feature, float> featuresDict = new Dictionary<Feature, float>();
-            for (int x = 0; x < words.Count; x++)
-            {
-                //Search the features
-                List<Feature> featureResults = getFeatureResults(words[x]);
-                for (int i = 0; i < featureResults.Count; i++)
-                {
-                    if (featuresDict.Keys.Contains(featureResults[i]))
-                    {
-                        featuresDict[featureResults[i]] += featureWeight;
-                    }
-                    else
-                    {
-                        featuresDict.Add(featureResults[i], featureWeight);
-                    }
-                }
-                //search the keys
-                featureResults = getTagKeyResults(words[x]);
-                for (int i = 0; i < featureResults.Count; i++)
-                {
-                    if (featuresDict.Keys.Contains(featureResults[i]))
-                    {
-                        featuresDict[featureResults[i]] += tagKeyWeight;
-                    }
-                    else
-                    {
-                        featuresDict.Add(featureResults[i], tagKeyWeight);
-                    }
-                }
-            }
-
-            float maxScore = 0.0f;
-            int maxIndex = -1;
-            for (int i = 0; i < featuresDict.Values.Count; i++)
-            {
-                if (maxScore < featuresDict.Values.ElementAt(i))
-                {
-                    maxScore = featuresDict.Values.ElementAt(i);
-                    maxIndex = i;
-                }
-            }
-
-            //FeatureSpeaker 
-            FeatureSpeaker mySpeaker = new FeatureSpeaker();
-            tellMeMore = mySpeaker.getTagSpeak(featuresDict.Keys.ElementAt(maxIndex));
-            return mySpeaker.getChildSpeak(featuresDict.Keys.ElementAt(maxIndex));
-            }
-            catch
-            {
-                //don't understand anything in sentence (don't use tellMeMore yet)
-                FeatureSpeaker mySpeaker = new FeatureSpeaker();
-                //tellMeMore = mySpeaker.getTagSpeak(featGraph.Root);
-                Feature nextTopic = mySpeaker.getNextTopic(featGraph, this.currentTopic, "", this.turn);
-                nextTopic.DiscussedAmount += 1;
-                featGraph.setFeature(nextTopic.Data,nextTopic);
-                this.currentTopic = nextTopic;
-                this.turn += 1;
-                //return mySpeaker.getChildSpeak(featGraph.Root);
-                return nextTopic.Data;
-            }
-        }
-
-
 
         public List<Feature> getFeatureResults(string query)
         {

@@ -23,12 +23,14 @@ namespace Dialogue_Data_Entry
         private string currentQueryFolderName;
         private int queryCounter;
         private int selectedIndex;
-        private const string BAD_CHARS = "<>()\"\'";
+        private const string BAD_CHARS = "";
+        //private const string BAD_CHARS = "<>()\"\'";
         private int tIndex = -1;
         private ToolTip toolTip1;
         private bool shouldIgnoreCheckEvent;
         private Form2 myQuery;
         private bool updateFlag;
+        private string defaultFilename = @"\2008_Summer_Olympic_Games.xml";
 
         public Form1()
         {
@@ -72,6 +74,27 @@ namespace Dialogue_Data_Entry
             listBox1.Sorted = true;
             checkedListBox2.Sorted = true;
 
+            openDefaultFile();
+        }
+
+        //Open the default file
+        private void openDefaultFile()
+        {
+            string defaultFile = Directory.GetCurrentDirectory() + defaultFilename;
+            Console.WriteLine(defaultFile);
+            if (File.Exists(defaultFile))
+            {
+                //Open it
+                currentFileName = defaultFile;
+                featGraph = XMLFilerForFeatureGraph.readFeatureGraph(currentFileName);
+                selectedIndex = -1;
+                refreshAllButUpdateFeature();
+                tagListBox.Items.Clear();
+                listBox3.Items.Clear();
+                checkedListBox2.Items.Clear();
+                clearAllTextBoxes();
+                this.Text = "Data Entry - Concept Graph : " + currentFileName;
+            }
         }
 
         //All of the operations for the File dropdown menu
@@ -102,7 +125,7 @@ namespace Dialogue_Data_Entry
                 listBox3.Items.Clear();
                 checkedListBox2.Items.Clear();
                 clearAllTextBoxes();
-                myQController = new QueryController(featGraph);
+                //myQController = new QueryController(featGraph);
                 this.Text = "Data Entry - Concept Graph : " + currentFileName;
             }
         }
@@ -706,9 +729,9 @@ namespace Dialogue_Data_Entry
         //unused function
         private void button4_Click(object sender, EventArgs e)
         {
-            FeatureSpeaker mySpeaker = new FeatureSpeaker();
-            MessageBox.Show(mySpeaker.getChildSpeak(toChange));
-            MessageBox.Show(mySpeaker.getTagSpeak(toChange));
+            //FeatureSpeaker mySpeaker = new FeatureSpeaker();
+            //MessageBox.Show(mySpeaker.getChildSpeak(toChange));
+            //MessageBox.Show(mySpeaker.getTagSpeak(toChange));
         }
         //Read query from file and write response to file
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)

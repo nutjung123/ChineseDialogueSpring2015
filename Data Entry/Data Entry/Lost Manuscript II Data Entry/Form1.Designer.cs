@@ -82,6 +82,11 @@
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sortedSelectFeatureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sortedFeatureComboBox = new System.Windows.Forms.ToolStripComboBox();
+            this.sortedSelectChildrenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sortedChildrenComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.findFeatureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -91,14 +96,10 @@
             this.visualizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.queryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.chatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.sortedSelectFeatureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sortedSelectChildrenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sortedFeatureComboBox = new System.Windows.Forms.ToolStripComboBox();
-            this.sortedChildrenComboBox = new System.Windows.Forms.ToolStripComboBox();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabControl1.SuspendLayout();
             this.FeatureCreator.SuspendLayout();
             this.FeatureEditor.SuspendLayout();
@@ -112,6 +113,7 @@
             this.tabControl1.Controls.Add(this.FeatureCreator);
             this.tabControl1.Controls.Add(this.FeatureEditor);
             this.tabControl1.Controls.Add(this.FeatureRemover);
+            this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Location = new System.Drawing.Point(3, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -638,6 +640,49 @@
             this.quitToolStripMenuItem.Text = "Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
             // 
+            // settingToolStripMenuItem
+            // 
+            this.settingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sortedSelectFeatureToolStripMenuItem,
+            this.sortedSelectChildrenToolStripMenuItem});
+            this.settingToolStripMenuItem.Name = "settingToolStripMenuItem";
+            this.settingToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
+            this.settingToolStripMenuItem.Text = "Setting";
+            // 
+            // sortedSelectFeatureToolStripMenuItem
+            // 
+            this.sortedSelectFeatureToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sortedFeatureComboBox});
+            this.sortedSelectFeatureToolStripMenuItem.Name = "sortedSelectFeatureToolStripMenuItem";
+            this.sortedSelectFeatureToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.sortedSelectFeatureToolStripMenuItem.Text = "Sort Select Feature";
+            // 
+            // sortedFeatureComboBox
+            // 
+            this.sortedFeatureComboBox.Items.AddRange(new object[] {
+            "Sorted by Alphabet",
+            "Sorted by ID"});
+            this.sortedFeatureComboBox.Name = "sortedFeatureComboBox";
+            this.sortedFeatureComboBox.Size = new System.Drawing.Size(121, 23);
+            this.sortedFeatureComboBox.Text = "Sorted by Alphabet";
+            // 
+            // sortedSelectChildrenToolStripMenuItem
+            // 
+            this.sortedSelectChildrenToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sortedChildrenComboBox});
+            this.sortedSelectChildrenToolStripMenuItem.Name = "sortedSelectChildrenToolStripMenuItem";
+            this.sortedSelectChildrenToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.sortedSelectChildrenToolStripMenuItem.Text = "Sort Select Children";
+            // 
+            // sortedChildrenComboBox
+            // 
+            this.sortedChildrenComboBox.Items.AddRange(new object[] {
+            "Sorted by Alphabet",
+            "Sorted by ID"});
+            this.sortedChildrenComboBox.Name = "sortedChildrenComboBox";
+            this.sortedChildrenComboBox.Size = new System.Drawing.Size(121, 23);
+            this.sortedChildrenComboBox.Text = "Sorted by Alphabet";
+            // 
             // viewToolStripMenuItem
             // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -712,15 +757,6 @@
             this.chatToolStripMenuItem.Text = "Chat";
             this.chatToolStripMenuItem.Click += new System.EventHandler(this.chatToolStripMenuItem_Click);
             // 
-            // settingToolStripMenuItem
-            // 
-            this.settingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.sortedSelectFeatureToolStripMenuItem,
-            this.sortedSelectChildrenToolStripMenuItem});
-            this.settingToolStripMenuItem.Name = "settingToolStripMenuItem";
-            this.settingToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
-            this.settingToolStripMenuItem.Text = "Setting";
-            // 
             // backgroundWorker1
             // 
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
@@ -739,39 +775,15 @@
             this.panel1.Size = new System.Drawing.Size(1057, 636);
             this.panel1.TabIndex = 6;
             // 
-            // sortedSelectFeatureToolStripMenuItem
+            // tabPage1
             // 
-            this.sortedSelectFeatureToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.sortedFeatureComboBox});
-            this.sortedSelectFeatureToolStripMenuItem.Name = "sortedSelectFeatureToolStripMenuItem";
-            this.sortedSelectFeatureToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.sortedSelectFeatureToolStripMenuItem.Text = "Sort Select Feature";
-            // 
-            // sortedSelectChildrenToolStripMenuItem
-            // 
-            this.sortedSelectChildrenToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.sortedChildrenComboBox});
-            this.sortedSelectChildrenToolStripMenuItem.Name = "sortedSelectChildrenToolStripMenuItem";
-            this.sortedSelectChildrenToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.sortedSelectChildrenToolStripMenuItem.Text = "Sort Select Children";
-            // 
-            // sortedFeatureComboBox
-            // 
-            this.sortedFeatureComboBox.Items.AddRange(new object[] {
-            "Sorted by Alphabet",
-            "Sorted by ID"});
-            this.sortedFeatureComboBox.Name = "sortedFeatureComboBox";
-            this.sortedFeatureComboBox.Size = new System.Drawing.Size(121, 23);
-            this.sortedFeatureComboBox.Text = "Sorted by Alphabet";
-            // 
-            // sortedChildrenComboBox
-            // 
-            this.sortedChildrenComboBox.Items.AddRange(new object[] {
-            "Sorted by Alphabet",
-            "Sorted by ID"});
-            this.sortedChildrenComboBox.Name = "sortedChildrenComboBox";
-            this.sortedChildrenComboBox.Size = new System.Drawing.Size(121, 23);
-            this.sortedChildrenComboBox.Text = "Sorted by Alphabet";
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(1030, 653);
+            this.tabPage1.TabIndex = 3;
+            this.tabPage1.Text = "Constraint Editor";
+            this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -872,6 +884,7 @@
         private System.Windows.Forms.ToolStripComboBox sortedFeatureComboBox;
         private System.Windows.Forms.ToolStripMenuItem sortedSelectChildrenToolStripMenuItem;
         private System.Windows.Forms.ToolStripComboBox sortedChildrenComboBox;
+        private System.Windows.Forms.TabPage tabPage1;
     }
 }
 

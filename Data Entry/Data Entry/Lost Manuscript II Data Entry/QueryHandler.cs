@@ -104,9 +104,9 @@ namespace Dialogue_Data_Entry
 
         private string MessageToServer(Feature feat, string speak, string noveltyInfo)
         {
-            return "ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + speak + ":" + noveltyInfo;
+            return "ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + speak + ":Novelty:" + noveltyInfo;
         }
-
+        //Form2 calls this function
         public string ParseInput(string input, bool messageToServer = false)
         {
             string answer = IDK;
@@ -139,7 +139,7 @@ namespace Dialogue_Data_Entry
             // Check
             if (this.topic == null)
                 this.topic = this.graph.Root;
-            FeatureSpeaker speaker = new FeatureSpeaker();
+            FeatureSpeaker speaker = new FeatureSpeaker(this.graph);
             // CASE: Nothing / Move on to next topic
             if (string.IsNullOrEmpty(input))
             {
@@ -147,8 +147,8 @@ namespace Dialogue_Data_Entry
                 string[] newBuffer;
 
                 // Can't guarantee it'll actually move on to anything...
-                nextTopic = speaker.getNextTopic(this.graph, nextTopic, "", this.turn);
-                noveltyInfo = speaker.getNovelty(this.graph, nextTopic, this.turn, noveltyAmount);
+                nextTopic = speaker.getNextTopic(nextTopic, "", this.turn);
+                noveltyInfo = speaker.getNovelty(nextTopic, this.turn, noveltyAmount);
                 currentTopicNovelty = speaker.getCurrentTopicNovelty();
                 newBuffer = FindStuffToSay(nextTopic);
                 //MessageBox.Show("Explored " + nextTopic.Data + " with " + newBuffer.Length + " speaks.");
@@ -170,7 +170,7 @@ namespace Dialogue_Data_Entry
                     answer = this.buffer[b++];
                 else
                     answer = "I've said all I can about that topic!";
-                noveltyInfo = speaker.getNovelty(this.graph, this.topic, this.turn, noveltyAmount);
+                noveltyInfo = speaker.getNovelty(this.topic, this.turn, noveltyAmount);
             }
             // CASE: New topic/question
             else
@@ -188,7 +188,7 @@ namespace Dialogue_Data_Entry
                     this.topic = feature;
                     this.buffer = ParseQuery(query);
                     answer = this.buffer[b++];
-                    noveltyInfo = speaker.getNovelty(this.graph, this.topic, this.turn, noveltyAmount);
+                    noveltyInfo = speaker.getNovelty(this.topic, this.turn, noveltyAmount);
                 }
             }
 

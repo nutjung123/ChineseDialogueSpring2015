@@ -6,6 +6,7 @@ using System.IO;
 using System.Xml;
 using Dialogue_Data_Entry;
 using System.Windows.Forms;
+using System.Security;
 
 namespace Dialogue_Data_Entry
 {
@@ -13,6 +14,31 @@ namespace Dialogue_Data_Entry
     class XMLFilerForFeatureGraph
     {
         public static XmlDocument docOld = new XmlDocument();
+
+        public static string escapeInvalidXML(string s)
+        {
+            if (s == null)
+            {
+                return s;
+            }
+            return SecurityElement.Escape(s);
+        }
+
+        public static string unEscapeInvalidXML(string s)
+        {
+            if (s == null)
+            {
+                return s;
+            }
+            string str = s;
+            str = str.Replace("&apos;", "'");
+            str = str.Replace("&quot;", "\""); 
+            str = str.Replace("&gt;", ">");
+            str = str.Replace("&lt;", "<");
+            str = str.Replace("&amp;", "&");
+            return str;
+        }
+
         public static bool writeFeatureGraph(FeatureGraph toWrite, string fileName)
         {
             try
@@ -26,26 +52,33 @@ namespace Dialogue_Data_Entry
                 for (int x = 0; x < toWrite.Features.Count; x++)
                 {
                     Feature tmp = toWrite.Features[x];
-                    writer.WriteLine("<Feature id=\"" + x + "\" data=\"" + tmp.Data + "\">");
+                    writer.WriteLine("<Feature id=\"" + x + "\" data=\"" + escapeInvalidXML(tmp.Data) + "\">");
+                    //Neighbor
                     for (int y = 0; y < tmp.Neighbors.Count; y++)
                     {
                         int id = toWrite.getFeatureIndex(tmp.Neighbors[y].Item1.Data);
-                        writer.WriteLine("<neighbor dest=\"" + id + "\" weight=\"" + tmp.Neighbors[y].Item2 + "\" relationship=\""+tmp.Neighbors[y].Item3+"\"/>");
+                        writer.WriteLine("<neighbor dest=\"" + id + "\" weight=\"" + tmp.Neighbors[y].Item2 + "\" relationship=\"" + escapeInvalidXML(tmp.Neighbors[y].Item3) + "\"/>");
                     }
+                    //Parent 
                     for (int y = 0; y < tmp.Parents.Count; y++)
                     {
                         int id = toWrite.getFeatureIndex(tmp.Parents[y].Item1.Data);
-                        writer.WriteLine("<parent dest=\"" + id + "\" weight=\"" + tmp.Parents[y].Item2 + "\" relationship=\"" + tmp.Parents[y].Item3 + "\"/>");
+                        writer.WriteLine("<parent dest=\"" + id + "\" weight=\"" + tmp.Parents[y].Item2 + "\" relationship=\"" + escapeInvalidXML(tmp.Parents[y].Item3) + "\"/>");
                     }
+                    //Tag
                     List<Tuple<string, string, string>> tags = tmp.Tags;
                     for (int y = 0; y < tags.Count; y++)
                     {
-                        writer.WriteLine("<tag key=\"" + tags[y].Item1 + "\" value=\"" + tags[y].Item2 + "\" type=\"" + tags[y].Item3 + "\"/>");
+                        string toWriteTag = "<tag key=\"" + escapeInvalidXML(tags[y].Item1);
+                        toWriteTag += "\" value=\"" + escapeInvalidXML(tags[y].Item2);
+                        toWriteTag += "\" type=\"" + escapeInvalidXML(tags[y].Item3) + "\"/>";
+                        writer.WriteLine(toWriteTag);
                     }
+                    //Speak
                     List<string> speaks = tmp.Speaks;
                     for (int y = 0; y < speaks.Count; y++)
                     {
-                        writer.WriteLine("<speak value=\"" + speaks[y] + "\"/>");
+                        writer.WriteLine("<speak value=\"" + escapeInvalidXML(speaks[y]) + "\"/>");
                     }
                     writer.WriteLine("</Feature>");
                 }
@@ -72,12 +105,13 @@ namespace Dialogue_Data_Entry
                 features = features[0].SelectNodes("Feature");
                 foreach (XmlNode node in features)
                 {
-                    string data = node.Attributes["data"].Value;
+                    string data = unEscapeInvalidXML(node.Attributes["data"].Value);
                     result.addFeature(new Feature(data));
                 }
                 foreach (XmlNode node in features)
                 {
                     Feature tmp = result.getFeature(node.Attributes["data"].Value);
+                    //Neighbor
                     XmlNodeList neighbors = node.SelectNodes("neighbor");
                     foreach (XmlNode neighborNode in neighbors)
                     {
@@ -86,7 +120,7 @@ namespace Dialogue_Data_Entry
                         string relationship = "";
                         if (neighborNode.Attributes["relationship"] != null)
                         {
-                            relationship = Convert.ToString(neighborNode.Attributes["relationship"].Value);
+                            relationship = unEscapeInvalidXML(Convert.ToString(neighborNode.Attributes["relationship"].Value));
                         }
                         tmp.addNeighbor(result.Features[id], weight,relationship);
 
@@ -104,6 +138,7 @@ namespace Dialogue_Data_Entry
                         }
                         //result.Features[id].addNeighbor(tmp,weight);
                     }
+                    //Parent
                     XmlNodeList parents = node.SelectNodes("parent");
                     foreach (XmlNode parentNode in parents)
                     {
@@ -112,22 +147,24 @@ namespace Dialogue_Data_Entry
                         string relationship = "";
                         if (parentNode.Attributes["relationship"] != null)
                         {
-                            relationship = Convert.ToString(parentNode.Attributes["relationship"].Value);
+                            relationship = unEscapeInvalidXML(Convert.ToString(parentNode.Attributes["relationship"].Value));
                         }
                         tmp.addParent(result.Features[id], weight, relationship);
                     }
+                    //Tag
                     XmlNodeList tags = node.SelectNodes("tag");
                     foreach (XmlNode tag in tags)
                     {
-                        string key = tag.Attributes["key"].Value;
-                        string val = tag.Attributes["value"].Value;
-                        string type = tag.Attributes["type"].Value;
+                        string key = unEscapeInvalidXML(tag.Attributes["key"].Value);
+                        string val = unEscapeInvalidXML(tag.Attributes["value"].Value);
+                        string type = unEscapeInvalidXML(tag.Attributes["type"].Value);
                         tmp.addTag(key, val, type);
                     }
+                    //Speak
                     XmlNodeList speaks = node.SelectNodes("speak");
                     foreach (XmlNode speak in speaks)
                     {
-                        tmp.addSpeak(speak.Attributes["value"].Value);
+                        tmp.addSpeak(unEscapeInvalidXML(speak.Attributes["value"].Value));
                     }
                 }
                 int rootId = -1;
@@ -146,6 +183,8 @@ namespace Dialogue_Data_Entry
                 return null;
             }
         }
+
+
         /* merge two files*/
         public static FeatureGraph readFeatureGraph2(string toReadPath)
         {
