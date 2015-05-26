@@ -20,6 +20,7 @@ namespace Dialogue_Data_Entry
         private string editorFeatureSelected;
         private string editorKeySelected;
         private string currentFileName;
+        private string currentConstraintFileName="";
         private string currentQueryFolderName;
         private int queryCounter;
         private int selectedIndex;
@@ -30,7 +31,10 @@ namespace Dialogue_Data_Entry
         private bool shouldIgnoreCheckEvent;
         private Form2 myQuery;
         private bool updateFlag;
+        private TextBox lastFocused;
+        private List<Tuple<string, string, string>> constraintList;
         private string defaultFilename = @"\2008_Summer_Olympic_Games.xml";
+        private string constraintFilename = @"\constraint.txt";
 
         public Form1()
         {
@@ -41,6 +45,7 @@ namespace Dialogue_Data_Entry
             toChange = null;
             currentFileName = "";
             updateFlag = false;
+            
             InitializeComponent();
 
             //set up tooltip
@@ -52,13 +57,18 @@ namespace Dialogue_Data_Entry
 
             //Add enter method
             textBox1.KeyDown += new KeyEventHandler(this.featureCreateTextBox1_KeyDown);
-            //Add tooltip method to checkedListBox2
-            checkedListBox2.MouseHover += new EventHandler(checkedListBox2_MouseHover);
-            checkedListBox2.MouseMove += new MouseEventHandler(checkedListBox2_MouseMove);
+            //Add tooltip method to childrenCheckedListBox
+            childrenCheckedListBox.MouseHover += new EventHandler(childrenCheckedListBox_MouseHover);
+            childrenCheckedListBox.MouseMove += new MouseEventHandler(childrenCheckedListBox_MouseMove);
             //check event handle
-            checkedListBox2.ItemCheck += new ItemCheckEventHandler(CheckedListBox2_ItemCheck);
+            childrenCheckedListBox.ItemCheck += new ItemCheckEventHandler(childrenCheckedListBox_ItemCheck);
             //right click event for adding relationship
-            checkedListBox2.MouseDown += new MouseEventHandler(CheckedListBox2_RightClick);
+            childrenCheckedListBox.MouseDown += new MouseEventHandler(childrenCheckedListBox_RightClick);
+
+            //Add lostFocuse Method
+            firstArgumentTextBox.LostFocus += textBoxFocusLost;
+            thirdArgumentTextBox.LostFocus += textBoxFocusLost;
+
 
             //Add closing method
             this.FormClosing += Window_Closing;
@@ -71,14 +81,15 @@ namespace Dialogue_Data_Entry
             //sorted list
             sortedChildrenComboBox.SelectedIndexChanged += new EventHandler(SortedChildrenComboBox_SelectedIndexChanged);
             sortedFeatureComboBox.SelectedIndexChanged += new EventHandler(SortedFeatureComboBox_SelectedIndexChanged);
-            listBox1.Sorted = true;
-            checkedListBox2.Sorted = true;
+            featureEditorListBox.Sorted = true;
+            childrenCheckedListBox.Sorted = true;
 
-            openDefaultFile();
+            openDefaultXMLFile();
+            openDefaultConstraintFile();
         }
 
         //Open the default file
-        private void openDefaultFile()
+        private void openDefaultXMLFile()
         {
             string defaultFile = Directory.GetCurrentDirectory() + defaultFilename;
             Console.WriteLine(defaultFile);
@@ -91,9 +102,18 @@ namespace Dialogue_Data_Entry
                 refreshAllButUpdateFeature();
                 tagListBox.Items.Clear();
                 listBox3.Items.Clear();
-                checkedListBox2.Items.Clear();
+                childrenCheckedListBox.Items.Clear();
                 clearAllTextBoxes();
                 this.Text = "Data Entry - Concept Graph : " + currentFileName;
+            }
+        }
+
+        private void openDefaultConstraintFile()
+        {
+            string defaultConstraintFile = Directory.GetCurrentDirectory() + constraintFilename;
+            if (File.Exists(defaultConstraintFile))
+            {
+                openExistingConstraintFile(defaultConstraintFile);
             }
         }
 
@@ -123,7 +143,7 @@ namespace Dialogue_Data_Entry
                 refreshAllButUpdateFeature();
                 tagListBox.Items.Clear();
                 listBox3.Items.Clear();
-                checkedListBox2.Items.Clear();
+                childrenCheckedListBox.Items.Clear();
                 clearAllTextBoxes();
                 //myQController = new QueryController(featGraph);
                 this.Text = "Data Entry - Concept Graph : " + currentFileName;
@@ -168,7 +188,7 @@ namespace Dialogue_Data_Entry
                 featGraph = XMLFilerForFeatureGraph.readFeatureGraph(currentFileName);
                 refreshAllButUpdateFeature();
                 tagListBox.Items.Clear();
-                checkedListBox2.Items.Clear();
+                childrenCheckedListBox.Items.Clear();
                 clearAllTextBoxes();
                 myQController = new QueryController(featGraph);
             }
@@ -354,10 +374,10 @@ namespace Dialogue_Data_Entry
         }
         public void refreshListBoxes()
         {
-            refreshFeatureListBox(checkedListBox1);
-            refreshFeatureListBox(checkedListBox2);
-            refreshFeatureListBox(checkedListBox3);
-            refreshFeatureListBox(listBox1);
+            refreshFeatureListBox(featureCreatorCheckedListBox);
+            refreshFeatureListBox(childrenCheckedListBox);
+            refreshFeatureListBox(featureRemoverCheckedListBox);
+            refreshFeatureListBox(featureEditorListBox);
             refreshFeatureTagListBox(tagListBox);
             refreshFeatureSpeaksListBox(listBox3);
         }
@@ -368,9 +388,10 @@ namespace Dialogue_Data_Entry
         }
         public void refreshAllButUpdateFeature()
         {
-            refreshFeatureListBox(checkedListBox1);
-            refreshFeatureListBox(checkedListBox3);
-            refreshFeatureListBox(listBox1);
+            refreshFeatureListBox(featureCreatorCheckedListBox);
+            refreshFeatureListBox(featureRemoverCheckedListBox);
+            refreshFeatureListBox(featureForConstraintListBox);
+            refreshFeatureListBox(featureEditorListBox);
         }
         public void clearAllTextBoxes()
         {
@@ -391,8 +412,8 @@ namespace Dialogue_Data_Entry
             if (toChange != null)
             {
                 initEditor(toChange);
-                listBox1.SelectedIndex = (indexOfIn(featureData, listBox1));
-                selectedIndex = featGraph.getFeatureIndex(listBox1.SelectedItem.ToString());
+                featureEditorListBox.SelectedIndex = (indexOfIn(featureData, featureEditorListBox));
+                selectedIndex = featGraph.getFeatureIndex(featureEditorListBox.SelectedItem.ToString());
             }
             if (tagData != "")
             {
@@ -438,10 +459,10 @@ namespace Dialogue_Data_Entry
             }
             textBox1.Clear();
             Feature toAdd = new Feature(data);
-            for (int x = 0; x < checkedListBox1.CheckedItems.Count; x++)
+            for (int x = 0; x < featureCreatorCheckedListBox.CheckedItems.Count; x++)
             {
-                toAdd.addNeighbor(featGraph.getFeature(checkedListBox1.CheckedItems[x].ToString()));
-                featGraph.getFeature(checkedListBox1.CheckedItems[x].ToString()).addParent(toAdd);
+                toAdd.addNeighbor(featGraph.getFeature(featureCreatorCheckedListBox.CheckedItems[x].ToString()));
+                featGraph.getFeature(featureCreatorCheckedListBox.CheckedItems[x].ToString()).addParent(toAdd);
                 //featGraph.getFeature(checkedListBox1.CheckedItems[x].ToString()).addNeighbor(toAdd);
             }
             featGraph.addFeature(toAdd);
@@ -486,7 +507,7 @@ namespace Dialogue_Data_Entry
                 }
                 refreshAllButUpdateFeature();
                 clearAllTextBoxes();
-                checkedListBox2.Items.Clear();
+                childrenCheckedListBox.Items.Clear();
                 tagListBox.Items.Clear();
                 listBox3.Items.Clear();
                 checkBox1.Checked = false;
@@ -498,12 +519,12 @@ namespace Dialogue_Data_Entry
         //feature list selection
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listBox1.SelectedItem == null)
+            if (featureEditorListBox.SelectedItem == null)
             {
                 MessageBox.Show("You haven't selected anything to edit yet", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            selectedIndex = featGraph.getFeatureIndex(listBox1.SelectedItem.ToString());
+            selectedIndex = featGraph.getFeatureIndex(featureEditorListBox.SelectedItem.ToString());
             //toChange = featGraph.getFeature(listBox1.SelectedItem.ToString()).deepCopy();
             
             initEditor(featGraph.Features[selectedIndex]);
@@ -519,7 +540,7 @@ namespace Dialogue_Data_Entry
                 maskedTextBox1.Text = toEdit.DiscussedThreshold.ToString();
                 editFeatureDataTextBox.Text = toEdit.Data;
                 editorFeatureSelected = toEdit.Data;
-                refreshFeatureListBox(checkedListBox2, toEdit.Data);
+                refreshFeatureListBox(childrenCheckedListBox, toEdit.Data);
 
                 refreshFeatureSpeaksListBox(listBox3);
                 refreshFeatureTagListBox(tagListBox);
@@ -527,17 +548,17 @@ namespace Dialogue_Data_Entry
                 
                 for (int x = 0; x < toEdit.Neighbors.Count; x++)
                 {
-                    for (int y = 0; y < checkedListBox2.Items.Count; y++)
+                    for (int y = 0; y < childrenCheckedListBox.Items.Count; y++)
                     {
-                        if (checkedListBox2.Items[y].ToString() == toEdit.Neighbors[x].Item1.Data)
+                        if (childrenCheckedListBox.Items[y].ToString() == toEdit.Neighbors[x].Item1.Data)
                         {
-                            checkedListBox2.SetItemChecked(y, true);
+                            childrenCheckedListBox.SetItemChecked(y, true);
                         }
                     }
                 }
 
                 shouldIgnoreCheckEvent = false;
-                checkedListBox2.Refresh();
+                childrenCheckedListBox.Refresh();
 
                 if (featGraph.Root != null && toEdit.Data == featGraph.Root.Data)
                 {
@@ -663,34 +684,40 @@ namespace Dialogue_Data_Entry
             }
         }
 
-        //tooltip helper function 
-        private void checkedListBox2_MouseMove(object sender, MouseEventArgs e)
+        //last focuse helper
+        private void textBoxFocusLost(object sender, EventArgs e)
         {
-            int index = checkedListBox2.IndexFromPoint(e.Location);
+            lastFocused = (TextBox)sender;
+        }
+
+        //tooltip helper function 
+        private void childrenCheckedListBox_MouseMove(object sender, MouseEventArgs e)
+        {
+            int index = childrenCheckedListBox.IndexFromPoint(e.Location);
             if (tIndex != index)
             {
                 GetToolTip();
             }
         }
         //tooltip helper function
-        private void checkedListBox2_MouseHover(object sender, EventArgs e)
+        private void childrenCheckedListBox_MouseHover(object sender, EventArgs e)
         {
             GetToolTip();
         }
         //show tooltip 
         private void GetToolTip()
         {
-            Point pos = checkedListBox2.PointToClient(MousePosition);
-            tIndex = checkedListBox2.IndexFromPoint(pos);
+            Point pos = childrenCheckedListBox.PointToClient(MousePosition);
+            tIndex = childrenCheckedListBox.IndexFromPoint(pos);
             if (tIndex > -1)
             {
-                string showText = checkedListBox2.Items[tIndex].ToString();
+                string showText = childrenCheckedListBox.Items[tIndex].ToString();
                 //check for relationship
-                if (checkedListBox2.GetItemCheckState(tIndex) == CheckState.Checked)
+                if (childrenCheckedListBox.GetItemCheckState(tIndex) == CheckState.Checked)
                 {
                     showText = showText + "\nR: " + featGraph.Features[selectedIndex].getRelationshipNeighbor(showText);
                 }
-                toolTip1.SetToolTip(checkedListBox2, showText);
+                toolTip1.SetToolTip(childrenCheckedListBox, showText);
             }
         }
 
@@ -702,7 +729,7 @@ namespace Dialogue_Data_Entry
         
         private void removeFeatureButton_Click(object sender, EventArgs e)
         {
-            if (checkedListBox3.CheckedItems.Count == 0)
+            if (featureRemoverCheckedListBox.CheckedItems.Count == 0)
             {
                 MessageBox.Show("You have not selected any Features to remove", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -714,9 +741,9 @@ namespace Dialogue_Data_Entry
                 return;
             } 
             
-            for (int x = 0; x < checkedListBox3.CheckedItems.Count; x++)
+            for (int x = 0; x < featureRemoverCheckedListBox.CheckedItems.Count; x++)
             {
-                featGraph.removeFeature(checkedListBox3.CheckedItems[x].ToString());
+                featGraph.removeFeature(featureRemoverCheckedListBox.CheckedItems[x].ToString());
             }
             refreshAllButUpdateFeature();
             updateFlag = true;
@@ -863,7 +890,7 @@ namespace Dialogue_Data_Entry
                 featGraph = XMLFilerForFeatureGraph.readFeatureGraph2(openFileDialog1.FileName);
                 refreshAllButUpdateFeature();
                 tagListBox.Items.Clear();
-                checkedListBox2.Items.Clear();
+                childrenCheckedListBox.Items.Clear();
                 clearAllTextBoxes();
                 myQController = new QueryController(featGraph);
             }
@@ -877,14 +904,14 @@ namespace Dialogue_Data_Entry
         }
 
         // add neighbor checkedListBox method (+ parent)
-        private void CheckedListBox2_ItemCheck(Object sender, ItemCheckEventArgs e)
+        private void childrenCheckedListBox_ItemCheck(Object sender, ItemCheckEventArgs e)
         {
             if (!shouldIgnoreCheckEvent && selectedIndex!=-1)
             {
                 if (e.NewValue == CheckState.Checked && e.CurrentValue == CheckState.Unchecked)
                 {
                     //if check insert the new neighbor 
-                    int neighborIndex = featGraph.getFeatureIndex(checkedListBox2.Items[e.Index].ToString());
+                    int neighborIndex = featGraph.getFeatureIndex(childrenCheckedListBox.Items[e.Index].ToString());
                     featGraph.Features[selectedIndex].addNeighbor(featGraph.Features[neighborIndex]);
                     featGraph.Features[neighborIndex].addParent(featGraph.Features[selectedIndex]);
                     //featGraph.Features[neighborIndex].addNeighbor(featGraph.Features[selectedIndex]);
@@ -893,7 +920,7 @@ namespace Dialogue_Data_Entry
                 else if (e.NewValue == CheckState.Unchecked && e.CurrentValue == CheckState.Checked)
                 {
                     //if uncheck remove the neighbor
-                    int neighborIndex = featGraph.getFeatureIndex(checkedListBox2.Items[e.Index].ToString());
+                    int neighborIndex = featGraph.getFeatureIndex(childrenCheckedListBox.Items[e.Index].ToString());
                     featGraph.Features[selectedIndex].removeNeighbor(featGraph.Features[neighborIndex].Data);
                     featGraph.Features[neighborIndex].removeParent(featGraph.Features[selectedIndex].Data);
                     //featGraph.Features[neighborIndex].removeNeighbor(featGraph.Features[selectedIndex].Data);
@@ -902,16 +929,16 @@ namespace Dialogue_Data_Entry
             }
         }
         //Right click event for adding relationship to the edge
-        private void CheckedListBox2_RightClick(Object sender, MouseEventArgs e)
+        private void childrenCheckedListBox_RightClick(Object sender, MouseEventArgs e)
         {
-            checkedListBox2.SelectedIndex = checkedListBox2.IndexFromPoint(e.X, e.Y);
-            if (checkedListBox2.SelectedIndex == -1)
+            childrenCheckedListBox.SelectedIndex = childrenCheckedListBox.IndexFromPoint(e.X, e.Y);
+            if (childrenCheckedListBox.SelectedIndex == -1)
             {
                 return;
             }
-            string selectedName = checkedListBox2.Items[checkedListBox2.SelectedIndex].ToString();
+            string selectedName = childrenCheckedListBox.Items[childrenCheckedListBox.SelectedIndex].ToString();
             if (e.Button == MouseButtons.Right 
-                && checkedListBox2.GetItemCheckState(checkedListBox2.SelectedIndex) == CheckState.Checked )
+                && childrenCheckedListBox.GetItemCheckState(childrenCheckedListBox.SelectedIndex) == CheckState.Checked )
             {
                 string OldRelationshipN = featGraph.Features[selectedIndex].getRelationshipNeighbor(selectedName);
                 string OldRelationshipP = featGraph.getFeature(selectedName).getRelationshipParent(featGraph.Features[selectedIndex].Data);
@@ -954,17 +981,17 @@ namespace Dialogue_Data_Entry
             string selectedSort = sortedFeatureComboBox.SelectedItem.ToString();
             if (selectedSort == "Sorted by Alphabet")
             {
-                listBox1.Sorted = true;
+                featureEditorListBox.Sorted = true;
 
             }
             else if (selectedSort == "Sorted by ID")
             {
-                listBox1.Sorted = false;
+                featureEditorListBox.Sorted = false;
             }
-            refreshFeatureListBox(listBox1);
+            refreshFeatureListBox(featureEditorListBox);
             if (selectedIndex != -1)
             {
-                listBox1.SelectedItem = featGraph.Features[selectedIndex].Data;
+                featureEditorListBox.SelectedItem = featGraph.Features[selectedIndex].Data;
                 //initEditor(featGraph.Features[selectedIndex]);
             }
         }
@@ -974,35 +1001,266 @@ namespace Dialogue_Data_Entry
             string selectedSort = sortedChildrenComboBox.SelectedItem.ToString();
             if (selectedSort == "Sorted by Alphabet")
             {
-                checkedListBox2.Sorted = true;
+                childrenCheckedListBox.Sorted = true;
             }
             else if (selectedSort == "Sorted by ID")
             {
-                checkedListBox2.Sorted = false;
+                childrenCheckedListBox.Sorted = false;
             }
             if (selectedIndex != -1)
             {
-                refreshFeatureListBox(checkedListBox2,featGraph.Features[selectedIndex].Data);
-                //update the check state of checkedListBox2 
+                refreshFeatureListBox(childrenCheckedListBox,featGraph.Features[selectedIndex].Data);
+                //update the check state of childrenCheckedListBox 
                 shouldIgnoreCheckEvent = true;
                 for (int x = 0; x < featGraph.Features[selectedIndex].Neighbors.Count; x++)
                 {
-                    for (int y = 0; y < checkedListBox2.Items.Count; y++)
+                    for (int y = 0; y < childrenCheckedListBox.Items.Count; y++)
                     {
-                        if (checkedListBox2.Items[y].ToString() == featGraph.Features[selectedIndex].Neighbors[x].Item1.Data)
+                        if (childrenCheckedListBox.Items[y].ToString() == featGraph.Features[selectedIndex].Neighbors[x].Item1.Data)
                         {
-                            checkedListBox2.SetItemChecked(y, true);
+                            childrenCheckedListBox.SetItemChecked(y, true);
                         }
                     }
                 }
 
                 shouldIgnoreCheckEvent = false;
-                checkedListBox2.Refresh();
+                childrenCheckedListBox.Refresh();
             }
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
         }
+
+        private void featureForConstraintListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+            if (lastFocused != null)
+            {
+                lastFocused.Text = featureForConstraintListBox.SelectedItem.ToString();
+            }
+        }
+
+        private void refreshShowConstraintListBox()
+        {
+            showConstraintListBox.Items.Clear();
+            if (constraintList != null)
+            {
+                for (int x = 0; x < constraintList.Count(); x++)
+                {
+                    string toAdd = constraintList[x].Item1+ " ";
+                    toAdd += constraintList[x].Item2+" ";
+                    toAdd += constraintList[x].Item3;
+                    showConstraintListBox.Items.Add(toAdd);
+                }
+            }
+        }
+
+        private void addConstraintButton_Click(object sender, EventArgs e)
+        {
+            //check all the three necessary fields
+            if(firstArgumentTextBox.Text == "" || featGraph.getFeatureIndex(firstArgumentTextBox.Text)== -1)
+            {
+                MessageBox.Show("First argument box is invalid", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            else if (secondArgumentComboBox.Text == "")
+            {
+                MessageBox.Show("Second argument box is empty", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            else if (thirdArgumentTextBox.Text == "") 
+            {
+                MessageBox.Show("Third argument box is invalid", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            else if (thirdArgumentTextBox.Text != "")
+            {
+                try
+                {
+                    int result = Convert.ToInt32(thirdArgumentTextBox.Text);
+                    if (result <= 0)
+                    {
+                        MessageBox.Show("Third argument box is invalid", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        return;
+                    }
+                }
+                catch (FormatException)
+                {
+                    if (featGraph.getFeatureIndex(thirdArgumentTextBox.Text) == -1)
+                    {
+                        MessageBox.Show("Third argument box is invalid", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        return;
+                    }
+                }
+            }
+            string firstArgument = firstArgumentTextBox.Text;
+            string secondArgument = secondArgumentComboBox.Text;
+            string thirdArgument = thirdArgumentTextBox.Text;
+            if (constraintList==null)
+            {
+                constraintList = new List<Tuple<string,string,string>>();
+            }
+            constraintList.Add(new Tuple<string,string,string>(firstArgument,secondArgument,thirdArgument));
+            refreshShowConstraintListBox();
+        }
+
+        private void showConstraintListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (showConstraintListBox.SelectedIndex != -1)
+            {
+                firstArgumentTextBox.Text = constraintList[showConstraintListBox.SelectedIndex].Item1;
+                secondArgumentComboBox.Text = constraintList[showConstraintListBox.SelectedIndex].Item2;
+                thirdArgumentTextBox.Text = constraintList[showConstraintListBox.SelectedIndex].Item3;
+            }
+        }
+
+        private void editConstraintButton_Click(object sender, EventArgs e)
+        {
+            if (showConstraintListBox.SelectedIndex == -1)
+            {
+                MessageBox.Show("You have not select one of the constraint.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            else if (firstArgumentTextBox.Text == "" || featGraph.getFeatureIndex(firstArgumentTextBox.Text) == -1)
+            {
+                MessageBox.Show("First argument box is invalid", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            else if (secondArgumentComboBox.Text == "")
+            {
+                MessageBox.Show("Second argument box is empty", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            else if (thirdArgumentTextBox.Text == "") 
+            {
+                MessageBox.Show("Third argument box is invalid", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            else if (thirdArgumentTextBox.Text != "")
+            {
+                try
+                {
+                    int result = Convert.ToInt32(thirdArgumentTextBox.Text);
+                    if (result <= 0)
+                    {
+                        MessageBox.Show("Third argument box is invalid", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        return;
+                    }
+                }
+                catch (FormatException)
+                {
+                    if (featGraph.getFeatureIndex(thirdArgumentTextBox.Text) == -1)
+                    {
+                        MessageBox.Show("Third argument box is invalid", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        return;
+                    }
+                }
+            }
+            string firstArgument = firstArgumentTextBox.Text;
+            string secondArgument = secondArgumentComboBox.Text;
+            string thirdArgument = thirdArgumentTextBox.Text;
+            constraintList.RemoveAt(showConstraintListBox.SelectedIndex);
+            constraintList.Add(new Tuple<string, string, string>(firstArgument, secondArgument, thirdArgument));
+            refreshShowConstraintListBox();
+        }
+
+        private void removeConstraintButton_Click(object sender, EventArgs e)
+        {
+            if (showConstraintListBox.SelectedIndex == -1)
+            {
+                MessageBox.Show("You have not select one of the constraint.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            constraintList.RemoveAt(showConstraintListBox.SelectedIndex);
+            refreshShowConstraintListBox();
+        }
+
+        private void saveAsConstraint()
+        {
+            saveFileDialog1.Title = "Save Constraint";
+            saveFileDialog1.FileName = "";
+            saveFileDialog1.OverwritePrompt = true;
+            saveFileDialog1.AddExtension = false;
+            saveFileDialog1.Filter = "Text File|*.txt|All Files|*";
+            saveFileDialog1.ShowDialog();
+            if (saveFileDialog1.FileName != "")
+            {
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(saveFileDialog1.FileName))
+                {
+                    for (int x = 0; x < constraintList.Count(); x++)
+                    {
+                        file.WriteLine(constraintList[x].Item1);
+                        file.WriteLine(constraintList[x].Item2);
+                        file.WriteLine(constraintList[x].Item3);
+                    }
+                }
+            }
+        }
+
+        private void saveFileForConstraintButton_Click(object sender, EventArgs e)
+        {
+            if (currentConstraintFileName != "")
+            {
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(currentConstraintFileName))
+                {
+                    for (int x = 0; x < constraintList.Count(); x++)
+                    {
+                        file.WriteLine(constraintList[x].Item1);
+                        file.WriteLine(constraintList[x].Item2);
+                        file.WriteLine(constraintList[x].Item3);
+                    }
+                }
+            }
+            else
+            {
+                saveAsConstraint();
+            }
+        }
+
+        private void saveAsForConstraintFileButton_Click(object sender, EventArgs e)
+        {
+            saveAsConstraint();
+        }
+
+        private void openExistingConstraintFile(string fileName)
+        {
+            currentConstraintFileName = fileName;
+            string[] lines = System.IO.File.ReadAllLines(currentConstraintFileName);
+            constraintList = new List<Tuple<string, string, string>>();
+            string firstArgument = "", secondArgument = "", thirdArgument = "";
+            for (int x = 0; x < lines.Count(); x++)
+            {
+                if (x % 3 == 0)
+                {
+                    firstArgument = lines[x];
+                }
+                else if (x % 3 == 1)
+                {
+                    secondArgument = lines[x];
+                }
+                else if (x % 3 == 2)
+                {
+                    thirdArgument = lines[x];
+                    constraintList.Add(new Tuple<string, string, string>(firstArgument, secondArgument, thirdArgument));
+                }
+            }
+            refreshShowConstraintListBox();
+        }
+
+        private void openFileForConstraintButton_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.Title = "Choose the Text file you want to load";
+            openFileDialog1.FileName = "";
+            openFileDialog1.Multiselect = false;
+            openFileDialog1.CheckFileExists = true;
+            openFileDialog1.Filter = "Text File|*.txt|All Files|*";
+            openFileDialog1.ShowDialog();
+            if (openFileDialog1.FileName != "" && openFileDialog1.CheckFileExists)
+            {
+                openExistingConstraintFile(openFileDialog1.FileName);
+            }
+        } 
+
     }
 }

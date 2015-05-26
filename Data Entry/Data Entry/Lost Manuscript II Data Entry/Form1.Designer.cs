@@ -33,7 +33,7 @@
             this.FeatureCreator = new System.Windows.Forms.TabPage();
             this.featureCreateButton = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
+            this.featureCreatorCheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.label2 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -60,16 +60,30 @@
             this.label5 = new System.Windows.Forms.Label();
             this.tagListBox = new System.Windows.Forms.ListBox();
             this.featureUpdateButton = new System.Windows.Forms.Button();
-            this.checkedListBox2 = new System.Windows.Forms.CheckedListBox();
+            this.childrenCheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.label6 = new System.Windows.Forms.Label();
             this.editFeatureDataTextBox = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.featureEditorListBox = new System.Windows.Forms.ListBox();
             this.FeatureRemover = new System.Windows.Forms.TabPage();
             this.removeFeatureButton = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
-            this.checkedListBox3 = new System.Windows.Forms.CheckedListBox();
+            this.featureRemoverCheckedListBox = new System.Windows.Forms.CheckedListBox();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.secondArgumentComboBox = new System.Windows.Forms.ComboBox();
+            this.saveFileForConstraintButton = new System.Windows.Forms.Button();
+            this.openFileForConstraintButton = new System.Windows.Forms.Button();
+            this.removeConstraintButton = new System.Windows.Forms.Button();
+            this.editConstraintButton = new System.Windows.Forms.Button();
+            this.addConstraintButton = new System.Windows.Forms.Button();
+            this.thirdArgumentLabel = new System.Windows.Forms.Label();
+            this.secondArgumentLabel = new System.Windows.Forms.Label();
+            this.firstArgumentLabel = new System.Windows.Forms.Label();
+            this.thirdArgumentTextBox = new System.Windows.Forms.TextBox();
+            this.firstArgumentTextBox = new System.Windows.Forms.TextBox();
+            this.showConstraintListBox = new System.Windows.Forms.ListBox();
+            this.featureForConstraintListBox = new System.Windows.Forms.ListBox();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.label10 = new System.Windows.Forms.Label();
@@ -99,11 +113,12 @@
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.saveAsForConstraintFileButton = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.FeatureCreator.SuspendLayout();
             this.FeatureEditor.SuspendLayout();
             this.FeatureRemover.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -124,7 +139,7 @@
             // 
             this.FeatureCreator.Controls.Add(this.featureCreateButton);
             this.FeatureCreator.Controls.Add(this.label3);
-            this.FeatureCreator.Controls.Add(this.checkedListBox1);
+            this.FeatureCreator.Controls.Add(this.featureCreatorCheckedListBox);
             this.FeatureCreator.Controls.Add(this.label2);
             this.FeatureCreator.Controls.Add(this.textBox1);
             this.FeatureCreator.Controls.Add(this.label1);
@@ -155,14 +170,14 @@
             this.label3.TabIndex = 4;
             this.label3.Text = resources.GetString("label3.Text");
             // 
-            // checkedListBox1
+            // featureCreatorCheckedListBox
             // 
-            this.checkedListBox1.FormattingEnabled = true;
-            this.checkedListBox1.HorizontalScrollbar = true;
-            this.checkedListBox1.Location = new System.Drawing.Point(10, 63);
-            this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(229, 559);
-            this.checkedListBox1.TabIndex = 3;
+            this.featureCreatorCheckedListBox.FormattingEnabled = true;
+            this.featureCreatorCheckedListBox.HorizontalScrollbar = true;
+            this.featureCreatorCheckedListBox.Location = new System.Drawing.Point(10, 63);
+            this.featureCreatorCheckedListBox.Name = "featureCreatorCheckedListBox";
+            this.featureCreatorCheckedListBox.Size = new System.Drawing.Size(229, 559);
+            this.featureCreatorCheckedListBox.TabIndex = 3;
             // 
             // label2
             // 
@@ -213,12 +228,12 @@
             this.FeatureEditor.Controls.Add(this.label5);
             this.FeatureEditor.Controls.Add(this.tagListBox);
             this.FeatureEditor.Controls.Add(this.featureUpdateButton);
-            this.FeatureEditor.Controls.Add(this.checkedListBox2);
+            this.FeatureEditor.Controls.Add(this.childrenCheckedListBox);
             this.FeatureEditor.Controls.Add(this.label6);
             this.FeatureEditor.Controls.Add(this.editFeatureDataTextBox);
             this.FeatureEditor.Controls.Add(this.label7);
             this.FeatureEditor.Controls.Add(this.label4);
-            this.FeatureEditor.Controls.Add(this.listBox1);
+            this.FeatureEditor.Controls.Add(this.featureEditorListBox);
             this.FeatureEditor.Location = new System.Drawing.Point(4, 22);
             this.FeatureEditor.Name = "FeatureEditor";
             this.FeatureEditor.Padding = new System.Windows.Forms.Padding(3);
@@ -445,14 +460,14 @@
             this.featureUpdateButton.UseVisualStyleBackColor = true;
             this.featureUpdateButton.Click += new System.EventHandler(this.featureUpdateButton_Click);
             // 
-            // checkedListBox2
+            // childrenCheckedListBox
             // 
-            this.checkedListBox2.FormattingEnabled = true;
-            this.checkedListBox2.HorizontalScrollbar = true;
-            this.checkedListBox2.Location = new System.Drawing.Point(230, 75);
-            this.checkedListBox2.Name = "checkedListBox2";
-            this.checkedListBox2.Size = new System.Drawing.Size(217, 304);
-            this.checkedListBox2.TabIndex = 11;
+            this.childrenCheckedListBox.FormattingEnabled = true;
+            this.childrenCheckedListBox.HorizontalScrollbar = true;
+            this.childrenCheckedListBox.Location = new System.Drawing.Point(230, 75);
+            this.childrenCheckedListBox.Name = "childrenCheckedListBox";
+            this.childrenCheckedListBox.Size = new System.Drawing.Size(217, 304);
+            this.childrenCheckedListBox.TabIndex = 11;
             // 
             // label6
             // 
@@ -489,21 +504,21 @@
             this.label4.TabIndex = 1;
             this.label4.Text = "Select the feature that you would like to edit";
             // 
-            // listBox1
+            // featureEditorListBox
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.HorizontalScrollbar = true;
-            this.listBox1.Location = new System.Drawing.Point(10, 23);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(211, 615);
-            this.listBox1.TabIndex = 0;
-            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
+            this.featureEditorListBox.FormattingEnabled = true;
+            this.featureEditorListBox.HorizontalScrollbar = true;
+            this.featureEditorListBox.Location = new System.Drawing.Point(10, 23);
+            this.featureEditorListBox.Name = "featureEditorListBox";
+            this.featureEditorListBox.Size = new System.Drawing.Size(211, 615);
+            this.featureEditorListBox.TabIndex = 0;
+            this.featureEditorListBox.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // FeatureRemover
             // 
             this.FeatureRemover.Controls.Add(this.removeFeatureButton);
             this.FeatureRemover.Controls.Add(this.label8);
-            this.FeatureRemover.Controls.Add(this.checkedListBox3);
+            this.FeatureRemover.Controls.Add(this.featureRemoverCheckedListBox);
             this.FeatureRemover.Location = new System.Drawing.Point(4, 22);
             this.FeatureRemover.Name = "FeatureRemover";
             this.FeatureRemover.Size = new System.Drawing.Size(1030, 653);
@@ -530,14 +545,162 @@
             this.label8.TabIndex = 1;
             this.label8.Text = "Select the feature(s) that you would like to remove";
             // 
-            // checkedListBox3
+            // featureRemoverCheckedListBox
             // 
-            this.checkedListBox3.FormattingEnabled = true;
-            this.checkedListBox3.Location = new System.Drawing.Point(6, 16);
-            this.checkedListBox3.Name = "checkedListBox3";
-            this.checkedListBox3.Size = new System.Drawing.Size(240, 604);
-            this.checkedListBox3.TabIndex = 0;
-            this.checkedListBox3.SelectedIndexChanged += new System.EventHandler(this.checkedListBox3_SelectedIndexChanged);
+            this.featureRemoverCheckedListBox.FormattingEnabled = true;
+            this.featureRemoverCheckedListBox.Location = new System.Drawing.Point(6, 16);
+            this.featureRemoverCheckedListBox.Name = "featureRemoverCheckedListBox";
+            this.featureRemoverCheckedListBox.Size = new System.Drawing.Size(240, 604);
+            this.featureRemoverCheckedListBox.TabIndex = 0;
+            this.featureRemoverCheckedListBox.SelectedIndexChanged += new System.EventHandler(this.checkedListBox3_SelectedIndexChanged);
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.saveAsForConstraintFileButton);
+            this.tabPage1.Controls.Add(this.secondArgumentComboBox);
+            this.tabPage1.Controls.Add(this.saveFileForConstraintButton);
+            this.tabPage1.Controls.Add(this.openFileForConstraintButton);
+            this.tabPage1.Controls.Add(this.removeConstraintButton);
+            this.tabPage1.Controls.Add(this.editConstraintButton);
+            this.tabPage1.Controls.Add(this.addConstraintButton);
+            this.tabPage1.Controls.Add(this.thirdArgumentLabel);
+            this.tabPage1.Controls.Add(this.secondArgumentLabel);
+            this.tabPage1.Controls.Add(this.firstArgumentLabel);
+            this.tabPage1.Controls.Add(this.thirdArgumentTextBox);
+            this.tabPage1.Controls.Add(this.firstArgumentTextBox);
+            this.tabPage1.Controls.Add(this.showConstraintListBox);
+            this.tabPage1.Controls.Add(this.featureForConstraintListBox);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(1030, 653);
+            this.tabPage1.TabIndex = 3;
+            this.tabPage1.Text = "Constraint Editor";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // secondArgumentComboBox
+            // 
+            this.secondArgumentComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.secondArgumentComboBox.FormattingEnabled = true;
+            this.secondArgumentComboBox.Items.AddRange(new object[] {
+            ">",
+            ">=",
+            "<",
+            "<=",
+            "=="});
+            this.secondArgumentComboBox.Location = new System.Drawing.Point(583, 86);
+            this.secondArgumentComboBox.Name = "secondArgumentComboBox";
+            this.secondArgumentComboBox.Size = new System.Drawing.Size(154, 21);
+            this.secondArgumentComboBox.TabIndex = 13;
+            // 
+            // saveFileForConstraintButton
+            // 
+            this.saveFileForConstraintButton.Location = new System.Drawing.Point(737, 275);
+            this.saveFileForConstraintButton.Name = "saveFileForConstraintButton";
+            this.saveFileForConstraintButton.Size = new System.Drawing.Size(127, 30);
+            this.saveFileForConstraintButton.TabIndex = 12;
+            this.saveFileForConstraintButton.Text = "Save File";
+            this.saveFileForConstraintButton.UseVisualStyleBackColor = true;
+            this.saveFileForConstraintButton.Click += new System.EventHandler(this.saveFileForConstraintButton_Click);
+            // 
+            // openFileForConstraintButton
+            // 
+            this.openFileForConstraintButton.Location = new System.Drawing.Point(583, 275);
+            this.openFileForConstraintButton.Name = "openFileForConstraintButton";
+            this.openFileForConstraintButton.Size = new System.Drawing.Size(127, 30);
+            this.openFileForConstraintButton.TabIndex = 11;
+            this.openFileForConstraintButton.Text = "Open File";
+            this.openFileForConstraintButton.UseVisualStyleBackColor = true;
+            this.openFileForConstraintButton.Click += new System.EventHandler(this.openFileForConstraintButton_Click);
+            // 
+            // removeConstraintButton
+            // 
+            this.removeConstraintButton.Location = new System.Drawing.Point(885, 207);
+            this.removeConstraintButton.Name = "removeConstraintButton";
+            this.removeConstraintButton.Size = new System.Drawing.Size(127, 30);
+            this.removeConstraintButton.TabIndex = 10;
+            this.removeConstraintButton.Text = "Remove";
+            this.removeConstraintButton.UseVisualStyleBackColor = true;
+            this.removeConstraintButton.Click += new System.EventHandler(this.removeConstraintButton_Click);
+            // 
+            // editConstraintButton
+            // 
+            this.editConstraintButton.Location = new System.Drawing.Point(737, 207);
+            this.editConstraintButton.Name = "editConstraintButton";
+            this.editConstraintButton.Size = new System.Drawing.Size(127, 30);
+            this.editConstraintButton.TabIndex = 9;
+            this.editConstraintButton.Text = "Edit";
+            this.editConstraintButton.UseVisualStyleBackColor = true;
+            this.editConstraintButton.Click += new System.EventHandler(this.editConstraintButton_Click);
+            // 
+            // addConstraintButton
+            // 
+            this.addConstraintButton.Location = new System.Drawing.Point(583, 207);
+            this.addConstraintButton.Name = "addConstraintButton";
+            this.addConstraintButton.Size = new System.Drawing.Size(127, 30);
+            this.addConstraintButton.TabIndex = 8;
+            this.addConstraintButton.Text = "Add";
+            this.addConstraintButton.UseVisualStyleBackColor = true;
+            this.addConstraintButton.Click += new System.EventHandler(this.addConstraintButton_Click);
+            // 
+            // thirdArgumentLabel
+            // 
+            this.thirdArgumentLabel.AutoSize = true;
+            this.thirdArgumentLabel.Location = new System.Drawing.Point(580, 137);
+            this.thirdArgumentLabel.Name = "thirdArgumentLabel";
+            this.thirdArgumentLabel.Size = new System.Drawing.Size(174, 13);
+            this.thirdArgumentLabel.TabIndex = 7;
+            this.thirdArgumentLabel.Text = "3rd Argument (Topic Name or Turn)";
+            // 
+            // secondArgumentLabel
+            // 
+            this.secondArgumentLabel.AutoSize = true;
+            this.secondArgumentLabel.Location = new System.Drawing.Point(580, 70);
+            this.secondArgumentLabel.Name = "secondArgumentLabel";
+            this.secondArgumentLabel.Size = new System.Drawing.Size(114, 13);
+            this.secondArgumentLabel.TabIndex = 6;
+            this.secondArgumentLabel.Text = "2nd Argument (symbol)";
+            // 
+            // firstArgumentLabel
+            // 
+            this.firstArgumentLabel.AutoSize = true;
+            this.firstArgumentLabel.Location = new System.Drawing.Point(580, 18);
+            this.firstArgumentLabel.Name = "firstArgumentLabel";
+            this.firstArgumentLabel.Size = new System.Drawing.Size(136, 13);
+            this.firstArgumentLabel.TabIndex = 5;
+            this.firstArgumentLabel.Text = "1st Argument (Topic Name)";
+            // 
+            // thirdArgumentTextBox
+            // 
+            this.thirdArgumentTextBox.Location = new System.Drawing.Point(583, 153);
+            this.thirdArgumentTextBox.Name = "thirdArgumentTextBox";
+            this.thirdArgumentTextBox.Size = new System.Drawing.Size(223, 20);
+            this.thirdArgumentTextBox.TabIndex = 4;
+            // 
+            // firstArgumentTextBox
+            // 
+            this.firstArgumentTextBox.Location = new System.Drawing.Point(583, 34);
+            this.firstArgumentTextBox.Name = "firstArgumentTextBox";
+            this.firstArgumentTextBox.Size = new System.Drawing.Size(223, 20);
+            this.firstArgumentTextBox.TabIndex = 2;
+            // 
+            // showConstraintListBox
+            // 
+            this.showConstraintListBox.FormattingEnabled = true;
+            this.showConstraintListBox.Location = new System.Drawing.Point(237, 18);
+            this.showConstraintListBox.Name = "showConstraintListBox";
+            this.showConstraintListBox.Size = new System.Drawing.Size(332, 615);
+            this.showConstraintListBox.TabIndex = 1;
+            this.showConstraintListBox.SelectedIndexChanged += new System.EventHandler(this.showConstraintListBox_SelectedIndexChanged);
+            // 
+            // featureForConstraintListBox
+            // 
+            this.featureForConstraintListBox.FormattingEnabled = true;
+            this.featureForConstraintListBox.Location = new System.Drawing.Point(13, 18);
+            this.featureForConstraintListBox.Name = "featureForConstraintListBox";
+            this.featureForConstraintListBox.Size = new System.Drawing.Size(209, 615);
+            this.featureForConstraintListBox.TabIndex = 0;
+            this.featureForConstraintListBox.SelectedIndexChanged += new System.EventHandler(this.featureForConstraintListBox_SelectedIndexChanged);
             // 
             // openFileDialog1
             // 
@@ -775,15 +938,15 @@
             this.panel1.Size = new System.Drawing.Size(1057, 636);
             this.panel1.TabIndex = 6;
             // 
-            // tabPage1
+            // saveAsForConstraintFileButton
             // 
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1030, 653);
-            this.tabPage1.TabIndex = 3;
-            this.tabPage1.Text = "Constraint Editor";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.saveAsForConstraintFileButton.Location = new System.Drawing.Point(885, 275);
+            this.saveAsForConstraintFileButton.Name = "saveAsForConstraintFileButton";
+            this.saveAsForConstraintFileButton.Size = new System.Drawing.Size(127, 30);
+            this.saveAsForConstraintFileButton.TabIndex = 14;
+            this.saveAsForConstraintFileButton.Text = "Save As File";
+            this.saveAsForConstraintFileButton.UseVisualStyleBackColor = true;
+            this.saveAsForConstraintFileButton.Click += new System.EventHandler(this.saveAsForConstraintFileButton_Click);
             // 
             // Form1
             // 
@@ -804,6 +967,8 @@
             this.FeatureEditor.PerformLayout();
             this.FeatureRemover.ResumeLayout(false);
             this.FeatureRemover.PerformLayout();
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.panel1.ResumeLayout(false);
@@ -818,21 +983,21 @@
         private System.Windows.Forms.TabPage FeatureCreator;
         private System.Windows.Forms.Button featureCreateButton;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.CheckedListBox checkedListBox1;
+        private System.Windows.Forms.CheckedListBox featureCreatorCheckedListBox;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TabPage FeatureEditor;
         private System.Windows.Forms.TabPage FeatureRemover;
         private System.Windows.Forms.Button featureUpdateButton;
-        private System.Windows.Forms.CheckedListBox checkedListBox2;
+        private System.Windows.Forms.CheckedListBox childrenCheckedListBox;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox editFeatureDataTextBox;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox featureEditorListBox;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.CheckedListBox checkedListBox3;
+        private System.Windows.Forms.CheckedListBox featureRemoverCheckedListBox;
         private System.Windows.Forms.Button removeFeatureButton;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
@@ -885,6 +1050,20 @@
         private System.Windows.Forms.ToolStripMenuItem sortedSelectChildrenToolStripMenuItem;
         private System.Windows.Forms.ToolStripComboBox sortedChildrenComboBox;
         private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.ListBox showConstraintListBox;
+        private System.Windows.Forms.ListBox featureForConstraintListBox;
+        private System.Windows.Forms.TextBox thirdArgumentTextBox;
+        private System.Windows.Forms.TextBox firstArgumentTextBox;
+        private System.Windows.Forms.Label thirdArgumentLabel;
+        private System.Windows.Forms.Label secondArgumentLabel;
+        private System.Windows.Forms.Label firstArgumentLabel;
+        private System.Windows.Forms.Button saveFileForConstraintButton;
+        private System.Windows.Forms.Button openFileForConstraintButton;
+        private System.Windows.Forms.Button removeConstraintButton;
+        private System.Windows.Forms.Button editConstraintButton;
+        private System.Windows.Forms.Button addConstraintButton;
+        private System.Windows.Forms.ComboBox secondArgumentComboBox;
+        private System.Windows.Forms.Button saveAsForConstraintFileButton;
     }
 }
 
