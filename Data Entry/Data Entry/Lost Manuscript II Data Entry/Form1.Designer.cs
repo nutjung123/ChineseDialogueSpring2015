@@ -265,7 +265,7 @@
             this.textBox7.Location = new System.Drawing.Point(645, 413);
             this.textBox7.Multiline = true;
             this.textBox7.Name = "textBox7";
-            this.textBox7.ShortcutsEnabled = false;
+            this.textBox7.ShortcutsEnabled = true;
             this.textBox7.Size = new System.Drawing.Size(280, 127);
             this.textBox7.TabIndex = 30;
             // 
