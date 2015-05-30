@@ -64,6 +64,8 @@ namespace Dialogue_Data_Entry
             childrenCheckedListBox.ItemCheck += new ItemCheckEventHandler(childrenCheckedListBox_ItemCheck);
             //right click event for adding relationship
             childrenCheckedListBox.MouseDown += new MouseEventHandler(childrenCheckedListBox_RightClick);
+            //Add shortcuts
+			textBox7.KeyUp += new KeyEventHandler(this.textBox7_KeyUp);
 
             //Add lostFocuse Method
             firstArgumentTextBox.LostFocus += textBoxFocusLost;
@@ -1260,7 +1262,65 @@ namespace Dialogue_Data_Entry
             {
                 openExistingConstraintFile(openFileDialog1.FileName);
             }
-        } 
+        }
+        
+        private void textBox7_KeyUp(object sender, KeyEventArgs e) {
+			if (e.KeyCode == ( Keys.Control| Keys.C)) {
+				Menu_Copy(sender, e);
+			} else if (e.KeyCode == (Keys.Control | Keys.X)) {
+				Menu_Cut(sender, e);
+			} else if (e.KeyCode == (Keys.Control | Keys.V)) {
+				Menu_Paste(sender, e);
+			} else if (e.KeyCode == (Keys.Control | Keys.Z)) {
+				Menu_Undo(sender, e);
+			}
+		}
+
+		private void Menu_Copy(System.Object sender, System.EventArgs e)
+		{
+			// Ensure that text is selected in the text box.    
+			if(textBox7.SelectionLength > 0)
+				// Copy the selected text to the Clipboard.
+				textBox7.Copy();
+		}
+
+		private void Menu_Cut(System.Object sender, System.EventArgs e)
+		{   
+			// Ensure that text is currently selected in the text box.    
+			if(textBox7.SelectedText != "")
+				// Cut the selected text in the control and paste it into the Clipboard.
+				textBox7.Cut();
+		}
+
+		private void Menu_Paste(System.Object sender, System.EventArgs e)
+		{
+			// Determine if there is any text in the Clipboard to paste into the text box. 
+			if(Clipboard.GetDataObject().GetDataPresent(DataFormats.Text) == true)
+			{
+				// Determine if any text is selected in the text box. 
+				if(textBox7.SelectionLength > 0)
+				{
+					// Ask user if they want to paste over currently selected text. 
+					if(MessageBox.Show("Do you want to paste over current selection?", "Cut Example", MessageBoxButtons.YesNo) == DialogResult.No)
+						// Move selection to the point after the current selection and paste.
+						textBox7.SelectionStart = textBox7.SelectionStart + textBox7.SelectionLength;
+				}
+				// Paste current text in Clipboard into text box.
+				textBox7.Paste();
+			}
+		}
+
+		private void Menu_Undo(System.Object sender, System.EventArgs e)
+		{
+			// Determine if last operation can be undone in text box.    
+			if(textBox7.CanUndo == true)
+			{
+				// Undo the last operation.
+				textBox7.Undo();
+				// Clear the undo buffer to prevent last action from being redone.
+				textBox7.ClearUndo();
+			}
+		}
 
     }
 }
