@@ -269,6 +269,85 @@ namespace Dialogue_Data_Entry
             }
             return score;
         }
+        //Calculate the score, and return a data structure containing
+        //each score component as well as the score itself.
+        public double[] calculateScoreComponents(Feature current, Feature oldTopic)
+        {
+            double score = 0;
+            int currentIndex = featGraph.getFeatureIndex(current.Data);
+
+            //ZEV TODO: Replace these with adjustable weight variables
+            //set of Weight (W == Weight)
+            double discussAmountW = -3.0;
+            double noveltyW = -1.0;
+            double spatialConstraintW = 1.0;
+            double hierachyConstraintW = 1.0;
+
+            // novelty
+
+            double noveltyValue = calculateNovelty(current, oldTopic);
+
+            //getting novelty information
+            if (currentNovelty != null)
+            {
+                currentNovelty[currentIndex] = noveltyValue;
+            }
+
+            //spatial Constraint
+            double spatialConstraintValue = 0.0;
+            if (spatialConstraint(current, oldTopic))
+            {
+                spatialConstraintValue = 1.0;
+            }
+            //hierachy Constraint
+            double hierachyConstraintValue = 0.0;
+            if (hierachyConstraint(current, oldTopic))
+            {
+                hierachyConstraintValue = 1.0;
+            }
+
+            //check mentionCount
+            float DiscussedAmount = current.DiscussedAmount;
+
+            score += (DiscussedAmount * discussAmountW);
+            score += (Math.Abs(expectedDramaticV[currentTurn % expectedDramaticV.Count()] - noveltyValue) * noveltyW);
+            score += spatialConstraintValue * spatialConstraintW;
+            score += hierachyConstraintValue * hierachyConstraintW;
+
+            if (printCalculation)
+            {
+                System.Console.WriteLine("Have been addressed before: " + DiscussedAmount);
+                System.Console.WriteLine("Spatial Constraint Satisfied: " + spatialConstraintValue);
+                System.Console.WriteLine("Hierachy Constraint Satisfied: " + hierachyConstraintValue);
+
+                string scoreFormula = "";
+                scoreFormula += "score = Have Been Addressed * " + discussAmountW + " + abs(expectedDramaticV[" + currentTurn + "] - dramaticValue)*" + noveltyW;
+                scoreFormula += " + spatialConstraint*" + spatialConstraintW;
+                scoreFormula += " + hierachyConstraint*" + hierachyConstraintW;
+                scoreFormula += " = " + score;
+                System.Console.WriteLine(scoreFormula);
+            }
+
+            //Store score components, and score, in return array.
+            //Indices are as follows:
+            //0 = score
+            //1 = novelty
+            //2 = discussed amount
+            //3 = expected dramatic value
+            //4 = spatial constraint value
+            //5 = hierarchy constraint value
+            double[] return_array = new double[6];
+
+            //NOTE: Weights are NOT included.
+            return_array[0] = score;
+            return_array[1] = noveltyValue;
+            return_array[2] = DiscussedAmount;
+            return_array[3] = expectedDramaticV[currentTurn % expectedDramaticV.Count()];
+            return_array[4] = spatialConstraintValue;
+            return_array[5] = hierachyConstraintValue;
+
+            return return_array;
+        }//End method calculateScoreComponents
 
         //BFS to travel the whole graph
         //listScore keeps track of all nodes' score. 
