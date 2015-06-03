@@ -104,7 +104,11 @@ namespace Dialogue_Data_Entry
 
         private string MessageToServer(Feature feat, string speak, string noveltyInfo)
         {
-            return "ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + speak + ":Novelty:" + noveltyInfo;
+            String return_message = "";
+
+            return_message = "ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + speak + ":Novelty:" + noveltyInfo;
+
+            return return_message;
         }
         //Form2 calls this function
         public string ParseInput(string input, bool messageToServer = false)
@@ -113,6 +117,10 @@ namespace Dialogue_Data_Entry
             string noveltyInfo = "";
             double currentTopicNovelty = -1;
             // Pre-processing
+
+            //The input may be delimited by colons. Try to split it.
+            String[] split_input = input.Trim().Split(':');
+
             // Lowercase for comparisons
             input = input.Trim().ToLower();
 
@@ -140,6 +148,68 @@ namespace Dialogue_Data_Entry
             if (this.topic == null)
                 this.topic = this.graph.Root;
             FeatureSpeaker speaker = new FeatureSpeaker(this.graph);
+
+            if (split_input.Length != 0 || messageToServer)
+            {
+                // GET_NODE_VALUES command from Unity front-end
+                if (split_input[0].Equals("GET_NODE_VALUES"))
+                {
+                    //Get the node we wish to get a set of values for, by data.
+                    //"data" is represented by each node's data field in the XML.
+                    //In the split input string, index 1 is the data of the node we want
+                    //to get values for.
+                    //Index 2 is the data of the node we are getting values relative to.
+                    string current_node_data = split_input[1];
+                    string old_node_data = split_input[2];
+                    //Get the features for these two nodes
+                    Feature current_feature = this.graph.getFeature(current_node_data);
+                    Feature old_feature = this.graph.getFeature(old_node_data);
+                    //If EITHER feature is null, return an error message.
+                    if (current_feature == null || old_feature == null)
+                        return "no feature found";
+                    double[] return_node_values = speaker.calculateScoreComponents(current_feature, old_feature);
+                    //Turn them into a colon-separated string, headed by
+                    //the key-phrase "RETURN_NODE_VALUES"
+                    string return_string = return_node_values[0] + ":"
+                        + return_node_values[1] + ":" + return_node_values[2] + ":"
+                        + return_node_values[3] + ":" + return_node_values[4] + ":"
+                        + return_node_values[5] + ":";
+                    
+                    return return_string;
+                }//end if
+                // GET_WEIGHT command from Unity front-end
+                else if (split_input[0].Equals("GET_WEIGHT"))
+                {
+                    //Return a colon-separated string of every weight value
+                    string return_string = "Weights: ";
+                    double[] weight_array = this.graph.getWeightArray();
+                    for (int i = 0; i < weight_array.Length; i++)
+                    {
+                        if (i != 0)
+                            return_string += ":";
+                        return_string += weight_array[i];
+                    }//end for
+                    return return_string;
+                }//end else if
+                // SET_WEIGHT command from Unity front-end
+                else if (split_input[0].Equals("SET_WEIGHT"))
+                {
+                    //Index 1 is the index of the weight we wish to adjust.
+                    //Index 2 is the new weight value.
+                    this.graph.setWeight(int.Parse(split_input[1]), double.Parse(split_input[2]));
+                    //Return the new weight values right away.
+                    string return_string = "Weights: ";
+                    double[] weight_array = this.graph.getWeightArray();
+                    for (int i = 0; i < weight_array.Length; i++)
+                    {
+                        if (i != 0)
+                            return_string += ":";
+                        return_string += weight_array[i];
+                    }//end for
+                    return return_string;
+                }//end else if
+            }//end else if
+
             // CASE: Nothing / Move on to next topic
             if (string.IsNullOrEmpty(input))
             {

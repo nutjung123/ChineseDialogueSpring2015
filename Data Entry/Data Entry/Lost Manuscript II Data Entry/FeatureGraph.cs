@@ -12,12 +12,31 @@ namespace Dialogue_Data_Entry
         private Feature root;
         private int maxDepth;
         private double maxDistance;
+
+        //An array of weights, for use in calculations.
+        //The indices are as follows:
+        //  0 - discuss amount weight
+        //  1 - novelty weight
+        //  2 - spatial constraint weight
+        //  3 - hierarchy constraint weight
+        private double[] weight_array;
+
         public FeatureGraph()
         {
             features = new List<Feature>();
             root = null;
             maxDepth = -1;
             maxDistance = -1;
+            //Default values for weights
+            //              double discussAmountW = -3.0;
+            //double noveltyW = -1.0;
+            //double spatialConstraintW = 1.0;
+            //double hierachyConstraintW = 1.0;
+            weight_array = new double[4];
+            weight_array[0] = -3.0;
+            weight_array[1] = -1.0;
+            weight_array[2] = 1.0;
+            weight_array[3] = 1.0;
         }
 
         private void helperMaxDepthDSF(Feature current, int depth, bool[] checkEntry)
@@ -243,6 +262,21 @@ namespace Dialogue_Data_Entry
             maxDepth = h;
         }
 
+        //Get a single weight from the weight array
+        public double getSingleWeight(int weight_index)
+        {
+            return weight_array[weight_index];
+        }//end method getSingleWeight
+        //Get the entire weight array
+        public double[] getWeightArray()
+        {
+            return weight_array;
+        }//end method getWeightArray
+        //Set a single weight in the weight array
+        public void setWeight(int weight_index, double weight_to_set)
+        {
+            weight_array[weight_index] = weight_to_set;
+        }//end method setWeight
 
         public bool addFeature(Feature toAdd)
         {
