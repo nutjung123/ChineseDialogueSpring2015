@@ -265,6 +265,8 @@ namespace Dialogue_Data_Entry
         //Get a single weight from the weight array
         public double getSingleWeight(int weight_index)
         {
+            if (weight_index < 0 || weight_index >= weight_array.Length)
+                return -1;
             return weight_array[weight_index];
         }//end method getSingleWeight
         //Get the entire weight array
@@ -275,6 +277,8 @@ namespace Dialogue_Data_Entry
         //Set a single weight in the weight array
         public void setWeight(int weight_index, double weight_to_set)
         {
+            if (weight_index < 0 || weight_index >= weight_array.Length)
+                return;
             weight_array[weight_index] = weight_to_set;
         }//end method setWeight
 

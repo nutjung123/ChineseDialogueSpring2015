@@ -218,10 +218,12 @@ namespace Dialogue_Data_Entry
             int currentIndex = featGraph.getFeatureIndex(current.Data);
 
             //set of Weight (W == Weight)
-            double discussAmountW = -3.0;
-            double noveltyW = -1.0;
-            double spatialConstraintW = 1.0;
-            double hierachyConstraintW = 1.0;
+            //Get the weights from the graph.
+            double[] weight_array = featGraph.getWeightArray();
+            double discussAmountW = weight_array[0];
+            double noveltyW = weight_array[1];
+            double spatialConstraintW = weight_array[2];
+            double hierachyConstraintW = weight_array[3];
 
             // novelty
 
@@ -277,11 +279,12 @@ namespace Dialogue_Data_Entry
             int currentIndex = featGraph.getFeatureIndex(current.Data);
 
             //ZEV TODO: Replace these with adjustable weight variables
-            //set of Weight (W == Weight)
-            double discussAmountW = -3.0;
-            double noveltyW = -1.0;
-            double spatialConstraintW = 1.0;
-            double hierachyConstraintW = 1.0;
+            //Get the weights from the graph.
+            double[] weight_array = featGraph.getWeightArray();
+            double discussAmountW = weight_array[0];
+            double noveltyW = weight_array[1];
+            double spatialConstraintW = weight_array[2];
+            double hierachyConstraintW = weight_array[3];
 
             // novelty
 
