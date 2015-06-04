@@ -194,9 +194,15 @@ namespace Dialogue_Data_Entry
                 // SET_WEIGHT command from Unity front-end
                 else if (split_input[0].Equals("SET_WEIGHT"))
                 {
+
+                    //For each pair,
                     //Index 1 is the index of the weight we wish to adjust.
                     //Index 2 is the new weight value.
-                    this.graph.setWeight(int.Parse(split_input[1]), double.Parse(split_input[2]));
+                    for (int m = 1; m < split_input.Length; m += 2)
+                    {
+                        this.graph.setWeight(int.Parse(split_input[m]), double.Parse(split_input[m + 1]));
+                    }//end for
+
                     //Return the new weight values right away.
                     string return_string = "Weights: ";
                     double[] weight_array = this.graph.getWeightArray();
