@@ -416,6 +416,31 @@ namespace Dialogue_Data_Entry
             return answer;
         }
 
+        //Opposite of get novelty, get the ids of the features that, according to the calculation,
+        //are closest to the current topic.
+        //TODO: Finish this...
+        public string getProximal(Feature currentTopic, int turn, int amount = 5)
+        {
+            string answer = "";
+            bool oldPrintFlag = printCalculation;
+            // printCalculation = false;
+
+            bool[] checkEntry = new bool[featGraph.Count];
+            List<Tuple<Feature, double>> listScore = new List<Tuple<Feature, double>>();
+            //Travel the graph and compile a list of calculated scores.
+            this.travelGraph(featGraph.Root, currentTopic, 0, true, checkEntry, ref listScore);
+            listScore.Sort((x, y) => y.Item2.CompareTo(x.Item2));
+
+            for (int x = 0; x < amount; x++)
+            {
+                answer += featGraph.getFeatureIndex(listScore[x].Item1.Data) + " " + listScore[x].Item2 + " ";
+            }
+
+            printCalculation = oldPrintFlag;
+
+            return answer;
+        }//end method getProximal
+
         //Return the next topic
         public Feature getNextTopic(Feature oldTopic, string query, int turn)
         {
