@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Dialogue_Data_Entry;
 using AIMLbot;
+//using System.Collections.Stack;
+using System.Collections;
 
 namespace Dialogue_Data_Entry
 {
@@ -78,6 +80,8 @@ namespace Dialogue_Data_Entry
         private int turn;
         private int noveltyAmount = 5;
 
+		public Stack prevCurr = new Stack();
+
         /// <summary>
         /// Create a converter for the specified XML file
         /// </summary>
@@ -101,11 +105,20 @@ namespace Dialogue_Data_Entry
             this.turn = 1;
             this.topic = null;
         }
-
-        private string MessageToServer(Feature feat, string speak, string noveltyInfo)
+			
+		private string MessageToServer(Feature feat, string speak, string noveltyInfo)
         {
             String return_message = "";
 
+			if (prevCurr.Count != 0) {
+				Feature first = (Feature) prevCurr.Peek();
+			}
+				
+			prevCurr.Push (feat);
+			foreach (Feature obj in prevCurr) {
+				obj.print();
+			}
+			
             return_message = "ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + speak + ":Novelty:" + noveltyInfo;
 
             return return_message;
@@ -136,7 +149,7 @@ namespace Dialogue_Data_Entry
                     if (!output.StartsWith(FORMAT))
                         return output;
 
-                    // MessageBox.Show("Converted output reads: " + output);
+                    //MessageBox.Show("Converted output reads: " + output);
                     input = output.Replace(FORMAT, "").ToLower();
                 }
             }
@@ -162,8 +175,8 @@ namespace Dialogue_Data_Entry
                     string current_node_data = split_input[1];
                     string old_node_data = split_input[2];
                     //Get the features for these two nodes
-                    Feature current_feature = this.graph.getFeature(current_node_data);
-                    Feature old_feature = this.graph.getFeature(old_node_data);
+					Feature current_feature = this.graph.getFeature(current_node_data);
+					Feature old_feature = this.graph.getFeature(old_node_data);
                     //If EITHER feature is null, return an error message.
                     if (current_feature == null || old_feature == null)
                         return "no feature found";
@@ -328,16 +341,19 @@ namespace Dialogue_Data_Entry
             {
                 questionType = Question.WHAT;
                 // Check for direction words
-                foreach (string direction in directionWords)
-                {
-                    // Ideally only one direction is specified
-                    if (input.Contains(direction))
-                    {
-                        directionType = (Direction)Enum.Parse(typeof(Direction), direction, true);
-                        // Don't break. If "northwest" is asked, "north" will match first
-                        // but then get replaced by "northwest" (and so on).
-                    }
-                }
+				if (input.Contains("direction"))
+				{
+					foreach (string direction in directionWords)
+					{
+						// Ideally only one direction is specified
+						if (input.Contains(direction))
+                    	{
+	                        directionType = (Direction)Enum.Parse(typeof(Direction), direction, true);
+	                        // Don't break. If "northwest" is asked, "north" will match first
+	                        // but then get replaced by "northwest" (and so on).
+	                    }
+					}
+				}
             }
             else
             {
