@@ -222,8 +222,8 @@ namespace Dialogue_Data_Entry
             double[] weight_array = featGraph.getWeightArray();
             double discussAmountW = weight_array[Constant.discussAmountWeightIndex];
             double noveltyW = weight_array[Constant.noveltyWeightIndex];
-            double spatialConstraintW = weight_array[Constant.spatialConstraintWeightIndex];
-            double hierachyConstraintW = weight_array[Constant.hierarchyConstraintWeightIndex];
+            double spatialConstraintW = weight_array[Constant.spatialWeightIndex];
+            double hierachyConstraintW = weight_array[Constant.hierarchyWeightIndex];
 
             // novelty
 
@@ -339,15 +339,15 @@ namespace Dialogue_Data_Entry
             //3 = expected dramatic value
             //4 = spatial constraint value
             //5 = hierarchy constraint value
-            double[] return_array = new double[6];
+            double[] return_array = new double[Constant.scoreArraySize];
 
             //NOTE: Weights are NOT included.
-            return_array[0] = score;
-            return_array[1] = noveltyValue;
-            return_array[2] = DiscussedAmount;
-            return_array[3] = expectedDramaticV[currentTurn % expectedDramaticV.Count()];
-            return_array[4] = spatialConstraintValue;
-            return_array[5] = hierachyConstraintValue;
+            return_array[Constant.scoreArrayScoreIndex] = score;
+            return_array[Constant.scoreArrayNoveltyIndex] = noveltyValue;
+            return_array[Constant.scoreArrayDiscussedAmountIndex] = DiscussedAmount;
+            return_array[Constant.scoreArrayExpectedDramaticIndex] = expectedDramaticV[currentTurn % expectedDramaticV.Count()];
+            return_array[Constant.scoreArraySpatialIndex] = spatialConstraintValue;
+            return_array[Constant.scoreArrayHierarchyIndex] = hierachyConstraintValue;
 
             return return_array;
         }//End method calculateScoreComponents
@@ -399,7 +399,7 @@ namespace Dialogue_Data_Entry
         {
             string answer = "";
             bool oldPrintFlag = printCalculation;
-           // printCalculation = false;
+            printCalculation = false;
 
             bool[] checkEntry = new bool[featGraph.Count];
             List<Tuple<Feature, double>> listScore = new List<Tuple<Feature, double>>();
@@ -418,25 +418,20 @@ namespace Dialogue_Data_Entry
 
         //Opposite of get novelty, get the ids of the features that, according to the calculation,
         //are closest to the current topic.
-        //TODO: Finish this...
-        public string getProximal(Feature currentTopic, int turn, int amount = 5)
+        public string getProximal(Feature currentTopic, int amount = 5)
         {
             string answer = "";
-            bool oldPrintFlag = printCalculation;
-            // printCalculation = false;
+            List<double> closestTopic = currentTopic.ShortestDistance;
 
-            bool[] checkEntry = new bool[featGraph.Count];
-            List<Tuple<Feature, double>> listScore = new List<Tuple<Feature, double>>();
-            //Travel the graph and compile a list of calculated scores.
-            this.travelGraph(featGraph.Root, currentTopic, 0, true, checkEntry, ref listScore);
-            listScore.Sort((x, y) => y.Item2.CompareTo(x.Item2));
+            var sorted = closestTopic.Select((x, i) => new KeyValuePair<double, int>(x, i)).OrderBy(x => x.Key).ToList();
 
-            for (int x = 0; x < amount; x++)
+            List<int> closetTopicIndex = sorted.Select(x => x.Value).ToList();
+            //skip the first index, because that index is itself
+            for (int x = 1; x <= amount; x++)
             {
-                answer += featGraph.getFeatureIndex(listScore[x].Item1.Data) + " " + listScore[x].Item2 + " ";
+                answer += closetTopicIndex[x] + " " + closestTopic[closetTopicIndex[x]]+" ";
+                //answer += featGraph.getFeatureIndex(listScore[x].Item1.Data) + " " + listScore[x].Item2 + " ";
             }
-
-            printCalculation = oldPrintFlag;
 
             return answer;
         }//end method getProximal

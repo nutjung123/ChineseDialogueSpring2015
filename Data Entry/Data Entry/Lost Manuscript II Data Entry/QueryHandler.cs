@@ -252,10 +252,12 @@ namespace Dialogue_Data_Entry
                     double[] return_node_values = speaker.calculateScoreComponents(current_feature, old_feature);
                     //Turn them into a colon-separated string, headed by
                     //the key-phrase "RETURN_NODE_VALUES"
-                    string return_string = return_node_values[0] + ":"
-                        + return_node_values[1] + ":" + return_node_values[2] + ":"
-                        + return_node_values[3] + ":" + return_node_values[4] + ":"
-                        + return_node_values[5] + ":";
+                    string return_string = return_node_values[Constant.scoreArrayScoreIndex] + ":"
+                        + return_node_values[Constant.scoreArrayNoveltyIndex] + ":" 
+                        + return_node_values[Constant.scoreArrayDiscussedAmountIndex] + ":"
+                        + return_node_values[Constant.scoreArrayExpectedDramaticIndex] + ":" 
+                        + return_node_values[Constant.scoreArraySpatialIndex] + ":"
+                        + return_node_values[Constant.scoreArrayHierarchyIndex] + ":";
                     
                     return return_string;
                 }//end if
@@ -302,7 +304,7 @@ namespace Dialogue_Data_Entry
                 {
                     //GET_RELATED only gets related nodes for the current topic.
                     noveltyInfo = speaker.getNovelty(this.topic, this.turn, noveltyAmount);
-                    return "Novelty:" + noveltyInfo + ":Proximal:" + speaker.getProximal(this.topic, this.turn, noveltyAmount);
+                    return "Novelty:" + noveltyInfo + ":Proximal:" + speaker.getProximal(this.topic, noveltyAmount);
                 }//end else if
             }//end else if
 
@@ -369,9 +371,9 @@ namespace Dialogue_Data_Entry
                 if (messageToServer)
                 {
                     //Return message to Unity front-end with both novel and proximal nodes
-                    return MessageToServer(this.topic, answer, noveltyInfo, speaker.getProximal(this.topic, this.turn, noveltyAmount));
+                    return MessageToServer(this.topic, answer, noveltyInfo, speaker.getProximal(this.topic, noveltyAmount));
                 }
-                return answer + " " + noveltyInfo;
+                return answer + " <Novelty Info: " + noveltyInfo + " > <Proximal Info: " + speaker.getProximal(this.topic, noveltyAmount) + ">";
             }
         }
 

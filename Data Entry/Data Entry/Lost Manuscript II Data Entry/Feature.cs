@@ -15,7 +15,7 @@ namespace Dialogue_Data_Entry
         private List<Tuple<Feature, double, string>> parents;    // This is a HashSet of features that can be reached to this feature node 
         private List<Tuple<string, string, string>>  tags;       // This is a list of tuples that are used to store the tags (generic, single use pices of information). The first element is the key, and the second element is the Data. This will simply operate as a map.
         private List<string> speaks;
-        private List<double> shortestDistance;         //list of shortestDistance to all nodes (index == id)
+        private List<double> shortestDistance;         //list of shortestDistance to all nodes (index is id)
         private int level, dist;
         public bool flag;                                // This is a public general use flag that can be used for things like traversals and stuff like that
        
