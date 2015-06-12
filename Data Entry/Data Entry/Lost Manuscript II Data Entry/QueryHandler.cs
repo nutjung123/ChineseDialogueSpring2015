@@ -107,14 +107,12 @@ namespace Dialogue_Data_Entry
             this.topic = null;
         }
 			
-		private string MessageToServer(Feature feat, string speak, string noveltyInfo)
+		private string MessageToServer(Feature feat, string speak, string noveltyInfo, string proximalInfo = "")
         {
             String return_message = "";
 
             prevCurr.AddFirst(feat);
 
-            //System.Console.WriteLine("================  prevCurr.Count  ================");
-            //System.Console.WriteLine("\tCount:               " + string.Format("{0}", prevCurr.Count));
             if (prevCurr.Count > 2) {
 				 prevCurr.RemoveLast();
 			}
@@ -193,7 +191,7 @@ namespace Dialogue_Data_Entry
                 return_message = "now let's talk about another topic ";
             }
 			
-            return_message += "ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + speak + ":Novelty:" + noveltyInfo;
+            return_message = "ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + speak + ":Novelty:" + noveltyInfo + ":Proximal:" + proximalInfo;
 
             return return_message;
         }
@@ -301,6 +299,14 @@ namespace Dialogue_Data_Entry
                     }//end for
                     return return_string;
                 }//end else if
+                //GET_RELATED command from Unity front-end.
+                //Returns a message containing a list of most novel and most proximal nodes
+                else if (split_input[0].Equals("GET_RELATED"))
+                {
+                    //GET_RELATED only gets related nodes for the current topic.
+                    noveltyInfo = speaker.getNovelty(this.topic, this.turn, noveltyAmount);
+                    return "Novelty:" + noveltyInfo + ":Proximal:" + speaker.getProximal(this.topic, this.turn, noveltyAmount);
+                }//end else if
             }//end else if
 
             // CASE: Nothing / Move on to next topic
@@ -365,7 +371,8 @@ namespace Dialogue_Data_Entry
             {
                 if (messageToServer)
                 {
-                    return MessageToServer(this.topic, answer, noveltyInfo);
+                    //Return message to Unity front-end with both novel and proximal nodes
+                    return MessageToServer(this.topic, answer, noveltyInfo, speaker.getProximal(this.topic, this.turn, noveltyAmount));
                 }
                 return answer + " " + noveltyInfo;
             }
