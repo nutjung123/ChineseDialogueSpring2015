@@ -32,7 +32,7 @@ namespace Dialogue_Data_Entry
         private Form2 myQuery;
         private bool updateFlag;
         private TextBox lastFocused;
-        private List<Tuple<string, string, string>> constraintList;
+        private List<Tuple<string, string, string>> temporalConstraintList;
         private string defaultFilename = @"\2008_Summer_Olympic_Games.xml";
         private string constraintFilename = @"\constraint.txt";
 
@@ -1046,13 +1046,13 @@ namespace Dialogue_Data_Entry
         private void refreshShowConstraintListBox()
         {
             showConstraintListBox.Items.Clear();
-            if (constraintList != null)
+            if (temporalConstraintList != null)
             {
-                for (int x = 0; x < constraintList.Count(); x++)
+                for (int x = 0; x < temporalConstraintList.Count(); x++)
                 {
-                    string toAdd = constraintList[x].Item1+ " ";
-                    toAdd += constraintList[x].Item2+" ";
-                    toAdd += constraintList[x].Item3;
+                    string toAdd = temporalConstraintList[x].Item1+ " ";
+                    toAdd += temporalConstraintList[x].Item2+" ";
+                    toAdd += temporalConstraintList[x].Item3;
                     showConstraintListBox.Items.Add(toAdd);
                 }
             }
@@ -1099,11 +1099,11 @@ namespace Dialogue_Data_Entry
             string firstArgument = firstArgumentTextBox.Text;
             string secondArgument = secondArgumentComboBox.Text;
             string thirdArgument = thirdArgumentTextBox.Text;
-            if (constraintList==null)
+            if (temporalConstraintList==null)
             {
-                constraintList = new List<Tuple<string,string,string>>();
+                temporalConstraintList = new List<Tuple<string,string,string>>();
             }
-            constraintList.Add(new Tuple<string,string,string>(firstArgument,secondArgument,thirdArgument));
+            temporalConstraintList.Add(new Tuple<string,string,string>(firstArgument,secondArgument,thirdArgument));
             refreshShowConstraintListBox();
         }
 
@@ -1111,9 +1111,9 @@ namespace Dialogue_Data_Entry
         {
             if (showConstraintListBox.SelectedIndex != -1)
             {
-                firstArgumentTextBox.Text = constraintList[showConstraintListBox.SelectedIndex].Item1;
-                secondArgumentComboBox.Text = constraintList[showConstraintListBox.SelectedIndex].Item2;
-                thirdArgumentTextBox.Text = constraintList[showConstraintListBox.SelectedIndex].Item3;
+                firstArgumentTextBox.Text = temporalConstraintList[showConstraintListBox.SelectedIndex].Item1;
+                secondArgumentComboBox.Text = temporalConstraintList[showConstraintListBox.SelectedIndex].Item2;
+                thirdArgumentTextBox.Text = temporalConstraintList[showConstraintListBox.SelectedIndex].Item3;
             }
         }
 
@@ -1162,8 +1162,8 @@ namespace Dialogue_Data_Entry
             string firstArgument = firstArgumentTextBox.Text;
             string secondArgument = secondArgumentComboBox.Text;
             string thirdArgument = thirdArgumentTextBox.Text;
-            constraintList.RemoveAt(showConstraintListBox.SelectedIndex);
-            constraintList.Add(new Tuple<string, string, string>(firstArgument, secondArgument, thirdArgument));
+            temporalConstraintList.RemoveAt(showConstraintListBox.SelectedIndex);
+            temporalConstraintList.Add(new Tuple<string, string, string>(firstArgument, secondArgument, thirdArgument));
             refreshShowConstraintListBox();
         }
 
@@ -1174,7 +1174,7 @@ namespace Dialogue_Data_Entry
                 MessageBox.Show("You have not select one of the constraint.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            constraintList.RemoveAt(showConstraintListBox.SelectedIndex);
+            temporalConstraintList.RemoveAt(showConstraintListBox.SelectedIndex);
             refreshShowConstraintListBox();
         }
 
@@ -1190,11 +1190,11 @@ namespace Dialogue_Data_Entry
             {
                 using (System.IO.StreamWriter file = new System.IO.StreamWriter(saveFileDialog1.FileName))
                 {
-                    for (int x = 0; x < constraintList.Count(); x++)
+                    for (int x = 0; x < temporalConstraintList.Count(); x++)
                     {
-                        file.WriteLine(constraintList[x].Item1);
-                        file.WriteLine(constraintList[x].Item2);
-                        file.WriteLine(constraintList[x].Item3);
+                        file.WriteLine(temporalConstraintList[x].Item1);
+                        file.WriteLine(temporalConstraintList[x].Item2);
+                        file.WriteLine(temporalConstraintList[x].Item3);
                     }
                 }
             }
@@ -1206,11 +1206,11 @@ namespace Dialogue_Data_Entry
             {
                 using (System.IO.StreamWriter file = new System.IO.StreamWriter(currentConstraintFileName))
                 {
-                    for (int x = 0; x < constraintList.Count(); x++)
+                    for (int x = 0; x < temporalConstraintList.Count(); x++)
                     {
-                        file.WriteLine(constraintList[x].Item1);
-                        file.WriteLine(constraintList[x].Item2);
-                        file.WriteLine(constraintList[x].Item3);
+                        file.WriteLine(temporalConstraintList[x].Item1);
+                        file.WriteLine(temporalConstraintList[x].Item2);
+                        file.WriteLine(temporalConstraintList[x].Item3);
                     }
                 }
             }
@@ -1229,7 +1229,7 @@ namespace Dialogue_Data_Entry
         {
             currentConstraintFileName = fileName;
             string[] lines = System.IO.File.ReadAllLines(currentConstraintFileName);
-            constraintList = new List<Tuple<string, string, string>>();
+            temporalConstraintList = new List<Tuple<string, string, string>>();
             string firstArgument = "", secondArgument = "", thirdArgument = "";
             for (int x = 0; x < lines.Count(); x++)
             {
@@ -1244,7 +1244,7 @@ namespace Dialogue_Data_Entry
                 else if (x % 3 == 2)
                 {
                     thirdArgument = lines[x];
-                    constraintList.Add(new Tuple<string, string, string>(firstArgument, secondArgument, thirdArgument));
+                    temporalConstraintList.Add(new Tuple<string, string, string>(firstArgument, secondArgument, thirdArgument));
                 }
             }
             refreshShowConstraintListBox();

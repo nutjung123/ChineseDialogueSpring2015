@@ -220,10 +220,10 @@ namespace Dialogue_Data_Entry
             //set of Weight (W == Weight)
             //Get the weights from the graph.
             double[] weight_array = featGraph.getWeightArray();
-            double discussAmountW = weight_array[0];
-            double noveltyW = weight_array[1];
-            double spatialConstraintW = weight_array[2];
-            double hierachyConstraintW = weight_array[3];
+            double discussAmountW = weight_array[Constant.discussAmountWeightIndex];
+            double noveltyW = weight_array[Constant.noveltyWeightIndex];
+            double spatialConstraintW = weight_array[Constant.spatialConstraintWeightIndex];
+            double hierachyConstraintW = weight_array[Constant.hierarchyConstraintWeightIndex];
 
             // novelty
 
