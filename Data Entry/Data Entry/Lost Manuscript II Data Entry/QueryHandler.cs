@@ -107,19 +107,16 @@ namespace Dialogue_Data_Entry
             this.topic = null;
         }
 			
-		private string MessageToServer(Feature feat, string speak, string noveltyInfo, string proximalInfo = "")
+	private string MessageToServer(Feature feat, string speak, string noveltyInfo, string proximalInfo = "")
         {
             String return_message = "";
 
             prevCurr.AddFirst(feat);
 
-            if (prevCurr.Count > 2) {
-				 prevCurr.RemoveLast();
-			}
-				
-			foreach (Feature obj in prevCurr) {
-				obj.print();
-			}
+            if (prevCurr.Count > 2)
+            {
+		 prevCurr.RemoveLast();
+	    }
 
             Feature first = prevCurr.First();   // Current node
             Feature last = prevCurr.Last();     // Previous node
