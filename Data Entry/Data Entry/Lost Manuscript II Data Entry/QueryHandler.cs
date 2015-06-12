@@ -80,7 +80,8 @@ namespace Dialogue_Data_Entry
         private int turn;
         private int noveltyAmount = 5;
 
-		public Stack prevCurr = new Stack();
+        //public Stack prevCurr = new Stack();
+        public LinkedList<Feature> prevCurr = new LinkedList<Feature>();
 
         /// <summary>
         /// Create a converter for the specified XML file
@@ -110,16 +111,89 @@ namespace Dialogue_Data_Entry
         {
             String return_message = "";
 
-			if (prevCurr.Count != 0) {
-				Feature first = (Feature) prevCurr.Peek();
+            prevCurr.AddFirst(feat);
+
+            //System.Console.WriteLine("================  prevCurr.Count  ================");
+            //System.Console.WriteLine("\tCount:               " + string.Format("{0}", prevCurr.Count));
+            if (prevCurr.Count > 2) {
+				 prevCurr.RemoveLast();
 			}
 				
-			prevCurr.Push (feat);
 			foreach (Feature obj in prevCurr) {
 				obj.print();
 			}
+
+            Feature first = prevCurr.First();   // Current node
+            Feature last = prevCurr.Last();     // Previous node
+
+            // Check if last has first as its neighbor
+            if (last.getNeighbor(first.Data) != null)
+            {
+                // There are 4 cases:
+                // 1) directions
+                if (last.getRelationshipNeighbor(first.Data) == "north")
+                {
+                    return_message = "to the south of this place is...";
+                }
+                if (last.getRelationshipNeighbor(first.Data) == "south")
+                {
+                    return_message = "to the north of this place is...";
+                }
+                if (last.getRelationshipNeighbor(first.Data) == "east")
+                {
+                    return_message = "to the west of this place is...";
+                }
+                if (last.getRelationshipNeighbor(first.Data) == "west")
+                {
+                    return_message = "to the east of this place is...";
+                }
+                if (last.getRelationshipNeighbor(first.Data) == "northeast")
+                {
+                    return_message = "to the southwest of this place is...";
+                }
+                if (last.getRelationshipNeighbor(first.Data) == "southwest")
+                {
+                    return_message = "to the northeast of this place is...";
+                }
+                if (last.getRelationshipNeighbor(first.Data) == "northwest")
+                {
+                    return_message = "to the southeast of this place is...";
+                }
+                if (last.getRelationshipNeighbor(first.Data) == "southeast")
+                {
+                    return_message = "to the northwest of this place is...";
+                }
+                // 2) hosted/was hosted at
+                if (last.getRelationshipNeighbor(first.Data) == "hosted")
+                {
+                    return_message = "next we will talk about competitions happened here ";
+                }
+                if (last.getRelationshipNeighbor(first.Data) == "was hosted at")
+                {
+                    return_message = "this event happened at the following place ";
+                }
+                // 3) contain/inside
+                if (last.getRelationshipNeighbor(first.Data) == "contain")
+                {
+                    return_message = "the following event is in ";
+                }
+                if (last.getRelationshipNeighbor(first.Data) == "inside")
+                {
+                    return_message = "the following event has ";
+                }
+                // 4) won
+                if (last.getRelationshipNeighbor(first.Data) == "won")
+                {
+                    return_message = "this person won in the following event, ";
+                }
+            }
+            // Not a neighbor
+            else if (last.getNeighbor(first.Data) == null && prevCurr.Count > 1)
+            {
+                return_message = "now let's talk about another topic ";
+            }
 			
-            return_message = "ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + speak + ":Novelty:" + noveltyInfo;
+            return_message += "ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + speak + ":Novelty:" + noveltyInfo;
 
             return return_message;
         }
