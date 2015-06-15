@@ -421,16 +421,22 @@ namespace Dialogue_Data_Entry
         public string getProximal(Feature currentTopic, int amount = 5)
         {
             string answer = "";
-            List<double> closestTopic = currentTopic.ShortestDistance;
 
-            var sorted = closestTopic.Select((x, i) => new KeyValuePair<double, int>(x, i)).OrderBy(x => x.Key).ToList();
+           // List<double> closestTopic = currentTopic.ShortestDistance;
 
-            List<int> closetTopicIndex = sorted.Select(x => x.Value).ToList();
+            bool[] checkEntry = new bool[featGraph.Count];
+            List<Tuple<Feature, double>> listScore = new List<Tuple<Feature, double>>();
+            this.travelGraph(featGraph.Root, currentTopic, 0, true, checkEntry, ref listScore);
+            listScore.Sort((x, y) => y.Item2.CompareTo(x.Item2));
+
+            //var sorted = closestTopic.Select((x, i) => new KeyValuePair<double, int>(x, i)).OrderBy(x => x.Key).ToList();
+
+            //List<int> closetTopicIndex = sorted.Select(x => x.Value).ToList();
             //skip the first index, because that index is itself
             for (int x = 1; x <= amount; x++)
             {
-                answer += closetTopicIndex[x] + " " + closestTopic[closetTopicIndex[x]]+" ";
-                //answer += featGraph.getFeatureIndex(listScore[x].Item1.Data) + " " + listScore[x].Item2 + " ";
+                //answer += closetTopicIndex[x] + " " + closestTopic[closetTopicIndex[x]]+" ";
+                answer += featGraph.getFeatureIndex(listScore[x].Item1.Data) + " " + listScore[x].Item2 + " ";
             }
 
             return answer;
