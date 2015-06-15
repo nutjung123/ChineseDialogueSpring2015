@@ -417,7 +417,7 @@ namespace Dialogue_Data_Entry
         }
 
         //Opposite of get novelty, get the ids of the features that, according to the calculation,
-        //are closest to the current topic.
+        //are most likely to be chosen as the next topic.
         public string getProximal(Feature currentTopic, int amount = 5)
         {
             string answer = "";
@@ -432,8 +432,8 @@ namespace Dialogue_Data_Entry
             //var sorted = closestTopic.Select((x, i) => new KeyValuePair<double, int>(x, i)).OrderBy(x => x.Key).ToList();
 
             //List<int> closetTopicIndex = sorted.Select(x => x.Value).ToList();
-            //skip the first index, because that index is itself
-            for (int x = 1; x <= amount; x++)
+            
+            for (int x = 0; x < amount; x++)
             {
                 //answer += closetTopicIndex[x] + " " + closestTopic[closetTopicIndex[x]]+" ";
                 answer += featGraph.getFeatureIndex(listScore[x].Item1.Data) + " " + listScore[x].Item2 + " ";
