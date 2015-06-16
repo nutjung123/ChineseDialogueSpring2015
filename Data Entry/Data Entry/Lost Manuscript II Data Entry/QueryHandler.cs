@@ -128,67 +128,67 @@ namespace Dialogue_Data_Entry
                 // 1) directions
                 if (last.getRelationshipNeighbor(first.Data) == "north")
                 {
-                    return_message = "to the south of this place is...";
+                    return_message = " To the south of this place is...";
                 }
                 if (last.getRelationshipNeighbor(first.Data) == "south")
                 {
-                    return_message = "to the north of this place is...";
+                    return_message = " To the north of this place is...";
                 }
                 if (last.getRelationshipNeighbor(first.Data) == "east")
                 {
-                    return_message = "to the west of this place is...";
+                    return_message = " To the west of this place is...";
                 }
                 if (last.getRelationshipNeighbor(first.Data) == "west")
                 {
-                    return_message = "to the east of this place is...";
+                    return_message = " To the east of this place is...";
                 }
                 if (last.getRelationshipNeighbor(first.Data) == "northeast")
                 {
-                    return_message = "to the southwest of this place is...";
+                    return_message = " To the southwest of this place is...";
                 }
                 if (last.getRelationshipNeighbor(first.Data) == "southwest")
                 {
-                    return_message = "to the northeast of this place is...";
+                    return_message = " To the northeast of this place is...";
                 }
                 if (last.getRelationshipNeighbor(first.Data) == "northwest")
                 {
-                    return_message = "to the southeast of this place is...";
+                    return_message = " To the southeast of this place is...";
                 }
                 if (last.getRelationshipNeighbor(first.Data) == "southeast")
                 {
-                    return_message = "to the northwest of this place is...";
+                    return_message = " To the northwest of this place is...";
                 }
                 // 2) hosted/was hosted at
                 if (last.getRelationshipNeighbor(first.Data) == "hosted")
                 {
-                    return_message = "next we will talk about competitions happened here ";
+                    return_message = " Next we will talk about competitions happened here";
                 }
                 if (last.getRelationshipNeighbor(first.Data) == "was hosted at")
                 {
-                    return_message = "this event happened at the following place ";
+                    return_message = " This event happened at the following place";
                 }
                 // 3) contain/inside
                 if (last.getRelationshipNeighbor(first.Data) == "contain")
                 {
-                    return_message = "the following event is in ";
+                    return_message = " The following event is in";
                 }
                 if (last.getRelationshipNeighbor(first.Data) == "inside")
                 {
-                    return_message = "the following event has ";
+                    return_message = " The following event has";
                 }
                 // 4) won
                 if (last.getRelationshipNeighbor(first.Data) == "won")
                 {
-                    return_message = "this person won in the following event, ";
+                    return_message = " This person won in the following event,";
                 }
             }
             // Not a neighbor
             else if (last.getNeighbor(first.Data) == null && prevCurr.Count > 1)
             {
-                return_message = "now let's talk about another topic ";
+                return_message = " Now let's talk about another topic";
             }
 			
-            return_message = "ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + speak + ":Novelty:" + noveltyInfo + ":Proximal:" + proximalInfo;
+            return_message += " ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + speak + ":Novelty:" + noveltyInfo + ":Proximal:" + proximalInfo;
 
             return return_message;
         }
