@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Dialogue_Data_Entry;
 using AIMLbot;
-//using System.Collections.Stack;
 using System.Collections;
 
 namespace Dialogue_Data_Entry
@@ -86,7 +85,8 @@ namespace Dialogue_Data_Entry
         private string prevSpatial;
 
         public LinkedList<Feature> prevCurr = new LinkedList<Feature>();
-		public LinkedList<Feature> MetList = new LinkedList<Feature>();
+	public LinkedList<Feature> MetList = new LinkedList<Feature>();
+	public int countFocusNode = 0;
 
         /// <summary>
         /// Create a converter for the specified XML file
@@ -118,7 +118,8 @@ namespace Dialogue_Data_Entry
             String return_message = "";
 
             prevCurr.AddFirst(feat);
-			MetList.AddLast(feat);
+	    MetList.AddLast(feat);
+	    countFocusNode += 1;
 
             if (prevCurr.Count > 2)
             {
@@ -209,12 +210,14 @@ namespace Dialogue_Data_Entry
             return_message += " ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + speak + ":Novelty:" + noveltyInfo + ":Proximal:" + proximalInfo;
 
 
-			if (old.getRelationshipNeighbor(newOld.Data) == current.getRelationshipNeighbor(newOld.Data))
-			{
-				String relationship = old.getRelationshipNeighbor (newOld.Data);
-				return_message += " Just as [" + old.Data + ", " + relationship + ", " + newOld.Data
-					+ "], so too [" + current.Data + ", " + relationship + ", " + newOld.Data + "]";
-			}
+		if (old.getRelationshipNeighbor(newOld.Data) == current.getRelationshipNeighbor(newOld.Data) &&
+				old.getRelationshipNeighbor(newOld.Data) != "" && countFocusNode == 5)
+		{
+			countFocusNode = 0; // Set back to 0
+			String relationship = old.getRelationshipNeighbor (newOld.Data);
+			return_message += " Just as [" + old.Data + ", " + relationship + ", " + newOld.Data
+				+ "], so too [" + current.Data + ", " + relationship + ", " + newOld.Data + "]";
+		}
 
             return return_message;
         }
