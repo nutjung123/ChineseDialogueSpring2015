@@ -18,21 +18,21 @@ namespace Dialogue_Data_Entry
     public partial class Form2 : Form
     {
         private FeatureGraph featGraph;
-        private QueryController myController;
         private QueryHandler myHandler;
         private float featureWeight;
         private float tagKeyWeight;
         private SynchronousSocketListener myServer = null;
         private Thread serverThread = null;
         private volatile bool _shouldStop = false;
+        private List<TemporalConstraint> temporalConstraintList;
 
-        public Form2(FeatureGraph myGraph)
+        public Form2(FeatureGraph myGraph, List<TemporalConstraint> myTemporalConstraintList)
         {
             InitializeComponent();
             //pre-process shortest distance
             myGraph.getMaxDistance();           
-            myController = new QueryController(myGraph);
-            featGraph = myGraph;
+            this.featGraph = myGraph;
+            this.temporalConstraintList = myTemporalConstraintList;
             //clear discussedAmount
             for (int x = 0; x < featGraph.Features.Count(); x++)
             {
@@ -61,12 +61,8 @@ namespace Dialogue_Data_Entry
         private void query_Click(object sender, EventArgs e)
         {
             string query = inputBox.Text;
-            /*if (myController == null)
-            {
-                myController = new QueryController(featGraph);
-            }*/
             if (myHandler == null)
-                myHandler = new QueryHandler(featGraph);
+                myHandler = new QueryHandler(featGraph, temporalConstraintList);
             chatBox.AppendText("User: "+query+"\r\n");
             string answer = myHandler.ParseInput(query,false);
             chatBox.AppendText("System:"+answer+"\r\n");
@@ -110,7 +106,7 @@ namespace Dialogue_Data_Entry
                     break;
                 }
                 if (myHandler == null)
-                    myHandler = new QueryHandler(featGraph);
+                    myHandler = new QueryHandler(featGraph, temporalConstraintList);
                 //Console.WriteLine("Query: " + query);
                 
                 this.Invoke((MethodInvoker)delegate

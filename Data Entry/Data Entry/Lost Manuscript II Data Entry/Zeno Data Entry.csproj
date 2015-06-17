@@ -59,7 +59,6 @@
     <Compile Include="Form3.Designer.cs">
       <DependentUpon>Form3.cs</DependentUpon>
     </Compile>
-    <Compile Include="QueryController.cs" />
     <Compile Include="DeepClone.cs" />
     <Compile Include="Feature.cs" />
     <Compile Include="FeatureGraph.cs" />
@@ -84,6 +83,7 @@
     <Compile Include="Searcher.Designer.cs">
       <DependentUpon>Searcher.cs</DependentUpon>
     </Compile>
+    <Compile Include="TemporalConstraint.cs" />
     <Compile Include="TreeFrom.cs">
       <SubType>Form</SubType>
     </Compile>

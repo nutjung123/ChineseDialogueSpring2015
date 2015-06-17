@@ -32,11 +32,11 @@ namespace Dialogue_Data_Entry
             //double noveltyW = -1.0;
             //double spatialConstraintW = 1.0;
             //double hierachyConstraintW = 1.0;
-            weight_array = new double[Constant.weightArraySize];
-            weight_array[Constant.discussAmountWeightIndex] = -3.0;
-            weight_array[Constant.noveltyWeightIndex] = -1.0;
-            weight_array[Constant.spatialWeightIndex] = 1.0;
-            weight_array[Constant.hierarchyWeightIndex] = 1.0;
+            weight_array = new double[Constant.WeightArraySize];
+            weight_array[Constant.DiscussAmountWeightIndex] = -3.0;
+            weight_array[Constant.NoveltyWeightIndex] = -1.0;
+            weight_array[Constant.SpatialWeightIndex] = 1.0;
+            weight_array[Constant.HierarchyWeightIndex] = 1.0;
         }
 
         private void helperMaxDepthDSF(Feature current, int depth, bool[] checkEntry)

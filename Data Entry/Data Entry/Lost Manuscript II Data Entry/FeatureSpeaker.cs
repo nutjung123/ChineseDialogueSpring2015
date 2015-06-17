@@ -21,11 +21,12 @@ namespace Dialogue_Data_Entry
         private const string FUN_FACT = "Fun Fact";
         private double[] currentNovelty;
         private double currentTopicNovelty = -1;
+        private List<TemporalConstraint> temporalConstraintList;
 
-
-        public FeatureSpeaker(FeatureGraph featG)
+        public FeatureSpeaker(FeatureGraph featG,List<TemporalConstraint> myTemporalConstraintList)
         {
             //define dramaticFunction manually here
+            this.temporalConstraintList = myTemporalConstraintList;
             this.featGraph = featG;
             expectedDramaticV = new double[20] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
         }
@@ -53,6 +54,71 @@ namespace Dialogue_Data_Entry
             }
         }
 
+        public List<int> temporalConstraint(Feature current,int turn, List<string> topicHistory)
+        {
+            List<int> indexList = new List<int>();
+            for (int x = 0; x < temporalConstraintList.Count(); x++)
+            {
+                if (temporalConstraintList[x].FirstArgument == current.Data && !temporalConstraintList[x].Satisfied)
+                {
+                    //Third argument is turn case 
+                    if (temporalConstraintList[x].getThirdArgumentType() == "turn")
+                    {
+                        if (temporalConstraintList[x].SecondArgument == ">")
+                        {
+                            if (turn > Convert.ToInt32(temporalConstraintList[x].ThirdArgument))
+                            {
+                                indexList.Add(x);
+                            }
+                        }
+                        else if (temporalConstraintList[x].SecondArgument == ">=")
+                        {
+                            if (turn >= Convert.ToInt32(temporalConstraintList[x].ThirdArgument))
+                            {
+                                indexList.Add(x);
+                            }
+                        }
+                        else if (temporalConstraintList[x].SecondArgument == "==")
+                        {
+                            if (turn == Convert.ToInt32(temporalConstraintList[x].ThirdArgument))
+                            {
+                                indexList.Add(x);
+                            }
+                        }
+                        else if (temporalConstraintList[x].SecondArgument == "<=")
+                        {
+                            if (turn <= Convert.ToInt32(temporalConstraintList[x].ThirdArgument))
+                            {
+                                indexList.Add(x);
+                            }
+                        }
+                        else if (temporalConstraintList[x].SecondArgument == "<")
+                        {
+                            if (turn < Convert.ToInt32(temporalConstraintList[x].ThirdArgument))
+                            {
+                                indexList.Add(x);
+                            }
+                        }
+                    } //Third argument is a topic case
+                    else if (temporalConstraintList[x].getThirdArgumentType() == "topic")
+                    {
+                        //There is only one prosible case that the constraint will be satisfied by current topic.
+                        // First > Third , and Third has already been discussed (is in history).
+                        // this turn is already greater than all of the turn of topics in history.
+                        // Only need to check whether third argument exists in history or not.
+                        for (int y = 0; y < topicHistory.Count(); y++)
+                        {
+                            if (temporalConstraintList[x].ThirdArgument == topicHistory[y])
+                            {
+                                indexList.Add(x);
+                                break; //Only satisfied once
+                            }
+                        }
+                    }
+                }
+            }
+            return indexList;
+        }
 
         private bool hierachyConstraint(Feature current, Feature oldTopic)
         {
@@ -220,10 +286,10 @@ namespace Dialogue_Data_Entry
             //set of Weight (W == Weight)
             //Get the weights from the graph.
             double[] weight_array = featGraph.getWeightArray();
-            double discussAmountW = weight_array[Constant.discussAmountWeightIndex];
-            double noveltyW = weight_array[Constant.noveltyWeightIndex];
-            double spatialConstraintW = weight_array[Constant.spatialWeightIndex];
-            double hierachyConstraintW = weight_array[Constant.hierarchyWeightIndex];
+            double discussAmountW = weight_array[Constant.DiscussAmountWeightIndex];
+            double noveltyW = weight_array[Constant.NoveltyWeightIndex];
+            double spatialConstraintW = weight_array[Constant.SpatialWeightIndex];
+            double hierachyConstraintW = weight_array[Constant.HierarchyWeightIndex];
 
             // novelty
 
@@ -339,15 +405,15 @@ namespace Dialogue_Data_Entry
             //3 = expected dramatic value
             //4 = spatial constraint value
             //5 = hierarchy constraint value
-            double[] return_array = new double[Constant.scoreArraySize];
+            double[] return_array = new double[Constant.ScoreArraySize];
 
             //NOTE: Weights are NOT included.
-            return_array[Constant.scoreArrayScoreIndex] = score;
-            return_array[Constant.scoreArrayNoveltyIndex] = noveltyValue;
-            return_array[Constant.scoreArrayDiscussedAmountIndex] = DiscussedAmount;
-            return_array[Constant.scoreArrayExpectedDramaticIndex] = expectedDramaticV[currentTurn % expectedDramaticV.Count()];
-            return_array[Constant.scoreArraySpatialIndex] = spatialConstraintValue;
-            return_array[Constant.scoreArrayHierarchyIndex] = hierachyConstraintValue;
+            return_array[Constant.ScoreArrayScoreIndex] = score;
+            return_array[Constant.ScoreArrayNoveltyIndex] = noveltyValue;
+            return_array[Constant.ScoreArrayDiscussedAmountIndex] = DiscussedAmount;
+            return_array[Constant.ScoreArrayExpectedDramaticIndex] = expectedDramaticV[currentTurn % expectedDramaticV.Count()];
+            return_array[Constant.ScoreArraySpatialIndex] = spatialConstraintValue;
+            return_array[Constant.ScoreArrayHierarchyIndex] = hierachyConstraintValue;
 
             return return_array;
         }//End method calculateScoreComponents

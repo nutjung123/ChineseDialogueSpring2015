@@ -16,7 +16,6 @@ namespace Dialogue_Data_Entry
     {
         private FeatureGraph featGraph;
         private Feature toChange;
-        private QueryController myQController;
         private string editorFeatureSelected;
         private string editorKeySelected;
         private string currentFileName;
@@ -32,7 +31,7 @@ namespace Dialogue_Data_Entry
         private Form2 myQuery;
         private bool updateFlag;
         private TextBox lastFocused;
-        private List<Tuple<string, string, string>> temporalConstraintList;
+        private List<TemporalConstraint> temporalConstraintList;
         private string defaultFilename = @"\2008_Summer_Olympic_Games.xml";
         private string constraintFilename = @"\constraint.txt";
 
@@ -40,7 +39,6 @@ namespace Dialogue_Data_Entry
         {
             queryCounter = 0;
             selectedIndex = -1;
-            myQController = new QueryController(featGraph);
             featGraph = new FeatureGraph();
             toChange = null;
             currentFileName = "";
@@ -147,7 +145,6 @@ namespace Dialogue_Data_Entry
                 listBox3.Items.Clear();
                 childrenCheckedListBox.Items.Clear();
                 clearAllTextBoxes();
-                //myQController = new QueryController(featGraph);
                 this.Text = "Data Entry - Concept Graph : " + currentFileName;
             }
         }
@@ -192,7 +189,6 @@ namespace Dialogue_Data_Entry
                 tagListBox.Items.Clear();
                 childrenCheckedListBox.Items.Clear();
                 clearAllTextBoxes();
-                myQController = new QueryController(featGraph);
             }
         }
 
@@ -777,11 +773,9 @@ namespace Dialogue_Data_Entry
                     var fs = File.Open(queryFileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     var sr = new StreamReader(fs);
                     string query = sr.ReadToEnd();
-                    string response = myQController.makeQuery(query);
                     fs.Close();
                     fs = File.Open(responseFileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     var sw = new StreamWriter(fs);
-                    sw.Write(response);
                     sw.Close();
                     queryCounter += 1;
                 }
@@ -894,14 +888,13 @@ namespace Dialogue_Data_Entry
                 tagListBox.Items.Clear();
                 childrenCheckedListBox.Items.Clear();
                 clearAllTextBoxes();
-                myQController = new QueryController(featGraph);
             }
         }
 
         private void chatToolStripMenuItem_Click(object sender, EventArgs e)
         {
             featGraph.setMaxDepth(-1); //so that we force them to recalculate every time you call query in case of updating graph
-            myQuery = new Form2(featGraph);
+            myQuery = new Form2(featGraph, temporalConstraintList);
             myQuery.Show();
         }
 
@@ -1050,9 +1043,9 @@ namespace Dialogue_Data_Entry
             {
                 for (int x = 0; x < temporalConstraintList.Count(); x++)
                 {
-                    string toAdd = temporalConstraintList[x].Item1+ " ";
-                    toAdd += temporalConstraintList[x].Item2+" ";
-                    toAdd += temporalConstraintList[x].Item3;
+                    string toAdd = temporalConstraintList[x].FirstArgument+ " ";
+                    toAdd += temporalConstraintList[x].SecondArgument+" ";
+                    toAdd += temporalConstraintList[x].ThirdArgument;
                     showConstraintListBox.Items.Add(toAdd);
                 }
             }
@@ -1101,9 +1094,9 @@ namespace Dialogue_Data_Entry
             string thirdArgument = thirdArgumentTextBox.Text;
             if (temporalConstraintList==null)
             {
-                temporalConstraintList = new List<Tuple<string,string,string>>();
+                temporalConstraintList = new List<TemporalConstraint>();
             }
-            temporalConstraintList.Add(new Tuple<string,string,string>(firstArgument,secondArgument,thirdArgument));
+            temporalConstraintList.Add(new TemporalConstraint(firstArgument,secondArgument,thirdArgument));
             refreshShowConstraintListBox();
         }
 
@@ -1111,9 +1104,9 @@ namespace Dialogue_Data_Entry
         {
             if (showConstraintListBox.SelectedIndex != -1)
             {
-                firstArgumentTextBox.Text = temporalConstraintList[showConstraintListBox.SelectedIndex].Item1;
-                secondArgumentComboBox.Text = temporalConstraintList[showConstraintListBox.SelectedIndex].Item2;
-                thirdArgumentTextBox.Text = temporalConstraintList[showConstraintListBox.SelectedIndex].Item3;
+                firstArgumentTextBox.Text = temporalConstraintList[showConstraintListBox.SelectedIndex].FirstArgument;
+                secondArgumentComboBox.Text = temporalConstraintList[showConstraintListBox.SelectedIndex].SecondArgument;
+                thirdArgumentTextBox.Text = temporalConstraintList[showConstraintListBox.SelectedIndex].ThirdArgument;
             }
         }
 
@@ -1163,7 +1156,7 @@ namespace Dialogue_Data_Entry
             string secondArgument = secondArgumentComboBox.Text;
             string thirdArgument = thirdArgumentTextBox.Text;
             temporalConstraintList.RemoveAt(showConstraintListBox.SelectedIndex);
-            temporalConstraintList.Add(new Tuple<string, string, string>(firstArgument, secondArgument, thirdArgument));
+            temporalConstraintList.Add(new TemporalConstraint(firstArgument, secondArgument, thirdArgument));
             refreshShowConstraintListBox();
         }
 
@@ -1192,9 +1185,9 @@ namespace Dialogue_Data_Entry
                 {
                     for (int x = 0; x < temporalConstraintList.Count(); x++)
                     {
-                        file.WriteLine(temporalConstraintList[x].Item1);
-                        file.WriteLine(temporalConstraintList[x].Item2);
-                        file.WriteLine(temporalConstraintList[x].Item3);
+                        file.WriteLine(temporalConstraintList[x].FirstArgument);
+                        file.WriteLine(temporalConstraintList[x].SecondArgument);
+                        file.WriteLine(temporalConstraintList[x].ThirdArgument);
                     }
                 }
             }
@@ -1208,9 +1201,9 @@ namespace Dialogue_Data_Entry
                 {
                     for (int x = 0; x < temporalConstraintList.Count(); x++)
                     {
-                        file.WriteLine(temporalConstraintList[x].Item1);
-                        file.WriteLine(temporalConstraintList[x].Item2);
-                        file.WriteLine(temporalConstraintList[x].Item3);
+                        file.WriteLine(temporalConstraintList[x].FirstArgument);
+                        file.WriteLine(temporalConstraintList[x].SecondArgument);
+                        file.WriteLine(temporalConstraintList[x].ThirdArgument);
                     }
                 }
             }
@@ -1229,7 +1222,7 @@ namespace Dialogue_Data_Entry
         {
             currentConstraintFileName = fileName;
             string[] lines = System.IO.File.ReadAllLines(currentConstraintFileName);
-            temporalConstraintList = new List<Tuple<string, string, string>>();
+            temporalConstraintList = new List<TemporalConstraint>();
             string firstArgument = "", secondArgument = "", thirdArgument = "";
             for (int x = 0; x < lines.Count(); x++)
             {
@@ -1244,7 +1237,7 @@ namespace Dialogue_Data_Entry
                 else if (x % 3 == 2)
                 {
                     thirdArgument = lines[x];
-                    temporalConstraintList.Add(new Tuple<string, string, string>(firstArgument, secondArgument, thirdArgument));
+                    temporalConstraintList.Add(new TemporalConstraint(firstArgument, secondArgument, thirdArgument));
                 }
             }
             refreshShowConstraintListBox();

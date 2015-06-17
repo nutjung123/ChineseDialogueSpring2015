@@ -68,6 +68,8 @@ namespace Dialogue_Data_Entry
         private string[] directionWords = {"inside", "contain", "north", "east", "west", "south",
                                       "northeast", "northwest", "southeast", "southwest",
                                       "hosted", "was_hosted_at", "won"};
+        private string[] Directional_Words = {"north", "east", "west", "south",
+                                      "northeast", "northwest", "southeast", "southwest"};
         // "is in" -> contains?
         private Bot bot;
         private User user;
@@ -79,6 +81,9 @@ namespace Dialogue_Data_Entry
         private int b;  // buffer index gets reset when buffer does
         private int turn;
         private int noveltyAmount = 5;
+        private List<TemporalConstraint> temporalConstraintList;
+        private List<string> topicHistory;
+        private string prevSpatial;
 
         //public Stack prevCurr = new Stack();
         public LinkedList<Feature> prevCurr = new LinkedList<Feature>();
@@ -87,10 +92,11 @@ namespace Dialogue_Data_Entry
         /// Create a converter for the specified XML file
         /// </summary>
         /// <param name="xmlFilename"></param>
-        public QueryHandler(FeatureGraph graph)
+        public QueryHandler(FeatureGraph graph, List<TemporalConstraint> myTemporalConstraintList)
         {
             // Load the AIML Bot
             this.bot = new Bot();
+            this.temporalConstraintList = myTemporalConstraintList;
             bot.loadSettings();
             bot.isAcceptingUserInput = false;
             bot.loadAIMLFromFiles();
@@ -107,7 +113,7 @@ namespace Dialogue_Data_Entry
             this.topic = null;
         }
 			
-	private string MessageToServer(Feature feat, string speak, string noveltyInfo, string proximalInfo = "")
+	    private string MessageToServer(Feature feat, string speak, string noveltyInfo, string proximalInfo = "")
         {
             String return_message = "";
 
@@ -115,8 +121,8 @@ namespace Dialogue_Data_Entry
 
             if (prevCurr.Count > 2)
             {
-		 prevCurr.RemoveLast();
-	    }
+		        prevCurr.RemoveLast();
+	        }
 
             Feature first = prevCurr.First();   // Current node
             Feature last = prevCurr.Last();     // Previous node
@@ -192,6 +198,38 @@ namespace Dialogue_Data_Entry
 
             return return_message;
         }
+
+        //update various history when the system choose the next topic
+        public void updateHistory(Feature nextTopic)
+        {
+            //update spatial constraint information
+            if (topicHistory.Count() > 0)
+            {
+                Feature prevTopic = graph.getFeature(topicHistory[topicHistory.Count() - 1]);
+                if (prevTopic.getNeighbor(nextTopic.Data) != null)
+                {
+                    foreach(string str in Directional_Words)
+                    {
+                        if (str == prevTopic.getRelationshipNeighbor(nextTopic.Data))
+                        {
+                            prevSpatial = str;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            //update temporal constraint information
+            FeatureSpeaker temp = new FeatureSpeaker(this.graph, temporalConstraintList);
+            List<int> temporalIndex = temp.temporalConstraint(nextTopic,turn,topicHistory);
+            for (int x = 0; x < temporalIndex.Count(); x++)
+            {
+                temporalConstraintList[temporalIndex[x]].Satisfied = true;
+            }
+            //update topic's history
+            topicHistory.Add(nextTopic.Data);
+        }
+
         //Form2 calls this function
         public string ParseInput(string input, bool messageToServer = false)
         {
@@ -229,7 +267,7 @@ namespace Dialogue_Data_Entry
             // Check
             if (this.topic == null)
                 this.topic = this.graph.Root;
-            FeatureSpeaker speaker = new FeatureSpeaker(this.graph);
+            FeatureSpeaker speaker = new FeatureSpeaker(this.graph, temporalConstraintList);
 
             if (split_input.Length != 0 || messageToServer)
             {
@@ -252,12 +290,12 @@ namespace Dialogue_Data_Entry
                     double[] return_node_values = speaker.calculateScoreComponents(current_feature, old_feature);
                     //Turn them into a colon-separated string, headed by
                     //the key-phrase "RETURN_NODE_VALUES"
-                    string return_string = return_node_values[Constant.scoreArrayScoreIndex] + ":"
-                        + return_node_values[Constant.scoreArrayNoveltyIndex] + ":" 
-                        + return_node_values[Constant.scoreArrayDiscussedAmountIndex] + ":"
-                        + return_node_values[Constant.scoreArrayExpectedDramaticIndex] + ":" 
-                        + return_node_values[Constant.scoreArraySpatialIndex] + ":"
-                        + return_node_values[Constant.scoreArrayHierarchyIndex] + ":";
+                    string return_string = return_node_values[Constant.ScoreArrayScoreIndex] + ":"
+                        + return_node_values[Constant.ScoreArrayNoveltyIndex] + ":" 
+                        + return_node_values[Constant.ScoreArrayDiscussedAmountIndex] + ":"
+                        + return_node_values[Constant.ScoreArrayExpectedDramaticIndex] + ":" 
+                        + return_node_values[Constant.ScoreArraySpatialIndex] + ":"
+                        + return_node_values[Constant.ScoreArrayHierarchyIndex] + ":";
                     
                     return return_string;
                 }//end if
@@ -360,6 +398,8 @@ namespace Dialogue_Data_Entry
                 }
             }
 
+            //Update 
+            //updateHistory(this.topic);
             this.turn++;
 
             if (answer.Length == 0)
