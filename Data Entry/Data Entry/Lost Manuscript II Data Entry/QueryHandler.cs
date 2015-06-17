@@ -135,9 +135,7 @@ namespace Dialogue_Data_Entry
 
 			// Metaphor - 3 nodes
 			Feature old = MetList.First();
-            Feature newOld = null;
-            if (MetList.Count() >= 2)
-                newOld = MetList.ElementAt(1);
+			Feature newOld = MetList.ElementAt(1);
 			Feature current = MetList.Last();
 
 
@@ -207,19 +205,16 @@ namespace Dialogue_Data_Entry
             {
                 return_message = " Now let's talk about another topic";
             }
+			
+            return_message += " ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + speak + ":Novelty:" + noveltyInfo + ":Proximal:" + proximalInfo;
 
-            if (newOld != null)
-                if (old.getRelationshipNeighbor(newOld.Data) == current.getRelationshipNeighbor(newOld.Data))
-                {
-                    String relationship = old.getRelationshipNeighbor(newOld.Data);
-                    return_message += " Just as [" + old.Data + ", " + relationship + ", " + newOld.Data
-                        + "], so too [" + current.Data + ", " + relationship + ", " + newOld.Data + "]";
-                }
 
-            //Return message is being used to store the text to be said before the actual speak value.
-            String to_say = return_message + speak;
-
-            return_message += " ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + to_say + ":Novelty:" + noveltyInfo + ":Proximal:" + proximalInfo;
+			if (old.getRelationshipNeighbor(newOld.Data) == current.getRelationshipNeighbor(newOld.Data))
+			{
+				String relationship = old.getRelationshipNeighbor (newOld.Data);
+				return_message += " Just as [" + old.Data + ", " + relationship + ", " + newOld.Data
+					+ "], so too [" + current.Data + ", " + relationship + ", " + newOld.Data + "]";
+			}
 
             return return_message;
         }
