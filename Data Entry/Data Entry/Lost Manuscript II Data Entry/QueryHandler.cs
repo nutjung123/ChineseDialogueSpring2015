@@ -85,8 +85,8 @@ namespace Dialogue_Data_Entry
         private List<string> topicHistory;
         private string prevSpatial;
 
-        //public Stack prevCurr = new Stack();
         public LinkedList<Feature> prevCurr = new LinkedList<Feature>();
+		public LinkedList<Feature> MetList = new LinkedList<Feature>();
 
         /// <summary>
         /// Create a converter for the specified XML file
@@ -118,14 +118,26 @@ namespace Dialogue_Data_Entry
             String return_message = "";
 
             prevCurr.AddFirst(feat);
+			MetList.AddLast(feat);
 
             if (prevCurr.Count > 2)
             {
 		        prevCurr.RemoveLast();
 	        }
+			if (MetList.Count > 3)
+			{
+				MetList.RemoveFirst();
+			}
 
+			// Previous-Current nodes
             Feature first = prevCurr.First();   // Current node
             Feature last = prevCurr.Last();     // Previous node
+
+			// Metaphor - 3 nodes
+			Feature old = MetList.First();
+			Feature newOld = MetList.ElementAt(1);
+			Feature current = MetList.Last();
+
 
             // Check if last has first as its neighbor
             if (last.getNeighbor(first.Data) != null)
@@ -195,6 +207,14 @@ namespace Dialogue_Data_Entry
             }
 			
             return_message += " ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + speak + ":Novelty:" + noveltyInfo + ":Proximal:" + proximalInfo;
+
+
+			if (old.getRelationshipNeighbor(newOld.Data) == current.getRelationshipNeighbor(newOld.Data))
+			{
+				String relationship = old.getRelationshipNeighbor (newOld.Data);
+				return_message += " Just as [" + old.Data + ", " + relationship + ", " + newOld.Data
+					+ "], so too [" + current.Data + ", " + relationship + ", " + newOld.Data + "]";
+			}
 
             return return_message;
         }
