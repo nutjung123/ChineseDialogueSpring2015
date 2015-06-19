@@ -1,36 +1,6 @@
-Beijing National Aquatics Center
->
-Beijing National Stadium
-Beijing National Aquatics Center
->
-Olympic Green Tennis Center
-Tennis
-==
-Olympic Green Tennis Center
-Athletics
->=
-Swimming - Mens 100 m Backstroke
-Athletics
->=
-Olympic Green Tennis Center
-Swimming - Mens 200 m Backstroke
->=
-Track and Field - Mens 400 m
-Aquatics
-<=
-3
-Tennis
-<
-Swimming - Mens 4x200 m Freestyle Relay
-Tennis
-<
-Beijing National Aquatics Center
 Tennis
 <
 5
-Swimming - Mens 100 m Backstroke
+Beijing National Stadium
 >
-Swimming - Mens 4x100 m Freestyle Relay
-Swimming - Mens 100 m Backstroke
->
-2
+2008 Summer Olympic Games

@@ -81,7 +81,7 @@ namespace Dialogue_Data_Entry
         private int turn;
         private int noveltyAmount = 5;
         private List<TemporalConstraint> temporalConstraintList;
-        private List<string> topicHistory;
+        private List<string> topicHistory = new List<string>();
         private string prevSpatial;
 
         public LinkedList<Feature> prevCurr = new LinkedList<Feature>();
@@ -230,6 +230,7 @@ namespace Dialogue_Data_Entry
         public void updateHistory(Feature nextTopic)
         {
             //update spatial constraint information
+            bool spatialExist = false;
             if (topicHistory.Count() > 0)
             {
                 Feature prevTopic = graph.getFeature(topicHistory[topicHistory.Count() - 1]);
@@ -240,10 +241,15 @@ namespace Dialogue_Data_Entry
                         if (str == prevTopic.getRelationshipNeighbor(nextTopic.Data))
                         {
                             prevSpatial = str;
+                            spatialExist = true;
                             break;
                         }
                     }
                 }
+            }
+            if (!spatialExist)
+            {
+                prevSpatial = "";
             }
 
             //update temporal constraint information
@@ -294,7 +300,7 @@ namespace Dialogue_Data_Entry
             // Check
             if (this.topic == null)
                 this.topic = this.graph.Root;
-            FeatureSpeaker speaker = new FeatureSpeaker(this.graph, temporalConstraintList);
+            FeatureSpeaker speaker = new FeatureSpeaker(this.graph, temporalConstraintList, prevSpatial, topicHistory);
 
             if (split_input.Length != 0 || messageToServer)
             {
@@ -426,7 +432,7 @@ namespace Dialogue_Data_Entry
             }
 
             //Update 
-            //updateHistory(this.topic);
+            updateHistory(this.topic);
             this.turn++;
 
             if (answer.Length == 0)
