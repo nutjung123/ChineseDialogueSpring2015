@@ -10,7 +10,7 @@ namespace Dialogue_Data_Entry
     {
         private double[] expectedDramaticV;
         private FeatureGraph featGraph;
-        private bool printCalculation = false;
+        private bool printCalculation = true;
         private int currentTurn;
         private int heightLimit = 999;
         private string[] spatialKey = new string[8] { "east", "north", "northeast", "northwest", "south", "southeast", "southwest", "west" };
