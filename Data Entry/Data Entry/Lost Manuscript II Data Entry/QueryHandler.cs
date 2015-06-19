@@ -206,7 +206,7 @@ namespace Dialogue_Data_Entry
             // Not a neighbor
             else if (last.getNeighbor(first.Data) == null && prevCurr.Count > 1)
             {
-                return_message = " Now let's talk about another topic";
+                //return_message = " Now let's talk about another topic. ";
             }
 
             if (newOld != null)
