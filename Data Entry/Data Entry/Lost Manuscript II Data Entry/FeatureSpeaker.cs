@@ -16,6 +16,7 @@ namespace Dialogue_Data_Entry
         private string[] spatialKey = new string[8] { "east", "north", "northeast", "northwest", "south", "southeast", "southwest", "west" };
         private string[] hierarchyKey = new string[2] { "contain", "won" };
         private string previousSpatial = "";
+        private List<string> topicHistory;
         private const string SPATIAL = "spatial";
         private const string HIERACHY = "hierachy";
         private const string FUN_FACT = "Fun Fact";
@@ -28,6 +29,16 @@ namespace Dialogue_Data_Entry
             //define dramaticFunction manually here
             this.temporalConstraintList = myTemporalConstraintList;
             this.featGraph = featG;
+            expectedDramaticV = new double[20] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
+        }
+
+        public FeatureSpeaker(FeatureGraph featG, List<TemporalConstraint> myTemporalConstraintList,string prevSpatial,List<string> topicH)
+        {
+            this.temporalConstraintList = myTemporalConstraintList;
+            this.featGraph = featG;
+            previousSpatial = prevSpatial;
+            this.topicHistory = topicH;
+            //define dramaticFunction manually here
             expectedDramaticV = new double[20] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
         }
 
@@ -53,8 +64,9 @@ namespace Dialogue_Data_Entry
                 getHeight(current.Neighbors[x].Item1, target, h + 1, checkEntry, ref height);
             }
         }
-
-        public List<int> temporalConstraint(Feature current,int turn, List<string> topicHistory)
+        //Input: the current topic, the current turn and the whole history
+        //Return: a list of temporal constraint that this topic can satisfy that are not satisfied yet.
+        public List<int> temporalConstraint(Feature current,int turn, List<string> topicH)
         {
             List<int> indexList = new List<int>();
             for (int x = 0; x < temporalConstraintList.Count(); x++)
@@ -103,15 +115,15 @@ namespace Dialogue_Data_Entry
                     else if (temporalConstraintList[x].getThirdArgumentType() == "topic")
                     {
                         //There is only one prosible case that the constraint will be satisfied by current topic.
-                        // First > Third , and Third has already been discussed (is in history).
+                        // First > Third , and Third has already been discussed (It is in history).
                         // this turn is already greater than all of the turn of topics in history.
                         // Only need to check whether third argument exists in history or not.
-                        for (int y = 0; y < topicHistory.Count(); y++)
+                        for (int y = 0; y < topicH.Count(); y++)
                         {
-                            if (temporalConstraintList[x].ThirdArgument == topicHistory[y])
+                            if (temporalConstraintList[x].ThirdArgument == topicH[y])
                             {
                                 indexList.Add(x);
-                                break; //Only satisfied once
+                                break; //Only need to find once instance of this topic in the history
                             }
                         }
                     }
@@ -183,7 +195,7 @@ namespace Dialogue_Data_Entry
                     }
                 }
             }
-            else //TO DO: update previousSpatial
+            else 
             {
                 for (int x = 0; x < current.Neighbors.Count; x++)
                 {
@@ -195,7 +207,7 @@ namespace Dialogue_Data_Entry
                         }
                     }
                 }
-                for (int x = 0; x < current.Parents.Count; x++)
+                /*for (int x = 0; x < current.Parents.Count; x++)
                 {
                     if (current.Parents[x].Item1.Data == oldTopic.Data)
                     {
@@ -204,7 +216,7 @@ namespace Dialogue_Data_Entry
                             return true;
                         }
                     }
-                }
+                }*/
             }
             return false;
         }
@@ -290,6 +302,7 @@ namespace Dialogue_Data_Entry
             double noveltyW = weight_array[Constant.NoveltyWeightIndex];
             double spatialConstraintW = weight_array[Constant.SpatialWeightIndex];
             double hierachyConstraintW = weight_array[Constant.HierarchyWeightIndex];
+            double temporalConstraintW = weight_array[Constant.TemporalWeightIndex];
 
             // novelty
 
@@ -314,24 +327,30 @@ namespace Dialogue_Data_Entry
                 hierachyConstraintValue = 1.0;
             }
 
+            //Temporal Constraint
+            double temporalConstraintValue = temporalConstraint(current, this.currentTurn, this.topicHistory).Count();
+
             //check mentionCount
             float DiscussedAmount = current.DiscussedAmount;
 
             score += (DiscussedAmount * discussAmountW);
             score += (Math.Abs(expectedDramaticV[currentTurn % expectedDramaticV.Count()] - noveltyValue) * noveltyW);
             score += spatialConstraintValue * spatialConstraintW;
-            score += hierachyConstraintValue * hierachyConstraintW;
+            score += (hierachyConstraintValue * hierachyConstraintW);
+            score += (temporalConstraintValue * temporalConstraintW);
 
             if (printCalculation)
             {
-                System.Console.WriteLine("Have been addressed before: " + DiscussedAmount);
-                System.Console.WriteLine("Spatial Constraint Satisfied: " + spatialConstraintValue);
-                System.Console.WriteLine("Hierachy Constraint Satisfied: " + hierachyConstraintValue);
-                
+                Console.WriteLine("Have been addressed before: " + DiscussedAmount);
+                Console.WriteLine("Spatial Constraint Satisfied: " + spatialConstraintValue);
+                Console.WriteLine("Hierachy Constraint Satisfied: " + hierachyConstraintValue);
+                Console.WriteLine("Temporal Constraint Satisfied: "+temporalConstraintValue);
+                Console.WriteLine("Temporal Calculation: "+temporalConstraintValue*temporalConstraintW);
                 string scoreFormula = "";
                 scoreFormula += "score = Have Been Addressed * " + discussAmountW + " + abs(expectedDramaticV[" + currentTurn + "] - dramaticValue)*" + noveltyW;
                 scoreFormula += " + spatialConstraint*" + spatialConstraintW;
                 scoreFormula += " + hierachyConstraint*" + hierachyConstraintW;
+                scoreFormula += " + temporalConstraint*" + temporalConstraintW;
                 scoreFormula += " = " + score;
                 System.Console.WriteLine(scoreFormula);
             }

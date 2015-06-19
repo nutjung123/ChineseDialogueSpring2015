@@ -104,3 +104,4 @@ C:\Users\Sakawkarn\Desktop\Chinese Dialogue Management\ChineseDialogueSpring2015
 C:\Users\Sakawkarn\Desktop\Chinese Dialogue Management\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Dialogue_Data_Entry.Searcher.resources
 C:\Users\Sakawkarn\Desktop\Chinese Dialogue Management\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Dialogue_Data_Entry.TreeFrom.resources
 C:\Users\Sakawkarn\Desktop\Chinese Dialogue Management\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Zeno Data Entry.csproj.GenerateResource.Cache
+C:\Users\nutjung\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Zeno Data Entry.csprojResolveAssemblyReference.cache
