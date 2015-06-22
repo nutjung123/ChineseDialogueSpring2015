@@ -87,6 +87,7 @@ namespace Dialogue_Data_Entry
         public LinkedList<Feature> prevCurr = new LinkedList<Feature>();
 		public LinkedList<Feature> MetList = new LinkedList<Feature>();
 		public int countFocusNode = 0;
+		public double noveltyValue = 0.0;
 
         /// <summary>
         /// Create a converter for the specified XML file
@@ -133,9 +134,9 @@ namespace Dialogue_Data_Entry
 			}
 			// Not a neighbor
 			// NEED TO consider novelty value (low)
-			else if (last.getNeighbor(first.Data) == null)
+			else if (last.getNeighbor(first.Data) == null && noveltyValue >= 0.6)
 			{
-				return_message = "Now let's talk about " + first.Data;
+				return_message = "Now let's talk about " + first.Data + ". ";
 			}
 
 			return return_message;
@@ -150,17 +151,17 @@ namespace Dialogue_Data_Entry
 			// NEED TO implement 4 nodes relationship
 			List<string> sentencePatterns = new List<string>();
 			sentencePatterns.Add(" Just as [" + old.Data + ", " + relationship + ", " + newOld.Data
-				+ "], so too [" + current.Data + ", " + relationship + ", " + newOld.Data + "].");
+				+ "], so too [" + current.Data + ", " + relationship + ", " + newOld.Data + "]. ");
 			sentencePatterns.Add("[" + current.Data + ", " + relationship + ", " + newOld.Data
-				+ "] much like [" + newOld.Data + "] and [" + newOld.Data + "].");
+				+ "] much like [" + newOld.Data + "] and [" + newOld.Data + "]. ");
 			sentencePatterns.Add("Like [" + old.Data + ", " + relationship + ", " + newOld.Data + "]"
-				+ "[" +current.Data + "] also " + "[" + relationship + current.Data + "].");
+				+ "[" +current.Data + "] also " + "[" + relationship + current.Data + "]. ");
 			sentencePatterns.Add("In the way that [" + old.Data + ", " + relationship + ", " + newOld.Data
-				+ "], " + "[" + current.Data + ", " + relationship + ", " + newOld.Data + "].");
+				+ "], " + "[" + current.Data + ", " + relationship + ", " + newOld.Data + "]. ");
 			sentencePatterns.Add("Remember how " + "[" + old.Data + ", " + relationship + ", " + newOld.Data
-				+ "]?" + "Well, in the same way, " + "[" +current.Data + "] also " + "[" + relationship + current.Data + "].");
+				+ "]?" + "Well, in the same way, " + "[" +current.Data + "] also " + "[" + relationship + current.Data + "]. ");
 			sentencePatterns.Add("[" +current.Data + "] also " + "[" + relationship + current.Data + "]" +
-				"similar to how [" + old.Data + ", " + relationship + ", " + newOld.Data + "].");
+				"similar to how [" + old.Data + ", " + relationship + ", " + newOld.Data + "]. ");
 
 			Random rnd = new Random();
 			int r = rnd.Next(sentencePatterns.Count);
@@ -384,6 +385,7 @@ namespace Dialogue_Data_Entry
                 nextTopic = speaker.getNextTopic(nextTopic, "", this.turn);
                 noveltyInfo = speaker.getNovelty(nextTopic, this.turn, noveltyAmount);
                 currentTopicNovelty = speaker.getCurrentTopicNovelty();
+				noveltyValue = speaker.getCurrentTopicNovelty();
                 newBuffer = FindStuffToSay(nextTopic);
                 //MessageBox.Show("Explored " + nextTopic.Data + " with " + newBuffer.Length + " speaks.");
 
