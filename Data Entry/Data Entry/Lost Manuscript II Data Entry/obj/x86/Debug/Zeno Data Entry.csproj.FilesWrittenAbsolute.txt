@@ -1,0 +1,12 @@
+/Users/piyaws/150609 ChineseDialogueSpring2015/Data Entry/Data Entry/Lost Manuscript II Data Entry/obj/x86/Debug/.NETFramework,Version=v4.0,Profile=Client.AssemblyAttribute.cs
+/Users/piyaws/150609 ChineseDialogueSpring2015/Data Entry/Data Entry/Lost Manuscript II Data Entry/obj/x86/Debug/Dialogue_Data_Entry.Form1.resources
+/Users/piyaws/150609 ChineseDialogueSpring2015/Data Entry/Data Entry/Lost Manuscript II Data Entry/obj/x86/Debug/Dialogue_Data_Entry.Form2.resources
+/Users/piyaws/150609 ChineseDialogueSpring2015/Data Entry/Data Entry/Lost Manuscript II Data Entry/obj/x86/Debug/Dialogue_Data_Entry.Form3.resources
+/Users/piyaws/150609 ChineseDialogueSpring2015/Data Entry/Data Entry/Lost Manuscript II Data Entry/obj/x86/Debug/Dialogue_Data_Entry.Properties.Resources.resources
+/Users/piyaws/150609 ChineseDialogueSpring2015/Data Entry/Data Entry/Lost Manuscript II Data Entry/obj/x86/Debug/Dialogue_Data_Entry.Searcher.resources
+/Users/piyaws/150609 ChineseDialogueSpring2015/Data Entry/Data Entry/Lost Manuscript II Data Entry/obj/x86/Debug/Dialogue_Data_Entry.TreeFrom.resources
+/Users/piyaws/150609 ChineseDialogueSpring2015/Data Entry/Data Entry/Lost Manuscript II Data Entry/obj/x86/Debug/Dialogue Data Entry.exe
+/Users/piyaws/150609 ChineseDialogueSpring2015/Data Entry/Data Entry/Lost Manuscript II Data Entry/bin/Debug/AIMLbot.dll
+/Users/piyaws/150609 ChineseDialogueSpring2015/Data Entry/Data Entry/Lost Manuscript II Data Entry/bin/Debug/Dialogue Data Entry.exe.mdb
+/Users/piyaws/150609 ChineseDialogueSpring2015/Data Entry/Data Entry/Lost Manuscript II Data Entry/bin/Debug/Dialogue Data Entry.exe
+/Users/piyaws/150609 ChineseDialogueSpring2015/Data Entry/Data Entry/Lost Manuscript II Data Entry/obj/x86/Debug/Dialogue Data Entry.exe.mdb

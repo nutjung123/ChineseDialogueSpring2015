@@ -113,7 +113,7 @@ namespace Dialogue_Data_Entry
             this.topic = null;
         }
 
-		private string LeadingTopic(Feature last, Feature first, LinkedList<Feature> prevCurr)
+		private string LeadingTopic(Feature last, Feature first)
 		{
 			string return_message = " ";
 			// Check if last has first as its neighbor
@@ -127,17 +127,49 @@ namespace Dialogue_Data_Entry
 				// Else
 				else if (last.getRelationshipNeighbor(first.Data) == null)
 				{
-					//return_message = 
+					//return_message = ;
 				}
 
 			}
 			// Not a neighbor
 			// NEED TO consider novelty value (low)
-			else if (last.getNeighbor(first.Data) == null && prevCurr.Count > 1)
+			else if (last.getNeighbor(first.Data) == null)
 			{
 				return_message = "Now let's talk about " + first.Data;
 			}
 
+			return return_message;
+		}
+
+		private string RelationshipAnalogy(Feature old, Feature newOld, Feature current)
+		{
+			string return_message = "";
+			string relationship = old.getRelationshipNeighbor(newOld.Data);
+
+			// Senten Patterns list - for 3 nodes
+			// NEED TO implement 4 nodes relationship
+			List<string> sentencePatterns = new List<string>();
+			sentencePatterns.Add(" Just as [" + old.Data + ", " + relationship + ", " + newOld.Data
+				+ "], so too [" + current.Data + ", " + relationship + ", " + newOld.Data + "].");
+			sentencePatterns.Add("[" + current.Data + ", " + relationship + ", " + newOld.Data
+				+ "] much like [" + newOld.Data + "] and [" + newOld.Data + "].");
+			sentencePatterns.Add("Like [" + old.Data + ", " + relationship + ", " + newOld.Data + "]"
+				+ "[" +current.Data + "] also " + "[" + relationship + current.Data + "].");
+			sentencePatterns.Add("In the way that [" + old.Data + ", " + relationship + ", " + newOld.Data
+				+ "], " + "[" + current.Data + ", " + relationship + ", " + newOld.Data + "].");
+			sentencePatterns.Add("Remember how " + "[" + old.Data + ", " + relationship + ", " + newOld.Data
+				+ "]?" + "Well, in the same way, " + "[" +current.Data + "] also " + "[" + relationship + current.Data + "].");
+			sentencePatterns.Add("[" +current.Data + "] also " + "[" + relationship + current.Data + "]" +
+				"similar to how [" + old.Data + ", " + relationship + ", " + newOld.Data + "].");
+
+			Random rnd = new Random();
+			int r = rnd.Next(sentencePatterns.Count);
+
+			if (old.getRelationshipNeighbor(newOld.Data) == current.getRelationshipNeighbor(newOld.Data) &&
+				old.getRelationshipNeighbor(newOld.Data) != "")
+			{
+				return_message += sentencePatterns[r];
+			}
 			return return_message;
 		}
 			
@@ -170,18 +202,17 @@ namespace Dialogue_Data_Entry
 			Feature current = MetList.Last();
 
 			// Leading-topic sentence
-			return_message = LeadingTopic (last, first, prevCurr);
+			if (prevCurr.Count > 1)
+			{
+				return_message = LeadingTopic (last, first);
+			}
 
 			// Analogy
-            if (newOld != null)
-                if (old.getRelationshipNeighbor(newOld.Data) == current.getRelationshipNeighbor(newOld.Data) &&
-                        old.getRelationshipNeighbor(newOld.Data) != "" && countFocusNode == 5)
-                {
-                    countFocusNode = 0; // Set back to 0
-                    String relationship = old.getRelationshipNeighbor(newOld.Data);
-                    return_message += " Just as [" + old.Data + ", " + relationship + ", " + newOld.Data
-                        + "], so too [" + current.Data + ", " + relationship + ", " + newOld.Data + "]";
-                }
+			if (newOld != null && countFocusNode == 5)
+			{
+				countFocusNode = 0; // Set back to 0
+				return_message += RelationshipAnalogy (old, newOld, current);
+			}
 
             String to_speak = return_message + speak;
 
