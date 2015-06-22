@@ -85,8 +85,8 @@ namespace Dialogue_Data_Entry
         private string prevSpatial;
 
         public LinkedList<Feature> prevCurr = new LinkedList<Feature>();
-	public LinkedList<Feature> MetList = new LinkedList<Feature>();
-	public int countFocusNode = 0;
+		public LinkedList<Feature> MetList = new LinkedList<Feature>();
+		public int countFocusNode = 0;
 
         /// <summary>
         /// Create a converter for the specified XML file
@@ -112,14 +112,42 @@ namespace Dialogue_Data_Entry
             this.turn = 1;
             this.topic = null;
         }
+
+		private string LeadingTopic(Feature last, Feature first, LinkedList<Feature> prevCurr)
+		{
+			string return_message = " ";
+			// Check if last has first as its neighbor
+			if (last.getNeighbor(first.Data) != null)
+			{
+				// There is a relationship between two nodes
+				if (last.getRelationshipNeighbor(first.Data) != null)
+				{
+					return_message = last.Data + last.getRelationshipNeighbor(first.Data) + first.Data;
+				}
+				// Else
+				else if (last.getRelationshipNeighbor(first.Data) == null)
+				{
+					//return_message = 
+				}
+
+			}
+			// Not a neighbor
+			// NEED TO consider novelty value (low)
+			else if (last.getNeighbor(first.Data) == null && prevCurr.Count > 1)
+			{
+				return_message = "Now let's talk about " + first.Data;
+			}
+
+			return return_message;
+		}
 			
 	    private string MessageToServer(Feature feat, string speak, string noveltyInfo, string proximalInfo = "")
         {
             String return_message = "";
 
             prevCurr.AddFirst(feat);
-	    MetList.AddLast(feat);
-	    countFocusNode += 1;
+	    	MetList.AddLast(feat);
+	    	countFocusNode += 1;
 
             if (prevCurr.Count > 2)
             {
@@ -141,74 +169,10 @@ namespace Dialogue_Data_Entry
 			    newOld = MetList.ElementAt(1);
 			Feature current = MetList.Last();
 
+			// Leading-topic sentence
+			return_message = LeadingTopic (last, first, prevCurr);
 
-            // Check if last has first as its neighbor
-            if (last.getNeighbor(first.Data) != null)
-            {
-                // There are 4 cases:
-                // 1) directions
-                if (last.getRelationshipNeighbor(first.Data) == "north")
-                {
-                    return_message = " To the south of this place is...";
-                }
-                if (last.getRelationshipNeighbor(first.Data) == "south")
-                {
-                    return_message = " To the north of this place is...";
-                }
-                if (last.getRelationshipNeighbor(first.Data) == "east")
-                {
-                    return_message = " To the west of this place is...";
-                }
-                if (last.getRelationshipNeighbor(first.Data) == "west")
-                {
-                    return_message = " To the east of this place is...";
-                }
-                if (last.getRelationshipNeighbor(first.Data) == "northeast")
-                {
-                    return_message = " To the southwest of this place is...";
-                }
-                if (last.getRelationshipNeighbor(first.Data) == "southwest")
-                {
-                    return_message = " To the northeast of this place is...";
-                }
-                if (last.getRelationshipNeighbor(first.Data) == "northwest")
-                {
-                    return_message = " To the southeast of this place is...";
-                }
-                if (last.getRelationshipNeighbor(first.Data) == "southeast")
-                {
-                    return_message = " To the northwest of this place is...";
-                }
-                // 2) hosted/was hosted at
-                if (last.getRelationshipNeighbor(first.Data) == "hosted")
-                {
-                    return_message = " Next we will talk about competitions happened here";
-                }
-                if (last.getRelationshipNeighbor(first.Data) == "was hosted at")
-                {
-                    return_message = " This event happened at the following place";
-                }
-                // 3) contain/inside
-                if (last.getRelationshipNeighbor(first.Data) == "contain")
-                {
-                    return_message = " The following event is in";
-                }
-                if (last.getRelationshipNeighbor(first.Data) == "inside")
-                {
-                    return_message = " The following event has";
-                }
-                // 4) won
-                if (last.getRelationshipNeighbor(first.Data) == "won")
-                {
-                    return_message = " This person won in the following event,";
-                }
-            }
-            // Not a neighbor
-            else if (last.getNeighbor(first.Data) == null && prevCurr.Count > 1)
-            {
-                //return_message = " Now let's talk about another topic. ";
-            }
-
+			// Analogy
             if (newOld != null)
                 if (old.getRelationshipNeighbor(newOld.Data) == current.getRelationshipNeighbor(newOld.Data) &&
                         old.getRelationshipNeighbor(newOld.Data) != "" && countFocusNode == 5)
