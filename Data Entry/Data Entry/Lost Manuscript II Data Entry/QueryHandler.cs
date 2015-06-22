@@ -142,7 +142,7 @@ namespace Dialogue_Data_Entry
 			return return_message;
 		}
 
-		private string RelationshipAnalogy(Feature old, Feature newOld, Feature current)
+		private string RelationshipAnalogy(Feature old, Feature newOld, Feature prevOfCurr,Feature current)
 		{
 			string return_message = "";
 			string relationship = old.getRelationshipNeighbor(newOld.Data);
@@ -150,7 +150,7 @@ namespace Dialogue_Data_Entry
 			// Senten Patterns list - for 3 nodes
 			// NEED TO implement 4 nodes relationship
 			List<string> sentencePatterns = new List<string>();
-			sentencePatterns.Add(" Just as [" + old.Data + ", " + relationship + ", " + newOld.Data
+			/*sentencePatterns.Add(" Just as [" + old.Data + ", " + relationship + ", " + newOld.Data
 				+ "], so too [" + current.Data + ", " + relationship + ", " + newOld.Data + "]. ");
 			sentencePatterns.Add("[" + current.Data + ", " + relationship + ", " + newOld.Data
 				+ "] much like [" + newOld.Data + "] and [" + newOld.Data + "]. ");
@@ -161,13 +161,34 @@ namespace Dialogue_Data_Entry
 			sentencePatterns.Add("Remember how " + "[" + old.Data + ", " + relationship + ", " + newOld.Data
 				+ "]?" + "Well, in the same way, " + "[" +current.Data + "] also " + "[" + relationship + current.Data + "]. ");
 			sentencePatterns.Add("[" +current.Data + "] also " + "[" + relationship + current.Data + "]" +
+				"similar to how [" + old.Data + ", " + relationship + ", " + newOld.Data + "]. ");*/
+
+			// 4 nodes
+			sentencePatterns.Add(" Just as [" + old.Data + ", " + relationship + ", " + newOld.Data
+				+ "], so too [" + current.Data + ", " + relationship + ", " + prevOfCurr.Data + "]. ");
+			sentencePatterns.Add("[" + current.Data + ", " + relationship + ", " + prevOfCurr.Data
+				+ "] much like [" + old.Data + "] and [" + newOld.Data + "]. ");
+			sentencePatterns.Add("Like [" + old.Data + ", " + relationship + ", " + newOld.Data + "]"
+				+ "[" + current.Data + "] also " + "[" + relationship + prevOfCurr.Data + "]. ");
+			sentencePatterns.Add("In the way that [" + old.Data + ", " + relationship + ", " + newOld.Data
+				+ "], " + "[" + current.Data + ", " + relationship + ", " + prevOfCurr.Data + "]. ");
+			sentencePatterns.Add("Remember how " + "[" + old.Data + ", " + relationship + ", " + newOld.Data
+				+ "]?" + "Well, in the same way, " + "[" + current.Data + "] also " + "[" + relationship + prevOfCurr.Data + "]. ");
+			sentencePatterns.Add("[" + current.Data + "] also " + "[" + relationship + prevOfCurr.Data + "]" +
 				"similar to how [" + old.Data + ", " + relationship + ", " + newOld.Data + "]. ");
+
 
 			Random rnd = new Random();
 			int r = rnd.Next(sentencePatterns.Count);
 
-			if (old.getRelationshipNeighbor(newOld.Data) == current.getRelationshipNeighbor(newOld.Data) &&
+			/*if (old.getRelationshipNeighbor(newOld.Data) == current.getRelationshipNeighbor(newOld.Data) &&
 				old.getRelationshipNeighbor(newOld.Data) != "")
+			{
+				return_message += sentencePatterns[r];
+			}*/
+
+			if (old.getRelationshipNeighbor(newOld.Data) == current.getRelationshipNeighbor(prevOfCurr.Data) &&
+				old.getRelationshipNeighbor(newOld.Data) != "" && current.getRelationshipNeighbor(prevOfCurr.Data) != "")
 			{
 				return_message += sentencePatterns[r];
 			}
@@ -186,7 +207,7 @@ namespace Dialogue_Data_Entry
             {
 		        prevCurr.RemoveLast();
 	        }
-			if (MetList.Count > 3)
+			if (MetList.Count > 20)
 			{
 				MetList.RemoveFirst();
 			}
@@ -201,6 +222,9 @@ namespace Dialogue_Data_Entry
             if (MetList.Count() >= 2)
 			    newOld = MetList.ElementAt(1);
 			Feature current = MetList.Last();
+			// 4th node
+			// NEED TO check all possibilities (17 pairs - linear time)
+			Feature prevOfCurr = MetList.ElementAt(MetList.Count-1);
 
 			// Leading-topic sentence
 			if (prevCurr.Count > 1)
@@ -212,7 +236,7 @@ namespace Dialogue_Data_Entry
 			if (newOld != null && countFocusNode == 5)
 			{
 				countFocusNode = 0; // Set back to 0
-				return_message += RelationshipAnalogy (old, newOld, current);
+				return_message += RelationshipAnalogy (old, newOld, prevOfCurr, current);
 			}
 
             String to_speak = return_message + speak;
