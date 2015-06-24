@@ -175,8 +175,8 @@ namespace Dialogue_Data_Entry
 				return_message += sentencePatterns[r];
 			}*/
 
-			if (old.getRelationshipNeighbor(newOld.Data) == current.getRelationshipNeighbor(prevOfCurr.Data) &&
-				old.getRelationshipNeighbor(newOld.Data) != "" && current.getRelationshipNeighbor(prevOfCurr.Data) != "")
+			if (old.getRelationshipNeighbor(newOld.Data) == prevOfCurr.getRelationshipNeighbor(current.Data) &&
+				old.getRelationshipNeighbor(newOld.Data) != "" && prevOfCurr.getRelationshipNeighbor(current.Data) != "")
 			{
 				string relationship = old.getRelationshipNeighbor(newOld.Data);
 				// 4 nodes
@@ -245,7 +245,7 @@ namespace Dialogue_Data_Entry
 
 				}
 
-                while (old.getRelationshipNeighbor(newOld.Data) != current.getRelationshipNeighbor(prevOfCurr.Data))
+				while (old.getRelationshipNeighbor(newOld.Data) != prevOfCurr.getRelationshipNeighbor(current.Data))
                 {
                     old = newOld;
                     newOld = MetList.ElementAt(countNode + 1);
@@ -255,7 +255,7 @@ namespace Dialogue_Data_Entry
 						countNode = 1;
 						break;
 					}
-					if (old.getRelationshipNeighbor(newOld.Data) == current.getRelationshipNeighbor(prevOfCurr.Data))
+					if (old.getRelationshipNeighbor(newOld.Data) == prevOfCurr.getRelationshipNeighbor(current.Data))
 					{
 						countNode = 1;
 						Console.WriteLine("Preparing Analogy for " + current.Data);
