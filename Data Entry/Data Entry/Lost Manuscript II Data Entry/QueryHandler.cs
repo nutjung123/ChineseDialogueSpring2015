@@ -228,16 +228,19 @@ namespace Dialogue_Data_Entry
 			// 4th node
 			// NEED TO check all possibilities (17 pairs - linear time)
 			Feature prevOfCurr = MetList.ElementAt(MetList.Count-1);
-			while (old.getRelationshipNeighbor(newOld.Data) != current.getRelationshipNeighbor(prevOfCurr.Data))
-			{
-				if (old.getRelationshipNeighbor(newOld.Data) == current.getRelationshipNeighbor(prevOfCurr.Data))
-				{
-					break;
-				}
-				old = newOld;
-				newOld = MetList.ElementAt(countNode + 1);
-				countNode += 1;
-			}
+            if (MetList.Count() >= 4)
+            {
+                while (old.getRelationshipNeighbor(newOld.Data) != current.getRelationshipNeighbor(prevOfCurr.Data))
+                {
+                    if (old.getRelationshipNeighbor(newOld.Data) == current.getRelationshipNeighbor(prevOfCurr.Data))
+                    {
+                        break;
+                    }
+                    old = newOld;
+                    newOld = MetList.ElementAt(countNode + 1);
+                    countNode += 1;
+                }
+            }
 
 			// Leading-topic sentence
 			if (prevCurr.Count > 1)
