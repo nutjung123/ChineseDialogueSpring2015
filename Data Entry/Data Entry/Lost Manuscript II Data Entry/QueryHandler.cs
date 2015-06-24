@@ -255,15 +255,16 @@ namespace Dialogue_Data_Entry
             }
 
 			// Leading-topic sentence
-			if (prevCurr.Count > 1)
+			if (prevCurr.Count > 1 && countFocusNode == 5)
 			{
 				return_message = LeadingTopic (last, first);
+                countFocusNode = 0; // Set back to 0
 			}
 
 			// Analogy
-			if (newOld != null && countFocusNode == 5)
+			if (newOld != null )
 			{
-				countFocusNode = 0; // Set back to 0
+                Console.WriteLine("Preparing Analogy for " + current.Data);
 				return_message += RelationshipAnalogy (old, newOld, prevOfCurr, current);
 			}
 
