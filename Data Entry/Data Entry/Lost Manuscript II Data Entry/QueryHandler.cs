@@ -145,7 +145,6 @@ namespace Dialogue_Data_Entry
 		private string RelationshipAnalogy(Feature old, Feature newOld, Feature prevOfCurr,Feature current)
 		{
 			string return_message = "";
-			string relationship = old.getRelationshipNeighbor(newOld.Data);
 
 			// Senten Patterns list - for 3 nodes
 			// NEED TO implement 4 nodes relationship
@@ -163,21 +162,6 @@ namespace Dialogue_Data_Entry
 			sentencePatterns.Add("[" +current.Data + "] also " + "[" + relationship + current.Data + "]" +
 				"similar to how [" + old.Data + ", " + relationship + ", " + newOld.Data + "]. ");*/
 
-			// 4 nodes
-			sentencePatterns.Add(" Just as [" + old.Data + ", " + relationship + ", " + newOld.Data
-				+ "], so too [" + current.Data + ", " + relationship + ", " + prevOfCurr.Data + "]. ");
-			sentencePatterns.Add("[" + current.Data + ", " + relationship + ", " + prevOfCurr.Data
-				+ "] much like [" + old.Data + "] and [" + newOld.Data + "]. ");
-			sentencePatterns.Add("Like [" + old.Data + ", " + relationship + ", " + newOld.Data + "]"
-				+ "[" + current.Data + "] also " + "[" + relationship + prevOfCurr.Data + "]. ");
-			sentencePatterns.Add("In the way that [" + old.Data + ", " + relationship + ", " + newOld.Data
-				+ "], " + "[" + current.Data + ", " + relationship + ", " + prevOfCurr.Data + "]. ");
-			sentencePatterns.Add("Remember how " + "[" + old.Data + ", " + relationship + ", " + newOld.Data
-				+ "]?" + "Well, in the same way, " + "[" + current.Data + "] also " + "[" + relationship + prevOfCurr.Data + "]. ");
-			sentencePatterns.Add("[" + current.Data + "] also " + "[" + relationship + prevOfCurr.Data + "]" +
-				"similar to how [" + old.Data + ", " + relationship + ", " + newOld.Data + "]. ");
-
-
 			Random rnd = new Random();
 			int r = rnd.Next(sentencePatterns.Count);
 
@@ -190,6 +174,21 @@ namespace Dialogue_Data_Entry
 			if (old.getRelationshipNeighbor(newOld.Data) == current.getRelationshipNeighbor(prevOfCurr.Data) &&
 				old.getRelationshipNeighbor(newOld.Data) != "" && current.getRelationshipNeighbor(prevOfCurr.Data) != "")
 			{
+				string relationship = old.getRelationshipNeighbor(newOld.Data);
+				// 4 nodes
+				sentencePatterns.Add(" Just as [" + old.Data + ", " + relationship + ", " + newOld.Data
+					+ "], so too [" + current.Data + ", " + relationship + ", " + prevOfCurr.Data + "]. ");
+				sentencePatterns.Add("[" + current.Data + ", " + relationship + ", " + prevOfCurr.Data
+					+ "] much like [" + old.Data + "] and [" + newOld.Data + "]. ");
+				sentencePatterns.Add("Like [" + old.Data + ", " + relationship + ", " + newOld.Data + "]"
+					+ "[" + current.Data + "] also " + "[" + relationship + prevOfCurr.Data + "]. ");
+				sentencePatterns.Add("In the way that [" + old.Data + ", " + relationship + ", " + newOld.Data
+					+ "], " + "[" + current.Data + ", " + relationship + ", " + prevOfCurr.Data + "]. ");
+				sentencePatterns.Add("Remember how " + "[" + old.Data + ", " + relationship + ", " + newOld.Data
+					+ "]?" + "Well, in the same way, " + "[" + current.Data + "] also " + "[" + relationship + prevOfCurr.Data + "]. ");
+				sentencePatterns.Add("[" + current.Data + "] also " + "[" + relationship + prevOfCurr.Data + "]" +
+					"similar to how [" + old.Data + ", " + relationship + ", " + newOld.Data + "]. ");
+
 				return_message += sentencePatterns[r];
 			}
 			return return_message;
