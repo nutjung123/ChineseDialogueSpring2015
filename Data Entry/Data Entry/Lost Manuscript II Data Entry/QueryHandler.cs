@@ -232,7 +232,11 @@ namespace Dialogue_Data_Entry
 			Feature current = MetList.Last();
 			// 4th node
 			// NEED TO check all possibilities (17 pairs - linear time)
-			Feature prevOfCurr = MetList.ElementAt(MetList.Count-2);
+
+            Feature prevOfCurr = null;
+            if (MetList.Count() >= 2)
+                prevOfCurr = MetList.ElementAt(MetList.Count - 2);
+
             if (MetList.Count() >= 4)
             {
 				// Analogy
