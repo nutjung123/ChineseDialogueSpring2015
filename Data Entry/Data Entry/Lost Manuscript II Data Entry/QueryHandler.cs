@@ -231,13 +231,17 @@ namespace Dialogue_Data_Entry
             {
                 while (old.getRelationshipNeighbor(newOld.Data) != current.getRelationshipNeighbor(prevOfCurr.Data))
                 {
-                    if (old.getRelationshipNeighbor(newOld.Data) == current.getRelationshipNeighbor(prevOfCurr.Data))
-                    {
-                        break;
-                    }
                     old = newOld;
                     newOld = MetList.ElementAt(countNode + 1);
                     countNode += 1;
+					if (old.Data == current.Data && newOld.Data == prevOfCurr.Data)
+					{
+						break;
+					}
+					if (old.getRelationshipNeighbor(newOld.Data) == current.getRelationshipNeighbor(prevOfCurr.Data))
+					{
+						break;
+					}
                 }
             }
 
