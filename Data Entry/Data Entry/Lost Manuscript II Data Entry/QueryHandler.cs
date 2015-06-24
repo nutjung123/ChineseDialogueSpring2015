@@ -236,11 +236,14 @@ namespace Dialogue_Data_Entry
                     countNode += 1;
 					if (old.Data == current.Data && newOld.Data == prevOfCurr.Data)
 					{
+						countNode = 1;
 						break;
 					}
 					if (old.getRelationshipNeighbor(newOld.Data) == current.getRelationshipNeighbor(prevOfCurr.Data))
 					{
+						countNode = 1;
 						break;
+
 					}
                 }
             }
