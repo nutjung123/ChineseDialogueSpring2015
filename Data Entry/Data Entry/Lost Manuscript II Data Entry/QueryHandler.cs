@@ -145,6 +145,11 @@ namespace Dialogue_Data_Entry
 		private string RelationshipAnalogy(Feature old, Feature newOld, Feature prevOfCurr,Feature current)
 		{
 			string return_message = "";
+			Console.WriteLine(old.Data);
+			Console.WriteLine(newOld.Data);
+			Console.WriteLine(prevOfCurr.Data);
+			Console.WriteLine(current.Data);
+
 
 			// Senten Patterns list - for 3 nodes
 			// NEED TO implement 4 nodes relationship
@@ -163,7 +168,6 @@ namespace Dialogue_Data_Entry
 				"similar to how [" + old.Data + ", " + relationship + ", " + newOld.Data + "]. ");*/
 
 			Random rnd = new Random();
-			int r = rnd.Next(sentencePatterns.Count);
 
 			/*if (old.getRelationshipNeighbor(newOld.Data) == current.getRelationshipNeighbor(newOld.Data) &&
 				old.getRelationshipNeighbor(newOld.Data) != "")
@@ -188,6 +192,8 @@ namespace Dialogue_Data_Entry
 					+ "]?" + "Well, in the same way, " + "[" + current.Data + "] also " + "[" + relationship + prevOfCurr.Data + "]. ");
 				sentencePatterns.Add("[" + current.Data + "] also " + "[" + relationship + prevOfCurr.Data + "]" +
 					"similar to how [" + old.Data + ", " + relationship + ", " + newOld.Data + "]. ");
+
+				int r = rnd.Next(sentencePatterns.Count);
 
 				return_message += sentencePatterns[r];
 			}
