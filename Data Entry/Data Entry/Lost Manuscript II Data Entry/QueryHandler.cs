@@ -232,9 +232,15 @@ namespace Dialogue_Data_Entry
 			Feature current = MetList.Last();
 			// 4th node
 			// NEED TO check all possibilities (17 pairs - linear time)
-			Feature prevOfCurr = MetList.ElementAt(MetList.Count-1);
+			Feature prevOfCurr = MetList.ElementAt(MetList.Count-2);
             if (MetList.Count() >= 4)
             {
+				// Analogy
+				if (newOld != null )
+				{
+
+				}
+
                 while (old.getRelationshipNeighbor(newOld.Data) != current.getRelationshipNeighbor(prevOfCurr.Data))
                 {
                     old = newOld;
@@ -248,6 +254,8 @@ namespace Dialogue_Data_Entry
 					if (old.getRelationshipNeighbor(newOld.Data) == current.getRelationshipNeighbor(prevOfCurr.Data))
 					{
 						countNode = 1;
+						Console.WriteLine("Preparing Analogy for " + current.Data);
+						return_message += RelationshipAnalogy (old, newOld, prevOfCurr, current);
 						break;
 
 					}
@@ -261,12 +269,6 @@ namespace Dialogue_Data_Entry
                 countFocusNode = 0; // Set back to 0
 			}
 
-			// Analogy
-			if (newOld != null )
-			{
-                Console.WriteLine("Preparing Analogy for " + current.Data);
-				return_message += RelationshipAnalogy (old, newOld, prevOfCurr, current);
-			}
 
             String to_speak = return_message + speak;
 
