@@ -32,7 +32,8 @@ namespace Dialogue_Data_Entry
         private bool updateFlag;
         private TextBox lastFocused;
         private List<TemporalConstraint> temporalConstraintList;
-        private string defaultFilename = @"\2008_Summer_Olympic_Games.xml";
+        //Change this to change which file is loaded at program startup
+        private string defaultFilename = @"\2008_Summer_Olympic_Games_4th_simple_tag.xml";
         private string constraintFilename = @"\constraint.txt";
 
         public Form1()
@@ -86,6 +87,9 @@ namespace Dialogue_Data_Entry
 
             openDefaultXMLFile();
             openDefaultConstraintFile();
+
+            //Open the query window
+            openQueryWindow();
         }
 
         //Open the default file
@@ -893,10 +897,16 @@ namespace Dialogue_Data_Entry
 
         private void chatToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            openQueryWindow();
+        }
+
+        //Opens the Query window
+        private void openQueryWindow()
+        {
             featGraph.setMaxDepth(-1); //so that we force them to recalculate every time you call query in case of updating graph
             myQuery = new Form2(featGraph, temporalConstraintList);
             myQuery.Show();
-        }
+        }//end method openQueryWindow
 
         // add neighbor checkedListBox method (+ parent)
         private void childrenCheckedListBox_ItemCheck(Object sender, ItemCheckEventArgs e)
