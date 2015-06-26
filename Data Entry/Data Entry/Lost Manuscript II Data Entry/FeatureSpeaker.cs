@@ -11,7 +11,7 @@ namespace Dialogue_Data_Entry
         private double[] expectedDramaticV;
         private FeatureGraph featGraph;
         private bool printCalculation = false;
-        private int currentTurn;
+        private int currentTurn=1;
         private int heightLimit = 999;
         private string[] spatialKey = new string[8] { "east", "north", "northeast", "northwest", "south", "southeast", "southwest", "west" };
         private string[] hierarchyKey = new string[2] { "contain", "won" };
@@ -23,21 +23,33 @@ namespace Dialogue_Data_Entry
         private double[] currentNovelty;
         private double currentTopicNovelty = -1;
         private List<TemporalConstraint> temporalConstraintList;
+        private string[] Directional_Words = {"north", "east", "west", "south",
+                                      "northeast", "northwest", "southeast", "southwest"};
 
         public FeatureSpeaker(FeatureGraph featG,List<TemporalConstraint> myTemporalConstraintList)
         {
             //define dramaticFunction manually here
-            this.temporalConstraintList = myTemporalConstraintList;
+            this.temporalConstraintList = new List<TemporalConstraint>();
+            for (int x = 0; x < myTemporalConstraintList.Count(); x++)
+            {
+                this.temporalConstraintList.Add(new TemporalConstraint(myTemporalConstraintList[x].FirstArgument,
+                    myTemporalConstraintList[x].SecondArgument, myTemporalConstraintList[x].ThirdArgument));
+            }
             this.featGraph = featG;
             expectedDramaticV = new double[20] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
         }
 
         public FeatureSpeaker(FeatureGraph featG, List<TemporalConstraint> myTemporalConstraintList,string prevSpatial,List<string> topicH)
         {
-            this.temporalConstraintList = myTemporalConstraintList;
+            this.temporalConstraintList = new List<TemporalConstraint>();
+            for (int x = 0; x < myTemporalConstraintList.Count();x++ )
+            {
+                this.temporalConstraintList.Add(new TemporalConstraint(myTemporalConstraintList[x].FirstArgument,
+                    myTemporalConstraintList[x].SecondArgument, myTemporalConstraintList[x].ThirdArgument));
+            }
             this.featGraph = featG;
             previousSpatial = prevSpatial;
-            this.topicHistory = topicH;
+            this.topicHistory = new List<string>(topicH);
             //define dramaticFunction manually here
             expectedDramaticV = new double[20] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
         }
@@ -506,7 +518,8 @@ namespace Dialogue_Data_Entry
         public string getProximal(Feature currentTopic, int amount = 5)
         {
             string answer = "";
-
+            bool oldPrintCalculation = printCalculation;
+            printCalculation = false;
            // List<double> closestTopic = currentTopic.ShortestDistance;
 
             bool[] checkEntry = new bool[featGraph.Count];
@@ -523,7 +536,7 @@ namespace Dialogue_Data_Entry
                 //answer += closetTopicIndex[x] + " " + closestTopic[closetTopicIndex[x]]+" ";
                 answer += featGraph.getFeatureIndex(listScore[x].Item1.Data) + " " + listScore[x].Item2 + " ";
             }
-
+            printCalculation = oldPrintCalculation;
             return answer;
         }//end method getProximal
 
@@ -597,6 +610,84 @@ namespace Dialogue_Data_Entry
                 return -1;
             }
             return currentTopicNovelty;
+        }
+
+        private void internalUpdateHistory(Feature nextTopic)
+        {
+            //update spatial constraint information
+            bool spatialExist = false;
+            if (topicHistory.Count() > 0)
+            {
+                Feature prevTopic = this.featGraph.getFeature(topicHistory[topicHistory.Count() - 1]);
+                if (prevTopic.getNeighbor(nextTopic.Data) != null)
+                {
+                    foreach(string str in Directional_Words)
+                    {
+                        if (str == prevTopic.getRelationshipNeighbor(nextTopic.Data))
+                        {
+                            previousSpatial = str;
+                            spatialExist = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (!spatialExist)
+            {
+                previousSpatial = "";
+            }
+
+            //update temporal constraint information
+            FeatureSpeaker temp = new FeatureSpeaker(this.featGraph, temporalConstraintList);
+            List<int> temporalIndex = temp.temporalConstraint(nextTopic,currentTurn,topicHistory);
+            for (int x = 0; x < temporalIndex.Count(); x++)
+            {
+                temporalConstraintList[temporalIndex[x]].Satisfied = true;
+            }
+            //update topic's history
+            topicHistory.Add(nextTopic.Data);
+        }
+
+        public List<Feature> forwardProjection(Feature currentTopic, int forwardTurn)
+        {
+            //remember internal variables for forward projection
+            string internalPreviousSpatial = this.previousSpatial;
+            List<string> internalTopicHistory = new List<string>(this.topicHistory);
+            int internalTurn = this.currentTurn;
+            Feature tempCurrentTopic = currentTopic;
+            bool oldPrintCalculation = printCalculation;
+            List<TemporalConstraint> internalTemporalConstraintList = new List<TemporalConstraint>();
+            for (int x = 0; x < temporalConstraintList.Count();x++ )
+            {
+                internalTemporalConstraintList.Add(new TemporalConstraint(temporalConstraintList[x].FirstArgument,
+                    temporalConstraintList[x].SecondArgument, temporalConstraintList[x].ThirdArgument));
+            }
+            printCalculation = false;
+
+            //Forward Projection
+            List<Feature> topicList = new List<Feature>();
+            for (int x = 0; x < forwardTurn;x++)
+            {
+                //update Internal variables
+                tempCurrentTopic = this.getNextTopic(tempCurrentTopic, "", currentTurn);
+                tempCurrentTopic.DiscussedAmount++;
+                internalUpdateHistory(tempCurrentTopic);
+                currentTurn++;
+                topicList.Add(tempCurrentTopic);
+            }
+
+            //recover all old variables
+            this.previousSpatial = internalPreviousSpatial;
+            this.topicHistory = internalTopicHistory;
+            this.currentTurn = internalTurn;
+            this.temporalConstraintList = internalTemporalConstraintList;
+            printCalculation = oldPrintCalculation;
+            for (int x = 0; x < forwardTurn;x++)
+            {
+                topicList[x].DiscussedAmount--;
+            }
+
+            return topicList;
         }
 
     }

@@ -439,7 +439,15 @@ namespace Dialogue_Data_Entry
             {
                 Feature nextTopic = this.topic;
                 string[] newBuffer;
-
+                //testing forward projection
+                if (true)
+                {
+                    List<Feature> testingForwardP = speaker.forwardProjection(nextTopic, 5);
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Console.WriteLine(testingForwardP[i].Data);
+                    }
+                }
                 // Can't guarantee it'll actually move on to anything...
                 nextTopic = speaker.getNextTopic(nextTopic, "", this.turn);
                 noveltyInfo = speaker.getNovelty(nextTopic, this.turn, noveltyAmount);
