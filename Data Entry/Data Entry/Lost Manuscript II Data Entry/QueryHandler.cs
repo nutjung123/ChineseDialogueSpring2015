@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Dialogue_Data_Entry;
 using AIMLbot;
 using System.Collections;
+using System.Diagnostics;
 
 namespace Dialogue_Data_Entry
 {
@@ -439,15 +440,30 @@ namespace Dialogue_Data_Entry
             {
                 Feature nextTopic = this.topic;
                 string[] newBuffer;
-                //testing forward projection
+                
+                // == testing forward projection
                 if (true)
                 {
-                    List<Feature> testingForwardP = speaker.forwardProjection(nextTopic, 5);
-                    for (int i = 0; i < 5; i++)
+                    Stopwatch stopWatch = new Stopwatch();
+                    stopWatch.Start();
+                    
+                    int forwardTurn = 20;
+                    List<Feature> testingForwardP = speaker.forwardProjection(nextTopic, forwardTurn);
+                    
+                    stopWatch.Stop();
+                    TimeSpan ts = stopWatch.Elapsed;
+                    // Format and display the TimeSpan value. 
+                    string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                        ts.Hours, ts.Minutes, ts.Seconds,
+                        ts.Milliseconds / 10);
+                    Console.WriteLine("RunTime of forward projection" + elapsedTime);
+                    //print out all the topics
+                    for (int i = 0; i < forwardTurn; i++)
                     {
                         Console.WriteLine(testingForwardP[i].Data);
                     }
                 }
+                
                 // Can't guarantee it'll actually move on to anything...
                 nextTopic = speaker.getNextTopic(nextTopic, "", this.turn);
                 noveltyInfo = speaker.getNovelty(nextTopic, this.turn, noveltyAmount);
