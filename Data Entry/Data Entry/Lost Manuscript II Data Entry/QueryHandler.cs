@@ -327,24 +327,29 @@ namespace Dialogue_Data_Entry
             double currentTopicNovelty = -1;
             // Pre-processing
 
+            Console.WriteLine("parse input " + input);
+
             //The input may be delimited by colons. Try to split it.
             String[] split_input = input.Trim().Split(':');
+            Console.WriteLine("split input " + split_input[0]);
 
             // Lowercase for comparisons
             input = input.Trim().ToLower();
+            Console.WriteLine("trimmed lowered input " + input);
 
             if (!string.IsNullOrEmpty(input))
             {
                 // Check to see if the AIML Bot has anything to say
                 Request request = new Request(input, this.user, this.bot);
+               
                 Result result = bot.Chat(request);
                 string output = result.Output;
-
+                
                 if (output.Length > 0)
                 {
                     if (!output.StartsWith(FORMAT))
                         return output;
-
+                    
                     //MessageBox.Show("Converted output reads: " + output);
                     input = output.Replace(FORMAT, "").ToLower();
                 }
@@ -352,7 +357,7 @@ namespace Dialogue_Data_Entry
 
             // Remove punctuation
             input = RemovePunctuation(input);
-
+            
             // Check
             if (this.topic == null)
                 this.topic = this.graph.Root;
@@ -360,6 +365,25 @@ namespace Dialogue_Data_Entry
 
             if (split_input.Length != 0 || messageToServer)
             {
+                //Step-through command from Query window.
+                if (split_input[0].Equals("STEP"))
+                {
+                    //Step through the program with blank inputs a certain number of times, 
+                    //specified by the second argument in the command
+                    Console.WriteLine("step_count " + split_input[1]);
+                    int step_count = int.Parse(split_input[1]);
+                    //Create an answer by calling the ParseInput function step_count times.
+                    answer = "";
+                    for (int s = 0; s < step_count; s++)
+                    {
+                        answer += ParseInput("");
+                        answer += "\n";
+                    }
+                    Console.WriteLine("answer " + answer);
+                    //Just return this answer by itself
+                    return answer;
+                }//end if
+
                 // GET_NODE_VALUES command from Unity front-end
                 if (split_input[0].Equals("GET_NODE_VALUES"))
                 {
