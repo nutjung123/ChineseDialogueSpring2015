@@ -119,7 +119,7 @@ namespace Dialogue_Data_Entry
 		{
 			string return_message = " ";
 			// Check if there is a relationship between two nodes
-			if (last.getNeighbor(first.Data) != null)
+			if (last.getNeighbor(first.Data) != null || || first.getNeighbor(last.Data) == null)
 			{
 				// Check if last has first as its neighbor
 				if (last.getRelationshipNeighbor (first.Data) != null) {
