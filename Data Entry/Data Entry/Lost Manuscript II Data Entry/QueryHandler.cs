@@ -183,7 +183,7 @@ namespace Dialogue_Data_Entry
 			return return_message;
 		}
 			
-	    private string MessageToServer(Feature feat, string speak, string noveltyInfo, string proximalInfo = "")
+	    private string MessageToServer(Feature feat, string speak, string noveltyInfo, string proximalInfo = "", bool forLog = false)
         {
             String return_message = "";
 
@@ -241,7 +241,6 @@ namespace Dialogue_Data_Entry
 					if (old.getRelationshipNeighbor(newOld.Data) == prevOfCurr.getRelationshipNeighbor(current.Data))
 					{
 						countNode = 1;
-						Console.WriteLine("Preparing Analogy for " + current.Data);
 						return_message += RelationshipAnalogy (old, newOld, prevOfCurr, current);
 						break;
 
@@ -259,7 +258,10 @@ namespace Dialogue_Data_Entry
 
             String to_speak = return_message + speak;
 
-            return_message += " ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + to_speak + ":Novelty:" + noveltyInfo + ":Proximal:" + proximalInfo;
+            if (forLog)
+                return_message += " ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + to_speak + "\r\n";
+            else
+                return_message += " ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + to_speak + ":Novelty:" + noveltyInfo + ":Proximal:" + proximalInfo;
 
             return return_message;
         }
@@ -302,7 +304,10 @@ namespace Dialogue_Data_Entry
         }
 
         //Form2 calls this function
-        public string ParseInput(string input, bool messageToServer = false)
+        //input is the input to be parsed.
+        //messageToServer indicates whether or not we are preparing a response to the front-end.
+        //forLog indicates whether or not we are preparing a response for a log output.
+        public string ParseInput(string input, bool messageToServer = false, bool forLog = false)
         {
             string answer = IDK;
             string noveltyInfo = "";
@@ -358,7 +363,8 @@ namespace Dialogue_Data_Entry
                     answer = "";
                     for (int s = 0; s < step_count; s++)
                     {
-                        answer += ParseInput("");
+                        //Get forServer and forLog responses.
+                        answer += ParseInput("", true, true);
                         answer += "\n";
                     }
                     Console.WriteLine("answer " + answer);
@@ -530,9 +536,13 @@ namespace Dialogue_Data_Entry
                 if (messageToServer)
                 {
                     //Return message to Unity front-end with both novel and proximal nodes
-                    return MessageToServer(this.topic, answer, noveltyInfo, speaker.getProximal(this.topic, noveltyAmount));
+                    return MessageToServer(this.topic, answer, noveltyInfo, speaker.getProximal(this.topic, noveltyAmount), forLog);
                 }
-                return answer + " <Novelty Info: " + noveltyInfo + " > <Proximal Info: " + speaker.getProximal(this.topic, noveltyAmount) + ">";
+
+                if (forLog)
+                    return answer;
+                else
+                    return answer + " <Novelty Info: " + noveltyInfo + " > <Proximal Info: " + speaker.getProximal(this.topic, noveltyAmount) + ">";
             }
         }
 
