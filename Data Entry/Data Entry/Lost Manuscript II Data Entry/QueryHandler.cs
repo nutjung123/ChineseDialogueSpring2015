@@ -118,24 +118,24 @@ namespace Dialogue_Data_Entry
 		private string LeadingTopic(Feature last, Feature first)
 		{
 			string return_message = " ";
-			// Check if last has first as its neighbor
+			// Check if there is a relationship between two nodes
 			if (last.getNeighbor(first.Data) != null)
 			{
-				// There is a relationship between two nodes
-				if (last.getRelationshipNeighbor(first.Data) != null)
-				{
+				// Check if last has first as its neighbor
+				if (last.getRelationshipNeighbor (first.Data) != null) {
 					return_message = last.Data + last.getRelationshipNeighbor(first.Data) + first.Data;
 				}
-				// Else
-				else if (last.getRelationshipNeighbor(first.Data) == null)
+				// If last is a child node of first (first is a parent of last)
+				else if (last.getRelationshipParent (first.Data) != null)
 				{
-					//return_message = ;
+					return_message = last.Data + last.getRelationshipParent(first.Data) + first.Data;
 				}
-
 			}
-			// Not a neighbor
+				
+			// Neither neighbor or parent/child
 			// NEED TO consider novelty value (low)
-			else if (last.getNeighbor(first.Data) == null && noveltyValue >= 0.6)
+			else if (last.getNeighbor(first.Data) == null || first.getNeighbor(last.Data) == null
+						&& noveltyValue >= 0.6)
 			{
 				return_message = "Now let's talk about " + first.Data + ". ";
 			}
@@ -155,26 +155,8 @@ namespace Dialogue_Data_Entry
 			// Senten Patterns list - for 3 nodes
 			// NEED TO implement 4 nodes relationship
 			List<string> sentencePatterns = new List<string>();
-			/*sentencePatterns.Add(" Just as [" + old.Data + ", " + relationship + ", " + newOld.Data
-				+ "], so too [" + current.Data + ", " + relationship + ", " + newOld.Data + "]. ");
-			sentencePatterns.Add("[" + current.Data + ", " + relationship + ", " + newOld.Data
-				+ "] much like [" + newOld.Data + "] and [" + newOld.Data + "]. ");
-			sentencePatterns.Add("Like [" + old.Data + ", " + relationship + ", " + newOld.Data + "]"
-				+ "[" +current.Data + "] also " + "[" + relationship + current.Data + "]. ");
-			sentencePatterns.Add("In the way that [" + old.Data + ", " + relationship + ", " + newOld.Data
-				+ "], " + "[" + current.Data + ", " + relationship + ", " + newOld.Data + "]. ");
-			sentencePatterns.Add("Remember how " + "[" + old.Data + ", " + relationship + ", " + newOld.Data
-				+ "]?" + "Well, in the same way, " + "[" +current.Data + "] also " + "[" + relationship + current.Data + "]. ");
-			sentencePatterns.Add("[" +current.Data + "] also " + "[" + relationship + current.Data + "]" +
-				"similar to how [" + old.Data + ", " + relationship + ", " + newOld.Data + "]. ");*/
 
 			Random rnd = new Random();
-
-			/*if (old.getRelationshipNeighbor(newOld.Data) == current.getRelationshipNeighbor(newOld.Data) &&
-				old.getRelationshipNeighbor(newOld.Data) != "")
-			{
-				return_message += sentencePatterns[r];
-			}*/
 
 			if (old.getRelationshipNeighbor(newOld.Data) == prevOfCurr.getRelationshipNeighbor(current.Data) &&
 				old.getRelationshipNeighbor(newOld.Data) != "" && prevOfCurr.getRelationshipNeighbor(current.Data) != "")
