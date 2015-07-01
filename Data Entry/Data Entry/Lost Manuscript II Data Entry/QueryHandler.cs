@@ -123,12 +123,14 @@ namespace Dialogue_Data_Entry
 			{
 				// Check if last has first as its neighbor
 				if (last.getRelationshipNeighbor (first.Data) != null) {
-					return_message = last.Data + last.getRelationshipNeighbor(first.Data) + first.Data;
+					return_message = "{" + last.Data + " " + last.getRelationshipNeighbor(first.Data) + " " 
+						+ first.Data + " .} ";
 				}
 				// If last is a child node of first (first is a parent of last)
 				else if (last.getRelationshipParent (first.Data) != null)
 				{
-					return_message = last.Data + last.getRelationshipParent(first.Data) + first.Data;
+					return_message = "{" + last.Data + " " + last.getRelationshipParent(first.Data) + " " 
+						+ first.Data + " .} ";
 				}
 			}
 				
@@ -137,7 +139,7 @@ namespace Dialogue_Data_Entry
 			else if (last.getNeighbor(first.Data) == null || first.getNeighbor(last.Data) == null
 						&& noveltyValue >= 0.6)
 			{
-				return_message = "Now let's talk about " + first.Data + ". ";
+				return_message = "{Now let's talk about " + first.Data + ".} ";
 			}
 
 			return return_message;
