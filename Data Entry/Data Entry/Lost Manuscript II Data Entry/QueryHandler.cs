@@ -200,7 +200,7 @@ namespace Dialogue_Data_Entry
 		        prevCurr.RemoveLast();
 	        }
             //Store the last history_size number of nodes
-            int history_size = 1000;
+            int history_size = 100;
             if (MetList.Count > history_size)
 			{
 				MetList.RemoveFirst();
@@ -272,7 +272,8 @@ namespace Dialogue_Data_Entry
 
 						}
 						// Only display rare
-						if (count_relationship <= 5)
+                        // Not necessary at the moment to check for rareness of analogy
+						if (count_relationship <= 1000)
 						{
 							return_message += RelationshipAnalogy (old, newOld, prevOfCurr, current);
 						}
