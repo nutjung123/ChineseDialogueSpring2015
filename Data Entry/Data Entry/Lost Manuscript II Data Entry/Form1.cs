@@ -34,7 +34,8 @@ namespace Dialogue_Data_Entry
         private List<TemporalConstraint> temporalConstraintList;
         //Change this to change which file is loaded at program startup
         //private string defaultFilename = @"\2008_Summer_Olympic_Games.xml";
-        private string defaultFilename = @"\2008_Summer_Olympic_Games_4th_simple_tag.xml";
+        //private string defaultFilename = @"\2008_Summer_Olympic_Games_4th_simple_tag.xml";
+        private string defaultFilename = @"\2008_Summer_Olympic_Games_4th_tag10.xml";
         private string constraintFilename = @"\constraint.txt";
 
         public Form1()

@@ -148,8 +148,10 @@ namespace Dialogue_Data_Entry
 			string return_message = "";
 			Console.WriteLine("old: " + old.Data);
 			Console.WriteLine("new: " + newOld.Data);
+            Console.WriteLine("relationship: " + old.getRelationshipNeighbor(newOld.Data));
 			Console.WriteLine("previous of current: " + prevOfCurr.Data);
 			Console.WriteLine("current: " + current.Data);
+            Console.WriteLine("relationship: " + prevOfCurr.getRelationshipNeighbor(current.Data));
 
 
 			// Senten Patterns list - for 3 nodes
@@ -158,7 +160,7 @@ namespace Dialogue_Data_Entry
 
 			Random rnd = new Random();
 
-			if (old.getRelationshipNeighbor(newOld.Data) == prevOfCurr.getRelationshipNeighbor(current.Data) &&
+			if (old.getRelationshipNeighbor(newOld.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data)) &&
 				old.getRelationshipNeighbor(newOld.Data) != "" && prevOfCurr.getRelationshipNeighbor(current.Data) != "")
 			{
 				string relationship = old.getRelationshipNeighbor(newOld.Data);
@@ -195,7 +197,9 @@ namespace Dialogue_Data_Entry
             {
 		        prevCurr.RemoveLast();
 	        }
-			if (MetList.Count > 20)
+            //Store the last history_size number of nodes
+            int history_size = 1000;
+            if (MetList.Count > history_size)
 			{
 				MetList.RemoveFirst();
 			}
@@ -229,6 +233,12 @@ namespace Dialogue_Data_Entry
 				}
 
 				//while (old.getRelationshipNeighbor(newOld.Data) != prevOfCurr.getRelationshipNeighbor(current.Data))
+                //DEBUG
+                if (prevOfCurr.getNeighbor(current.Data) != null)
+                {
+                    Console.WriteLine(prevOfCurr.Data + " is neighbors with " + current.Data + ", relationship " + prevOfCurr.getRelationshipNeighbor(current.Data));
+                }//end if
+
                 for (int countNode = 0; countNode < MetList.Count - 1; countNode++ )
                 {
                     old = MetList.ElementAt(countNode);
@@ -240,7 +250,10 @@ namespace Dialogue_Data_Entry
                         //countNode = 1;
                         //break;
                     }
-                    if (old.getRelationshipNeighbor(newOld.Data) == prevOfCurr.getRelationshipNeighbor(current.Data))
+                    //If the relationships match and neither relationship is the empty relationship,
+                    //form an analogy.
+                    if (old.getRelationshipNeighbor(newOld.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data))
+                        && old.getRelationshipNeighbor(newOld.Data) != "" && prevOfCurr.getRelationshipNeighbor(current.Data) != "")
                     {
                         //countNode = 1;
                         
