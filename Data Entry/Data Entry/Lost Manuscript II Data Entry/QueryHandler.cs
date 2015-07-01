@@ -119,7 +119,7 @@ namespace Dialogue_Data_Entry
 		{
 			string return_message = " ";
 			// Check if there is a relationship between two nodes
-			if (last.getNeighbor(first.Data) != null || || first.getNeighbor(last.Data) == null)
+			if (last.getNeighbor(first.Data) != null || first.getNeighbor(last.Data) == null)
 			{
 				// Check if last has first as its neighbor
 				if (last.getRelationshipNeighbor (first.Data) != null) {
@@ -146,10 +146,10 @@ namespace Dialogue_Data_Entry
 		private string RelationshipAnalogy(Feature old, Feature newOld, Feature prevOfCurr,Feature current)
 		{
 			string return_message = "";
-			Console.WriteLine(old.Data);
-			Console.WriteLine(newOld.Data);
-			Console.WriteLine(prevOfCurr.Data);
-			Console.WriteLine(current.Data);
+			Console.WriteLine("old: " + old.Data);
+			Console.WriteLine("new: " + newOld.Data);
+			Console.WriteLine("previous of current: " + prevOfCurr.Data);
+			Console.WriteLine("current: " + current.Data);
 
 
 			// Senten Patterns list - for 3 nodes
@@ -207,10 +207,10 @@ namespace Dialogue_Data_Entry
 			// Metaphor - 3 nodes
 			Feature old = MetList.First();
             Feature newOld = null;
-			int countNode = 1;
+			//int countNode = 1;
 			if (MetList.Count () >= 2)
 			{
-				newOld = MetList.ElementAt(countNode);
+				newOld = MetList.ElementAt(1);
 			}
 			Feature current = MetList.Last();
 			// 4th node
@@ -228,23 +228,24 @@ namespace Dialogue_Data_Entry
 
 				}
 
-				while (old.getRelationshipNeighbor(newOld.Data) != prevOfCurr.getRelationshipNeighbor(current.Data))
+				//while (old.getRelationshipNeighbor(newOld.Data) != prevOfCurr.getRelationshipNeighbor(current.Data))
+                for (int countNode = 0; countNode < MetList.Count - 1; countNode++ )
                 {
-                    old = newOld;
+                    old = MetList.ElementAt(countNode);
                     newOld = MetList.ElementAt(countNode + 1);
-                    countNode += 1;
-					if (old.Data == current.Data && newOld.Data == prevOfCurr.Data)
-					{
-						countNode = 1;
-						break;
-					}
-					if (old.getRelationshipNeighbor(newOld.Data) == prevOfCurr.getRelationshipNeighbor(current.Data))
-					{
-						countNode = 1;
-						return_message += RelationshipAnalogy (old, newOld, prevOfCurr, current);
-						break;
-
-					}
+                    //countNode += 1;
+                    if (old.Data.Equals(prevOfCurr.Data) && newOld.Data.Equals(current.Data))
+                    {
+                        continue;
+                        //countNode = 1;
+                        //break;
+                    }
+                    if (old.getRelationshipNeighbor(newOld.Data) == prevOfCurr.getRelationshipNeighbor(current.Data))
+                    {
+                        //countNode = 1;
+                        return_message += RelationshipAnalogy(old, newOld, prevOfCurr, current);
+                        break;
+                    }//end if
                 }
             }
 
@@ -314,15 +315,15 @@ namespace Dialogue_Data_Entry
             double currentTopicNovelty = -1;
             // Pre-processing
 
-            Console.WriteLine("parse input " + input);
+            //Console.WriteLine("parse input " + input);
 
             //The input may be delimited by colons. Try to split it.
             String[] split_input = input.Trim().Split(':');
-            Console.WriteLine("split input " + split_input[0]);
+            //Console.WriteLine("split input " + split_input[0]);
 
             // Lowercase for comparisons
             input = input.Trim().ToLower();
-            Console.WriteLine("trimmed lowered input " + input);
+            //Console.WriteLine("trimmed lowered input " + input);
 
             if (!string.IsNullOrEmpty(input))
             {
@@ -357,7 +358,7 @@ namespace Dialogue_Data_Entry
                 {
                     //Step through the program with blank inputs a certain number of times, 
                     //specified by the second argument in the command
-                    Console.WriteLine("step_count " + split_input[1]);
+                    //Console.WriteLine("step_count " + split_input[1]);
                     int step_count = int.Parse(split_input[1]);
                     //Create an answer by calling the ParseInput function step_count times.
                     answer = "";
@@ -367,7 +368,7 @@ namespace Dialogue_Data_Entry
                         answer += ParseInput("", true, true);
                         answer += "\n";
                     }
-                    Console.WriteLine("answer " + answer);
+                    //Console.WriteLine("answer " + answer);
                     //Just return this answer by itself
                     return answer;
                 }//end if
