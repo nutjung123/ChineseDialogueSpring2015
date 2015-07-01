@@ -243,8 +243,25 @@ namespace Dialogue_Data_Entry
                     if (old.getRelationshipNeighbor(newOld.Data) == prevOfCurr.getRelationshipNeighbor(current.Data))
                     {
                         //countNode = 1;
-                        return_message += RelationshipAnalogy(old, newOld, prevOfCurr, current);
-                        break;
+                        
+                        // Count relationship in the list (<=20 nodes)
+			int count_relationship = 0;
+			int cc = 0;
+			while (cc <= MetList.Count())
+			{
+				if (old.getRelationshipNeighbor (newOld.Data) == prevOfCurr.getRelationshipNeighbor (current.Data))
+				{
+					count_relationship += 1;
+				}
+				cc += 1;
+
+			}
+			// Only display rare
+			if (count_relationship <= 5)
+			{
+				return_message += RelationshipAnalogy (old, newOld, prevOfCurr, current);
+			}
+			break;
                     }//end if
                 }
             }
