@@ -36,8 +36,8 @@ namespace Dialogue_Data_Entry
             weight_array = new double[Constant.WeightArraySize];
             weight_array[Constant.DiscussAmountWeightIndex] = -3.0;
             weight_array[Constant.NoveltyWeightIndex] = -1.0;
-            weight_array[Constant.SpatialWeightIndex] = 1.0;
-            weight_array[Constant.HierarchyWeightIndex] = 1.0;
+            weight_array[Constant.SpatialWeightIndex] = 5.0;
+            weight_array[Constant.HierarchyWeightIndex] = 5.0;
             weight_array[Constant.TemporalWeightIndex] = 0.2;
         }
 

@@ -117,30 +117,51 @@ namespace Dialogue_Data_Entry
 
 		private string LeadingTopic(Feature last, Feature first)
 		{
-			string return_message = " ";
+			string return_message = "";
+
+            //First is the current node (the one that has just been traversed to)
+            //A set of possible lead-in statements.
+            List<string> lead_in_statements = new List<string>();
+            lead_in_statements.Add("{There's also " + first.Data + ".} ");
+            lead_in_statements.Add("{But let's talk about " + first.Data + ".} ");
+            lead_in_statements.Add("{And have I mentioned " + first.Data + "?} ");
+            lead_in_statements.Add("{Now, about " + first.Data + ".} ");
+            lead_in_statements.Add("{Now, let's talk about " + first.Data + ".} ");
+            lead_in_statements.Add("{I should touch on " + first.Data + ".} ");
+            lead_in_statements.Add("{Have you heard of " + first.Data + "?} ");
+
+            Random rand = new Random();
+
 			// Check if there is a relationship between two nodes
-			if (last.getNeighbor(first.Data) != null || first.getNeighbor(last.Data) == null)
+			if (last.getNeighbor(first.Data) != null || first.getNeighbor(last.Data) != null)
 			{
 				// Check if last has first as its neighbor
-				if (last.getRelationshipNeighbor (first.Data) != null) {
+				if (!last.getRelationshipNeighbor (first.Data).Equals("")) {
 					return_message = "{" + last.Data + " " + last.getRelationshipNeighbor(first.Data) + " " 
 						+ first.Data + " .} ";
 				}
 				// If last is a child node of first (first is a parent of last)
-				else if (last.getRelationshipParent (first.Data) != null)
+				else if (!last.getRelationshipParent (first.Data).Equals(""))
 				{
 					return_message = "{" + last.Data + " " + last.getRelationshipParent(first.Data) + " " 
 						+ first.Data + " .} ";
 				}
 			}
-				
 			// Neither neighbor or parent/child
 			// NEED TO consider novelty value (low)
-			else if (last.getNeighbor(first.Data) == null || first.getNeighbor(last.Data) == null
-						&& noveltyValue >= 0.6)
+			else if (last.getNeighbor(first.Data) == null || first.getNeighbor(last.Data) == null)
 			{
-				return_message = "{Now let's talk about " + first.Data + ".} ";
-			}
+                //If the novelty is high enough, always include a lead-in statement.
+                if (noveltyValue >= 0.6)
+                    return_message += lead_in_statements[rand.Next(lead_in_statements.Count)];
+                //If there is no mention of the node's name in the node's speak value, always place a
+                //lead-in statement.
+                else if (!FindSpeak(first).Contains<string>(first.Data))
+                {
+                    return_message += lead_in_statements[rand.Next(lead_in_statements.Count)];
+                }//end if
+
+			}//
 
 			return return_message;
 		}
@@ -283,7 +304,7 @@ namespace Dialogue_Data_Entry
             }
 
 			// Leading-topic sentence
-			if (prevCurr.Count > 1 && countFocusNode == 5)
+			if (prevCurr.Count > 1)// && countFocusNode == 1)
 			{
 				return_message = LeadingTopic (last, first);
                 countFocusNode = 0; // Set back to 0
@@ -293,9 +314,9 @@ namespace Dialogue_Data_Entry
             String to_speak = return_message + speak;
 
             if (forLog)
-                return_message += " ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + to_speak + "\r\n";
+                return_message = to_speak + "\r\n";
             else
-                return_message += " ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + to_speak + ":Novelty:" + noveltyInfo + ":Proximal:" + proximalInfo;
+                return_message = " ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + to_speak + ":Novelty:" + noveltyInfo + ":Proximal:" + proximalInfo;
 
             return return_message;
         }
