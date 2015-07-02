@@ -375,7 +375,89 @@ namespace Dialogue_Data_Entry
             double score = 0;
             int currentIndex = featGraph.getFeatureIndex(current.Data);
 
-            //ZEV TODO: Replace these with adjustable weight variables
+            //set of Weight (W == Weight)
+            //Get the weights from the graph.
+            double[] weight_array = featGraph.getWeightArray();
+            double discussAmountW = weight_array[Constant.DiscussAmountWeightIndex];
+            double noveltyW = weight_array[Constant.NoveltyWeightIndex];
+            double spatialConstraintW = weight_array[Constant.SpatialWeightIndex];
+            double hierachyConstraintW = weight_array[Constant.HierarchyWeightIndex];
+            double temporalConstraintW = weight_array[Constant.TemporalWeightIndex];
+
+            // novelty
+
+            double noveltyValue = calculateNovelty(current, oldTopic);
+
+            //getting novelty information
+            if (currentNovelty != null)
+            {
+                currentNovelty[currentIndex] = noveltyValue;
+            }
+
+            //spatial Constraint
+            double spatialConstraintValue = 0.0;
+            if (spatialConstraint(current, oldTopic))
+            {
+                spatialConstraintValue = 1.0;
+            }
+            //hierachy Constraint
+            double hierachyConstraintValue = 0.0;
+            if (hierachyConstraint(current, oldTopic))
+            {
+                hierachyConstraintValue = 1.0;
+            }
+
+            //Temporal Constraint
+            double temporalConstraintValue = temporalConstraint(current, this.currentTurn, this.topicHistory).Count();
+
+            //check mentionCount
+            float DiscussedAmount = current.DiscussedAmount;
+
+            score += (DiscussedAmount * discussAmountW);
+            score += (Math.Abs(expectedDramaticV[currentTurn % expectedDramaticV.Count()] - noveltyValue) * noveltyW);
+            score += spatialConstraintValue * spatialConstraintW;
+            score += (hierachyConstraintValue * hierachyConstraintW);
+            score += (temporalConstraintValue * temporalConstraintW);
+
+            if (printCalculation)
+            {
+                Console.WriteLine("Have been addressed before: " + DiscussedAmount);
+                Console.WriteLine("Spatial Constraint Satisfied: " + spatialConstraintValue);
+                Console.WriteLine("Hierachy Constraint Satisfied: " + hierachyConstraintValue);
+                Console.WriteLine("Temporal Constraint Satisfied: " + temporalConstraintValue);
+                Console.WriteLine("Temporal Calculation: " + temporalConstraintValue * temporalConstraintW);
+                string scoreFormula = "";
+                scoreFormula += "score = Have Been Addressed * " + discussAmountW + " + abs(expectedDramaticV[" + currentTurn + "] - dramaticValue)*" + noveltyW;
+                scoreFormula += " + spatialConstraint*" + spatialConstraintW;
+                scoreFormula += " + hierachyConstraint*" + hierachyConstraintW;
+                scoreFormula += " + temporalConstraint*" + temporalConstraintW;
+                scoreFormula += " = " + score;
+                System.Console.WriteLine(scoreFormula);
+            }
+
+            //Store score components, and score, in return array.
+            //Indices are as follows:
+            //0 = score
+            //1 = novelty
+            //2 = discussed amount
+            //3 = expected dramatic value
+            //4 = spatial constraint value
+            //5 = hierarchy constraint value
+            double[] return_array = new double[Constant.ScoreArraySize];
+
+            //NOTE: Weights are NOT included.
+            return_array[Constant.ScoreArrayScoreIndex] = score;
+            return_array[Constant.ScoreArrayNoveltyIndex] = noveltyValue;
+            return_array[Constant.ScoreArrayDiscussedAmountIndex] = DiscussedAmount;
+            return_array[Constant.ScoreArrayExpectedDramaticIndex] = expectedDramaticV[currentTurn % expectedDramaticV.Count()];
+            return_array[Constant.ScoreArraySpatialIndex] = spatialConstraintValue;
+            return_array[Constant.ScoreArrayHierarchyIndex] = hierachyConstraintValue;
+
+            return return_array;
+
+            /*double score = 0;
+            int currentIndex = featGraph.getFeatureIndex(current.Data);
+
             //Get the weights from the graph.
             double[] weight_array = featGraph.getWeightArray();
             double discussAmountW = weight_array[0];
@@ -446,7 +528,7 @@ namespace Dialogue_Data_Entry
             return_array[Constant.ScoreArraySpatialIndex] = spatialConstraintValue;
             return_array[Constant.ScoreArrayHierarchyIndex] = hierachyConstraintValue;
 
-            return return_array;
+            return return_array;*/
         }//End method calculateScoreComponents
 
         //BFS to travel the whole graph

@@ -130,6 +130,23 @@ namespace Dialogue_Data_Entry
             lead_in_statements.Add("{I should touch on " + first.Data + ".} ");
             lead_in_statements.Add("{Have you heard of " + first.Data + "?} ");
 
+            //A set of lead-in statements for non-novel nodes
+            List<string> non_novel_lead_in_statements = new List<string>();
+            non_novel_lead_in_statements.Add("{There's also " + first.Data + ".} ");
+            non_novel_lead_in_statements.Add("{And then there's " + first.Data + ".} ");
+            non_novel_lead_in_statements.Add("{As well, there's " + first.Data + ".} ");
+            non_novel_lead_in_statements.Add("{And there's " + first.Data + ".} ");
+            non_novel_lead_in_statements.Add("{" + first.Data + " is} ");
+
+            //A set of lead-in statements for novel nodes
+            List<string> novel_lead_in_statements = new List<string>();
+            novel_lead_in_statements.Add("{But let's talk about " + first.Data + ".} ");
+            novel_lead_in_statements.Add("{And have I mentioned " + first.Data + "?} ");
+            novel_lead_in_statements.Add("{Now, about " + first.Data + ".} ");
+            novel_lead_in_statements.Add("{Now, let's talk about " + first.Data + ".} ");
+            novel_lead_in_statements.Add("{I should touch on " + first.Data + ".} ");
+            novel_lead_in_statements.Add("{Have you heard of " + first.Data + "?} ");
+
             Random rand = new Random();
 
 			// Check if there is a relationship between two nodes
@@ -151,15 +168,16 @@ namespace Dialogue_Data_Entry
 			// NEED TO consider novelty value (low)
 			else if (last.getNeighbor(first.Data) == null || first.getNeighbor(last.Data) == null)
 			{
-                //If the novelty is high enough, always include a lead-in statement.
+                //If the novelty is high enough, always include a novel topic lead-in statement.
                 if (noveltyValue >= 0.6)
-                    return_message += lead_in_statements[rand.Next(lead_in_statements.Count)];
-                //If there is no mention of the node's name in the node's speak value, always place a
-                //lead-in statement.
-                else if (!FindSpeak(first).Contains<string>(first.Data))
+                    return_message += novel_lead_in_statements[rand.Next(novel_lead_in_statements.Count)];
+                //Otherwise, include a non-novel topic lead-in statement.
+                else
                 {
-                    return_message += lead_in_statements[rand.Next(lead_in_statements.Count)];
+                    return_message += non_novel_lead_in_statements[rand.Next(non_novel_lead_in_statements.Count)];
                 }//end if
+
+                //!FindSpeak(first).Contains<string>(first.Data)
 
 			}//
 
