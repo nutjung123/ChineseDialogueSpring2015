@@ -527,7 +527,7 @@ namespace Dialogue_Data_Entry
                 string[] newBuffer;
                 
                 // == testing forward projection
-                if (true)
+                if (false)
                 {
                     Stopwatch stopWatch = new Stopwatch();
                     stopWatch.Start();
