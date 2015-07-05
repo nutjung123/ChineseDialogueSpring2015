@@ -201,28 +201,79 @@ namespace Dialogue_Data_Entry
 
 			Random rnd = new Random();
 
-			if (old.getRelationshipNeighbor(newOld.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data)) &&
-				old.getRelationshipNeighbor(newOld.Data) != "" && prevOfCurr.getRelationshipNeighbor(current.Data) != "")
-			{
-				string relationship = old.getRelationshipNeighbor(newOld.Data);
-				// 4 nodes
-				sentencePatterns.Add(" Just as [" + old.Data + ", " + relationship + ", " + newOld.Data
-					+ "], so too [" + prevOfCurr.Data + ", " + relationship + ", " + current.Data + "]. ");
-				sentencePatterns.Add("[" + prevOfCurr.Data + ", " + relationship + ", " + current.Data
-					+ "] much like [" + old.Data + "] and [" + newOld.Data + "]. ");
-				sentencePatterns.Add("Like [" + old.Data + ", " + relationship + ", " + newOld.Data + "]"
-					+ "[" + prevOfCurr.Data + "] also " + "[" + relationship + current.Data + "]. ");
-				sentencePatterns.Add("In the way that [" + old.Data + ", " + relationship + ", " + newOld.Data
-					+ "], " + "[" + prevOfCurr.Data + ", " + relationship + ", " + current.Data + "]. ");
-				sentencePatterns.Add("Remember how " + "[" + old.Data + ", " + relationship + ", " + newOld.Data
-					+ "]?" + "Well, in the same way, " + "[" + prevOfCurr.Data + "] also " + "[" + relationship + current.Data + "]. ");
-				sentencePatterns.Add("[" + prevOfCurr.Data + "] also " + "[" + relationship + current.Data + "]" +
-					"similar to how [" + old.Data + ", " + relationship + ", " + newOld.Data + "]. ");
+            //Define A1, B1, A2, B2, and R.
+            //  Node A1 has relationship R with node B1.
+            //  Node A2 has relaitonship R with node B2.
+            string a1 = "";
+            string b1 = "";
+            string a2 = "";
+            string b2 = "";
+            string r = "";
 
-				int r = rnd.Next(sentencePatterns.Count);
+            /*(old.getRelationshipNeighbor(newOld.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data))
+                            || newOld.getRelationshipNeighbor(old.Data).Equals(current.getRelationshipNeighbor(prevOfCurr.Data))
+                            || newOld.getRelationshipNeighbor(old.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data))
+                            || old.getRelationshipNeighbor(newOld.Data).Equals(current.getRelationshipNeighbor(prevOfCurr.Data))*/
 
-				return_message += sentencePatterns[r];
-			}
+            if (old.getRelationshipNeighbor(newOld.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data)))
+            {
+                a1 = old.Data;
+                b1 = newOld.Data;
+                a2 = prevOfCurr.Data;
+                b2 = current.Data;
+                r = old.getRelationshipNeighbor(newOld.Data);
+            }//end if
+            else if (newOld.getRelationshipNeighbor(old.Data).Equals(current.getRelationshipNeighbor(prevOfCurr.Data)))
+            {
+                a1 = newOld.Data;
+                b1 = old.Data;
+                a2 = current.Data;
+                b2 = prevOfCurr.Data;
+                r = newOld.getRelationshipNeighbor(old.Data);
+            }//end else if
+            else if (newOld.getRelationshipNeighbor(old.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data)))
+            {
+                a1 = newOld.Data;
+                b1 = old.Data;
+                a2 = prevOfCurr.Data;
+                b2 = current.Data;
+                r = newOld.getRelationshipNeighbor(old.Data);
+            }//end else if
+            else if (old.getRelationshipNeighbor(newOld.Data).Equals(current.getRelationshipNeighbor(prevOfCurr.Data)))
+            {
+                a1 = old.Data;
+                b1 = newOld.Data;
+                a2 = current.Data;
+                b2 = prevOfCurr.Data;
+                r = old.getRelationshipNeighbor(newOld.Data);
+            }//end else if
+
+			//if (old.getRelationshipNeighbor(newOld.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data)) &&
+			//	old.getRelationshipNeighbor(newOld.Data) != "" && prevOfCurr.getRelationshipNeighbor(current.Data) != "")
+			//{
+			string relationship = old.getRelationshipNeighbor(newOld.Data);
+			// 4 nodes
+            sentencePatterns.Add("[Just as " + a1 + " " + r + " " + b1
+                + ", so too " + a2 + " " + r + " " + b2 + ".] ");
+            sentencePatterns.Add("[" + a2 + " " + r + " " + b2
+                + ", much like " + a1 + " and " + b1 + ".] ");
+            sentencePatterns.Add("[Like " + a1 + " " + r + " " + b1 + ", "
+                + a2 + " also " + r + " " + b2 + ".] ");
+            sentencePatterns.Add("[The same way that " + a1 + " " + r + " " + b1
+                + ", " + a2 + " " + r + " " + b2 + ".] ");
+            sentencePatterns.Add("[Remember how " + a1 + " " + r + " " + b1
+                + "? Well, in the same way, "+ a2 + " also " + r + " " + b2 + ".] ");
+            sentencePatterns.Add("[" + a2 + " also " + r + " " + b2
+                + ", similar to how " + a1 + " " + r + " " + b1 + ".] ");
+
+			int random_int = rnd.Next(sentencePatterns.Count);
+
+            return_message += sentencePatterns[random_int];
+			//}
+
+            //DEBUG
+            Console.WriteLine("return_message: " + return_message);
+
 			return return_message;
 		}
 			
@@ -265,6 +316,7 @@ namespace Dialogue_Data_Entry
             if (MetList.Count() >= 2)
                 prevOfCurr = MetList.ElementAt(MetList.Count - 2);
 
+            bool analogy_made = false;
             if (MetList.Count() >= 4)
             {
 				// Analogy
@@ -293,7 +345,11 @@ namespace Dialogue_Data_Entry
                     }
                     //If the relationships match and neither relationship is the empty relationship,
                     //form an analogy.
-                    if (old.getRelationshipNeighbor(newOld.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data))
+                    //NOTE: Checking relationships in BOTH directions
+                    if ((old.getRelationshipNeighbor(newOld.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data))
+                            || newOld.getRelationshipNeighbor(old.Data).Equals(current.getRelationshipNeighbor(prevOfCurr.Data))
+                            || newOld.getRelationshipNeighbor(old.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data))
+                            || old.getRelationshipNeighbor(newOld.Data).Equals(current.getRelationshipNeighbor(prevOfCurr.Data)))
                         && old.getRelationshipNeighbor(newOld.Data) != "" && prevOfCurr.getRelationshipNeighbor(current.Data) != "")
                     {
                         //countNode = 1;
@@ -315,14 +371,16 @@ namespace Dialogue_Data_Entry
 						if (count_relationship <= 1000)
 						{
 							return_message += RelationshipAnalogy (old, newOld, prevOfCurr, current);
+                            analogy_made = true;
 						}
 						break;
                     }//end if
                 }
             }
 
-			// Leading-topic sentence
-			if (prevCurr.Count > 1)// && countFocusNode == 1)
+			// Leading-topic sentence.
+            // Only place a leading topic sentence if there isn't already an analogy here.
+            if (prevCurr.Count > 1 && !analogy_made)// && countFocusNode == 1)
 			{
 				return_message = LeadingTopic (last, first);
                 countFocusNode = 0; // Set back to 0
