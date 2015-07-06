@@ -14,10 +14,10 @@ namespace Dialogue_Data_Entry
         private int currentTurn=1;
         private int heightLimit = 999;
         private string[] spatialKey = new string[8] { "east", "north", "northeast", "northwest", "south", "southeast", "southwest", "west" };
-        private string[] hierarchyKey = new string[27] { "is", "was a member of", "are", "won a gold medal in", "is a kind of", "is a member of"
+        private string[] hierarchyKey = new string[28] { "is", "was a member of", "are", "won a gold medal in", "is a kind of", "is a member of"
             , "is southwest of", "won", "is one of", "include", "was", "took place on", "was one of the", "is southeast of", "took place at"
             , "was one of", "is a", "includes", "included", "is northeast of", "has", "is north of", "is in", "is west of"
-            , "is east of", "is south of", "is northwest of" };
+            , "is east of", "is south of", "is northwest of", "" };
         private string previousSpatial = "";
         private List<string> topicHistory;
         private const string SPATIAL = "spatial";
@@ -29,8 +29,27 @@ namespace Dialogue_Data_Entry
         private string[] Directional_Words = {"north", "east", "west", "south",
                                       "northeast", "northwest", "southeast", "southwest"};
 
+        //FILTERING:
+        //A list of nodes to filter out of mention.
+        //Nodes in this list won't be spoken explicitly unless they
+        //are directly queried for.
+        //These nodes are still included in traversals, but upon traveling to
+        //one of these nodes the next step in the traversal is automatically taken.
+        public List<string> filter_nodes = new List<string>();
+
         public FeatureSpeaker(FeatureGraph featG,List<TemporalConstraint> myTemporalConstraintList)
         {
+            //FILTERING:
+            //Build list of filter nodes.
+            //Each filter node is identified by its Data values in the XML
+            filter_nodes.Add("Male");
+            filter_nodes.Add("Female");
+            filter_nodes.Add("Cities");
+            filter_nodes.Add("Sports");
+            filter_nodes.Add("Gold Medallists");
+            filter_nodes.Add("Venues");
+            filter_nodes.Add("Time");
+
             //define dramaticFunction manually here
             this.temporalConstraintList = new List<TemporalConstraint>();
             for (int x = 0; x < myTemporalConstraintList.Count(); x++)
@@ -44,6 +63,17 @@ namespace Dialogue_Data_Entry
 
         public FeatureSpeaker(FeatureGraph featG, List<TemporalConstraint> myTemporalConstraintList,string prevSpatial,List<string> topicH)
         {
+            //FILTERING:
+            //Build list of filter nodes.
+            //Each filter node is identified by its Data values in the XML
+            filter_nodes.Add("Male");
+            filter_nodes.Add("Female");
+            filter_nodes.Add("Cities");
+            filter_nodes.Add("Sports");
+            filter_nodes.Add("Gold Medallists");
+            filter_nodes.Add("Venues");
+            filter_nodes.Add("Time");
+
             this.temporalConstraintList = new List<TemporalConstraint>();
             for (int x = 0; x < myTemporalConstraintList.Count();x++ )
             {
@@ -354,7 +384,11 @@ namespace Dialogue_Data_Entry
             score += (hierachyConstraintValue * hierachyConstraintW);
             score += (temporalConstraintValue * temporalConstraintW);
 
+            //if (hierachyConstraintValue > 0)
+            //  Console.WriteLine("hierarchy constraint for " + current.Data + " from " + oldTopic.Data + ": " + hierachyConstraintValue);
+
             if (printCalculation)
+            //if (true)
             {
                 Console.WriteLine("Have been addressed before: " + DiscussedAmount);
                 Console.WriteLine("Spatial Constraint Satisfied: " + spatialConstraintValue);
@@ -664,13 +698,25 @@ namespace Dialogue_Data_Entry
                 {
                     if (listScore[x].Item2 > maxScore)
                     {
+                        //FILTERING:
+                        //If the item in this list is one of the filter nodes,
+                        //do not include it in max score determination.
+                        //Check for filter nodes.
+                        if (filter_nodes.Contains(listScore[x].Item1.Data))
+                        {
+                            //If it is a filter node, take another step.
+                            Console.WriteLine("Filtering out " + listScore[x].Item1.Data);
+                            continue;
+                        }//end if
+
                         maxScore = listScore[x].Item2;
                         maxIndex = x;
                     }
                 }
 
                 currentTopicNovelty = currentNovelty[featGraph.getFeatureIndex(listScore[maxIndex].Item1.Data)];
-                if (printCalculation)
+                //if (printCalculation)
+                if (true)
                 {
                     System.Console.WriteLine("\n\nMax score: " + maxScore);
                     System.Console.WriteLine("Novelty: "+ currentTopicNovelty);

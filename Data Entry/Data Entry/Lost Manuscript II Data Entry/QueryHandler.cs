@@ -94,6 +94,14 @@ namespace Dialogue_Data_Entry
         //words which may be interchangeable when used to find analogies.
         public List<List<string>> equivalent_relationships = new List<List<string>>();
 
+        //FILTERING:
+        //A list of nodes to filter out of mention.
+        //Nodes in this list won't be spoken explicitly unless they
+        //are directly queried for.
+        //These nodes are still included in traversals, but upon traveling to
+        //one of these nodes the next step in the traversal is automatically taken.
+        public List<string> filter_nodes = new List<string>();
+
         /// <summary>
         /// Create a converter for the specified XML file
         /// </summary>
@@ -137,6 +145,16 @@ namespace Dialogue_Data_Entry
             //is west of, is east of, is south of, is northwest of
             equivalent_relationships.Add(new List<string>() { "is southwest of", "is southeast of"
                 , "is northeast of", "is north of", "is west of", "is east of", "is south of", "is northwest of" });
+
+            //Build list of filter nodes.
+            //Each filter node is identified by its Data values in the XML
+            filter_nodes.Add("Male");
+            filter_nodes.Add("Female");
+            filter_nodes.Add("Cities");
+            filter_nodes.Add("Sports");
+            filter_nodes.Add("Gold Medallists");
+            filter_nodes.Add("Venues");
+            filter_nodes.Add("Time");
         }
 
 		private string LeadingTopic(Feature last, Feature first)
@@ -177,12 +195,15 @@ namespace Dialogue_Data_Entry
 			if (last.getNeighbor(first.Data) != null || first.getNeighbor(last.Data) != null)
 			{
 				// Check if last has first as its neighbor
-				if (!last.getRelationshipNeighbor (first.Data).Equals("")) {
+				if (!last.getRelationshipNeighbor (first.Data).Equals("")
+                    && !(last.getRelationshipNeighbor (first.Data) == null))
+                {
 					return_message = "{" + last.Data + " " + last.getRelationshipNeighbor(first.Data) + " " 
 						+ first.Data + " .} ";
 				}
 				// If last is a child node of first (first is a parent of last)
-				else if (!last.getRelationshipParent (first.Data).Equals(""))
+				else if (!last.getRelationshipParent (first.Data).Equals("")
+                            && !(last.getRelationshipParent(first.Data) == null))
 				{
 					return_message = "{" + last.Data + " " + last.getRelationshipParent(first.Data) + " " 
 						+ first.Data + " .} ";
@@ -271,6 +292,13 @@ namespace Dialogue_Data_Entry
                 b2 = prevOfCurr.Data;
                 r = old.getRelationshipNeighbor(newOld.Data);
             }//end else if
+
+            //If there is a blank relationship, no analogy may be made.
+            if (r.Equals(""))
+                return "";
+            //if a1 equals a2 and b1 equals b2, no analogy may be made.
+            if (a1.Equals(a2) && b1.Equals(b2))
+                return "";
 
 			//if (old.getRelationshipNeighbor(newOld.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data)) &&
 			//	old.getRelationshipNeighbor(newOld.Data) != "" && prevOfCurr.getRelationshipNeighbor(current.Data) != "")
@@ -405,18 +433,27 @@ namespace Dialogue_Data_Entry
                         // Not necessary at the moment to check for rareness of analogy
 						if (count_relationship <= 1000)
 						{
+                            int return_message_length = return_message.Length;
 							return_message += RelationshipAnalogy (old, newOld, prevOfCurr, current);
-                            analogy_made = true;
+                            //If any addition has been made to the return message, then an
+                            //analogy has been successfully made.
+                            if (return_message.Length > return_message_length)
+                                analogy_made = true;
+                            //Otherwise, keep trying to find an analogy
+                            else
+                                continue;
 						}
 						break;
                     }//end if
                 }
             }
 
+            Console.WriteLine("analogy made " + analogy_made);
 			// Leading-topic sentence.
             // Only place a leading topic sentence if there isn't already an analogy here.
-            if (prevCurr.Count > 1 && !analogy_made && !CheckAlreadyMentioned(current))// && countFocusNode == 1)
+            if (prevCurr.Count > 1 && !analogy_made) // && !CheckAlreadyMentioned(current))// && countFocusNode == 1)
 			{
+                Console.WriteLine("creating leading topic for " + last.Data + " to " + first.Data);
 				return_message = LeadingTopic (last, first);
                 countFocusNode = 0; // Set back to 0
 			}
@@ -644,6 +681,17 @@ namespace Dialogue_Data_Entry
                 
                 // Can't guarantee it'll actually move on to anything...
                 nextTopic = speaker.getNextTopic(nextTopic, "", this.turn);
+
+                /*
+                //Check for filter nodes.
+                if (filter_nodes.Contains(nextTopic.Data))
+                {
+                    //If it is a filter node, take another step.
+                    Console.WriteLine("Filtering out " + nextTopic.Data);
+                    ParseInput("", false, false);
+                }//end if
+                */
+                
                 noveltyInfo = speaker.getNovelty(nextTopic, this.turn, noveltyAmount);
                 currentTopicNovelty = speaker.getCurrentTopicNovelty();
 				noveltyValue = speaker.getCurrentTopicNovelty();
