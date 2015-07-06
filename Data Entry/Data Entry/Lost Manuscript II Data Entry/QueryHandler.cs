@@ -307,7 +307,9 @@ namespace Dialogue_Data_Entry
 			List<string> speaks = feat.Speaks;
 			string data = feat.Data;
 
-			return speaks.Contains (data);
+            //Console.WriteLine(feat.Data + " mentioned in " + speaks[0] + " : " + speaks[0].Contains (data));
+
+			return speaks[0].Contains (data);
 		}
 			
 	    private string MessageToServer(Feature feat, string speak, string noveltyInfo, string proximalInfo = "", bool forLog = false)
@@ -413,7 +415,7 @@ namespace Dialogue_Data_Entry
 
 			// Leading-topic sentence.
             // Only place a leading topic sentence if there isn't already an analogy here.
-            if (prevCurr.Count > 1 && !analogy_made)// && countFocusNode == 1)
+            if (prevCurr.Count > 1 && !analogy_made && !CheckAlreadyMentioned(current))// && countFocusNode == 1)
 			{
 				return_message = LeadingTopic (last, first);
                 countFocusNode = 0; // Set back to 0
