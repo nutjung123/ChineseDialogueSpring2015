@@ -90,6 +90,10 @@ namespace Dialogue_Data_Entry
 		public int countFocusNode = 0;
 		public double noveltyValue = 0.0;
 
+        //A list of string lists, each of which represents a set of relationship
+        //words which may be interchangeable when used to find analogies.
+        public List<List<string>> equivalent_relationships = new List<List<string>>();
+
         /// <summary>
         /// Create a converter for the specified XML file
         /// </summary>
@@ -113,6 +117,26 @@ namespace Dialogue_Data_Entry
 
             this.turn = 1;
             this.topic = null;
+
+            //Build lists of equivalent relationships
+            //is, are, was, is a kind of, is a
+            equivalent_relationships.Add(new List<string>() { "is", "are", "was", "is a kind of", "is a" });
+            //was a member of, is a member of
+            equivalent_relationships.Add(new List<string>() { "was a member of", "is a member of" });
+            //won a gold medal in, won
+            equivalent_relationships.Add(new List<string>() { "won a gold medal in", "won" });
+            //is one of, was one of the, was one of
+            equivalent_relationships.Add(new List<string>() { "is one of", "was one of the", "was one of" });
+            //include, includes, included, has
+            equivalent_relationships.Add(new List<string>() { "include", "includes", "included", "has" });
+            //took place on
+            equivalent_relationships.Add(new List<string>() { "took place on" });
+            //took place at
+            equivalent_relationships.Add(new List<string>() { "took place at" });
+            //is southwest of, is southeast of, is northeast of, is north of,
+            //is west of, is east of, is south of, is northwest of
+            equivalent_relationships.Add(new List<string>() { "is southwest of", "is southeast of"
+                , "is northeast of", "is north of", "is west of", "is east of", "is south of", "is northwest of" });
         }
 
 		private string LeadingTopic(Feature last, Feature first)
