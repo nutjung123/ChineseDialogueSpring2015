@@ -276,6 +276,15 @@ namespace Dialogue_Data_Entry
 
 			return return_message;
 		}
+
+		// Check to see if the name of the node is already mentioned in the speaks
+		public bool CheckAlreadyMentioned(Feature feat)
+		{
+			List<string> speaks = feat.Speaks;
+			string data = feat.Data;
+
+			return speaks.Contains (data);
+		}
 			
 	    private string MessageToServer(Feature feat, string speak, string noveltyInfo, string proximalInfo = "", bool forLog = false)
         {
