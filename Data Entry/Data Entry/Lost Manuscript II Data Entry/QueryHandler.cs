@@ -199,7 +199,7 @@ namespace Dialogue_Data_Entry
                     && !(last.getRelationshipNeighbor (first.Data) == null))
                 {
 					return_message = "{" + last.Data + " " + last.getRelationshipNeighbor(first.Data) + " " 
-						+ first.Data + " .} ";
+						+ first.Data + ".} ";
                     return return_message;
 				}//end if
 				// If last is a child node of first (first is a parent of last)
@@ -207,7 +207,7 @@ namespace Dialogue_Data_Entry
                             && !(last.getRelationshipParent(first.Data) == null))
 				{
 					return_message = "{" + last.Data + " " + last.getRelationshipParent(first.Data) + " " 
-						+ first.Data + " .} ";
+						+ first.Data + ".} ";
                     return return_message;
 				}//end else if
 			}//end if
