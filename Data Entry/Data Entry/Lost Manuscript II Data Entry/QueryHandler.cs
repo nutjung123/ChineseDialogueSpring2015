@@ -200,31 +200,31 @@ namespace Dialogue_Data_Entry
                 {
 					return_message = "{" + last.Data + " " + last.getRelationshipNeighbor(first.Data) + " " 
 						+ first.Data + " .} ";
-				}
+                    return return_message;
+				}//end if
 				// If last is a child node of first (first is a parent of last)
 				else if (!last.getRelationshipParent (first.Data).Equals("")
                             && !(last.getRelationshipParent(first.Data) == null))
 				{
 					return_message = "{" + last.Data + " " + last.getRelationshipParent(first.Data) + " " 
 						+ first.Data + " .} ";
-				}
-			}
+                    return return_message;
+				}//end else if
+			}//end if
 			// Neither neighbor or parent/child
 			// NEED TO consider novelty value (low)
-			else if (last.getNeighbor(first.Data) == null || first.getNeighbor(last.Data) == null)
-			{
-                //If the novelty is high enough, always include a novel topic lead-in statement.
-                if (noveltyValue >= 0.6)
-                    return_message += novel_lead_in_statements[rand.Next(novel_lead_in_statements.Count)];
-                //Otherwise, include a non-novel topic lead-in statement.
-                else
-                {
-                    return_message += non_novel_lead_in_statements[rand.Next(non_novel_lead_in_statements.Count)];
-                }//end if
+			//else if (last.getNeighbor(first.Data) == null || first.getNeighbor(last.Data) == null)
 
-                //!FindSpeak(first).Contains<string>(first.Data)
+            //If the novelty is high enough, always include a novel topic lead-in statement.
+            if (noveltyValue >= 0.6)
+                return_message += novel_lead_in_statements[rand.Next(novel_lead_in_statements.Count)];
+            //Otherwise, include a non-novel topic lead-in statement.
+            else
+            {
+                return_message += non_novel_lead_in_statements[rand.Next(non_novel_lead_in_statements.Count)];
+            }//end if
 
-			}//
+            //!FindSpeak(first).Contains<string>(first.Data)
 
 			return return_message;
 		}
@@ -465,6 +465,8 @@ namespace Dialogue_Data_Entry
                 return_message = to_speak + "\r\n";
             else
                 return_message = " ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + to_speak + ":Novelty:" + noveltyInfo + ":Proximal:" + proximalInfo;
+
+            //Console.WriteLine("to_speak: " + to_speak);
 
             return return_message;
         }
