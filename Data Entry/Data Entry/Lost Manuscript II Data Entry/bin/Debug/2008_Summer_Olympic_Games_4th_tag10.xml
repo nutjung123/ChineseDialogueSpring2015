@@ -1,5 +1,5 @@
 <AIMind>
-<Root id="106"/>
+<Root id="11"/>
 <Feature id="0" data="2008 Summer Olympic Games">
 <neighbor dest="96" weight="0" relationship="has"/>
 <neighbor dest="93" weight="0" relationship="has"/>
