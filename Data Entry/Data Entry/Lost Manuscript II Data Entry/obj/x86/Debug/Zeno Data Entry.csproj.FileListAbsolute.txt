@@ -117,3 +117,4 @@ C:\Users\Zev\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entry\Lo
 C:\Users\Zev\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Dialogue_Data_Entry.Searcher.resources
 C:\Users\Zev\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Dialogue_Data_Entry.TreeFrom.resources
 C:\Users\Zev\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Zeno Data Entry.csproj.GenerateResource.Cache
+C:\Users\zevsm_000\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Zeno Data Entry.csprojResolveAssemblyReference.cache
