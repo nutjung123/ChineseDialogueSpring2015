@@ -264,8 +264,10 @@ namespace Dialogue_Data_Entry
                             || old.getRelationshipNeighbor(newOld.Data).Equals(current.getRelationshipNeighbor(prevOfCurr.Data))*/
 
 			//Check equivalent and similarity
+			bool found = false;
 			foreach (List<string> list in equivalent_relationships)
 			{
+				if (found == true) break;
 				if ((list.Contains(old.getRelationshipNeighbor(newOld.Data)) && list.Contains(prevOfCurr.getRelationshipNeighbor(current.Data)))
 					|| old.getRelationshipNeighbor(newOld.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data)))
 				{
@@ -275,6 +277,7 @@ namespace Dialogue_Data_Entry
 					b2 = current.Data;
 					r1 = old.getRelationshipNeighbor(newOld.Data);
 					r2 = prevOfCurr.getRelationshipNeighbor(current.Data);
+					found = true;
 				}
 				else if ((list.Contains(newOld.getRelationshipNeighbor(old.Data)) && list.Contains(current.getRelationshipNeighbor(prevOfCurr.Data)))
 					|| newOld.getRelationshipNeighbor(old.Data).Equals(current.getRelationshipNeighbor(prevOfCurr.Data)))
@@ -285,6 +288,7 @@ namespace Dialogue_Data_Entry
 					b2 = prevOfCurr.Data;
 					r1 = newOld.getRelationshipNeighbor(old.Data);
 					r2 = current.getRelationshipNeighbor(prevOfCurr.Data);
+					found = true;
 				}
 				else if ((list.Contains(newOld.getRelationshipNeighbor(old.Data)) && list.Contains(prevOfCurr.getRelationshipNeighbor(current.Data)))
 					|| newOld.getRelationshipNeighbor(old.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data)))
@@ -295,6 +299,7 @@ namespace Dialogue_Data_Entry
 					b2 = current.Data;
 					r1 = newOld.getRelationshipNeighbor(old.Data);
 					r2 = prevOfCurr.getRelationshipNeighbor(current.Data);
+					found = true;
 				}
 				else if ((list.Contains(old.getRelationshipNeighbor(newOld.Data)) && list.Contains(current.getRelationshipNeighbor(prevOfCurr.Data)))
 					|| old.getRelationshipNeighbor(newOld.Data).Equals(current.getRelationshipNeighbor(prevOfCurr.Data)))
@@ -305,6 +310,7 @@ namespace Dialogue_Data_Entry
 					b2 = prevOfCurr.Data;
 					r1 = old.getRelationshipNeighbor(newOld.Data);
 					r2 = current.getRelationshipNeighbor (prevOfCurr.Data);
+					found = true;
 				}
 			}
 
