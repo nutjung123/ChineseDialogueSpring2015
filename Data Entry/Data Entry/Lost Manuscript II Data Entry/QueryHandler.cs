@@ -246,27 +246,77 @@ namespace Dialogue_Data_Entry
 
 			Random rnd = new Random();
 
-            //Define A1, B1, A2, B2, and R.
-            //  Node A1 has relationship R with node B1.
-            //  Node A2 has relaitonship R with node B2.
+            //Define A1, B1, A2, B2, R1,and R2.
+            //  Node A1 has relationship R1 with node B1.
+            //  Node A2 has relaitonship R2 with node B2.
+			//  AND R1 and R2 are in the same list inside equivalent_relationship list.
             string a1 = "";
             string b1 = "";
             string a2 = "";
             string b2 = "";
-            string r = "";
+            string r1 = "";
+			string r2 = "";
+
 
             /*(old.getRelationshipNeighbor(newOld.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data))
                             || newOld.getRelationshipNeighbor(old.Data).Equals(current.getRelationshipNeighbor(prevOfCurr.Data))
                             || newOld.getRelationshipNeighbor(old.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data))
                             || old.getRelationshipNeighbor(newOld.Data).Equals(current.getRelationshipNeighbor(prevOfCurr.Data))*/
 
-            if (old.getRelationshipNeighbor(newOld.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data)))
+			//Check equivalent and similarity
+			foreach (List<string> list in equivalent_relationships)
+			{
+				if ((list.Contains(old.getRelationshipNeighbor(newOld.Data)) && list.Contains(prevOfCurr.getRelationshipNeighbor(current.Data)))
+					|| old.getRelationshipNeighbor(newOld.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data)))
+				{
+					a1 = old.Data;
+					b1 = newOld.Data;
+					a2 = prevOfCurr.Data;
+					b2 = current.Data;
+					r1 = old.getRelationshipNeighbor(newOld.Data);
+					r2 = prevOfCurr.getRelationshipNeighbor(current.Data);
+				}
+				else if ((list.Contains(newOld.getRelationshipNeighbor(old.Data)) && list.Contains(current.getRelationshipNeighbor(prevOfCurr.Data)))
+					|| newOld.getRelationshipNeighbor(old.Data).Equals(current.getRelationshipNeighbor(prevOfCurr.Data)))
+				{
+					a1 = newOld.Data;
+					b1 = old.Data;
+					a2 = current.Data;
+					b2 = prevOfCurr.Data;
+					r1 = newOld.getRelationshipNeighbor(old.Data);
+					r2 = current.getRelationshipNeighbor(prevOfCurr.Data);
+				}
+				else if ((list.Contains(newOld.getRelationshipNeighbor(old.Data)) && list.Contains(prevOfCurr.getRelationshipNeighbor(current.Data)))
+					|| newOld.getRelationshipNeighbor(old.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data)))
+				{
+					a1 = newOld.Data;
+					b1 = old.Data;
+					a2 = prevOfCurr.Data;
+					b2 = current.Data;
+					r1 = newOld.getRelationshipNeighbor(old.Data);
+					r2 = prevOfCurr.getRelationshipNeighbor(current.Data);
+				}
+				else if ((list.Contains(old.getRelationshipNeighbor(newOld.Data)) && list.Contains(current.getRelationshipNeighbor(prevOfCurr.Data)))
+					|| old.getRelationshipNeighbor(newOld.Data).Equals(current.getRelationshipNeighbor(prevOfCurr.Data)))
+				{
+					a1 = old.Data;
+					b1 = newOld.Data;
+					a2 = current.Data;
+					b2 = prevOfCurr.Data;
+					r1 = old.getRelationshipNeighbor(newOld.Data);
+					r2 = current.getRelationshipNeighbor (prevOfCurr.Data);
+				}
+			}
+
+			/*
+            else if (old.getRelationshipNeighbor(newOld.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data)))
             {
                 a1 = old.Data;
                 b1 = newOld.Data;
                 a2 = prevOfCurr.Data;
                 b2 = current.Data;
-                r = old.getRelationshipNeighbor(newOld.Data);
+                r1 = old.getRelationshipNeighbor(newOld.Data);
+				r2 = prevOfCurr.getRelationshipNeighbor(current.Data);
             }//end if
             else if (newOld.getRelationshipNeighbor(old.Data).Equals(current.getRelationshipNeighbor(prevOfCurr.Data)))
             {
@@ -274,7 +324,8 @@ namespace Dialogue_Data_Entry
                 b1 = old.Data;
                 a2 = current.Data;
                 b2 = prevOfCurr.Data;
-                r = newOld.getRelationshipNeighbor(old.Data);
+                r1 = newOld.getRelationshipNeighbor(old.Data);
+				r2 = current.getRelationshipNeighbor(prevOfCurr.Data);
             }//end else if
             else if (newOld.getRelationshipNeighbor(old.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data)))
             {
@@ -282,7 +333,8 @@ namespace Dialogue_Data_Entry
                 b1 = old.Data;
                 a2 = prevOfCurr.Data;
                 b2 = current.Data;
-                r = newOld.getRelationshipNeighbor(old.Data);
+                r1 = newOld.getRelationshipNeighbor(old.Data);
+				r2 = prevOfCurr.getRelationshipNeighbor(current.Data);
             }//end else if
             else if (old.getRelationshipNeighbor(newOld.Data).Equals(current.getRelationshipNeighbor(prevOfCurr.Data)))
             {
@@ -290,11 +342,13 @@ namespace Dialogue_Data_Entry
                 b1 = newOld.Data;
                 a2 = current.Data;
                 b2 = prevOfCurr.Data;
-                r = old.getRelationshipNeighbor(newOld.Data);
+                r1 = old.getRelationshipNeighbor(newOld.Data);
+				r2 = current.getRelationshipNeighbor (prevOfCurr.Data);
             }//end else if
+            */
 
             //If there is a blank relationship, no analogy may be made.
-            if (r.Equals(""))
+			if (r1.Equals("") || r2.Equals(""))
                 return "";
             //if a1 equals a2 and b1 equals b2, no analogy may be made.
             if (a1.Equals(a2) && b1.Equals(b2))
@@ -303,20 +357,21 @@ namespace Dialogue_Data_Entry
 			//if (old.getRelationshipNeighbor(newOld.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data)) &&
 			//	old.getRelationshipNeighbor(newOld.Data) != "" && prevOfCurr.getRelationshipNeighbor(current.Data) != "")
 			//{
-			string relationship = old.getRelationshipNeighbor(newOld.Data);
+			//string relationship = old.getRelationshipNeighbor(newOld.Data);
+
 			// 4 nodes
-            sentencePatterns.Add("[Just as " + a1 + " " + r + " " + b1
-                + ", so too " + a2 + " " + r + " " + b2 + ".] ");
-            sentencePatterns.Add("[" + a2 + " " + r + " " + b2
-                + ", much like " + a1 + " and " + b1 + ".] ");
-            sentencePatterns.Add("[Like " + a1 + " " + r + " " + b1 + ", "
-                + a2 + " also " + r + " " + b2 + ".] ");
-            sentencePatterns.Add("[The same way that " + a1 + " " + r + " " + b1
-                + ", " + a2 + " " + r + " " + b2 + ".] ");
-            sentencePatterns.Add("[Remember how " + a1 + " " + r + " " + b1
-                + "? Well, in the same way, "+ a2 + " also " + r + " " + b2 + ".] ");
-            sentencePatterns.Add("[" + a2 + " also " + r + " " + b2
-                + ", similar to how " + a1 + " " + r + " " + b1 + ".] ");
+            sentencePatterns.Add("[Just as " + a1 + " " + r1 + " " + b1
+                + ", so too " + a2 + " " + r2 + " " + b2 + ".] ");
+            sentencePatterns.Add("[" + a2 + " " + r2 + " " + b2
+				+ ", much like " + a1 + " " + r1 + " " + b1 + ".] ");
+            sentencePatterns.Add("[Like " + a1 + " " + r1 + " " + b1 + ", "
+                + a2 + " also " + r2 + " " + b2 + ".] ");
+            sentencePatterns.Add("[The same way that " + a1 + " " + r1 + " " + b1
+                + ", " + a2 + " " + r2 + " " + b2 + ".] ");
+            sentencePatterns.Add("[Remember how " + a1 + " " + r1 + " " + b1
+                + "? Well, in the same way, "+ a2 + " also " + r2 + " " + b2 + ".] ");
+            sentencePatterns.Add("[" + a2 + " also " + r2 + " " + b2
+                + ", similar to how " + a1 + " " + r1 + " " + b1 + ".] ");
 
 			int random_int = rnd.Next(sentencePatterns.Count);
 
