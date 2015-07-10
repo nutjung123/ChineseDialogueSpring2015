@@ -162,7 +162,7 @@ namespace Dialogue_Data_Entry
 
             // Use the first source as default
             sourceStream = new NAudio.Wave.WaveIn();
-            // *** Still need to check for wave format
+            // Set wave format
             sourceStream.WaveFormat = new NAudio.Wave.WaveFormat(16000, 16, 1);
 
             NAudio.Wave.WaveInProvider waveIn = new NAudio.Wave.WaveInProvider(sourceStream);
