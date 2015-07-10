@@ -169,8 +169,12 @@ namespace Dialogue_Data_Entry
                         {
                             if (temporalConstraintList[x].ThirdArgument == topicH[y])
                             {
-                                indexList.Add(x);
-                                break; //Only need to find once instance of this topic in the history
+                                if (temporalConstraintList[x].FourthArgument == "")
+                                {
+                                    indexList.Add(x);
+                                    break; //Only need to find once instance of this topic in the history
+                                }
+                                //To Do: Adding the case of fourth and fifth arguments
                             }
                         }
                     }
