@@ -652,7 +652,7 @@
             // explanationLabel2
             // 
             this.explanationLabel2.AutoSize = true;
-            this.explanationLabel2.Location = new System.Drawing.Point(582, 145);
+            this.explanationLabel2.Location = new System.Drawing.Point(582, 211);
             this.explanationLabel2.Name = "explanationLabel2";
             this.explanationLabel2.Size = new System.Drawing.Size(419, 13);
             this.explanationLabel2.TabIndex = 19;
@@ -699,7 +699,7 @@
             "<",
             "<=",
             "=="});
-            this.secondArgumentComboBox.Location = new System.Drawing.Point(585, 239);
+            this.secondArgumentComboBox.Location = new System.Drawing.Point(585, 151);
             this.secondArgumentComboBox.Name = "secondArgumentComboBox";
             this.secondArgumentComboBox.Size = new System.Drawing.Size(154, 21);
             this.secondArgumentComboBox.TabIndex = 13;
@@ -758,7 +758,7 @@
             // 
             this.thirdArgumentLabel.AutoSize = true;
             this.thirdArgumentLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.thirdArgumentLabel.Location = new System.Drawing.Point(582, 128);
+            this.thirdArgumentLabel.Location = new System.Drawing.Point(582, 189);
             this.thirdArgumentLabel.Name = "thirdArgumentLabel";
             this.thirdArgumentLabel.Size = new System.Drawing.Size(124, 13);
             this.thirdArgumentLabel.TabIndex = 7;
@@ -768,7 +768,7 @@
             // 
             this.secondArgumentLabel.AutoSize = true;
             this.secondArgumentLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.secondArgumentLabel.Location = new System.Drawing.Point(582, 212);
+            this.secondArgumentLabel.Location = new System.Drawing.Point(582, 128);
             this.secondArgumentLabel.Name = "secondArgumentLabel";
             this.secondArgumentLabel.Size = new System.Drawing.Size(51, 13);
             this.secondArgumentLabel.TabIndex = 6;
@@ -787,7 +787,7 @@
             // thirdArgumentTextBox
             // 
             this.thirdArgumentTextBox.Enabled = false;
-            this.thirdArgumentTextBox.Location = new System.Drawing.Point(585, 176);
+            this.thirdArgumentTextBox.Location = new System.Drawing.Point(585, 237);
             this.thirdArgumentTextBox.Name = "thirdArgumentTextBox";
             this.thirdArgumentTextBox.Size = new System.Drawing.Size(223, 20);
             this.thirdArgumentTextBox.TabIndex = 4;
