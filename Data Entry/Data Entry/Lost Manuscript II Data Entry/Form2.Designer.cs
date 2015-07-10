@@ -34,6 +34,8 @@
             this.chatBox = new System.Windows.Forms.TextBox();
             this.StartServerButton = new System.Windows.Forms.Button();
             this.StopServerbutton = new System.Windows.Forms.Button();
+            this.StartSpeakingbutton = new System.Windows.Forms.Button();
+            this.StopSpeakingbutton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // inputBox
@@ -94,11 +96,33 @@
             this.StopServerbutton.UseVisualStyleBackColor = true;
             this.StopServerbutton.Click += new System.EventHandler(this.StopServerbutton_Click);
             // 
+            // StartSpeakingbutton
+            // 
+            this.StartSpeakingbutton.Location = new System.Drawing.Point(649, 277);
+            this.StartSpeakingbutton.Name = "StartSpeakingbutton";
+            this.StartSpeakingbutton.Size = new System.Drawing.Size(75, 23);
+            this.StartSpeakingbutton.TabIndex = 6;
+            this.StartSpeakingbutton.Text = "Speak";
+            this.StartSpeakingbutton.UseVisualStyleBackColor = true;
+            this.StartSpeakingbutton.Click += new System.EventHandler(this.StartSpeakingbutton_Click);
+            // 
+            // StopSpeakingbutton
+            // 
+            this.StopSpeakingbutton.Location = new System.Drawing.Point(649, 306);
+            this.StopSpeakingbutton.Name = "StopSpeakingbutton";
+            this.StopSpeakingbutton.Size = new System.Drawing.Size(75, 23);
+            this.StopSpeakingbutton.TabIndex = 7;
+            this.StopSpeakingbutton.Text = "Stop";
+            this.StopSpeakingbutton.UseVisualStyleBackColor = true;
+            this.StopSpeakingbutton.Click += new System.EventHandler(this.StopSpeakingbutton_Click);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(736, 370);
+            this.Controls.Add(this.StopSpeakingbutton);
+            this.Controls.Add(this.StartSpeakingbutton);
             this.Controls.Add(this.StopServerbutton);
             this.Controls.Add(this.StartServerButton);
             this.Controls.Add(this.chatBox);
@@ -121,5 +145,7 @@
         private System.Windows.Forms.TextBox chatBox;
         private System.Windows.Forms.Button StartServerButton;
         private System.Windows.Forms.Button StopServerbutton;
+        private System.Windows.Forms.Button StartSpeakingbutton;
+        private System.Windows.Forms.Button StopSpeakingbutton;
     }
 }

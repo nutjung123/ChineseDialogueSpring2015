@@ -150,5 +150,64 @@ namespace Dialogue_Data_Entry
             StopServerbutton_Click(sender, e);
         }
 
+        NAudio.Wave.WaveIn sourceStream = null;
+        NAudio.Wave.DirectSoundOut waveOut = null;
+        NAudio.Wave.WaveFileWriter waveWriter = null;
+
+        private void StartSpeakingbutton_Click(object sender, EventArgs e)
+        {
+            // Check if there are sources for input sound
+            int numResource = NAudio.Wave.WaveIn.DeviceCount;
+            if (numResource == 0) return;
+
+            // Use the first source as default
+            sourceStream = new NAudio.Wave.WaveIn();
+            // *** Still need to check for wave format
+            sourceStream.WaveFormat = new NAudio.Wave.WaveFormat(16000, 16, 1);
+
+            NAudio.Wave.WaveInProvider waveIn = new NAudio.Wave.WaveInProvider(sourceStream);
+
+            waveOut = new NAudio.Wave.DirectSoundOut();
+            waveOut.Init(waveIn);
+
+            sourceStream.StartRecording();
+            waveOut.Play(); // plays the audio, serve as demo, can be deleted
+
+            sourceStream.DataAvailable += new EventHandler<NAudio.Wave.WaveInEventArgs>(sourceStream_DataAvailable);
+            // Save the file temporarily in the audio folder, note that previous recording will be overwritten
+            waveWriter = new NAudio.Wave.WaveFileWriter("audio/temp.wav", sourceStream.WaveFormat);
+        }
+
+        private void sourceStream_DataAvailable(object sender, NAudio.Wave.WaveInEventArgs e)
+        {
+            if (waveWriter == null) return;
+
+            waveWriter.WriteData(e.Buffer, 0, e.BytesRecorded);
+            waveWriter.Flush();
+        }
+
+        // Stop recording
+        private void StopSpeakingbutton_Click(object sender, EventArgs e)
+        {
+            if (waveOut != null)
+            {
+                waveOut.Stop();
+                waveOut.Dispose();
+                waveOut = null;
+            }
+            if (sourceStream != null)
+            {
+                sourceStream.StopRecording();
+                sourceStream.Dispose();
+                sourceStream = null;
+            }
+            if (waveWriter != null)
+            {
+                waveWriter.Dispose();
+                waveWriter = null;
+            }
+
+            // Further implementation of Xunfei needed
+        }
     }
 }
