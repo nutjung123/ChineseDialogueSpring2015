@@ -1200,8 +1200,10 @@ namespace Dialogue_Data_Entry
             string firstArgument = firstArgumentTextBox.Text;
             string secondArgument = secondArgumentComboBox.Text;
             string thirdArgument = thirdArgumentTextBox.Text;
+            string fourthArgument = fourthArgumentComboBox.Text;
+            string fifthArgument = fifthArgumentTextBox.Text;
             temporalConstraintList.RemoveAt(showConstraintListBox.SelectedIndex);
-            temporalConstraintList.Add(new TemporalConstraint(firstArgument, secondArgument, thirdArgument,"",""));
+            temporalConstraintList.Add(new TemporalConstraint(firstArgument, secondArgument, thirdArgument,fourthArgument,fifthArgument));
             refreshShowConstraintListBox();
         }
 
@@ -1233,6 +1235,8 @@ namespace Dialogue_Data_Entry
                         file.WriteLine(temporalConstraintList[x].FirstArgument);
                         file.WriteLine(temporalConstraintList[x].SecondArgument);
                         file.WriteLine(temporalConstraintList[x].ThirdArgument);
+                        file.WriteLine(temporalConstraintList[x].FourthArgument);
+                        file.WriteLine(temporalConstraintList[x].FifthArgument);
                     }
                 }
             }
@@ -1249,6 +1253,8 @@ namespace Dialogue_Data_Entry
                         file.WriteLine(temporalConstraintList[x].FirstArgument);
                         file.WriteLine(temporalConstraintList[x].SecondArgument);
                         file.WriteLine(temporalConstraintList[x].ThirdArgument);
+                        file.WriteLine(temporalConstraintList[x].FourthArgument);
+                        file.WriteLine(temporalConstraintList[x].FifthArgument);
                     }
                 }
             }
@@ -1268,21 +1274,29 @@ namespace Dialogue_Data_Entry
             currentConstraintFileName = fileName;
             string[] lines = System.IO.File.ReadAllLines(currentConstraintFileName);
             temporalConstraintList = new List<TemporalConstraint>();
-            string firstArgument = "", secondArgument = "", thirdArgument = "";
+            string firstArgument = "", secondArgument = "", thirdArgument = "", fourthArgument ="", fifthArgument = "";
             for (int x = 0; x < lines.Count(); x++)
             {
-                if (x % 3 == 0)
+                if (x % 5 == 0)
                 {
                     firstArgument = lines[x];
                 }
-                else if (x % 3 == 1)
+                else if (x % 5 == 1)
                 {
                     secondArgument = lines[x];
                 }
-                else if (x % 3 == 2)
+                else if (x % 5 == 2)
                 {
                     thirdArgument = lines[x];
-                    temporalConstraintList.Add(new TemporalConstraint(firstArgument, secondArgument, thirdArgument,"",""));
+                }
+                else if (x % 5 == 3)
+                {
+                    fourthArgument = lines[x];
+                }
+                else if (x % 5 == 4)
+                {
+                    fifthArgument = lines[x];
+                    temporalConstraintList.Add(new TemporalConstraint(firstArgument, secondArgument, thirdArgument, fourthArgument, fifthArgument));
                 }
             }
             refreshShowConstraintListBox();
