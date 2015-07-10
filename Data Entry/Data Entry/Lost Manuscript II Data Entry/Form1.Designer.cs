@@ -71,6 +71,15 @@
             this.label8 = new System.Windows.Forms.Label();
             this.featureRemoverCheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.fifthArgumentTextBox = new System.Windows.Forms.TextBox();
+            this.quantityLabel = new System.Windows.Forms.Label();
+            this.fourthArgumentComboBox = new System.Windows.Forms.ComboBox();
+            this.symbolTwoTopicLabel = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.explanationLabel2 = new System.Windows.Forms.Label();
+            this.explanationLabel1 = new System.Windows.Forms.Label();
+            this.constraintTypeLabel = new System.Windows.Forms.Label();
+            this.saveAsForConstraintFileButton = new System.Windows.Forms.Button();
             this.secondArgumentComboBox = new System.Windows.Forms.ComboBox();
             this.saveFileForConstraintButton = new System.Windows.Forms.Button();
             this.openFileForConstraintButton = new System.Windows.Forms.Button();
@@ -113,7 +122,7 @@
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.saveAsForConstraintFileButton = new System.Windows.Forms.Button();
+            this.constriantTypeComboBox = new System.Windows.Forms.ComboBox();
             this.tabControl1.SuspendLayout();
             this.FeatureCreator.SuspendLayout();
             this.FeatureEditor.SuspendLayout();
@@ -265,7 +274,6 @@
             this.textBox7.Location = new System.Drawing.Point(645, 413);
             this.textBox7.Multiline = true;
             this.textBox7.Name = "textBox7";
-            this.textBox7.ShortcutsEnabled = true;
             this.textBox7.Size = new System.Drawing.Size(280, 127);
             this.textBox7.TabIndex = 30;
             // 
@@ -556,6 +564,15 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.constriantTypeComboBox);
+            this.tabPage1.Controls.Add(this.fifthArgumentTextBox);
+            this.tabPage1.Controls.Add(this.quantityLabel);
+            this.tabPage1.Controls.Add(this.fourthArgumentComboBox);
+            this.tabPage1.Controls.Add(this.symbolTwoTopicLabel);
+            this.tabPage1.Controls.Add(this.label11);
+            this.tabPage1.Controls.Add(this.explanationLabel2);
+            this.tabPage1.Controls.Add(this.explanationLabel1);
+            this.tabPage1.Controls.Add(this.constraintTypeLabel);
             this.tabPage1.Controls.Add(this.saveAsForConstraintFileButton);
             this.tabPage1.Controls.Add(this.secondArgumentComboBox);
             this.tabPage1.Controls.Add(this.saveFileForConstraintButton);
@@ -578,9 +595,103 @@
             this.tabPage1.Text = "Constraint Editor";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // fifthArgumentTextBox
+            // 
+            this.fifthArgumentTextBox.Enabled = false;
+            this.fifthArgumentTextBox.Location = new System.Drawing.Point(585, 392);
+            this.fifthArgumentTextBox.Name = "fifthArgumentTextBox";
+            this.fifthArgumentTextBox.Size = new System.Drawing.Size(154, 20);
+            this.fifthArgumentTextBox.TabIndex = 24;
+            // 
+            // quantityLabel
+            // 
+            this.quantityLabel.AutoSize = true;
+            this.quantityLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.quantityLabel.Location = new System.Drawing.Point(586, 367);
+            this.quantityLabel.Name = "quantityLabel";
+            this.quantityLabel.Size = new System.Drawing.Size(54, 13);
+            this.quantityLabel.TabIndex = 23;
+            this.quantityLabel.Text = "Number:";
+            // 
+            // fourthArgumentComboBox
+            // 
+            this.fourthArgumentComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.fourthArgumentComboBox.Enabled = false;
+            this.fourthArgumentComboBox.FormattingEnabled = true;
+            this.fourthArgumentComboBox.Items.AddRange(new object[] {
+            ">",
+            ">=",
+            "<",
+            "<=",
+            "=="});
+            this.fourthArgumentComboBox.Location = new System.Drawing.Point(585, 331);
+            this.fourthArgumentComboBox.Name = "fourthArgumentComboBox";
+            this.fourthArgumentComboBox.Size = new System.Drawing.Size(154, 21);
+            this.fourthArgumentComboBox.TabIndex = 22;
+            // 
+            // symbolTwoTopicLabel
+            // 
+            this.symbolTwoTopicLabel.AutoSize = true;
+            this.symbolTwoTopicLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.symbolTwoTopicLabel.Location = new System.Drawing.Point(582, 306);
+            this.symbolTwoTopicLabel.Name = "symbolTwoTopicLabel";
+            this.symbolTwoTopicLabel.Size = new System.Drawing.Size(51, 13);
+            this.symbolTwoTopicLabel.TabIndex = 21;
+            this.symbolTwoTopicLabel.Text = "Symbol:";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(582, 279);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(256, 13);
+            this.label11.TabIndex = 20;
+            this.label11.Text = "Constriant the distrance between two topics";
+            // 
+            // explanationLabel2
+            // 
+            this.explanationLabel2.AutoSize = true;
+            this.explanationLabel2.Location = new System.Drawing.Point(582, 145);
+            this.explanationLabel2.Name = "explanationLabel2";
+            this.explanationLabel2.Size = new System.Drawing.Size(419, 13);
+            this.explanationLabel2.TabIndex = 19;
+            this.explanationLabel2.Text = "(Type in the number or select the box below and select the topic from the left ha" +
+    "nd side)";
+            // 
+            // explanationLabel1
+            // 
+            this.explanationLabel1.AutoSize = true;
+            this.explanationLabel1.Location = new System.Drawing.Point(582, 40);
+            this.explanationLabel1.Name = "explanationLabel1";
+            this.explanationLabel1.Size = new System.Drawing.Size(315, 13);
+            this.explanationLabel1.TabIndex = 18;
+            this.explanationLabel1.Text = "(Select the box below and select the topic from the left hand side)";
+            // 
+            // constraintTypeLabel
+            // 
+            this.constraintTypeLabel.AutoSize = true;
+            this.constraintTypeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.constraintTypeLabel.Location = new System.Drawing.Point(582, 96);
+            this.constraintTypeLabel.Name = "constraintTypeLabel";
+            this.constraintTypeLabel.Size = new System.Drawing.Size(153, 13);
+            this.constraintTypeLabel.TabIndex = 15;
+            this.constraintTypeLabel.Text = "Constraint the topic with: ";
+            // 
+            // saveAsForConstraintFileButton
+            // 
+            this.saveAsForConstraintFileButton.Location = new System.Drawing.Point(885, 504);
+            this.saveAsForConstraintFileButton.Name = "saveAsForConstraintFileButton";
+            this.saveAsForConstraintFileButton.Size = new System.Drawing.Size(127, 30);
+            this.saveAsForConstraintFileButton.TabIndex = 14;
+            this.saveAsForConstraintFileButton.Text = "Save As File";
+            this.saveAsForConstraintFileButton.UseVisualStyleBackColor = true;
+            this.saveAsForConstraintFileButton.Click += new System.EventHandler(this.saveAsForConstraintFileButton_Click);
+            // 
             // secondArgumentComboBox
             // 
             this.secondArgumentComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.secondArgumentComboBox.Enabled = false;
             this.secondArgumentComboBox.FormattingEnabled = true;
             this.secondArgumentComboBox.Items.AddRange(new object[] {
             ">",
@@ -588,14 +699,14 @@
             "<",
             "<=",
             "=="});
-            this.secondArgumentComboBox.Location = new System.Drawing.Point(583, 86);
+            this.secondArgumentComboBox.Location = new System.Drawing.Point(585, 239);
             this.secondArgumentComboBox.Name = "secondArgumentComboBox";
             this.secondArgumentComboBox.Size = new System.Drawing.Size(154, 21);
             this.secondArgumentComboBox.TabIndex = 13;
             // 
             // saveFileForConstraintButton
             // 
-            this.saveFileForConstraintButton.Location = new System.Drawing.Point(737, 275);
+            this.saveFileForConstraintButton.Location = new System.Drawing.Point(737, 504);
             this.saveFileForConstraintButton.Name = "saveFileForConstraintButton";
             this.saveFileForConstraintButton.Size = new System.Drawing.Size(127, 30);
             this.saveFileForConstraintButton.TabIndex = 12;
@@ -605,7 +716,7 @@
             // 
             // openFileForConstraintButton
             // 
-            this.openFileForConstraintButton.Location = new System.Drawing.Point(583, 275);
+            this.openFileForConstraintButton.Location = new System.Drawing.Point(585, 504);
             this.openFileForConstraintButton.Name = "openFileForConstraintButton";
             this.openFileForConstraintButton.Size = new System.Drawing.Size(127, 30);
             this.openFileForConstraintButton.TabIndex = 11;
@@ -615,7 +726,7 @@
             // 
             // removeConstraintButton
             // 
-            this.removeConstraintButton.Location = new System.Drawing.Point(885, 207);
+            this.removeConstraintButton.Location = new System.Drawing.Point(885, 451);
             this.removeConstraintButton.Name = "removeConstraintButton";
             this.removeConstraintButton.Size = new System.Drawing.Size(127, 30);
             this.removeConstraintButton.TabIndex = 10;
@@ -625,7 +736,7 @@
             // 
             // editConstraintButton
             // 
-            this.editConstraintButton.Location = new System.Drawing.Point(737, 207);
+            this.editConstraintButton.Location = new System.Drawing.Point(737, 451);
             this.editConstraintButton.Name = "editConstraintButton";
             this.editConstraintButton.Size = new System.Drawing.Size(127, 30);
             this.editConstraintButton.TabIndex = 9;
@@ -635,7 +746,7 @@
             // 
             // addConstraintButton
             // 
-            this.addConstraintButton.Location = new System.Drawing.Point(583, 207);
+            this.addConstraintButton.Location = new System.Drawing.Point(585, 451);
             this.addConstraintButton.Name = "addConstraintButton";
             this.addConstraintButton.Size = new System.Drawing.Size(127, 30);
             this.addConstraintButton.TabIndex = 8;
@@ -646,40 +757,44 @@
             // thirdArgumentLabel
             // 
             this.thirdArgumentLabel.AutoSize = true;
-            this.thirdArgumentLabel.Location = new System.Drawing.Point(580, 137);
+            this.thirdArgumentLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.thirdArgumentLabel.Location = new System.Drawing.Point(582, 128);
             this.thirdArgumentLabel.Name = "thirdArgumentLabel";
-            this.thirdArgumentLabel.Size = new System.Drawing.Size(174, 13);
+            this.thirdArgumentLabel.Size = new System.Drawing.Size(124, 13);
             this.thirdArgumentLabel.TabIndex = 7;
-            this.thirdArgumentLabel.Text = "3rd Argument (Topic Name or Turn)";
+            this.thirdArgumentLabel.Text = "Topic Name or Turn:";
             // 
             // secondArgumentLabel
             // 
             this.secondArgumentLabel.AutoSize = true;
-            this.secondArgumentLabel.Location = new System.Drawing.Point(580, 70);
+            this.secondArgumentLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.secondArgumentLabel.Location = new System.Drawing.Point(582, 212);
             this.secondArgumentLabel.Name = "secondArgumentLabel";
-            this.secondArgumentLabel.Size = new System.Drawing.Size(114, 13);
+            this.secondArgumentLabel.Size = new System.Drawing.Size(51, 13);
             this.secondArgumentLabel.TabIndex = 6;
-            this.secondArgumentLabel.Text = "2nd Argument (symbol)";
+            this.secondArgumentLabel.Text = "Symbol:";
             // 
             // firstArgumentLabel
             // 
             this.firstArgumentLabel.AutoSize = true;
-            this.firstArgumentLabel.Location = new System.Drawing.Point(580, 18);
+            this.firstArgumentLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.firstArgumentLabel.Location = new System.Drawing.Point(582, 18);
             this.firstArgumentLabel.Name = "firstArgumentLabel";
-            this.firstArgumentLabel.Size = new System.Drawing.Size(136, 13);
+            this.firstArgumentLabel.Size = new System.Drawing.Size(150, 13);
             this.firstArgumentLabel.TabIndex = 5;
-            this.firstArgumentLabel.Text = "1st Argument (Topic Name)";
+            this.firstArgumentLabel.Text = "Constrianted topic Name:";
             // 
             // thirdArgumentTextBox
             // 
-            this.thirdArgumentTextBox.Location = new System.Drawing.Point(583, 153);
+            this.thirdArgumentTextBox.Enabled = false;
+            this.thirdArgumentTextBox.Location = new System.Drawing.Point(585, 176);
             this.thirdArgumentTextBox.Name = "thirdArgumentTextBox";
             this.thirdArgumentTextBox.Size = new System.Drawing.Size(223, 20);
             this.thirdArgumentTextBox.TabIndex = 4;
             // 
             // firstArgumentTextBox
             // 
-            this.firstArgumentTextBox.Location = new System.Drawing.Point(583, 34);
+            this.firstArgumentTextBox.Location = new System.Drawing.Point(585, 63);
             this.firstArgumentTextBox.Name = "firstArgumentTextBox";
             this.firstArgumentTextBox.Size = new System.Drawing.Size(223, 20);
             this.firstArgumentTextBox.TabIndex = 2;
@@ -938,15 +1053,18 @@
             this.panel1.Size = new System.Drawing.Size(1057, 636);
             this.panel1.TabIndex = 6;
             // 
-            // saveAsForConstraintFileButton
+            // constriantTypeComboBox
             // 
-            this.saveAsForConstraintFileButton.Location = new System.Drawing.Point(885, 275);
-            this.saveAsForConstraintFileButton.Name = "saveAsForConstraintFileButton";
-            this.saveAsForConstraintFileButton.Size = new System.Drawing.Size(127, 30);
-            this.saveAsForConstraintFileButton.TabIndex = 14;
-            this.saveAsForConstraintFileButton.Text = "Save As File";
-            this.saveAsForConstraintFileButton.UseVisualStyleBackColor = true;
-            this.saveAsForConstraintFileButton.Click += new System.EventHandler(this.saveAsForConstraintFileButton_Click);
+            this.constriantTypeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.constriantTypeComboBox.FormattingEnabled = true;
+            this.constriantTypeComboBox.Items.AddRange(new object[] {
+            "turn",
+            "topic"});
+            this.constriantTypeComboBox.Location = new System.Drawing.Point(737, 93);
+            this.constriantTypeComboBox.Name = "constriantTypeComboBox";
+            this.constriantTypeComboBox.Size = new System.Drawing.Size(127, 21);
+            this.constriantTypeComboBox.TabIndex = 25;
+            this.constriantTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.constriantTypeComboBox_SelectedIndexChanged);
             // 
             // Form1
             // 
@@ -1064,6 +1182,15 @@
         private System.Windows.Forms.Button addConstraintButton;
         private System.Windows.Forms.ComboBox secondArgumentComboBox;
         private System.Windows.Forms.Button saveAsForConstraintFileButton;
+        private System.Windows.Forms.Label explanationLabel2;
+        private System.Windows.Forms.Label explanationLabel1;
+        private System.Windows.Forms.Label constraintTypeLabel;
+        private System.Windows.Forms.TextBox fifthArgumentTextBox;
+        private System.Windows.Forms.Label quantityLabel;
+        private System.Windows.Forms.ComboBox fourthArgumentComboBox;
+        private System.Windows.Forms.Label symbolTwoTopicLabel;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.ComboBox constriantTypeComboBox;
     }
 }
 

@@ -55,7 +55,8 @@ namespace Dialogue_Data_Entry
             for (int x = 0; x < myTemporalConstraintList.Count(); x++)
             {
                 this.temporalConstraintList.Add(new TemporalConstraint(myTemporalConstraintList[x].FirstArgument,
-                    myTemporalConstraintList[x].SecondArgument, myTemporalConstraintList[x].ThirdArgument));
+                    myTemporalConstraintList[x].SecondArgument, myTemporalConstraintList[x].ThirdArgument,
+                    myTemporalConstraintList[x].FourthArgument, myTemporalConstraintList[x].FifthArgument));
             }
             this.featGraph = featG;
             expectedDramaticV = new double[20] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
@@ -78,7 +79,8 @@ namespace Dialogue_Data_Entry
             for (int x = 0; x < myTemporalConstraintList.Count();x++ )
             {
                 this.temporalConstraintList.Add(new TemporalConstraint(myTemporalConstraintList[x].FirstArgument,
-                    myTemporalConstraintList[x].SecondArgument, myTemporalConstraintList[x].ThirdArgument));
+                    myTemporalConstraintList[x].SecondArgument, myTemporalConstraintList[x].ThirdArgument,
+                    myTemporalConstraintList[x].FourthArgument,myTemporalConstraintList[x].FifthArgument));
             }
             this.featGraph = featG;
             previousSpatial = prevSpatial;
@@ -791,7 +793,8 @@ namespace Dialogue_Data_Entry
             for (int x = 0; x < temporalConstraintList.Count();x++ )
             {
                 internalTemporalConstraintList.Add(new TemporalConstraint(temporalConstraintList[x].FirstArgument,
-                    temporalConstraintList[x].SecondArgument, temporalConstraintList[x].ThirdArgument));
+                    temporalConstraintList[x].SecondArgument, temporalConstraintList[x].ThirdArgument,
+                    temporalConstraintList[x].FourthArgument, temporalConstraintList[x].FifthArgument));
             }
             printCalculation = false;
 

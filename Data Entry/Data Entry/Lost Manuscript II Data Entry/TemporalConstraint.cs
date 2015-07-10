@@ -14,13 +14,18 @@ namespace Dialogue_Data_Entry
         private string secondArgument;
         private string thirdArgument;
         private string thirdArgumentType = null;
+        private string fourthArgument;
+        private string fifthArgument;
         private bool satisfied = false;
 
-        public TemporalConstraint(string first, string second, string third)
+        public TemporalConstraint(string first, string second, string third,string fourth,string fifth)
         {
             this.firstArgument = first;
             this.secondArgument = second;
             this.thirdArgument = third;
+            this.fourthArgument = fourth;
+            this.fifthArgument = fifth;
+            getThirdArgumentType();
         }
 
         public string getThirdArgumentType()
@@ -30,11 +35,11 @@ namespace Dialogue_Data_Entry
                 try
                 {
                     int result = Convert.ToInt32(thirdArgument);
-                    thirdArgumentType = "turn";
+                    this.thirdArgumentType = "turn";
                 }
                 catch (FormatException)
                 {
-                    thirdArgumentType = "topic";
+                    this.thirdArgumentType = "topic";
                 }
             }
             return thirdArgumentType;
@@ -73,6 +78,30 @@ namespace Dialogue_Data_Entry
             set
             {
                 this.thirdArgument = value;
+            }
+        }
+
+        public string FourthArgument
+        {
+            get
+            {
+                return this.fourthArgument;
+            }
+            set
+            {
+                this.fourthArgument = value;
+            }
+        }
+
+        public string FifthArgument
+        {
+            get
+            {
+                return this.fifthArgument;
+            }
+            set
+            {
+                this.fifthArgument = value;
             }
         }
 

@@ -1062,6 +1062,17 @@ namespace Dialogue_Data_Entry
                     showConstraintListBox.Items.Add(toAdd);
                 }
             }
+            //clear all the field
+            firstArgumentTextBox.Text = "";
+            secondArgumentComboBox.SelectedIndex = -1;
+            thirdArgumentTextBox.Text = "";
+            fourthArgumentComboBox.SelectedIndex = -1;
+            fifthArgumentTextBox.Text = "";
+
+            secondArgumentComboBox.Enabled = false;
+            thirdArgumentTextBox.Enabled = false;
+            fourthArgumentComboBox.Enabled = false;
+            fifthArgumentTextBox.Enabled = false;
         }
 
         private void addConstraintButton_Click(object sender, EventArgs e)
@@ -1105,11 +1116,13 @@ namespace Dialogue_Data_Entry
             string firstArgument = firstArgumentTextBox.Text;
             string secondArgument = secondArgumentComboBox.Text;
             string thirdArgument = thirdArgumentTextBox.Text;
+            string fourthArgument = fourthArgumentComboBox.Text;
+            string fifthArgument = fifthArgumentTextBox.Text;
             if (temporalConstraintList==null)
             {
                 temporalConstraintList = new List<TemporalConstraint>();
             }
-            temporalConstraintList.Add(new TemporalConstraint(firstArgument,secondArgument,thirdArgument));
+            temporalConstraintList.Add(new TemporalConstraint(firstArgument,secondArgument,thirdArgument,fourthArgument,fifthArgument));
             refreshShowConstraintListBox();
         }
 
@@ -1118,8 +1131,27 @@ namespace Dialogue_Data_Entry
             if (showConstraintListBox.SelectedIndex != -1)
             {
                 firstArgumentTextBox.Text = temporalConstraintList[showConstraintListBox.SelectedIndex].FirstArgument;
+                constriantTypeComboBox.Text = temporalConstraintList[showConstraintListBox.SelectedIndex].getThirdArgumentType();
                 secondArgumentComboBox.Text = temporalConstraintList[showConstraintListBox.SelectedIndex].SecondArgument;
                 thirdArgumentTextBox.Text = temporalConstraintList[showConstraintListBox.SelectedIndex].ThirdArgument;
+                fourthArgumentComboBox.Text = temporalConstraintList[showConstraintListBox.SelectedIndex].FourthArgument;
+                fifthArgumentTextBox.Text = temporalConstraintList[showConstraintListBox.SelectedIndex].FifthArgument;
+
+                if (constriantTypeComboBox.Text == "turn")
+                {
+                    secondArgumentComboBox.Enabled = true;
+                    thirdArgumentTextBox.Enabled = true;
+                    fourthArgumentComboBox.Enabled = false;
+                    fifthArgumentTextBox.Enabled = false;
+                }
+                else if (constriantTypeComboBox.Text == "topic")
+                {
+                    secondArgumentComboBox.Enabled = false;
+                    thirdArgumentTextBox.Enabled = true;
+                    fourthArgumentComboBox.Enabled = true;
+                    fifthArgumentTextBox.Enabled = true;
+                }
+
             }
         }
 
@@ -1169,7 +1201,7 @@ namespace Dialogue_Data_Entry
             string secondArgument = secondArgumentComboBox.Text;
             string thirdArgument = thirdArgumentTextBox.Text;
             temporalConstraintList.RemoveAt(showConstraintListBox.SelectedIndex);
-            temporalConstraintList.Add(new TemporalConstraint(firstArgument, secondArgument, thirdArgument));
+            temporalConstraintList.Add(new TemporalConstraint(firstArgument, secondArgument, thirdArgument,"",""));
             refreshShowConstraintListBox();
         }
 
@@ -1250,7 +1282,7 @@ namespace Dialogue_Data_Entry
                 else if (x % 3 == 2)
                 {
                     thirdArgument = lines[x];
-                    temporalConstraintList.Add(new TemporalConstraint(firstArgument, secondArgument, thirdArgument));
+                    temporalConstraintList.Add(new TemporalConstraint(firstArgument, secondArgument, thirdArgument,"",""));
                 }
             }
             refreshShowConstraintListBox();
@@ -1327,6 +1359,25 @@ namespace Dialogue_Data_Entry
 				textBox7.ClearUndo();
 			}
 		}
+
+        private void constriantTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (constriantTypeComboBox.Text == "turn")  
+            {
+                secondArgumentComboBox.Enabled = true;
+                thirdArgumentTextBox.Enabled = true;
+                fourthArgumentComboBox.Enabled = false;
+                fifthArgumentTextBox.Enabled = false;
+            }
+            else if (constriantTypeComboBox.Text == "topic") 
+            {
+                secondArgumentComboBox.SelectedIndex = secondArgumentComboBox.Items.IndexOf(">");
+                secondArgumentComboBox.Enabled = false;
+                thirdArgumentTextBox.Enabled = true;
+                fourthArgumentComboBox.Enabled = true;
+                fifthArgumentTextBox.Enabled = true;
+            }
+        }
 
     }
 }
