@@ -350,7 +350,7 @@ namespace Dialogue_Data_Entry
         private static extern IntPtr MSPUploadData(string filename, byte[] UserData, uint len, string param, ref int ret);
         #endregion
 
-        #region unrevised
+        #region unrevisedCode
         public delegate void MyEventHandler(string info);
 
         /// <summary>
@@ -540,30 +540,21 @@ namespace Dialogue_Data_Entry
         /// 根据传入的音频文件名，转换成字符，用户需订阅DataReceive事件接收数据
         /// </summary>
         /// <param name="filename">音频文件名</param>
-        public static string IatModeTranslate(string filename)
+        public static string IatModeTranslate(string filename, string language)
         {
             string login_configs = "appid = 55817bb6, work_dir =   .  ";//登录参数
             string param1 = "sub=iat,auf=audio/L16;rate=16000,aue=speex-wb,ent=sms16k,rst=plain,rse=gb2312";
-            return TranslateVoiceFile(login_configs, param1, filename);
+            string param2 = "sub=iat,auf=audio/L16;rate=16000,aue=speex-wb,ent=sms-en16k,rst=plain,rse=gb2312";
+            string param3 = "sub=iat,auf=audio/L16;rate=16000,aue=speex-wb,ent=cantonese16k,rst=plain,rse=gb2312";
+            if (language == "chinese")
+                return TranslateVoiceFile(login_configs, param1, filename);
+            else if (language == "english")
+                return TranslateVoiceFile(login_configs, param2, filename);
+            else if (language == "cantonese")
+                return TranslateVoiceFile(login_configs, param3, filename);
+            else
+                return null;
         }
-
-        /*
-        public 
-        ///APPID, don't change
-        static string login_configs = "appid = 55817bb6, work_dir =   .  ";//登录参数
-        // parameter for chinese recognition
-        string param1 = "sub=iat,auf=audio/L16;rate=16000,aue=speex-wb,ent=sms16k,rst=plain,rse=gb2312";
-        // parameter for english recognition
-        string param2 = "sub=iat,auf=audio/L16;rate=16000,aue=speex-wb,ent=sms-en16k,rst=plain,rse=gb2312";
-        int ret = MSPLogin(null, null, login_configs);
-
-        public void run_iat(string filename)
-        {
-            string login_configs = "appid = 55817bb6, work_dir =   .  ";//登录参数
-            string param1 = "sub=iat,ssm=1,auf=audio/L16;rate=16000,aue=speex-wb;7,ent=sms16k,rst=plain,rse=gb2312";
-        }
-        */
-
     }
 
 }

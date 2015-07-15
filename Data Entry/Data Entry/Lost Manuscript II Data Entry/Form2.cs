@@ -154,7 +154,15 @@ namespace Dialogue_Data_Entry
         NAudio.Wave.DirectSoundOut waveOut = null;
         NAudio.Wave.WaveFileWriter waveWriter = null;
 
-        private void StartSpeakingbutton_Click(object sender, EventArgs e)
+        private void sourceStream_DataAvailable(object sender, NAudio.Wave.WaveInEventArgs e)
+        {
+            if (waveWriter == null) return;
+
+            waveWriter.WriteData(e.Buffer, 0, e.BytesRecorded);
+            waveWriter.Flush();
+        }
+
+        private void StartRecording()
         {
             // Check if there are sources for input sound
             int numResource = NAudio.Wave.WaveIn.DeviceCount;
@@ -167,8 +175,8 @@ namespace Dialogue_Data_Entry
 
             NAudio.Wave.WaveInProvider waveIn = new NAudio.Wave.WaveInProvider(sourceStream);
 
-            waveOut = new NAudio.Wave.DirectSoundOut();
-            waveOut.Init(waveIn);
+            //waveOut = new NAudio.Wave.DirectSoundOut();
+            //waveOut.Init(waveIn);
 
             sourceStream.StartRecording();
             //waveOut.Play(); // plays the audio, serve as demo, can be deleted
@@ -178,16 +186,7 @@ namespace Dialogue_Data_Entry
             waveWriter = new NAudio.Wave.WaveFileWriter("audio/temp.wav", sourceStream.WaveFormat);
         }
 
-        private void sourceStream_DataAvailable(object sender, NAudio.Wave.WaveInEventArgs e)
-        {
-            if (waveWriter == null) return;
-
-            waveWriter.WriteData(e.Buffer, 0, e.BytesRecorded);
-            waveWriter.Flush();
-        }
-
-        // Stop recording
-        private void StopSpeakingbutton_Click(object sender, EventArgs e)
+        private void StopRecording()
         {
             if (waveOut != null)
             {
@@ -206,10 +205,27 @@ namespace Dialogue_Data_Entry
                 waveWriter.Dispose();
                 waveWriter = null;
             }
+        }
 
-            // Further implementation of Xunfei needed
+        private void StartSpeakingbutton_Click(object sender, EventArgs e)
+        {
+            StartRecording();
+        }
 
-            inputBox.Text = XunfeiFunction.IatModeTranslate("audio/temp.wav");
+        private void StopSpeakingbutton_Click(object sender, EventArgs e)
+        {
+            StopRecording();
+            
+            if (EnglishRadioButton.Checked)
+            {
+                inputBox.Text = XunfeiFunction.IatModeTranslate("audio/temp.wav", "english");
+            }
+            else if (ChineseRadioButton.Checked)
+            {
+                inputBox.Text = XunfeiFunction.IatModeTranslate("audio/temp.wav", "chinese");
+            }
+            else { }
+            
         }
     }
 }
