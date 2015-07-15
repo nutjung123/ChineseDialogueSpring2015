@@ -171,7 +171,7 @@ namespace Dialogue_Data_Entry
             waveOut.Init(waveIn);
 
             sourceStream.StartRecording();
-            waveOut.Play(); // plays the audio, serve as demo, can be deleted
+            //waveOut.Play(); // plays the audio, serve as demo, can be deleted
 
             sourceStream.DataAvailable += new EventHandler<NAudio.Wave.WaveInEventArgs>(sourceStream_DataAvailable);
             // Save the file temporarily in the audio folder, note that previous recording will be overwritten
@@ -208,6 +208,8 @@ namespace Dialogue_Data_Entry
             }
 
             // Further implementation of Xunfei needed
+
+            inputBox.Text = XunfeiFunction.IatModeTranslate("audio/temp.wav");
         }
     }
 }
