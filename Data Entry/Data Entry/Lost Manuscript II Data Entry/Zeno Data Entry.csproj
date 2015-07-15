@@ -95,6 +95,7 @@
       <DependentUpon>TreeFrom.cs</DependentUpon>
     </Compile>
     <Compile Include="XMLFilerForFeatureGraph.cs" />
+    <Compile Include="Xunfei.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
