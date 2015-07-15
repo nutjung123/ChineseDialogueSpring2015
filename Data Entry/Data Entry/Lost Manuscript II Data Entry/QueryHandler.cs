@@ -175,10 +175,10 @@ namespace Dialogue_Data_Entry
             //A set of lead-in statements for non-novel nodes
             List<string> non_novel_lead_in_statements = new List<string>();
             non_novel_lead_in_statements.Add("{There's also " + first.Data + ".} ");
-            non_novel_lead_in_statements.Add("{And then there's " + first.Data + ".} ");
-            non_novel_lead_in_statements.Add("{As well, there's " + first.Data + ".} ");
-            non_novel_lead_in_statements.Add("{And there's " + first.Data + ".} ");
-            non_novel_lead_in_statements.Add("{" + first.Data + " is} ");
+            non_novel_lead_in_statements.Add("{Let's talk about " + first.Data + ", too.} ");
+            non_novel_lead_in_statements.Add("{I'll mention " + first.Data + " real quick.} ");
+            non_novel_lead_in_statements.Add("{So, about " + first.Data + ".} ");
+            non_novel_lead_in_statements.Add("{Now then, about " + first.Data + ".} ");
 
             //A set of lead-in statements for novel nodes
             List<string> novel_lead_in_statements = new List<string>();
