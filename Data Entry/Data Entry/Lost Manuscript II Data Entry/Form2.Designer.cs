@@ -36,6 +36,8 @@
             this.StopServerbutton = new System.Windows.Forms.Button();
             this.StartSpeakingbutton = new System.Windows.Forms.Button();
             this.StopSpeakingbutton = new System.Windows.Forms.Button();
+            this.EnglishRadioButton = new System.Windows.Forms.RadioButton();
+            this.ChineseRadioButton = new System.Windows.Forms.RadioButton();
             this.SuspendLayout();
             // 
             // inputBox
@@ -116,11 +118,35 @@
             this.StopSpeakingbutton.UseVisualStyleBackColor = true;
             this.StopSpeakingbutton.Click += new System.EventHandler(this.StopSpeakingbutton_Click);
             // 
+            // EnglishRadioButton
+            // 
+            this.EnglishRadioButton.AutoSize = true;
+            this.EnglishRadioButton.Checked = true;
+            this.EnglishRadioButton.Location = new System.Drawing.Point(649, 231);
+            this.EnglishRadioButton.Name = "EnglishRadioButton";
+            this.EnglishRadioButton.Size = new System.Drawing.Size(59, 17);
+            this.EnglishRadioButton.TabIndex = 8;
+            this.EnglishRadioButton.TabStop = true;
+            this.EnglishRadioButton.Text = "English";
+            this.EnglishRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // ChineseRadioButton
+            // 
+            this.ChineseRadioButton.AutoSize = true;
+            this.ChineseRadioButton.Location = new System.Drawing.Point(649, 254);
+            this.ChineseRadioButton.Name = "ChineseRadioButton";
+            this.ChineseRadioButton.Size = new System.Drawing.Size(63, 17);
+            this.ChineseRadioButton.TabIndex = 9;
+            this.ChineseRadioButton.Text = "Chinese";
+            this.ChineseRadioButton.UseVisualStyleBackColor = true;
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(736, 370);
+            this.Controls.Add(this.ChineseRadioButton);
+            this.Controls.Add(this.EnglishRadioButton);
             this.Controls.Add(this.StopSpeakingbutton);
             this.Controls.Add(this.StartSpeakingbutton);
             this.Controls.Add(this.StopServerbutton);
@@ -147,5 +173,7 @@
         private System.Windows.Forms.Button StopServerbutton;
         private System.Windows.Forms.Button StartSpeakingbutton;
         private System.Windows.Forms.Button StopSpeakingbutton;
+        private System.Windows.Forms.RadioButton EnglishRadioButton;
+        private System.Windows.Forms.RadioButton ChineseRadioButton;
     }
 }
