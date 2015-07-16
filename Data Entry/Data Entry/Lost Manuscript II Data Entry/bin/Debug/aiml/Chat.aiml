@@ -3,16 +3,66 @@
 
 <category>
 	<pattern>HI</pattern>
-	<template>Hello there!</template>
+	<template>Hi!</template>
 </category>
 <category>
 	<pattern>HI *</pattern>
 	<template><srai>HI</srai></template>
 </category>
 <category>
-	<pattern>HELLO *</pattern>
-	<template><srai>HI</srai></template>
+	<pattern>HELLO</pattern>
+	<template>Hello there!</template>
 </category>
+  <category>
+	<pattern>HELLO *</pattern>
+	<template><srai>HELLO</srai></template>
+</category>
+<category>
+  <pattern>HEY</pattern>
+  <template>Hey!</template>
+</category>
+<category>
+  <pattern>HEY *</pattern>
+  <template><srai>HEY</srai></template>
+</category>
+<category>
+  <pattern>YO</pattern>
+  <template><srai>HI</srai></template>
+</category>
+<category>
+  <pattern>YO *</pattern>
+  <template><srai>HEY</srai></template>
+</category>
+
+<category>
+  <pattern>HOW IS IT GOING</pattern>
+  <template>Great!</template>
+</category>
+<category>
+  <pattern>HOW'S IT GOING</pattern>
+  <template><srai>HOW IS IT GOING</srai></template>
+</category>
+<category>
+  <pattern>HOW DO YOU DO</pattern>
+  <template>Good!</template>
+</category>
+<category>
+  <pattern>HOW DO YOU DO *</pattern>
+  <template<srai>HOW DO YOU DO</srai></template>
+</category>
+<category>
+  <pattern>HOW ARE YOU DOING</pattern>
+  <template>Just so so.</template>
+</category>
+<category>
+  <pattern>HOW ARE *</pattern>
+  <template><srai>HOW IS IT GOING</srai></template>
+</category>
+<category>
+  <pattern>HOW IS *</pattern>
+   <template><srai>HOW DO YOU DO</srai></template>
+</category>
+  
 <category>
 	<pattern>I AM *</pattern>
 	<template><think><set name="name"><star /></set></think>
@@ -45,13 +95,34 @@
 	<template><think><set name="direction">NORTHEAST</set><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:WHAT <get name="direction"/> OF <get name="topic"/></template>
 </category>
 <category>
+  <pattern>WHAT IS SOUTHEAST OF *</pattern>
+  <template><think><set name="direction">SOUTHEAST</set><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:WHAT <get name="direction"/> OF <get name="topic"/></template>
+</category>
+<category>
+  <pattern>WHAT IS NORTHWEST OF *</pattern>
+  <template><think><set name="direction">NORTHWEST</set><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:WHAT <get name="direction"/> OF <get name="topic"/></template>
+</category>
+<category>
+  <pattern>WHAT IS SOUTHWEST OF *</pattern>
+  <template><think><set name="direction">SOUTHWEST</set><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:WHAT <get name="direction"/> OF <get name="topic"/></template>
+</category>
+<category>
 	<pattern>WHAT IS NORTH OF *</pattern>
 	<template><think><set name="direction">NORTH</set><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:WHAT <get name="direction"/> OF <get name="topic"/></template>
+</category>
+<category>
+  <pattern>WHAT IS EAST OF *</pattern>
+  <template><think><set name="direction">EAST</set><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:WHAT <get name="direction"/> OF <get name="topic"/></template>
+</category>
+<category>
+  <pattern>WHAT IS SOUTH OF *</pattern>
+  <template><think><set name="direction">SOUTH</set><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:WHAT <get name="direction"/> OF <get name="topic"/></template>
 </category>
 <category>
 	<pattern>WHAT IS WEST OF *</pattern>
 	<template><think><set name="direction">WEST</set><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:WHAT <get name="direction"/> OF <get name="topic"/></template>
 </category>
+  
 <category>
 	<pattern>WHAT IS INSIDE OF *</pattern>
 	<template><think><set name="direction">INSIDE</set><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:WHAT <get name="direction"/> OF <get name="topic"/></template>
@@ -81,28 +152,12 @@
 	<template><srai>WHAT IS INSIDE OF <star/></srai></template>
 </category>
 <category>
+  <pattern>WHAT DOES * INCLUDE</pattern>
+  <template><srai>WHAT IS INSIDE OF <star/></srai></template>
+</category>
+<category>
 	<pattern>WHAT * CONTAINS</pattern>
 	<template><srai>WHAT IS INSIDE OF <star/></srai></template>
-</category>
-<category>
-	<pattern>WHAT IS SOUTHEAST OF *</pattern>
-	<template><think><set name="direction">SOUTHEAST</set><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:WHAT <get name="direction"/> OF <get name="topic"/></template>
-</category>
-<category>
-	<pattern>WHAT IS NORTHWEST OF *</pattern>
-	<template><think><set name="direction">NORTHWEST</set><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:WHAT <get name="direction"/> OF <get name="topic"/></template>
-</category>
-<category>
-	<pattern>WHAT IS EAST OF *</pattern>
-	<template><think><set name="direction">EAST</set><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:WHAT <get name="direction"/> OF <get name="topic"/></template>
-</category>
-<category>
-	<pattern>WHAT IS SOUTH OF *</pattern>
-	<template><think><set name="direction">SOUTH</set><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:WHAT <get name="direction"/> OF <get name="topic"/></template>
-</category>
-<category>
-	<pattern>WHAT IS SOUTHWEST OF *</pattern>
-	<template><think><set name="direction">SOUTHWEST</set><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:WHAT <get name="direction"/> OF <get name="topic"/></template>
 </category>
 
 <category>
@@ -143,6 +198,18 @@
 	<template><think><set name="it"><set name="that"><set name="this"><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></set></set></set></think>FORMAT:WHERE <star/></template>
 </category>
 <category>
+  <pattern>WHERE'S *</pattern>
+  <template><srai>WHERE IS <star/></srai></template>
+</category>
+<category>
+  <pattern>WHERE CAN I FIND *</pattern>
+  <srai>WHERE IS <star/></srai>
+</category>
+<category>
+  <pattern>HOW TO GO TO *</pattern>
+  <srai>WHERE IS <star/></srai>
+</category>
+<category>
 	<pattern>WHERE IS IT</pattern>
 	<template>FORMAT:WHERE <get name="it"/></template>
 </category>
@@ -155,16 +222,8 @@
 	<template><srai>WHERE IS IT</srai></template>
 </category>
 <category>
-	<pattern>WHERE CAN I FIND *</pattern>
-	<template><srai>WHERE IS <star/></srai></template>
-</category>
-<category>
 	<pattern>WHERE'S THAT</pattern>
 	<template><srai>WHERE IS IT</srai></template>
-</category>
-<category>
-	<pattern>WHERE'S *</pattern>
-	<template><srai>WHERE IS <star/></srai></template>
 </category>
 
 <category>
@@ -244,6 +303,10 @@
 <category>
 	<pattern>WHO WON *</pattern>
 	<template><think><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:WHAT WON <star/></template>
+</category>
+<category>
+  <pattern>WHO IS THE WINNER OF *</pattern>
+  <template><srai>WHO WON <star /></srai></template>
 </category>
 <category>
 	<pattern>WHICH * WON *</pattern>
