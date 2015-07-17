@@ -786,9 +786,7 @@ namespace Dialogue_Data_Entry
                 Query query = BuildQuery(input);
                 if (query == null)
                 {
-                    answer = "I'm sorry, I'm afraid I don't understand what you are asking.";
-                    //Out-of-topic responses here?
-                    answer = answer + " But here's something I do know about. " + ParseInput("", true, true);
+                    answer = "I'm sorry, but I don't understand what you are asking.";
                 }
                 else
                 {
