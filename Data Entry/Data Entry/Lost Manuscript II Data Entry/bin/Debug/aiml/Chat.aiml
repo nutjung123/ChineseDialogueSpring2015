@@ -48,7 +48,7 @@
 </category>
 <category>
   	<pattern>HOW DO YOU DO *</pattern>
-  	<template<srai>HOW DO YOU DO</srai></template>
+  	<template><srai>HOW DO YOU DO</srai></template>
 </category>
 <category>
   	<pattern>HOW ARE YOU DOING</pattern>
@@ -122,7 +122,7 @@
 	<pattern>WHAT IS WEST OF *</pattern>
 	<template><think><set name="direction">WEST</set><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:WHAT <get name="direction"/> OF <get name="topic"/></template>
 </category>
-  
+
 <category>
 	<pattern>WHAT IS INSIDE OF *</pattern>
 	<template><think><set name="direction">INSIDE</set><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:WHAT <get name="direction"/> OF <get name="topic"/></template>
@@ -203,11 +203,11 @@
 </category>
 <category>
   	<pattern>WHERE CAN I FIND *</pattern>
-  	<srai>WHERE IS <star/></srai>
+  	<template><srai>WHERE IS <star/></srai></template>
 </category>
 <category>
   	<pattern>HOW TO GO TO *</pattern>
-  	<srai>WHERE IS <star/></srai>
+  	<template><srai>WHERE IS <star/></srai></template>
 </category>
 <category>
 	<pattern>WHERE IS IT</pattern>
