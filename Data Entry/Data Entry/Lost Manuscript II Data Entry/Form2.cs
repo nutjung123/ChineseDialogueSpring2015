@@ -105,6 +105,37 @@ namespace Dialogue_Data_Entry
                     });
                     break;
                 }
+                if (query == "Start Recording")
+                {
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        StartRecording();
+                    });
+                    //myServer.SendDataToClient("success");
+                    continue;
+                }
+                if (query == "Stop Recording")
+                {
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        StopRecording();
+                    });
+                    string translated_query = null;
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        translated_query = XunfeiFunction.IatModeTranslate("audio/temp.wav", "english");
+                    });
+                    if (translated_query != null)
+                    {
+                        myServer.SendDataToClient(translated_query);
+                    }
+                    else
+                    {
+                        myServer.SendDataToClient("stopped recording");
+                    }
+                    continue;
+                }
+
                 if (myHandler == null)
                     myHandler = new QueryHandler(featGraph, temporalConstraintList);
                 //Console.WriteLine("Query: " + query);
@@ -151,7 +182,7 @@ namespace Dialogue_Data_Entry
         }
 
         NAudio.Wave.WaveIn sourceStream = null;
-        NAudio.Wave.DirectSoundOut waveOut = null;
+        //NAudio.Wave.DirectSoundOut waveOut = null;
         NAudio.Wave.WaveFileWriter waveWriter = null;
 
         private void sourceStream_DataAvailable(object sender, NAudio.Wave.WaveInEventArgs e)
@@ -188,12 +219,14 @@ namespace Dialogue_Data_Entry
 
         private void StopRecording()
         {
+            /*
             if (waveOut != null)
             {
                 waveOut.Stop();
                 waveOut.Dispose();
                 waveOut = null;
             }
+            */
             if (sourceStream != null)
             {
                 sourceStream.StopRecording();
