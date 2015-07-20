@@ -179,15 +179,24 @@ namespace Dialogue_Data_Entry
             non_novel_lead_in_statements.Add("{I'll mention " + first.Data + " real quick.} ");
             non_novel_lead_in_statements.Add("{So, about " + first.Data + ".} ");
             non_novel_lead_in_statements.Add("{Now then, about " + first.Data + ".} ");
+            non_novel_lead_in_statements.Add("{Let's talk about " + first.Data + " for a moment.} ");
+            non_novel_lead_in_statements.Add("{Have I mentioned " + first.Data + "?} ");
+            non_novel_lead_in_statements.Add("{Now, about " + first.Data + ".} ");
+            non_novel_lead_in_statements.Add("{Now, let's talk about " + first.Data + ".} ");
+            non_novel_lead_in_statements.Add("{I should touch on " + first.Data + ".} ");
 
             //A set of lead-in statements for novel nodes
             List<string> novel_lead_in_statements = new List<string>();
+            novel_lead_in_statements.Add("{There's also " + first.Data + ".} ");
+            novel_lead_in_statements.Add("{Let's talk about " + first.Data + ".} ");
+            novel_lead_in_statements.Add("{I'll mention " + first.Data + " real quick.} ");
+            novel_lead_in_statements.Add("{So, about " + first.Data + ".} ");
+            novel_lead_in_statements.Add("{Now then, about " + first.Data + ".} ");
             novel_lead_in_statements.Add("{Let's talk about " + first.Data + " for a moment.} ");
             novel_lead_in_statements.Add("{Have I mentioned " + first.Data + "?} ");
             novel_lead_in_statements.Add("{Now, about " + first.Data + ".} ");
             novel_lead_in_statements.Add("{Now, let's talk about " + first.Data + ".} ");
             novel_lead_in_statements.Add("{I should touch on " + first.Data + ".} ");
-            novel_lead_in_statements.Add("{Have you heard of " + first.Data + "?} ");
 
             Random rand = new Random();
 
