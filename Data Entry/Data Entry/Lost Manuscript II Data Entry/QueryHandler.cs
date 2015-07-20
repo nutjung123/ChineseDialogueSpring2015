@@ -175,15 +175,15 @@ namespace Dialogue_Data_Entry
             //A set of lead-in statements for non-novel nodes
             List<string> non_novel_lead_in_statements = new List<string>();
             non_novel_lead_in_statements.Add("{There's also " + first.Data + ".} ");
-            non_novel_lead_in_statements.Add("{Let's talk about " + first.Data + ", too.} ");
+            non_novel_lead_in_statements.Add("{Let's talk about " + first.Data + ".} ");
             non_novel_lead_in_statements.Add("{I'll mention " + first.Data + " real quick.} ");
             non_novel_lead_in_statements.Add("{So, about " + first.Data + ".} ");
             non_novel_lead_in_statements.Add("{Now then, about " + first.Data + ".} ");
 
             //A set of lead-in statements for novel nodes
             List<string> novel_lead_in_statements = new List<string>();
-            novel_lead_in_statements.Add("{But let's talk about " + first.Data + ".} ");
-            novel_lead_in_statements.Add("{And have I mentioned " + first.Data + "?} ");
+            novel_lead_in_statements.Add("{Let's talk about " + first.Data + " for a moment.} ");
+            novel_lead_in_statements.Add("{Have I mentioned " + first.Data + "?} ");
             novel_lead_in_statements.Add("{Now, about " + first.Data + ".} ");
             novel_lead_in_statements.Add("{Now, let's talk about " + first.Data + ".} ");
             novel_lead_in_statements.Add("{I should touch on " + first.Data + ".} ");
@@ -401,7 +401,7 @@ namespace Dialogue_Data_Entry
 			return speaks[0].Contains (data);
 		}
 			
-	    private string MessageToServer(Feature feat, string speak, string noveltyInfo, string proximalInfo = "", bool forLog = false)
+	    private string MessageToServer(Feature feat, string speak, string noveltyInfo, string proximalInfo = "", bool forLog = false, bool out_of_topic_response = false)
         {
             String return_message = "";
 
@@ -522,6 +522,13 @@ namespace Dialogue_Data_Entry
 
             String to_speak = return_message + speak;
 
+            if (out_of_topic_response)
+            {
+                //"I'm afraid I don't know anything about ";
+                to_speak = "I'm sorry, I'm afraid I don't understand what you are asking. But here's something I do know about. "
+                    + to_speak;
+            }//end if
+
             if (forLog)
                 return_message = to_speak + "\r\n";
             else
@@ -573,7 +580,8 @@ namespace Dialogue_Data_Entry
         //input is the input to be parsed.
         //messageToServer indicates whether or not we are preparing a response to the front-end.
         //forLog indicates whether or not we are preparing a response for a log output.
-        public string ParseInput(string input, bool messageToServer = false, bool forLog = false)
+        //outOfTopic indicates whether or not we are continuing out-of-topic handling.
+        public string ParseInput(string input, bool messageToServer = false, bool forLog = false, bool outOfTopic = false)
         {
             string answer = IDK;
             string noveltyInfo = "";
@@ -713,6 +721,8 @@ namespace Dialogue_Data_Entry
                 }//end else if
             }//end else if
 
+            //Whether or not the query was out-of-topic
+            bool out_of_topic = false;
             // CASE: Nothing / Move on to next topic
             if (string.IsNullOrEmpty(input))
             {
@@ -786,8 +796,10 @@ namespace Dialogue_Data_Entry
                 Query query = BuildQuery(input);
                 if (query == null)
                 {
-                    answer = "I'm sorry, I'm afraid I don't understand what you are asking.";
-                    answer = answer + " But here's something I do know about. " + ParseInput("", false, false);
+                    return ParseInput("", messageToServer, false, true);
+                    //answer = "I'm sorry, I'm afraid I don't understand what you are asking. But here's something I do know about. ";
+                    //answer = answer + ParseInput("", false, false);
+                    //out_of_topic = true;
                 }
                 else
                 {
@@ -814,13 +826,16 @@ namespace Dialogue_Data_Entry
                 if (messageToServer)
                 {
                     //Return message to Unity front-end with both novel and proximal nodes
-                    return MessageToServer(this.topic, answer, noveltyInfo, speaker.getProximal(this.topic, noveltyAmount), forLog);
+                    return MessageToServer(this.topic, answer, noveltyInfo, speaker.getProximal(this.topic, noveltyAmount), forLog, outOfTopic);
                 }
+
+                if (outOfTopic)
+                    answer += ParseInput("", false, false);
 
                 if (forLog)
                     return answer;
                 else
-                    return answer + " <Novelty Info: " + noveltyInfo + " > <Proximal Info: " + speaker.getProximal(this.topic, noveltyAmount) + ">";
+                    return answer;// +" <Novelty Info: " + noveltyInfo + " > <Proximal Info: " + speaker.getProximal(this.topic, noveltyAmount) + ">";
             }
         }
 
