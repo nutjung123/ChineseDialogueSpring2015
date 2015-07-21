@@ -114,8 +114,10 @@ namespace Dialogue_Data_Entry
                     //myServer.SendDataToClient("success");
                     continue;
                 }
-                if (query == "Stop Recording")
+                if (query.Contains("Stop Recording:"))
                 {
+                    // parse the string, last substring as the language, assume that the input string is correct
+                    string language = query.Split(':')[1];
                     this.Invoke((MethodInvoker)delegate
                     {
                         StopRecording();
@@ -123,7 +125,7 @@ namespace Dialogue_Data_Entry
                     string translated_query = null;
                     this.Invoke((MethodInvoker)delegate
                     {
-                        translated_query = XunfeiFunction.IatModeTranslate("audio/temp.wav", "english");
+                        translated_query = XunfeiFunction.IatModeTranslate("audio/temp.wav", language);
                     });
                     if (translated_query != null)
                     {
