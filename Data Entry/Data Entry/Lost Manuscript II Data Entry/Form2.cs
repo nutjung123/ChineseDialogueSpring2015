@@ -127,6 +127,7 @@ namespace Dialogue_Data_Entry
                     {
                         translated_query = XunfeiFunction.IatModeTranslate("audio/temp.wav", language);
                     });
+                    //MessageBox.Show(translated_query);
                     if (translated_query != null)
                     {
                         myServer.SendDataToClient(translated_query);

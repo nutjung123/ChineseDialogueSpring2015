@@ -77,7 +77,7 @@ namespace Dialogue_Data_Entry
             bytes = new byte[1024];
             int bytesRec = handler.Receive(bytes);
             Console.Write(" Data: " + bytesRec + "\n");
-            data += Encoding.ASCII.GetString(bytes, 0, bytesRec);
+            data += Encoding.Unicode.GetString(bytes, 0, bytesRec);
             if (data.IndexOf("<EOF>") > -1)
             {
               // Show the data on the console.
@@ -90,7 +90,7 @@ namespace Dialogue_Data_Entry
         public void SendDataToClient(string data)
         {
             // Echo the data back to the client.
-            byte[] msg = Encoding.ASCII.GetBytes(data);
+            byte[] msg = Encoding.Unicode.GetBytes(data);
             handler.Send(msg);
         }
 
