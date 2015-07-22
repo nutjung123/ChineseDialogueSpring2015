@@ -33,6 +33,22 @@
   	<pattern>YO *</pattern>
   	<template><srai>HEY</srai></template>
 </category>
+<category>
+  <pattern>NICE TO MEET YOU</pattern>
+  <template>Nice to meet you, too!</template>
+</category>
+<category>
+  <pattern>* NICE TO MEET YOU</pattern>
+  <template><srai>NICE TO MEET YOU</srai></template>
+</category>
+<category>
+  <pattern>NICE TO MEET YOU *</pattern>
+  <template><srai>NICE TO MEET YOU</srai></template>
+</category>
+<category>
+  <pattern>HUH *</pattern>
+  <template>What do you want to learn more about?</template>
+</category>
 
 <category>
   	<pattern>HOW IS IT GOING</pattern>
@@ -165,6 +181,10 @@
 	<template><think><set name="it"><set name="that"><set name="this"><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></set></set></set></think>FORMAT:WHAT <star/></template>
 </category>
 <category>
+  <pattern>WHAT IS * ABOUT</pattern>
+  <template><srai>WHAT IS <star/></srai></template>
+</category>
+<category>
 	<pattern>WHAT * ABOUT *</pattern>
 	<template><srai>WHAT IS <star/></srai></template>
 </category>
@@ -173,8 +193,16 @@
 	<template><srai>WHAT IS <star/></srai></template>
 </category>
 <category>
+  <pattern>WHAT DOES * DO</pattern>
+  <template><srai>WHAT IS <star/></srai></template>
+</category>
+<category>
 	<pattern>WHAT IS IT</pattern>
 	<template>FORMAT:WHAT <get name="it"/></template>
+</category>
+<category>
+  <pattern>WHAT IS IT ABOUT</pattern>
+  <template>FORMAT:WHAT <get name="it"/></template>
 </category>
 <category>
 	<pattern>WHAT'S THAT</pattern>
@@ -189,10 +217,233 @@
 	<template><srai>WHAT IS IT</srai></template>
 </category>
 <category>
+  <pattern>WHAT IS THAT ABOUT</pattern>
+  <template><srai>WHAT IS IT</srai></template>
+</category>
+<category>
 	<pattern>WHAT IS THIS</pattern>
 	<template><srai>WHAT IS IT</srai></template>
 </category>
-
+<category>
+  <pattern>WHAT IS THIS ABOUT</pattern>
+  <template><srai>WHAT IS IT</srai></template>
+</category>
+<category>
+  <pattern>WHAT DOES IT DO</pattern>
+  <template><srai>WHAT IS IT</srai></template>
+</category>
+  
+<category>
+  <pattern>I AM INTERESED IN *</pattern>
+  <template><srai>WHAT IS <star/></srai></template>
+</category>
+<category>
+  <pattern>I AM INTERESTED IN WHAT IT IS</pattern>
+  <template><srai>I AM INTERESED IN <star/></srai></template>
+</category>
+<category>
+  <pattern>I AM INTERESTED IN WHAT THIS IS</pattern>
+  <template><srai>I AM INTERESTED IN WHAT IT IS</srai></template>
+</category>
+<category>
+  <pattern>I AM INTERESTED IN WHAT THAT IS</pattern>
+  <template><srai>I AM INTERESTED IN WHAT IT IS</srai></template>
+</category>
+<category>
+  <pattern>I AM INTERESTED IN WHO SHE IS</pattern>
+  <template><srai>I AM INTERESTED IN WHAT IT IS</srai></template>
+</category>
+<category>
+  <pattern>I AM INTERESTED IN WHO HE IS</pattern>
+  <template><srai>I AM INTERESTED IN WHAT IT IS</srai></template>
+</category>
+<category>
+  <pattern>I AM INTERESTED IN WHAT IT DOES</pattern>
+  <template><srai>I AM INTERESTED IN WHAT IT IS</srai></template>
+</category>
+  
+<category>
+  <pattern>CAN YOU PLEASE TELL ME ABOUT *</pattern>
+  <template><srai>WHAT IS <star/></srai></template>
+</category>
+<category>
+  <pattern>COULD YOU PLEASE TELL ME ABOUT *</pattern>
+  <template><srai>WHAT IS <star/></srai></template>
+</category>
+<category>
+  <pattern>WOULD YOU PLEASE TELL ME ABOUT *</pattern>
+  <template><srai>WHAT IS <star/></srai></template>
+</category>
+  
+<category>
+  <pattern>CAN YOU * TELL ME *</pattern>
+  <template><srai>CAN YOU PLEASE TELL ME ABOUT <star index="2"/></srai></template>
+</category>
+<category>
+  <pattern>CAN YOU * PLEASE TELL *</pattern>
+  <template><srai>CAN YOU PLEASE TELL ME ABOUT <star index="2"/></srai></template>
+</category>
+<category>
+  <pattern>COULD YOU * TELL ME *</pattern>
+  <template><srai>CAN YOU PLEASE TELL ME ABOUT <star index="2"/></srai></template>
+</category>
+<category>
+  <pattern>COULD YOU * PLEASE TELL ME *</pattern>
+  <template><srai>CAN YOU PLEASE TELL ME ABOUT <star index="2"/></srai></template>
+</category>
+<category>
+  <pattern>WOULD YOU * TELL ME *</pattern>
+  <template><srai>CAN YOU PLEASE TELL ME ABOUT <star index="2"/></srai></template>
+</category>
+<category>
+  <pattern>WOULD YOU * PLEASE TELL ME *</pattern>
+  <template><srai>CAN YOU PLEASE TELL ME ABOUT <star index="2"/></srai></template>
+</category>
+<category>
+  <pattern>CAN YOU * TELL ME WHAT * IS ABOUT</pattern>
+  <template><srai>CAN YOU PLEASE TELL ME ABOUT <star index="2"/></srai></template>
+</category>
+<category>
+  <pattern>CAN YOU * PLEASE TELL ME WHAT * IS ABOUT</pattern>
+  <template><srai>CAN YOU PLEASE TELL ME ABOUT <star index="2"/></srai></template>
+</category>
+<category>
+  <pattern>COULD YOU * TELL ME WHAT * IS ABOUT</pattern>
+  <template><srai>CAN YOU PLEASE TELL ME ABOUT <star index="2"/></srai></template>
+</category>
+<category>
+  <pattern>COULD YOU * PLEASE TELL ME WHAT * IS ABOUT</pattern>
+  <template><srai>CAN YOU PLEASE TELL ME ABOUT <star index="2"/></srai></template>
+</category>
+<category>
+  <pattern>WOULD YOU * TELL ME WHAT * IS ABOUT</pattern>
+  <template><srai>CAN YOU PLEASE TELL ME ABOUT <star index="2"/></srai></template>
+</category>
+<category>
+  <pattern>WOULD YOU * PLEASE TELL ME WHAT * IS ABOUT</pattern>
+  <template><srai>CAN YOU PLEASE TELL ME ABOUT <star index="2"/></srai></template>
+</category>
+<category>
+  <pattern>CAN YOU * TELL ME WHAT IT IS ABOUT</pattern>
+  <template><srai>WHAT IS IT</srai></template>
+</category>
+<category>
+  <pattern>CAN YOU * TELL ME WHAT THAT IS ABOUT</pattern>
+  <template><srai>WHAT IS IT</srai></template>
+</category>
+<category>
+  <pattern>CAN YOU * TELL ME WHAT THIS IS ABOUT</pattern>
+  <template><srai>WHAT IS IT</srai></template>
+</category>
+<category>
+  <pattern>CAN YOU * PLEASE TELL ME WHAT IT IS ABOUT</pattern>
+  <template><srai>WHAT IS IT</srai></template>
+</category>
+<category>
+  <pattern>CAN YOU * PLEASE TELL ME WHAT THAT IS ABOUT</pattern>
+  <template><srai>WHAT IS IT</srai></template>
+</category>
+<category>
+  <pattern>CAN YOU * PLEASE TELL ME WHAT THIS IS ABOUT</pattern>
+  <template><srai>WHAT IS IT</srai></template>
+</category>
+<category>
+  <pattern>COULD YOU * TELL ME WHAT IT IS ABOUT</pattern>
+  <template><srai>WHAT IS IT</srai></template>
+</category>
+<category>
+  <pattern>COULD YOU * TELL ME WHAT THAT IS ABOUT</pattern>
+  <template><srai>WHAT IS IT</srai></template>
+</category>
+<category>
+  <pattern>COULD YOU * TELL ME WHAT THIS IS ABOUT</pattern>
+  <template><srai>WHAT IS IT</srai></template>
+</category>
+<category>
+  <pattern>COULD YOU * PLEASE TELL ME WHAT IT IS ABOUT</pattern>
+  <template><srai>WHAT IS IT</srai></template>
+</category>
+<category>
+  <pattern>COULD YOU * PLEASE TELL ME WHAT THAT IS ABOUT</pattern>
+  <template><srai>WHAT IS IT</srai></template>
+</category>
+<category>
+  <pattern>COULD YOU * PLEASE TELL ME WHAT THIS IS ABOUT</pattern>
+  <template><srai>WHAT IS IT</srai></template>
+</category>
+<category>
+  <pattern>WOULD YOU * TELL ME WHAT IT IS ABOUT</pattern>
+  <template><srai>WHAT IS IT</srai></template>
+</category>
+<category>
+  <pattern>WOULD YOU * TELL ME WHAT THAT IS ABOUT</pattern>
+  <template><srai>WHAT IS IT</srai></template>
+</category>
+<category>
+  <pattern>WOULD YOU * TELL ME WHAT THIS IS ABOUT</pattern>
+  <template><srai>WHAT IS IT</srai></template>
+</category>
+<category>
+  <pattern>WOULD YOU * PLEASE TELL ME WHAT IT IS ABOUT</pattern>
+  <template><srai>WHAT IS IT</srai></template>
+</category>
+<category>
+  <pattern>WOULD YOU * PLEASE TELL ME WHAT THAT IS ABOUT</pattern>
+  <template><srai>WHAT IS IT</srai></template>
+</category>
+<category>
+  <pattern>WOULD YOU * PLEASE TELL ME WHAT THIS IS ABOUT</pattern>
+  <template><srai>WHAT IS IT</srai></template>
+</category>
+<category>
+  <pattern>CAN YOU * TELL ME WHO SHE IS</pattern>
+  <template><srai>WHAT IS IT</srai></template>
+</category>
+<category>
+  <pattern>CAN YOU * TELL ME WHO HE IS</pattern>
+  <template><srai>WHO IS HE</srai></template>
+</category>
+<category>
+  <pattern>CAN YOU * PLEASE TELL ME WHO SHE IS</pattern>
+  <template><srai>WHO IS SHE</srai></template>
+</category>
+<category>
+  <pattern>CAN YOU * PLEASE TELL ME WHO HE IS</pattern>
+  <template><srai>WHO IS HE</srai></template>
+</category>
+<category>
+  <pattern>COULD YOU * TELL ME WHO SHE IS</pattern>
+  <template><srai>WHO IS SHE</srai></template>
+</category>
+<category>
+  <pattern>COULD YOU * TELL ME WHO HE IS</pattern>
+  <template><srai>WHO IS HE</srai></template>
+</category>
+<category>
+  <pattern>COULD YOU * PLEASE TELL ME WHO SHE IS</pattern>
+  <template><srai>WHO IS SHE</srai></template>
+</category>
+<category>
+  <pattern>COULD YOU * PLEASE TELL ME WHO HE IS</pattern>
+  <template><srai>WHO IS HE</srai></template>
+</category>
+<category>
+  <pattern>WOULD YOU * TELL ME WHO SHE IS</pattern>
+  <template><srai>WHO IS SHE</srai></template>
+</category>
+<category>
+  <pattern>WOULD YOU * TELL ME WHO HE IS</pattern>
+  <template><srai>WHO IS HE</srai></template>
+</category>
+<category>
+  <pattern>WOULD YOU * PLEASE TELL ME WHO SHE IS</pattern>
+  <template><srai>WHO IS SHE</srai></template>
+</category>
+<category>
+  <pattern>WOULD YOU * PLEASE TELL ME WHO HE IS</pattern>
+  <template><srai>WHO IS HE</srai></template>
+</category>
+  
 <category>
 	<pattern>WHERE IS *</pattern>
 	<template><think><set name="it"><set name="that"><set name="this"><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></set></set></set></think>FORMAT:WHERE <star/></template>
@@ -299,6 +550,14 @@
 <category>
 	<pattern>WHO IS *</pattern>
 	<template><srai>WHAT IS <star/></srai></template>
+</category>
+<category>
+  <pattern>WHO IS SHE</pattern>
+  <template><srai>WHO IS <star/></srai></template>
+</category>
+<category>
+  <pattern>WHO IS HE</pattern>
+  <template><srai>WHO IS <star/></srai></template>
 </category>
 <category>
 	<pattern>WHO WON *</pattern>
