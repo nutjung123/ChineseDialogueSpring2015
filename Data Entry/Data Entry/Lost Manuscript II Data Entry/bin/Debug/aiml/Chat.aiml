@@ -33,18 +33,6 @@
   	<pattern>YO *</pattern>
   	<template><srai>HEY</srai></template>
 </category>
-<category>
-  	<pattern>NICE TO MEET YOU</pattern>
-  	<template>Nice to meet you, too!</template>
-</category>
-<category>
-  	<pattern>* NICE TO MEET YOU *</pattern>
-  	<template><srai>NICE TO MEET YOU</srai></template>
-</category>
-<category>
-  	<pattern>HUH *</pattern>
-  	<template>What do you want to learn more about?</template>
-</category>
 
 <category>
   	<pattern>HOW IS IT GOING</pattern>
@@ -282,6 +270,18 @@
   	<template><srai>WHO WON <star /></srai></template>
 </category>
 <category>
+  	<pattern>WHO WON A GOLD MEDAL IN *</pattern>
+  	<template><srai>WHO WON <star /></srai></template>
+</category>
+<category>
+  	<pattern>WHO IS A GOLD MEDALIST OF *</pattern>
+  	<template><srai>WHO WON <star /></srai></template>
+</category>
+<category>
+  	<pattern>WHO WAS A GOLD MEDALIST OF *</pattern>
+  	<template><srai>WHO WON <star /></srai></template>
+</category>
+<category>
 	<pattern>WHICH * WON *</pattern>
 	<template><srai>WHO WON <star index="2"/></srai></template>
 </category>
@@ -293,6 +293,7 @@
 	<pattern>WHAT * DID * WIN</pattern>
 	<template><srai>WHAT DID <star index="2"/> WIN</srai></template>
 </category>
+
 <category>
 	<pattern>WHERE WAS * HOSTED AT</pattern>
 	<template><think><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:WHERE <star/> WAS_HOSTED_AT</template>
@@ -630,6 +631,78 @@
 <category>
 	<pattern>MORE</pattern>
 	<template><srai>TELL ME MORE</srai></template>
+</category>
+
+<category>
+  	<pattern>NICE TO MEET YOU</pattern>
+  	<template>Nice to meet you, too!</template>
+</category>
+<category>
+  	<pattern>* NICE TO MEET YOU *</pattern>
+  	<template><srai>NICE TO MEET YOU</srai></template>
+</category>
+<category>
+  	<pattern>HUH *</pattern>
+  	<template>What do you want to learn more about?</template>
+</category>
+
+<category>
+  	<pattern>BYE</pattern>
+  	<template>Bye!</template>
+</category>
+<category>
+  	<pattern>BYE *</pattern>
+  	<template><srai>BYE</srai></template>
+</category>
+<category>
+  	<pattern>BYE BYE</pattern>
+  	<template>Bye Bye!</template>
+</category>
+<category>
+  	<pattern>BYE BYE *</pattern>
+  	<template><srai>BYE BYE</srai></template>
+</category>
+<category>
+  	<pattern>GOODBYE</pattern>
+  	<template>Goodbye!</template>
+</category>
+<category>
+  	<pattern>GOODBYE *</pattern>
+  	<template><srai>GOODBYE</srai></template>
+</category>
+<category>
+  	<pattern>GOOD NIGHT</pattern>
+  	<template>Good night!</template>
+</category>
+<category>
+  	<pattern>GOOD NIGHT *</pattern>
+  	<template><srai>GOOD NIGHT</srai></template>
+</category>
+<category>
+  	<pattern>SEE YOU</pattern>
+  	<template>See you!</template>
+</category>
+<category>
+  	<pattern>SEE YOU *</pattern>
+  	<template><srai>SEE YOU</srai></template>
+</category>
+
+<category>
+  	<pattern>THANK YOU</pattern>
+  	<template>You are welcome.</template>
+</category>
+<category>
+  	<pattern>THANK YOU *</pattern>
+  	<template><srai>THANK YOU</srai></template>
+</category>
+
+<category>
+  	<pattern>SORRY</pattern>
+  	<template>It's fine.</template>
+</category>
+<category>
+  	<pattern>SORRY *</pattern>
+  	<template><srai>SORRY</srai></template>
 </category>
 
 </aiml>

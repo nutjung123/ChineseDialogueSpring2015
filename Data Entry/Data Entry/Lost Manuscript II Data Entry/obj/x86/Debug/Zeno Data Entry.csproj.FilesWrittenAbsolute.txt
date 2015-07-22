@@ -10,3 +10,4 @@
 /Users/piyaws/150609 ChineseDialogueSpring2015/Data Entry/Data Entry/Lost Manuscript II Data Entry/bin/Debug/Dialogue Data Entry.exe.mdb
 /Users/piyaws/150609 ChineseDialogueSpring2015/Data Entry/Data Entry/Lost Manuscript II Data Entry/bin/Debug/Dialogue Data Entry.exe
 /Users/piyaws/150609 ChineseDialogueSpring2015/Data Entry/Data Entry/Lost Manuscript II Data Entry/obj/x86/Debug/Dialogue Data Entry.exe.mdb
+/Users/piyaws/150609 ChineseDialogueSpring2015/Data Entry/Data Entry/Lost Manuscript II Data Entry/bin/Debug/NAudio.dll
