@@ -38,6 +38,7 @@
             this.StopSpeakingbutton = new System.Windows.Forms.Button();
             this.EnglishRadioButton = new System.Windows.Forms.RadioButton();
             this.ChineseRadioButton = new System.Windows.Forms.RadioButton();
+            this.TTSbutton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // inputBox
@@ -140,11 +141,22 @@
             this.ChineseRadioButton.Text = "Chinese";
             this.ChineseRadioButton.UseVisualStyleBackColor = true;
             // 
+            // TTSbutton
+            // 
+            this.TTSbutton.Location = new System.Drawing.Point(649, 180);
+            this.TTSbutton.Name = "TTSbutton";
+            this.TTSbutton.Size = new System.Drawing.Size(75, 23);
+            this.TTSbutton.TabIndex = 10;
+            this.TTSbutton.Text = "TTS";
+            this.TTSbutton.UseVisualStyleBackColor = true;
+            this.TTSbutton.Click += new System.EventHandler(this.TTSbutton_Click);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(736, 370);
+            this.Controls.Add(this.TTSbutton);
             this.Controls.Add(this.ChineseRadioButton);
             this.Controls.Add(this.EnglishRadioButton);
             this.Controls.Add(this.StopSpeakingbutton);
@@ -175,5 +187,6 @@
         private System.Windows.Forms.Button StopSpeakingbutton;
         private System.Windows.Forms.RadioButton EnglishRadioButton;
         private System.Windows.Forms.RadioButton ChineseRadioButton;
+        private System.Windows.Forms.Button TTSbutton;
     }
 }

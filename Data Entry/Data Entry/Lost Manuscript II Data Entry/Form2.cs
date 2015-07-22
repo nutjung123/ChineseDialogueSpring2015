@@ -134,7 +134,7 @@ namespace Dialogue_Data_Entry
                     }
                     else
                     {
-                        myServer.SendDataToClient("stopped recording");
+                        myServer.SendDataToClient("Recording stopped: No speech detected.");
                     }
                     continue;
                 }
@@ -263,5 +263,60 @@ namespace Dialogue_Data_Entry
             else { }
             
         }
+        //private NAudio.Wave.BlockAlignReductionStream stream = null;
+        //private NAudio.Wave.DirectSoundOut output = null;
+        //NAudio.Wave.IWavePlayer player = new NAudio.Wave.WaveOut(NAudio.Wave.WaveCallbackInfo.FunctionCallback());
+        private void TTSbutton_Click(object sender, EventArgs e)
+        {
+            string filename = "audio/out.wav";
+            //NAudio.Wave.WaveFileReader audio = new NAudio.Wave.WaveFileReader(filename);
+            //player.Stop();
+            //player.Dispose();
+            //DisposeWave();
+            /*
+            NAudio.Wave.IWavePlayer player = new NAudio.Wave.WaveOut(NAudio.Wave.WaveCallbackInfo.FunctionCallback());
+            player.Init(audio);
+            player.Play();
+            */
+            if (EnglishRadioButton.Checked)
+            {
+                XunfeiFunction.ProcessVoice(inputBox.Text, filename, "english", "male");
+            }
+            else if (ChineseRadioButton.Checked)
+            {
+                XunfeiFunction.ProcessVoice(inputBox.Text, filename, "chinese");
+            }
+            else { }
+            /*
+            DisposeWave();*/
+
+
+            //NAudio.Wave.WaveStream pcm = new NAudio.Wave.WaveChannel32(audio);
+
+            /*output = new NAudio.Wave.DirectSoundOut();
+            output.Init(audio);
+            output.Play();
+            */
+
+            //player.Stop();  // does not work because it stopped too quickly, just before the file has started playing
+
+        }
+        /*
+        private void DisposeWave()
+        {
+            if (output != null)
+            {
+                if (output.PlaybackState == NAudio.Wave.PlaybackState.Playing) output.Stop();
+                output.Dispose();
+                output = null;
+            }
+
+            if (stream != null)
+            {
+                stream.Dispose();
+                stream = null;
+            }
+        }
+        */
     }
 }

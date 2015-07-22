@@ -50,6 +50,23 @@ namespace Dialogue_Data_Entry
         MSP_TTS_FLAG_DATA_END = 2,
         MSP_TTS_FLAG_CMD_CANCELED = 4,
     }
+    public enum VoiceName
+    {
+        //intp65引擎：
+        xiaoyan,//（青年女声，普通话）
+        xiaoyu,//（青年男声，普通话）
+
+        //intp65_en引擎:
+        Catherine,//（英文女声）
+        henry,//（英文男声）
+
+        //vivi21引擎：
+        vixy,//（小燕，普通话）
+        vixm,//（小梅，粤语）
+        vixl,//（小莉，台湾普通话）
+        vixr,//（小蓉，四川话）
+        vixyun,//（小芸，东北话）
+    }
     public enum ErrorCode
     {
         MSP_SUCCESS = 0,
@@ -292,6 +309,43 @@ namespace Dialogue_Data_Entry
 
     public class XunfeiFunction
     {
+        #region waveformat
+        struct wave_pcm_hdr
+        {
+            public char[] riff;                        // = "RIFF"
+            public int size_8;                         // = FileSize - 8
+            public char[] wave;                        // = "WAVE"
+            public char[] fmt;                       // = "fmt "
+            public int dwFmtSize;                      // = 下一个结构体的大小 : 16
+
+            public short format_tag;              // = PCM : 1
+            public short channels;                       // = 通道数 : 1
+            public int samples_per_sec;        // = 采样率 : 8000 | 6000 | 11025 | 16000
+            public int avg_bytes_per_sec;      // = 每秒字节数 : dwSamplesPerSec * wBitsPerSample / 8
+            public short block_align;            // = 每采样点字节数 : wBitsPerSample / 8
+            public short bits_per_sample;         // = 量化比特数: 8 | 16
+
+            public char[] data;                        // = "data";
+            public int data_size;                // = 纯数据长度 : FileSize - 44 
+        };
+        // default
+        static wave_pcm_hdr default_pcmwavhdr = new wave_pcm_hdr
+        {
+            riff = new char[] { 'R', 'I', 'F', 'F' },
+            size_8 = 0,
+            wave = new char[] { 'W', 'A', 'V', 'E' },
+            fmt = new char[] { 'f', 'm', 't', ' ' },
+            dwFmtSize = 16,
+            format_tag = 1,
+            channels = 1,
+            samples_per_sec = 16000,
+            avg_bytes_per_sec = 32000,
+            block_align = 2,
+            bits_per_sample = 16,
+            data = new char[] { 'd', 'a', 't', 'a' },
+            data_size = 0
+        };
+        #endregion
         #region methods
         [DllImport("msc.dll", CallingConvention = CallingConvention.StdCall)]
         private static extern IntPtr QISRSessionBegin(string grammarList, string _params, ref int errorCode);
@@ -351,6 +405,7 @@ namespace Dialogue_Data_Entry
         #endregion
 
         #region unrevisedCode
+        /*
         public delegate void MyEventHandler(string info);
 
         /// <summary>
@@ -372,6 +427,7 @@ namespace Dialogue_Data_Entry
         /// 文本合成声音停止后，触发该事件
         /// </summary>
         public event EventHandler TextToVoiceStopEven;
+        */
         #endregion
 
         private static string PtrToStr(IntPtr p)
@@ -536,10 +592,6 @@ namespace Dialogue_Data_Entry
             return rec_result;
         }
 
-        /// <summary>
-        /// 根据传入的音频文件名，转换成字符，用户需订阅DataReceive事件接收数据
-        /// </summary>
-        /// <param name="filename">音频文件名</param>
         public static string IatModeTranslate(string filename, string language)
         {
             string login_configs = "appid = 55817bb6, work_dir =   .  ";//登录参数
@@ -554,6 +606,111 @@ namespace Dialogue_Data_Entry
                 return TranslateVoiceFile(login_configs, param3, filename);
             else
                 return null;
+        }
+
+        public static void Begin_ProcessVoice(string text, string filename, string _params, string _login_configs)//合成声音
+        {
+            string login_configs = _login_configs;//登录参数
+            MSPLogin(null, null, login_configs);
+
+            wave_pcm_hdr pcmwavhdr = default_pcmwavhdr;
+            string sess_id = null;
+            int ret = -1;
+            uint text_len = 0; ;
+            uint audio_len = 0;
+            int synth_status = (int)SynthesizingStatus.MSP_TTS_FLAG_STILL_HAVE_DATA;
+
+            byte[] byteText = Encoding.Default.GetBytes(text);//计算字节数
+            text_len = (uint)byteText.Count();
+
+            sess_id = PtrToStr(QTTSSessionBegin(_params, ref ret));
+            if (sess_id == null)
+            {
+                //if (ShowInfomation != null) ShowInfomation("Appid出现问题！");
+                return;
+            }
+            FileStream fs = new FileStream(filename, FileMode.Create);
+            BinaryWriter sw = new BinaryWriter(fs, Encoding.Default);
+
+            sw.Write(default_pcmwavhdr.riff);                        // = "RIFF"
+            sw.Write(default_pcmwavhdr.size_8);                        // = FileSize - 8
+            sw.Write(default_pcmwavhdr.wave);                        // = "WAVE"
+            sw.Write(default_pcmwavhdr.fmt);
+            sw.Write(default_pcmwavhdr.dwFmtSize);
+            sw.Write(default_pcmwavhdr.format_tag);
+            sw.Write(default_pcmwavhdr.channels);
+            sw.Write(default_pcmwavhdr.samples_per_sec);
+            sw.Write(default_pcmwavhdr.avg_bytes_per_sec);
+            sw.Write(default_pcmwavhdr.block_align);
+            sw.Write(default_pcmwavhdr.bits_per_sample);
+            sw.Write(default_pcmwavhdr.data);
+            sw.Write(default_pcmwavhdr.data_size);
+
+            ret = QTTSTextPut(sess_id, text, text_len, null);
+            while (true)
+            {
+                IntPtr ptr = QTTSAudioGet(sess_id, ref audio_len, ref synth_status, ref ret);
+
+                if (ptr != IntPtr.Zero)
+                {
+                    byte[] data = new byte[audio_len];
+                    Marshal.Copy(ptr, data, 0, (int)audio_len);
+                    sw.Write(data);
+                    pcmwavhdr.data_size += (int)audio_len;//修正pcm数据的大小
+                }
+                if (synth_status == (int)SynthesizingStatus.MSP_TTS_FLAG_DATA_END || ret != 0)
+                    break;
+            }//合成状态synth_status取值可参考开发文档
+
+            pcmwavhdr.size_8 += pcmwavhdr.data_size + 36;
+
+            //将修正过的数据写回文件头部
+            fs.Seek(4, SeekOrigin.Begin);
+            sw.Write(pcmwavhdr.size_8);
+            fs.Seek(40, SeekOrigin.Begin);
+            sw.Write(pcmwavhdr.data_size);
+
+            sw.Flush();
+            sw.Close();
+            fs.Close();
+            sw.Dispose();
+            fs.Dispose();
+            ret = QTTSSessionEnd(sess_id, null);
+            MSPLogout();
+            /*
+            if (ShowInfomation != null) ShowInfomation("转换结束");
+            if (TextToVoiceStopEven != null) TextToVoiceStopEven(this, new EventArgs());//触发结束事件
+            */
+        }
+
+        public static void ProcessVoice(string text, string filename, string language = "chinese", string preferred_sex = "female", int voicespeed = 5)
+        {
+            VoiceName voicename = VoiceName.xiaoyan;
+            if (language == "chinese")
+            {
+                if (preferred_sex == "female")
+                {
+                    voicename = VoiceName.xiaoyan;
+                }
+                else
+                {
+                    voicename = VoiceName.xiaoyu;
+                }
+            }
+            else if (language == "english")
+            {
+                if (preferred_sex == "female")
+                {
+                    voicename = VoiceName.Catherine;
+                }
+                else
+                {
+                    voicename = VoiceName.henry;
+                }
+            }
+            string param = string.Format(" vcn={0}, spd ={1}, vol = 50, bgs=0, aue=speex-wb, smk = 3", voicename, voicespeed);
+            string login_param = "appid = 55817bb6, work_dir =   .  ";
+            Begin_ProcessVoice(text, filename, param, login_param);
         }
     }
 
