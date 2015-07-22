@@ -68,8 +68,8 @@ namespace Dialogue_Data_Entry
         private string[] directionWords = {"inside", "contain", "north", "east", "west", "south",
                                       "northeast", "northwest", "southeast", "southwest",
                                       "hosted", "was_hosted_at", "won"};
-        private string[] Directional_Words = {"north", "east", "west", "south",
-                                      "northeast", "northwest", "southeast", "southwest"};
+        private string[] Directional_Words = { "is southwest of", "is southeast of"
+                , "is northeast of", "is north of", "is west of", "is east of", "is south of", "is northwest of" };
         // "is in" -> contains?
         private Bot bot;
         private User user;
@@ -231,7 +231,7 @@ namespace Dialogue_Data_Entry
 			return return_message;
 		}
 
-		private string RelationshipAnalogy(Feature old, Feature newOld, Feature prevOfCurr,Feature current)
+		private string RelationshipAnalogy(Feature old, Feature newOld, Feature prevOfCurr, Feature current)
 		{
 			string return_message = "";
 			Console.WriteLine("old: " + old.Data);
@@ -243,7 +243,6 @@ namespace Dialogue_Data_Entry
 
 
 			// Senten Patterns list - for 3 nodes
-			// NEED TO implement 4 nodes relationship
 			List<string> sentencePatterns = new List<string>();
 
 			Random rnd = new Random();
@@ -267,6 +266,15 @@ namespace Dialogue_Data_Entry
 
 			//Check equivalent and similarity
 			bool found = false;
+            bool directional = false;
+            //Check if the relationship is a directional word.
+            if (Directional_Words.Contains(old.getRelationshipNeighbor(newOld.Data))
+                || Directional_Words.Contains(newOld.getRelationshipNeighbor(old.Data)))
+            {
+                directional = true;
+            }//end if
+            
+
 			foreach (List<string> list in equivalent_relationships)
 			{
 				if (found == true) break;
@@ -361,6 +369,12 @@ namespace Dialogue_Data_Entry
             //if a1 equals a2 and b1 equals b2, no analogy may be made.
             if (a1.Equals(a2) && b1.Equals(b2))
                 return "";
+            //If the relationship is directional and b1 does NOT equal b2, then
+            //no analogy may be made.
+            if (directional && !(b1.Equals(b2)))
+            {
+                return "";
+            }//end if
 
 			//if (old.getRelationshipNeighbor(newOld.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data)) &&
 			//	old.getRelationshipNeighbor(newOld.Data) != "" && prevOfCurr.getRelationshipNeighbor(current.Data) != "")
@@ -472,11 +486,23 @@ namespace Dialogue_Data_Entry
                     //If the relationships match and neither relationship is the empty relationship,
                     //form an analogy.
                     //NOTE: Checking relationships in BOTH directions
-                    if ((old.getRelationshipNeighbor(newOld.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data))
+                    bool try_analogy = false;
+                    foreach (List<String> equivalent_set in equivalent_relationships)
+                    {
+                        //Check if the relationships are in the same equivalent set. If so, try to form an analogy.
+                        if (equivalent_set.Contains(old.getRelationshipNeighbor(newOld.Data))
+                            && equivalent_set.Contains(prevOfCurr.getRelationshipNeighbor(current.Data)))
+                        {
+                            try_analogy = true;
+                            break;
+                        }//end if
+                    }//end foreach
+                    if (((old.getRelationshipNeighbor(newOld.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data))
                             || newOld.getRelationshipNeighbor(old.Data).Equals(current.getRelationshipNeighbor(prevOfCurr.Data))
                             || newOld.getRelationshipNeighbor(old.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data))
                             || old.getRelationshipNeighbor(newOld.Data).Equals(current.getRelationshipNeighbor(prevOfCurr.Data)))
                         && old.getRelationshipNeighbor(newOld.Data) != "" && prevOfCurr.getRelationshipNeighbor(current.Data) != "")
+                        || try_analogy)
                     {
                         //countNode = 1;
                         
