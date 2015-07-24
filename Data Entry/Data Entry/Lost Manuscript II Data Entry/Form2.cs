@@ -147,6 +147,10 @@ namespace Dialogue_Data_Entry
                     {
                         XunfeiFunction.ProcessVoice(query, "audio/out.wav", language, preferred_sex);
                     });
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        Play_TTS_file("audio/out.wav");
+                    });
                     myServer.SendDataToClient("TTS completed.");
                     continue;
                 }
@@ -275,21 +279,11 @@ namespace Dialogue_Data_Entry
             else { }
             
         }
-        //private NAudio.Wave.BlockAlignReductionStream stream = null;
-        //private NAudio.Wave.DirectSoundOut output = null;
-        //NAudio.Wave.IWavePlayer player = new NAudio.Wave.WaveOut(NAudio.Wave.WaveCallbackInfo.FunctionCallback());
+
         private void TTSbutton_Click(object sender, EventArgs e)
         {
             string filename = "audio/out.wav";
-            //NAudio.Wave.WaveFileReader audio = new NAudio.Wave.WaveFileReader(filename);
-            //player.Stop();
-            //player.Dispose();
-            //DisposeWave();
-            /*
-            NAudio.Wave.IWavePlayer player = new NAudio.Wave.WaveOut(NAudio.Wave.WaveCallbackInfo.FunctionCallback());
-            player.Init(audio);
-            player.Play();
-            */
+
             if (EnglishRadioButton.Checked)
             {
                 XunfeiFunction.ProcessVoice(inputBox.Text, filename, "english", "male");
@@ -299,36 +293,26 @@ namespace Dialogue_Data_Entry
                 XunfeiFunction.ProcessVoice(inputBox.Text, filename, "chinese");
             }
             else { }
-            /*
-            DisposeWave();*/
 
-
-            //NAudio.Wave.WaveStream pcm = new NAudio.Wave.WaveChannel32(audio);
-
-            /*output = new NAudio.Wave.DirectSoundOut();
-            output.Init(audio);
-            output.Play();
-            */
-
-            //player.Stop();  // does not work because it stopped too quickly, just before the file has started playing
-
+            Play_TTS_file(filename);
         }
-        /*
-        private void DisposeWave()
+        private void Play_TTS_file(string filename)
         {
-            if (output != null)
+            NAudio.Wave.WaveFileReader audio = new NAudio.Wave.WaveFileReader(filename);
+            NAudio.Wave.IWavePlayer player = new NAudio.Wave.WaveOut(NAudio.Wave.WaveCallbackInfo.FunctionCallback());
+            player.Init(audio);
+            player.Play();
+            while (true)
             {
-                if (output.PlaybackState == NAudio.Wave.PlaybackState.Playing) output.Stop();
-                output.Dispose();
-                output = null;
-            }
-
-            if (stream != null)
-            {
-                stream.Dispose();
-                stream = null;
-            }
+                if (player.PlaybackState == NAudio.Wave.PlaybackState.Stopped)
+                {
+                    player.Dispose();
+                    //MessageBox.Show("disposed");
+                    audio.Close();
+                    audio.Dispose();
+                    break;
+                }
+            };
         }
-        */
     }
 }
