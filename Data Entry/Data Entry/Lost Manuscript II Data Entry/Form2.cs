@@ -138,6 +138,18 @@ namespace Dialogue_Data_Entry
                     }
                     continue;
                 }
+                if (query.Contains("TTS#"))
+                {
+                    string language = query.Split('#')[1];
+                    string preferred_sex = query.Split('#')[2];
+                    query = query.Split('#')[3];
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        XunfeiFunction.ProcessVoice(query, "audio/out.wav", language, preferred_sex);
+                    });
+                    myServer.SendDataToClient("TTS completed.");
+                    continue;
+                }
 
                 if (myHandler == null)
                     myHandler = new QueryHandler(featGraph, temporalConstraintList);
