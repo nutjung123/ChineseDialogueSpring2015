@@ -135,12 +135,20 @@ namespace Dialogue_Data_Entry
             equivalent_relationships.Add(new List<string>() { "won a gold medal in", "won" });
             //is one of, was one of the, was one of
             equivalent_relationships.Add(new List<string>() { "is one of", "was one of the", "was one of" });
-            //include, includes, included, has
-            equivalent_relationships.Add(new List<string>() { "include", "includes", "included", "has" });
+            //include, includes, included
+            equivalent_relationships.Add(new List<string>() { "include", "includes", "included" });
             //took place on
             equivalent_relationships.Add(new List<string>() { "took place on" });
             //took place at
             equivalent_relationships.Add(new List<string>() { "took place at" });
+            //has, had
+            equivalent_relationships.Add(new List<string>() { "has", "had" });
+            //includes event
+            equivalent_relationships.Add(new List<string>() { "includes event" });
+            //includes member, included member
+            equivalent_relationships.Add(new List<string>() { "includes member", "included member" });
+            //include athlete
+            equivalent_relationships.Add(new List<string>() { "include athlete" });
             //is southwest of, is southeast of, is northeast of, is north of,
             //is west of, is east of, is south of, is northwest of
             equivalent_relationships.Add(new List<string>() { "is southwest of", "is southeast of"

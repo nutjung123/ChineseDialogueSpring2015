@@ -1,5 +1,5 @@
 <AIMind>
-<Root id="0"/>
+<Root id="11"/>
 <Feature id="0" data="2008 Summer Olympic Games">
 <neighbor dest="96" weight="0" relationship="has"/>
 <neighbor dest="93" weight="0" relationship="has"/>
@@ -13,18 +13,18 @@
 <speak value="The 2008 Summer Olympic Games was a major international multi-sport event that took place in Beijing, China, from August 8 to 24, 2008."/>
 </Feature>
 <Feature id="1" data="Aquatics">
-<neighbor dest="119" weight="0" relationship="includes"/>
-<neighbor dest="138" weight="0" relationship="includes"/>
-<neighbor dest="134" weight="0" relationship="includes"/>
-<neighbor dest="122" weight="0" relationship="includes"/>
-<neighbor dest="115" weight="0" relationship="includes"/>
-<neighbor dest="135" weight="0" relationship="includes"/>
-<neighbor dest="107" weight="0" relationship="includes"/>
-<neighbor dest="114" weight="0" relationship="includes"/>
-<neighbor dest="145" weight="0" relationship="includes"/>
-<neighbor dest="129" weight="0" relationship="includes"/>
-<neighbor dest="117" weight="0" relationship="includes"/>
-<neighbor dest="133" weight="0" relationship="includes"/>
+<neighbor dest="119" weight="0" relationship="includes event"/>
+<neighbor dest="138" weight="0" relationship="includes event"/>
+<neighbor dest="134" weight="0" relationship="includes event"/>
+<neighbor dest="122" weight="0" relationship="includes event"/>
+<neighbor dest="115" weight="0" relationship="includes event"/>
+<neighbor dest="135" weight="0" relationship="includes event"/>
+<neighbor dest="107" weight="0" relationship="includes event"/>
+<neighbor dest="114" weight="0" relationship="includes event"/>
+<neighbor dest="145" weight="0" relationship="includes event"/>
+<neighbor dest="129" weight="0" relationship="includes event"/>
+<neighbor dest="117" weight="0" relationship="includes event"/>
+<neighbor dest="133" weight="0" relationship="includes event"/>
 <neighbor dest="29" weight="1" relationship="is a kind of"/>
 <parent dest="30" weight="1" relationship=""/>
 <parent dest="45" weight="1" relationship=""/>
@@ -39,13 +39,13 @@
 <speak value="Archery is the sport of using a bow to propel arrows."/>
 </Feature>
 <Feature id="3" data="Athletics">
-<neighbor dest="180" weight="0" relationship="includes"/>
-<neighbor dest="162" weight="0" relationship="includes"/>
-<neighbor dest="210" weight="0" relationship="includes"/>
-<neighbor dest="205" weight="0" relationship="includes"/>
-<neighbor dest="175" weight="0" relationship="includes"/>
-<neighbor dest="216" weight="0" relationship="includes"/>
-<neighbor dest="160" weight="0" relationship="includes"/>
+<neighbor dest="180" weight="0" relationship="includes event"/>
+<neighbor dest="162" weight="0" relationship="includes event"/>
+<neighbor dest="210" weight="0" relationship="includes event"/>
+<neighbor dest="205" weight="0" relationship="includes event"/>
+<neighbor dest="175" weight="0" relationship="includes event"/>
+<neighbor dest="216" weight="0" relationship="includes event"/>
+<neighbor dest="160" weight="0" relationship="includes event"/>
 <neighbor dest="29" weight="1" relationship="is a kind of"/>
 <parent dest="32" weight="1" relationship=""/>
 <parent dest="29" weight="0" relationship="is a kind of"/>
@@ -66,8 +66,8 @@
 <speak value="Baseball is a bat-and-ball sport played between two teams of nine players each who take turns batting and fielding."/>
 </Feature>
 <Feature id="6" data="Basketball">
-<neighbor dest="258" weight="0" relationship="includes"/>
-<neighbor dest="230" weight="0" relationship="includes"/>
+<neighbor dest="258" weight="0" relationship="includes event"/>
+<neighbor dest="230" weight="0" relationship="includes event"/>
 <neighbor dest="29" weight="1" relationship="is a kind of"/>
 <parent dest="29" weight="0" relationship="is a kind of"/>
 <parent dest="46" weight="1" relationship=""/>
@@ -87,7 +87,7 @@
 <speak value="Canoeing is a paddle sports in which you kneel or sit facing forward in an open or closed-decked canoe and propel yourself with a single-bladed paddle using your own power."/>
 </Feature>
 <Feature id="9" data="Cycling">
-<neighbor dest="131" weight="0" relationship="includes"/>
+<neighbor dest="131" weight="0" relationship="includes event"/>
 <neighbor dest="29" weight="1" relationship="is a kind of"/>
 <parent dest="57" weight="1" relationship=""/>
 <parent dest="50" weight="1" relationship=""/>
@@ -97,21 +97,21 @@
 <speak value="Cycling is the sport of using bicycles."/>
 </Feature>
 <Feature id="10" data="Equestrian">
-<neighbor dest="167" weight="0" relationship="includes"/>
+<neighbor dest="167" weight="0" relationship="includes event"/>
 <neighbor dest="29" weight="1" relationship="is a kind of"/>
 <parent dest="61" weight="1" relationship=""/>
 <parent dest="29" weight="0" relationship="is a kind of"/>
 <speak value="Equestrian is the sport of horseback riding."/>
 </Feature>
 <Feature id="11" data="Fencing">
-<neighbor dest="105" weight="0" relationship="includes"/>
+<neighbor dest="105" weight="0" relationship="includes event"/>
 <neighbor dest="29" weight="1" relationship="is a kind of"/>
 <parent dest="35" weight="1" relationship=""/>
 <parent dest="29" weight="0" relationship="is a kind of"/>
 <speak value="Fencing is a sport of the western art of combat with a small sword."/>
 </Feature>
 <Feature id="12" data="Football">
-<neighbor dest="200" weight="0" relationship="includes"/>
+<neighbor dest="200" weight="0" relationship="includes event"/>
 <neighbor dest="29" weight="1" relationship="is a kind of"/>
 <parent dest="32" weight="1" relationship=""/>
 <parent dest="63" weight="1" relationship=""/>
@@ -123,8 +123,8 @@
 <speak value="Football is a sport in which players kick the ball with only their feet to score a goal."/>
 </Feature>
 <Feature id="13" data="Gymnastics">
-<neighbor dest="137" weight="0" relationship="includes"/>
-<neighbor dest="173" weight="0" relationship="includes"/>
+<neighbor dest="137" weight="0" relationship="includes event"/>
+<neighbor dest="173" weight="0" relationship="includes event"/>
 <neighbor dest="29" weight="1" relationship="is a kind of"/>
 <parent dest="31" weight="1" relationship=""/>
 <parent dest="38" weight="1" relationship=""/>
@@ -159,22 +159,22 @@
 <speak value="Modern Pentathlon is a sport that comprises five events: horse riding with jumps, fencing, freestyle swimming, pistol shooting, and cross-country running."/>
 </Feature>
 <Feature id="18" data="Rowing">
-<neighbor dest="158" weight="0" relationship="includes"/>
+<neighbor dest="158" weight="0" relationship="includes event"/>
 <neighbor dest="29" weight="1" relationship="is a kind of"/>
 <parent dest="45" weight="1" relationship=""/>
 <parent dest="29" weight="0" relationship="is a kind of"/>
 <speak value="Rowing is the sport of propelling a boat using the motion of oars in the water."/>
 </Feature>
 <Feature id="19" data="Sailing">
-<neighbor dest="169" weight="0" relationship="includes"/>
+<neighbor dest="169" weight="0" relationship="includes event"/>
 <neighbor dest="29" weight="1" relationship="is a kind of"/>
 <parent dest="62" weight="1" relationship=""/>
 <parent dest="29" weight="0" relationship="is a kind of"/>
 <speak value="Sailing is the sport that uses sailboats."/>
 </Feature>
 <Feature id="20" data="Shooting">
-<neighbor dest="121" weight="0" relationship="includes"/>
-<neighbor dest="140" weight="0" relationship="includes"/>
+<neighbor dest="121" weight="0" relationship="includes event"/>
+<neighbor dest="140" weight="0" relationship="includes event"/>
 <neighbor dest="29" weight="1" relationship="is a kind of"/>
 <parent dest="47" weight="1" relationship=""/>
 <parent dest="43" weight="1" relationship=""/>
@@ -200,7 +200,7 @@
 <speak value="Taekwondo is a Korean martial art and sport with a heavy emphasis on kicks."/>
 </Feature>
 <Feature id="24" data="Tennis">
-<neighbor dest="148" weight="0" relationship="includes"/>
+<neighbor dest="148" weight="0" relationship="includes event"/>
 <neighbor dest="29" weight="1" relationship="is a kind of"/>
 <parent dest="33" weight="1" relationship=""/>
 <parent dest="29" weight="0" relationship="is a kind of"/>
@@ -213,9 +213,9 @@
 <speak value="The triathlon is a multiple-stage sport involving the completion of three continuous and sequential endurance disciplines, most popularly swimming, cycling, and running."/>
 </Feature>
 <Feature id="26" data="Volleyball">
-<neighbor dest="203" weight="0" relationship="includes"/>
-<neighbor dest="178" weight="0" relationship="includes"/>
-<neighbor dest="244" weight="0" relationship="includes"/>
+<neighbor dest="203" weight="0" relationship="includes event"/>
+<neighbor dest="178" weight="0" relationship="includes event"/>
+<neighbor dest="244" weight="0" relationship="includes event"/>
 <neighbor dest="29" weight="1" relationship="is a kind of"/>
 <parent dest="42" weight="1" relationship=""/>
 <parent dest="48" weight="1" relationship=""/>
@@ -230,7 +230,7 @@
 <speak value="Weightlifting is a sport in which the athlete attempts a maximum-weight single lift of a barbell loaded with weight plates."/>
 </Feature>
 <Feature id="28" data="Wrestling">
-<neighbor dest="171" weight="0" relationship="includes"/>
+<neighbor dest="171" weight="0" relationship="includes event"/>
 <neighbor dest="29" weight="1" relationship="is a kind of"/>
 <parent dest="39" weight="1" relationship=""/>
 <parent dest="29" weight="0" relationship="is a kind of"/>
@@ -2116,46 +2116,46 @@
 </Feature>
 <Feature id="199" data="United States Women&apos;s National Soccer Team">
 <neighbor dest="200" weight="1" relationship="won"/>
-<neighbor dest="198" weight="0" relationship="included"/>
-<neighbor dest="195" weight="0" relationship="includes"/>
-<neighbor dest="188" weight="0" relationship="included"/>
-<neighbor dest="190" weight="0" relationship="includes"/>
-<neighbor dest="194" weight="0" relationship="includes"/>
-<neighbor dest="192" weight="0" relationship="included"/>
-<neighbor dest="193" weight="0" relationship="includes"/>
-<neighbor dest="196" weight="0" relationship="includes"/>
-<neighbor dest="191" weight="0" relationship="included"/>
-<neighbor dest="185" weight="0" relationship="includes"/>
-<neighbor dest="197" weight="0" relationship="includes"/>
-<neighbor dest="184" weight="0" relationship="includes"/>
-<neighbor dest="189" weight="0" relationship="includes"/>
-<neighbor dest="181" weight="0" relationship="includes"/>
-<neighbor dest="183" weight="0" relationship="includes"/>
-<neighbor dest="182" weight="0" relationship="includes"/>
-<neighbor dest="186" weight="0" relationship="includes"/>
-<neighbor dest="187" weight="0" relationship="includes"/>
+<neighbor dest="198" weight="0" relationship="included member"/>
+<neighbor dest="195" weight="0" relationship="includes member"/>
+<neighbor dest="188" weight="0" relationship="included member"/>
+<neighbor dest="190" weight="0" relationship="includes member"/>
+<neighbor dest="194" weight="0" relationship="includes member"/>
+<neighbor dest="192" weight="0" relationship="included member"/>
+<neighbor dest="193" weight="0" relationship="includes member"/>
+<neighbor dest="196" weight="0" relationship="includes member"/>
+<neighbor dest="191" weight="0" relationship="included member"/>
+<neighbor dest="185" weight="0" relationship="includes member"/>
+<neighbor dest="197" weight="0" relationship="includes member"/>
+<neighbor dest="184" weight="0" relationship="includes member"/>
+<neighbor dest="189" weight="0" relationship="includes member"/>
+<neighbor dest="181" weight="0" relationship="includes member"/>
+<neighbor dest="183" weight="0" relationship="includes member"/>
+<neighbor dest="182" weight="0" relationship="includes member"/>
+<neighbor dest="186" weight="0" relationship="includes member"/>
+<neighbor dest="187" weight="0" relationship="includes member"/>
 <parent dest="200" weight="0" relationship="won"/>
-<parent dest="198" weight="1" relationship="included"/>
-<parent dest="195" weight="1" relationship="includes"/>
-<parent dest="188" weight="1" relationship="included"/>
-<parent dest="190" weight="1" relationship="includes"/>
-<parent dest="194" weight="1" relationship="includes"/>
-<parent dest="192" weight="1" relationship="included"/>
-<parent dest="193" weight="1" relationship="includes"/>
-<parent dest="196" weight="1" relationship="includes"/>
-<parent dest="191" weight="1" relationship="included"/>
-<parent dest="185" weight="1" relationship="includes"/>
-<parent dest="197" weight="1" relationship="includes"/>
-<parent dest="184" weight="1" relationship="includes"/>
-<parent dest="189" weight="1" relationship="includes"/>
-<parent dest="181" weight="1" relationship="includes"/>
+<parent dest="198" weight="1" relationship="included member"/>
+<parent dest="195" weight="1" relationship="includes member"/>
+<parent dest="188" weight="1" relationship="included member"/>
+<parent dest="190" weight="1" relationship="includes member"/>
+<parent dest="194" weight="1" relationship="includes member"/>
+<parent dest="192" weight="1" relationship="included member"/>
+<parent dest="193" weight="1" relationship="includes member"/>
+<parent dest="196" weight="1" relationship="includes member"/>
+<parent dest="191" weight="1" relationship="included member"/>
+<parent dest="185" weight="1" relationship="includes member"/>
+<parent dest="197" weight="1" relationship="includes member"/>
+<parent dest="184" weight="1" relationship="includes member"/>
+<parent dest="189" weight="1" relationship="includes member"/>
+<parent dest="181" weight="1" relationship="includes member"/>
 <parent dest="63" weight="1" relationship=""/>
-<parent dest="183" weight="1" relationship="includes"/>
+<parent dest="183" weight="1" relationship="includes member"/>
 <parent dest="64" weight="1" relationship=""/>
-<parent dest="182" weight="1" relationship="includes"/>
+<parent dest="182" weight="1" relationship="includes member"/>
 <parent dest="65" weight="1" relationship=""/>
-<parent dest="186" weight="1" relationship="includes"/>
-<parent dest="187" weight="1" relationship="includes"/>
+<parent dest="186" weight="1" relationship="includes member"/>
+<parent dest="187" weight="1" relationship="includes member"/>
 <parent dest="53" weight="1" relationship=""/>
 <speak value="The United States Women&apos;s National Soccer Team has been one of the most successful in international women&apos;s soccer, winning two Women&apos;s World Cup titles, four Olympic gold medals, and ten Algarve Cups. It was ranked No. 1 in the FIFA Women&apos;s World Rankings continuously from March 2008 to December 2014, and is currently ranked No. 2."/>
 </Feature>
@@ -2524,31 +2524,31 @@
 </Feature>
 <Feature id="229" data="United States Women&apos;s National Basketball Team">
 <neighbor dest="230" weight="1" relationship="won"/>
-<neighbor dest="224" weight="0" relationship="includes"/>
-<neighbor dest="225" weight="0" relationship="includes"/>
-<neighbor dest="223" weight="0" relationship="includes"/>
-<neighbor dest="227" weight="0" relationship="includes"/>
-<neighbor dest="221" weight="0" relationship="includes"/>
-<neighbor dest="226" weight="0" relationship="included"/>
-<neighbor dest="222" weight="0" relationship="includes"/>
-<neighbor dest="217" weight="0" relationship="includes"/>
-<neighbor dest="218" weight="0" relationship="includes"/>
-<neighbor dest="220" weight="0" relationship="includes"/>
-<neighbor dest="219" weight="0" relationship="includes"/>
+<neighbor dest="224" weight="0" relationship="includes member"/>
+<neighbor dest="225" weight="0" relationship="includes member"/>
+<neighbor dest="223" weight="0" relationship="includes member"/>
+<neighbor dest="227" weight="0" relationship="includes member"/>
+<neighbor dest="221" weight="0" relationship="includes member"/>
+<neighbor dest="226" weight="0" relationship="included member"/>
+<neighbor dest="222" weight="0" relationship="includes member"/>
+<neighbor dest="217" weight="0" relationship="includes member"/>
+<neighbor dest="218" weight="0" relationship="includes member"/>
+<neighbor dest="220" weight="0" relationship="includes member"/>
+<neighbor dest="219" weight="0" relationship="includes member"/>
 <neighbor dest="228" weight="0" relationship="included"/>
 <parent dest="230" weight="0" relationship="won"/>
-<parent dest="224" weight="1" relationship="includes"/>
-<parent dest="225" weight="1" relationship="includes"/>
-<parent dest="223" weight="1" relationship="includes"/>
-<parent dest="227" weight="1" relationship="includes"/>
-<parent dest="221" weight="1" relationship="includes"/>
-<parent dest="226" weight="1" relationship="included"/>
-<parent dest="222" weight="1" relationship="includes"/>
-<parent dest="217" weight="1" relationship="includes"/>
-<parent dest="218" weight="1" relationship="includes"/>
-<parent dest="220" weight="1" relationship="includes"/>
-<parent dest="219" weight="1" relationship="includes"/>
-<parent dest="228" weight="1" relationship="included"/>
+<parent dest="224" weight="1" relationship="includes member"/>
+<parent dest="225" weight="1" relationship="includes member"/>
+<parent dest="223" weight="1" relationship="includes member"/>
+<parent dest="227" weight="1" relationship="includes member"/>
+<parent dest="221" weight="1" relationship="includes member"/>
+<parent dest="226" weight="1" relationship="included member"/>
+<parent dest="222" weight="1" relationship="includes member"/>
+<parent dest="217" weight="1" relationship="includes member"/>
+<parent dest="218" weight="1" relationship="includes member"/>
+<parent dest="220" weight="1" relationship="includes member"/>
+<parent dest="219" weight="1" relationship="includes member"/>
+<parent dest="228" weight="1" relationship="included member"/>
 <parent dest="46" weight="1" relationship=""/>
 <speak value="The United States Women&apos;s National Basketball Team has won seven Olympic gold medals and nine FIBA world championships. The team is composed of some of the top American players in the WNBA and the women&apos;s college game."/>
 </Feature>
@@ -2721,33 +2721,33 @@
 </Feature>
 <Feature id="243" data="United States Men&apos;s National Volleyball Team">
 <neighbor dest="244" weight="1" relationship="won"/>
-<neighbor dest="241" weight="0" relationship="includes"/>
-<neighbor dest="236" weight="0" relationship="includes"/>
-<neighbor dest="232" weight="0" relationship="includes"/>
-<neighbor dest="233" weight="0" relationship="includes"/>
-<neighbor dest="231" weight="0" relationship="included"/>
-<neighbor dest="238" weight="0" relationship="includes"/>
-<neighbor dest="235" weight="0" relationship="includes"/>
-<neighbor dest="240" weight="0" relationship="includes"/>
-<neighbor dest="237" weight="0" relationship="includes"/>
-<neighbor dest="242" weight="0" relationship="includes"/>
-<neighbor dest="239" weight="0" relationship="includes"/>
-<neighbor dest="234" weight="0" relationship="includes"/>
+<neighbor dest="241" weight="0" relationship="includes member"/>
+<neighbor dest="236" weight="0" relationship="includes member"/>
+<neighbor dest="232" weight="0" relationship="includes member"/>
+<neighbor dest="233" weight="0" relationship="includes member"/>
+<neighbor dest="231" weight="0" relationship="included member"/>
+<neighbor dest="238" weight="0" relationship="includes member"/>
+<neighbor dest="235" weight="0" relationship="includes member"/>
+<neighbor dest="240" weight="0" relationship="includes member"/>
+<neighbor dest="237" weight="0" relationship="includes member"/>
+<neighbor dest="242" weight="0" relationship="includes member"/>
+<neighbor dest="239" weight="0" relationship="includes member"/>
+<neighbor dest="234" weight="0" relationship="includes member"/>
 <parent dest="244" weight="0" relationship="won"/>
 <parent dest="42" weight="1" relationship=""/>
 <parent dest="48" weight="1" relationship=""/>
-<parent dest="241" weight="1" relationship="includes"/>
-<parent dest="236" weight="1" relationship="includes"/>
-<parent dest="232" weight="1" relationship="includes"/>
-<parent dest="233" weight="1" relationship="includes"/>
-<parent dest="231" weight="1" relationship="included"/>
-<parent dest="238" weight="1" relationship="includes"/>
-<parent dest="235" weight="1" relationship="includes"/>
-<parent dest="240" weight="1" relationship="includes"/>
-<parent dest="237" weight="1" relationship="includes"/>
-<parent dest="242" weight="1" relationship="includes"/>
-<parent dest="239" weight="1" relationship="includes"/>
-<parent dest="234" weight="1" relationship="includes"/>
+<parent dest="241" weight="1" relationship="includes member"/>
+<parent dest="236" weight="1" relationship="includes member"/>
+<parent dest="232" weight="1" relationship="includes member"/>
+<parent dest="233" weight="1" relationship="includes member"/>
+<parent dest="231" weight="1" relationship="included member"/>
+<parent dest="238" weight="1" relationship="includes member"/>
+<parent dest="235" weight="1" relationship="includes member"/>
+<parent dest="240" weight="1" relationship="includes member"/>
+<parent dest="237" weight="1" relationship="includes member"/>
+<parent dest="242" weight="1" relationship="includes member"/>
+<parent dest="239" weight="1" relationship="includes member"/>
+<parent dest="234" weight="1" relationship="includes member"/>
 <speak value="The United States Men&apos;s National Volleyball Team, governed by USA Volleyball, takes part in international competitions such as the Summer Olympics and the FIVB World League."/>
 </Feature>
 <Feature id="244" data="(Volleyball) Men&apos;s Tournament">
@@ -2919,32 +2919,32 @@
 </Feature>
 <Feature id="257" data="United States Men&apos;s National Basketball Team">
 <neighbor dest="258" weight="1" relationship="won"/>
-<neighbor dest="246" weight="0" relationship="includes"/>
-<neighbor dest="245" weight="0" relationship="includes"/>
-<neighbor dest="247" weight="0" relationship="includes"/>
-<neighbor dest="252" weight="0" relationship="includes"/>
-<neighbor dest="256" weight="0" relationship="includes"/>
-<neighbor dest="249" weight="0" relationship="includes"/>
-<neighbor dest="255" weight="0" relationship="includes"/>
-<neighbor dest="251" weight="0" relationship="included"/>
-<neighbor dest="248" weight="0" relationship="includes"/>
-<neighbor dest="250" weight="0" relationship="includes"/>
-<neighbor dest="254" weight="0" relationship="included"/>
-<neighbor dest="253" weight="0" relationship="includes"/>
+<neighbor dest="246" weight="0" relationship="includes member"/>
+<neighbor dest="245" weight="0" relationship="includes member"/>
+<neighbor dest="247" weight="0" relationship="includes member"/>
+<neighbor dest="252" weight="0" relationship="includes member"/>
+<neighbor dest="256" weight="0" relationship="includes member"/>
+<neighbor dest="249" weight="0" relationship="includes member"/>
+<neighbor dest="255" weight="0" relationship="includes member"/>
+<neighbor dest="251" weight="0" relationship="included member"/>
+<neighbor dest="248" weight="0" relationship="includes member"/>
+<neighbor dest="250" weight="0" relationship="includes member"/>
+<neighbor dest="254" weight="0" relationship="included member"/>
+<neighbor dest="253" weight="0" relationship="includes member"/>
 <neighbor dest="46" weight="1" relationship="took place at"/>
 <parent dest="258" weight="0" relationship="won"/>
-<parent dest="246" weight="1" relationship="includes"/>
-<parent dest="245" weight="1" relationship="includes"/>
-<parent dest="247" weight="1" relationship="includes"/>
-<parent dest="252" weight="1" relationship="includes"/>
-<parent dest="256" weight="1" relationship="includes"/>
-<parent dest="249" weight="1" relationship="includes"/>
-<parent dest="255" weight="1" relationship="includes"/>
-<parent dest="251" weight="1" relationship="included"/>
-<parent dest="248" weight="1" relationship="includes"/>
-<parent dest="250" weight="1" relationship="includes"/>
-<parent dest="254" weight="1" relationship="included"/>
-<parent dest="253" weight="1" relationship="includes"/>
+<parent dest="246" weight="1" relationship="includes member"/>
+<parent dest="245" weight="1" relationship="includes member"/>
+<parent dest="247" weight="1" relationship="includes member"/>
+<parent dest="252" weight="1" relationship="includes member"/>
+<parent dest="256" weight="1" relationship="includes member"/>
+<parent dest="249" weight="1" relationship="includes member"/>
+<parent dest="255" weight="1" relationship="includes member"/>
+<parent dest="251" weight="1" relationship="included member"/>
+<parent dest="248" weight="1" relationship="includes member"/>
+<parent dest="250" weight="1" relationship="includes member"/>
+<parent dest="254" weight="1" relationship="included member"/>
+<parent dest="253" weight="1" relationship="includes member"/>
 <parent dest="46" weight="1" relationship=""/>
 <speak value="The United States Men&apos;s National Basketball Team represents the U.S. in international men&apos;s basketball, and has won medals in all seventeen Olympic tournaments it has entered, among which fourteen golds. "/>
 </Feature>
@@ -2983,123 +2983,123 @@
 <speak value="The men&apos;s Tournament of Basketball at the 2008 Summer Olympics took place on 10-24 August at the Wukesong Indoor Stadium."/>
 </Feature>
 <Feature id="259" data="Gold Medalists">
-<neighbor dest="118" weight="1" relationship="include"/>
-<neighbor dest="211" weight="1" relationship="include"/>
-<neighbor dest="198" weight="1" relationship="include"/>
-<neighbor dest="195" weight="1" relationship="include"/>
-<neighbor dest="188" weight="1" relationship="include"/>
-<neighbor dest="161" weight="1" relationship="include"/>
-<neighbor dest="150" weight="1" relationship="include"/>
-<neighbor dest="153" weight="1" relationship="include"/>
-<neighbor dest="168" weight="1" relationship="include"/>
-<neighbor dest="164" weight="1" relationship="include"/>
-<neighbor dest="113" weight="1" relationship="include"/>
-<neighbor dest="143" weight="1" relationship="include"/>
-<neighbor dest="204" weight="1" relationship="include"/>
-<neighbor dest="224" weight="1" relationship="include"/>
-<neighbor dest="225" weight="1" relationship="include"/>
-<neighbor dest="190" weight="1" relationship="include"/>
-<neighbor dest="246" weight="1" relationship="include"/>
-<neighbor dest="245" weight="1" relationship="include"/>
-<neighbor dest="154" weight="1" relationship="include"/>
-<neighbor dest="151" weight="1" relationship="include"/>
-<neighbor dest="247" weight="1" relationship="include"/>
-<neighbor dest="252" weight="1" relationship="include"/>
-<neighbor dest="194" weight="1" relationship="include"/>
-<neighbor dest="241" weight="1" relationship="include"/>
-<neighbor dest="110" weight="1" relationship="include"/>
-<neighbor dest="236" weight="1" relationship="include"/>
-<neighbor dest="207" weight="1" relationship="include"/>
-<neighbor dest="128" weight="1" relationship="include"/>
-<neighbor dest="174" weight="1" relationship="include"/>
-<neighbor dest="223" weight="1" relationship="include"/>
-<neighbor dest="256" weight="1" relationship="include"/>
-<neighbor dest="227" weight="1" relationship="include"/>
-<neighbor dest="249" weight="1" relationship="include"/>
-<neighbor dest="255" weight="1" relationship="include"/>
-<neighbor dest="155" weight="1" relationship="include"/>
-<neighbor dest="127" weight="1" relationship="include"/>
-<neighbor dest="149" weight="1" relationship="include"/>
+<neighbor dest="118" weight="1" relationship="include athlete"/>
+<neighbor dest="211" weight="1" relationship="include athlete"/>
+<neighbor dest="198" weight="1" relationship="include athlete"/>
+<neighbor dest="195" weight="1" relationship="include athlete"/>
+<neighbor dest="188" weight="1" relationship="include athlete"/>
+<neighbor dest="161" weight="1" relationship="include athlete"/>
+<neighbor dest="150" weight="1" relationship="include athlete"/>
+<neighbor dest="153" weight="1" relationship="include athlete"/>
+<neighbor dest="168" weight="1" relationship="include athlete"/>
+<neighbor dest="164" weight="1" relationship="include athlete"/>
+<neighbor dest="113" weight="1" relationship="include athlete"/>
+<neighbor dest="143" weight="1" relationship="include athlete"/>
+<neighbor dest="204" weight="1" relationship="include athlete"/>
+<neighbor dest="224" weight="1" relationship="include athlete"/>
+<neighbor dest="225" weight="1" relationship="include athlete"/>
+<neighbor dest="190" weight="1" relationship="include athlete"/>
+<neighbor dest="246" weight="1" relationship="include athlete"/>
+<neighbor dest="245" weight="1" relationship="include athlete"/>
+<neighbor dest="154" weight="1" relationship="include athlete"/>
+<neighbor dest="151" weight="1" relationship="include athlete"/>
+<neighbor dest="247" weight="1" relationship="include athlete"/>
+<neighbor dest="252" weight="1" relationship="include athlete"/>
+<neighbor dest="194" weight="1" relationship="include athlete"/>
+<neighbor dest="241" weight="1" relationship="include athlete"/>
+<neighbor dest="110" weight="1" relationship="include athlete"/>
+<neighbor dest="236" weight="1" relationship="include athlete"/>
+<neighbor dest="207" weight="1" relationship="include athlete"/>
+<neighbor dest="128" weight="1" relationship="include athlete"/>
+<neighbor dest="174" weight="1" relationship="include athlete"/>
+<neighbor dest="223" weight="1" relationship="include athlete"/>
+<neighbor dest="256" weight="1" relationship="include athlete"/>
+<neighbor dest="227" weight="1" relationship="include athlete"/>
+<neighbor dest="249" weight="1" relationship="include athlete"/>
+<neighbor dest="255" weight="1" relationship="include athlete"/>
+<neighbor dest="155" weight="1" relationship="include athlete"/>
+<neighbor dest="127" weight="1" relationship="include athlete"/>
+<neighbor dest="149" weight="1" relationship="include athlete"/>
 <neighbor dest="278" weight="1" relationship="has"/>
-<neighbor dest="232" weight="1" relationship="include"/>
-<neighbor dest="112" weight="1" relationship="include"/>
-<neighbor dest="144" weight="1" relationship="include"/>
-<neighbor dest="192" weight="1" relationship="include"/>
-<neighbor dest="193" weight="1" relationship="include"/>
-<neighbor dest="170" weight="1" relationship="include"/>
-<neighbor dest="196" weight="1" relationship="include"/>
-<neighbor dest="141" weight="1" relationship="include"/>
-<neighbor dest="251" weight="1" relationship="include"/>
-<neighbor dest="111" weight="1" relationship="include"/>
-<neighbor dest="208" weight="1" relationship="include"/>
-<neighbor dest="221" weight="1" relationship="include"/>
-<neighbor dest="191" weight="1" relationship="include"/>
-<neighbor dest="226" weight="1" relationship="include"/>
-<neighbor dest="177" weight="1" relationship="include"/>
-<neighbor dest="206" weight="1" relationship="include"/>
-<neighbor dest="233" weight="1" relationship="include"/>
-<neighbor dest="124" weight="1" relationship="include"/>
-<neighbor dest="248" weight="1" relationship="include"/>
-<neighbor dest="130" weight="1" relationship="include"/>
-<neighbor dest="179" weight="1" relationship="include"/>
-<neighbor dest="163" weight="1" relationship="include"/>
-<neighbor dest="185" weight="1" relationship="include"/>
-<neighbor dest="250" weight="1" relationship="include"/>
-<neighbor dest="156" weight="1" relationship="include"/>
-<neighbor dest="197" weight="1" relationship="include"/>
-<neighbor dest="222" weight="1" relationship="include"/>
-<neighbor dest="231" weight="1" relationship="include"/>
-<neighbor dest="184" weight="1" relationship="include"/>
+<neighbor dest="232" weight="1" relationship="include athlete"/>
+<neighbor dest="112" weight="1" relationship="include athlete"/>
+<neighbor dest="144" weight="1" relationship="include athlete"/>
+<neighbor dest="192" weight="1" relationship="include athlete"/>
+<neighbor dest="193" weight="1" relationship="include athlete"/>
+<neighbor dest="170" weight="1" relationship="include athlete"/>
+<neighbor dest="196" weight="1" relationship="include athlete"/>
+<neighbor dest="141" weight="1" relationship="include athlete"/>
+<neighbor dest="251" weight="1" relationship="include athlete"/>
+<neighbor dest="111" weight="1" relationship="include athlete"/>
+<neighbor dest="208" weight="1" relationship="include athlete"/>
+<neighbor dest="221" weight="1" relationship="include athlete"/>
+<neighbor dest="191" weight="1" relationship="include athlete"/>
+<neighbor dest="226" weight="1" relationship="include athlete"/>
+<neighbor dest="177" weight="1" relationship="include athlete"/>
+<neighbor dest="206" weight="1" relationship="include athlete"/>
+<neighbor dest="233" weight="1" relationship="include athlete"/>
+<neighbor dest="124" weight="1" relationship="include athlete"/>
+<neighbor dest="248" weight="1" relationship="include athlete"/>
+<neighbor dest="130" weight="1" relationship="include athlete"/>
+<neighbor dest="179" weight="1" relationship="include athlete"/>
+<neighbor dest="163" weight="1" relationship="include athlete"/>
+<neighbor dest="185" weight="1" relationship="include athlete"/>
+<neighbor dest="250" weight="1" relationship="include athlete"/>
+<neighbor dest="156" weight="1" relationship="include athlete"/>
+<neighbor dest="197" weight="1" relationship="include athlete"/>
+<neighbor dest="222" weight="1" relationship="include athlete"/>
+<neighbor dest="231" weight="1" relationship="include athlete"/>
+<neighbor dest="184" weight="1" relationship="include athlete"/>
 <neighbor dest="277" weight="1" relationship="has"/>
-<neighbor dest="104" weight="1" relationship="include"/>
-<neighbor dest="142" weight="1" relationship="include"/>
-<neighbor dest="157" weight="1" relationship="include"/>
-<neighbor dest="215" weight="1" relationship="include"/>
-<neighbor dest="109" weight="1" relationship="include"/>
-<neighbor dest="166" weight="1" relationship="include"/>
-<neighbor dest="106" weight="1" relationship="include"/>
-<neighbor dest="254" weight="1" relationship="include"/>
-<neighbor dest="176" weight="1" relationship="include"/>
-<neighbor dest="213" weight="1" relationship="include"/>
-<neighbor dest="136" weight="1" relationship="include"/>
-<neighbor dest="116" weight="1" relationship="include"/>
-<neighbor dest="212" weight="1" relationship="include"/>
-<neighbor dest="189" weight="1" relationship="include"/>
-<neighbor dest="108" weight="1" relationship="include"/>
-<neighbor dest="181" weight="1" relationship="include"/>
-<neighbor dest="126" weight="1" relationship="include"/>
-<neighbor dest="201" weight="1" relationship="include"/>
-<neighbor dest="183" weight="1" relationship="include"/>
-<neighbor dest="132" weight="1" relationship="include"/>
-<neighbor dest="209" weight="1" relationship="include"/>
-<neighbor dest="238" weight="1" relationship="include"/>
-<neighbor dest="235" weight="1" relationship="include"/>
-<neighbor dest="123" weight="1" relationship="include"/>
-<neighbor dest="240" weight="1" relationship="include"/>
-<neighbor dest="125" weight="1" relationship="include"/>
-<neighbor dest="237" weight="1" relationship="include"/>
-<neighbor dest="214" weight="1" relationship="include"/>
-<neighbor dest="242" weight="1" relationship="include"/>
-<neighbor dest="239" weight="1" relationship="include"/>
-<neighbor dest="217" weight="1" relationship="include"/>
-<neighbor dest="146" weight="1" relationship="include"/>
-<neighbor dest="182" weight="1" relationship="include"/>
-<neighbor dest="172" weight="1" relationship="include"/>
-<neighbor dest="159" weight="1" relationship="include"/>
-<neighbor dest="186" weight="1" relationship="include"/>
-<neighbor dest="218" weight="1" relationship="include"/>
-<neighbor dest="152" weight="1" relationship="include"/>
-<neighbor dest="220" weight="1" relationship="include"/>
-<neighbor dest="219" weight="1" relationship="include"/>
-<neighbor dest="253" weight="1" relationship="include"/>
-<neighbor dest="228" weight="1" relationship="include"/>
-<neighbor dest="187" weight="1" relationship="include"/>
-<neighbor dest="202" weight="1" relationship="include"/>
-<neighbor dest="234" weight="1" relationship="include"/>
-<neighbor dest="147" weight="1" relationship="include"/>
-<neighbor dest="139" weight="1" relationship="include"/>
-<neighbor dest="120" weight="1" relationship="include"/>
-<neighbor dest="165" weight="1" relationship="include"/>
+<neighbor dest="104" weight="1" relationship="include athlete"/>
+<neighbor dest="142" weight="1" relationship="include athlete"/>
+<neighbor dest="157" weight="1" relationship="include athlete"/>
+<neighbor dest="215" weight="1" relationship="include athlete"/>
+<neighbor dest="109" weight="1" relationship="include athlete"/>
+<neighbor dest="166" weight="1" relationship="include athlete"/>
+<neighbor dest="106" weight="1" relationship="include athlete"/>
+<neighbor dest="254" weight="1" relationship="include athlete"/>
+<neighbor dest="176" weight="1" relationship="include athlete"/>
+<neighbor dest="213" weight="1" relationship="include athlete"/>
+<neighbor dest="136" weight="1" relationship="include athlete"/>
+<neighbor dest="116" weight="1" relationship="include athlete"/>
+<neighbor dest="212" weight="1" relationship="include athlete"/>
+<neighbor dest="189" weight="1" relationship="include athlete"/>
+<neighbor dest="108" weight="1" relationship="include athlete"/>
+<neighbor dest="181" weight="1" relationship="include athlete"/>
+<neighbor dest="126" weight="1" relationship="include athlete"/>
+<neighbor dest="201" weight="1" relationship="include athlete"/>
+<neighbor dest="183" weight="1" relationship="include athlete"/>
+<neighbor dest="132" weight="1" relationship="include athlete"/>
+<neighbor dest="209" weight="1" relationship="include athlete"/>
+<neighbor dest="238" weight="1" relationship="include athlete"/>
+<neighbor dest="235" weight="1" relationship="include athlete"/>
+<neighbor dest="123" weight="1" relationship="include athlete"/>
+<neighbor dest="240" weight="1" relationship="include athlete"/>
+<neighbor dest="125" weight="1" relationship="include athlete"/>
+<neighbor dest="237" weight="1" relationship="include athlete"/>
+<neighbor dest="214" weight="1" relationship="include athlete"/>
+<neighbor dest="242" weight="1" relationship="include athlete"/>
+<neighbor dest="239" weight="1" relationship="include athlete"/>
+<neighbor dest="217" weight="1" relationship="include athlete"/>
+<neighbor dest="146" weight="1" relationship="include athlete"/>
+<neighbor dest="182" weight="1" relationship="include athlete"/>
+<neighbor dest="172" weight="1" relationship="include athlete"/>
+<neighbor dest="159" weight="1" relationship="include athlete"/>
+<neighbor dest="186" weight="1" relationship="include athlete"/>
+<neighbor dest="218" weight="1" relationship="include athlete"/>
+<neighbor dest="152" weight="1" relationship="include athlete"/>
+<neighbor dest="220" weight="1" relationship="include athlete"/>
+<neighbor dest="219" weight="1" relationship="include athlete"/>
+<neighbor dest="253" weight="1" relationship="include athlete"/>
+<neighbor dest="228" weight="1" relationship="include athlete"/>
+<neighbor dest="187" weight="1" relationship="include athlete"/>
+<neighbor dest="202" weight="1" relationship="include athlete"/>
+<neighbor dest="234" weight="1" relationship="include athlete"/>
+<neighbor dest="147" weight="1" relationship="include athlete"/>
+<neighbor dest="139" weight="1" relationship="include athlete"/>
+<neighbor dest="120" weight="1" relationship="include athlete"/>
+<neighbor dest="165" weight="1" relationship="include athlete"/>
 <parent dest="118" weight="1" relationship=""/>
 <parent dest="211" weight="1" relationship=""/>
 <parent dest="198" weight="1" relationship=""/>
@@ -3211,7 +3211,7 @@
 <parent dest="187" weight="1" relationship=""/>
 <parent dest="202" weight="1" relationship=""/>
 <parent dest="234" weight="1" relationship=""/>
-<parent dest="276" weight="0" relationship="has"/>
+<parent dest="276" weight="0" relationship=""/>
 <parent dest="147" weight="1" relationship=""/>
 <parent dest="139" weight="1" relationship=""/>
 <parent dest="120" weight="1" relationship=""/>
@@ -3419,7 +3419,7 @@
 <parent dest="160" weight="1" relationship=""/>
 <parent dest="244" weight="1" relationship=""/>
 <parent dest="171" weight="1" relationship=""/>
-<parent dest="276" weight="0" relationship="has"/>
+<parent dest="276" weight="0" relationship=""/>
 <speak value="Gold Sports are sport events in which American athletes have won gold medals."/>
 </Feature>
 <Feature id="276" data="United States Olympic Committee (USOC)">

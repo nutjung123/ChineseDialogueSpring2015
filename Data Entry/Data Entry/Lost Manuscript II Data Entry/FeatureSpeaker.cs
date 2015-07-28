@@ -14,10 +14,11 @@ namespace Dialogue_Data_Entry
         private int currentTurn=1;
         private int heightLimit = 999;
         private string[] spatialKey = new string[8] { "east", "north", "northeast", "northwest", "south", "southeast", "southwest", "west" };
-        private string[] hierarchyKey = new string[28] { "is", "was a member of", "are", "won a gold medal in", "is a kind of", "is a member of"
+        private string[] hierarchyKey = new string[33] { "is", "was a member of", "are", "won a gold medal in", "is a kind of", "is a member of"
             , "is southwest of", "won", "is one of", "include", "was", "took place on", "was one of the", "is southeast of", "took place at"
             , "was one of", "is a", "includes", "included", "is northeast of", "has", "is north of", "is in", "is west of"
-            , "is east of", "is south of", "is northwest of", "" };
+            , "is east of", "is south of", "is northwest of", "had", "includes event", "includes member", "included member"
+            , "include athlete", "" };
         private string previousSpatial = "";
         private List<string> topicHistory;
         private const string SPATIAL = "spatial";
