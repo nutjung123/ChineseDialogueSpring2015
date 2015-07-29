@@ -12,6 +12,7 @@ using System.Collections;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Diagnostics;
 
 namespace Dialogue_Data_Entry
 {
@@ -122,12 +123,22 @@ namespace Dialogue_Data_Entry
                     {
                         StopRecording();
                     });
+
                     string translated_query = null;
                     this.Invoke((MethodInvoker)delegate
                     {
                         translated_query = XunfeiFunction.IatModeTranslate("audio/temp.wav", language);
                     });
                     //MessageBox.Show(translated_query);
+
+                    if (language != "english")
+                    {
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            translated_query += run_translator(translated_query);
+                        });
+                    }
+
                     if (translated_query != null)
                     {
                         myServer.SendDataToClient(translated_query);
@@ -275,6 +286,7 @@ namespace Dialogue_Data_Entry
             else if (ChineseRadioButton.Checked)
             {
                 inputBox.Text = XunfeiFunction.IatModeTranslate("audio/temp.wav", "chinese");
+                inputBox.Text += run_translator(inputBox.Text);
             }
             else { }
             
@@ -313,6 +325,31 @@ namespace Dialogue_Data_Entry
                     break;
                 }
             };
+        }
+
+        private string run_translator(string text)
+        {
+            string result = null;
+            Process p = new Process();
+            p.StartInfo.FileName = "python";
+            // assuming asr text not empty
+            p.StartInfo.WorkingDirectory = "translation/";
+            p.StartInfo.Arguments = "translate.py \"" + text + "\"";
+
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            p.StartInfo.CreateNoWindow = true;
+            p.Start();
+
+            StreamReader reader = p.StandardOutput;
+            result = reader.ReadToEnd();
+            //MessageBox.Show(result);
+            reader.Close();
+            reader.Dispose();
+            p.Close();
+            p.Dispose();
+            return result;
         }
     }
 }
