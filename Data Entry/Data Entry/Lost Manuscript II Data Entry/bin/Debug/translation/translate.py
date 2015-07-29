@@ -13,16 +13,15 @@ if(len(sys.argv) > 1):
     text_to_translate = sys.argv[1]
 else:
     print "No words translated"
-    #exit()
+    exit()
     
 #print text_to_translate
 #print translate(text_to_translate, 'en')
 #uni_text = unicode(text_to_translate)
-"""
+
 text_to_translate = text_to_translate.decode(sys.stdin.encoding or locale.getpreferredencoding(True)).encode('utf-8')
 #print text_to_translate
 print translate(text_to_translate,'en')
-"""
 
 #print type(text_to_translate)
 #print text_to_translate
