@@ -342,7 +342,7 @@ namespace Dialogue_Data_Entry
             return noveltyValue;
         }
 
-        private double calculateScore(Feature current, Feature oldTopic)
+        public double calculateScore(Feature current, Feature oldTopic)
         {
             double score = 0;
             int currentIndex = featGraph.getFeatureIndex(current.Data);
@@ -805,6 +805,7 @@ namespace Dialogue_Data_Entry
 
             //Forward Projection
             List<Feature> topicList = new List<Feature>();
+            //topicList.Add(currentTopic);
             for (int x = 0; x < forwardTurn;x++)
             {
                 //update Internal variables

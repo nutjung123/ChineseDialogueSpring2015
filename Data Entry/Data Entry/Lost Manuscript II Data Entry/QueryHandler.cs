@@ -242,13 +242,13 @@ namespace Dialogue_Data_Entry
 		private string RelationshipAnalogy(Feature old, Feature newOld, Feature prevOfCurr, Feature current)
 		{
 			string return_message = "";
-			Console.WriteLine("old: " + old.Data);
+			/*Console.WriteLine("old: " + old.Data);
 			Console.WriteLine("new: " + newOld.Data);
             Console.WriteLine("relationship: " + old.getRelationshipNeighbor(newOld.Data));
 			Console.WriteLine("previous of current: " + prevOfCurr.Data);
 			Console.WriteLine("current: " + current.Data);
             Console.WriteLine("relationship: " + prevOfCurr.getRelationshipNeighbor(current.Data));
-
+            */
 
 			// Senten Patterns list - for 3 nodes
 			List<string> sentencePatterns = new List<string>();
@@ -617,7 +617,9 @@ namespace Dialogue_Data_Entry
         //messageToServer indicates whether or not we are preparing a response to the front-end.
         //forLog indicates whether or not we are preparing a response for a log output.
         //outOfTopic indicates whether or not we are continuing out-of-topic handling.
-        public string ParseInput(string input, bool messageToServer = false, bool forLog = false, bool outOfTopic = false)
+        //projectAsTopic true means we use forward projection to choose the next node to traverse to based on
+        //  how well the nodes in the n-length path from the current node relate to the current node.
+        public string ParseInput(string input, bool messageToServer = false, bool forLog = false, bool outOfTopic = false, bool projectAsTopic = false)
         {
             string answer = IDK;
             string noveltyInfo = "";
@@ -674,7 +676,12 @@ namespace Dialogue_Data_Entry
                     for (int s = 0; s < step_count; s++)
                     {
                         //Get forServer and forLog responses.
-                        answer += ParseInput("", true, true);
+                        if (s % 5 == 0)
+                        {
+                            answer += ParseInput("", true, true, false, true);
+                        }//end if
+                        else
+                            answer += ParseInput("", true, true, false, false);
                         answer += "\n";
                     }
                     //Console.WriteLine("answer " + answer);
@@ -757,8 +764,6 @@ namespace Dialogue_Data_Entry
                 }//end else if
             }//end else if
 
-            //Whether or not the query was out-of-topic
-            bool out_of_topic = false;
             // CASE: Nothing / Move on to next topic
             if (string.IsNullOrEmpty(input))
             {
@@ -789,7 +794,61 @@ namespace Dialogue_Data_Entry
                 }
                 
                 // Can't guarantee it'll actually move on to anything...
-                nextTopic = speaker.getNextTopic(nextTopic, "", this.turn);
+                //If we are not projecting the current node as a topic, pick the next node normally
+                if (!projectAsTopic)
+                    nextTopic = speaker.getNextTopic(nextTopic, "", this.turn);
+                //If we are projecting the current node as a topic, pick the next node whose projected
+                //path of nodes relate most to the current node (has the highest score).
+                else
+                {
+                    Console.WriteLine("Current Topic: " + this.topic.Data);
+                    //Go this many steps in the forward projection.
+                    int forward_turn = 5;
+                    //Get a list of all the neighbors to the current node
+                    List<Tuple<Feature, double, string>> all_neighbors = this.topic.Neighbors;
+                    //print out all neighbors
+                    /*Console.WriteLine("Neighbors: ");
+                    for (int i = 0; i < all_neighbors.Count; i++)
+                    {
+                        Console.WriteLine(all_neighbors[i].Item1.Data);
+                    }//end for*/
+                    
+                    //For each neighbor, find its projected path and sum the score of each node in the path relative to the current node.
+                    double highest_score = -10000;
+                    foreach (Tuple<Feature, double, string> neighbor_tuple in all_neighbors)
+                    {
+                        List<Feature> projected_path = speaker.forwardProjection(neighbor_tuple.Item1, forward_turn);
+                        //print out all the topics
+                        /*Console.WriteLine("Projected Path: ");
+                        for (int i = 0; i < forward_turn; i++)
+                        {
+                            Console.WriteLine(projected_path[i].Data);
+                        }//end for*/
+
+                        double total_score = 0;
+                        foreach (Feature path_node in projected_path)
+                        {
+                            total_score += speaker.calculateScore(path_node, this.topic);
+                        }//end foreach
+                        //Console.WriteLine("Score for path: " + total_score);
+
+                        if (total_score > highest_score)
+                        {
+                            highest_score = total_score;
+                            nextTopic = neighbor_tuple.Item1;
+                        }//end if
+                    }//end foreach
+                    //At the end of this foreach, nextTopic is set to the next node whose projected path had the highest sum score
+                    //relative to the current node.
+                    Console.WriteLine("Next Topic from " + this.topic.Data + " is " + nextTopic.Data + " with score " + highest_score);
+                    Console.WriteLine("Path: ");
+                    List<Feature> test_path = speaker.forwardProjection(nextTopic, forward_turn);
+                    //print out all the topics
+                    for (int i = 0; i < forward_turn; i++)
+                    {
+                        Console.WriteLine(test_path[i].Data);
+                    }//end for
+                }//end else
 
                 /*
                 //Check for filter nodes.
@@ -813,6 +872,8 @@ namespace Dialogue_Data_Entry
                 // talk about
                 this.buffer = newBuffer;
                 answer = this.buffer[b++];
+                if (projectAsTopic)
+                    answer = "*****" + answer;
             }
             // CASE: Tell me more / Continue speaking
             else if (input.Contains("more") && input.Contains("tell"))
