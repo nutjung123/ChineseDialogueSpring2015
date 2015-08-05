@@ -676,9 +676,9 @@ namespace Dialogue_Data_Entry
                     for (int s = 0; s < step_count; s++)
                     {
                         //Get forServer and forLog responses.
-                        if (s % 5 == 0)
+                        if (s % 5 == 1)
                         {
-                            answer += ParseInput("", true, true, false, true);
+                            answer += ParseInput("", true, true, false, false);
                         }//end if
                         else
                             answer += ParseInput("", true, true, false, false);
@@ -796,7 +796,10 @@ namespace Dialogue_Data_Entry
                 // Can't guarantee it'll actually move on to anything...
                 //If we are not projecting the current node as a topic, pick the next node normally
                 if (!projectAsTopic)
+                {
                     nextTopic = speaker.getNextTopic(nextTopic, "", this.turn);
+                    Console.WriteLine("Next Topic from " + this.topic.Data + " is " + nextTopic.Data);
+                }//end if
                 //If we are projecting the current node as a topic, pick the next node whose projected
                 //path of nodes relate most to the current node (has the highest score).
                 else
@@ -812,11 +815,16 @@ namespace Dialogue_Data_Entry
                     {
                         Console.WriteLine(all_neighbors[i].Item1.Data);
                     }//end for*/
-                    
+
                     //For each neighbor, find its projected path and sum the score of each node in the path relative to the current node.
                     double highest_score = -10000;
                     foreach (Tuple<Feature, double, string> neighbor_tuple in all_neighbors)
                     {
+                        //First, check if the neighbor is a filtered node.
+                        //If so, do not consider it.
+                        if (filter_nodes.Contains(neighbor_tuple.Item1.Data))
+                            continue;
+
                         List<Feature> projected_path = speaker.forwardProjection(neighbor_tuple.Item1, forward_turn);
                         //print out all the topics
                         /*Console.WriteLine("Projected Path: ");

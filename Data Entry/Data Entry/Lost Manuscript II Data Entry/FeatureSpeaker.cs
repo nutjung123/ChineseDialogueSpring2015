@@ -723,7 +723,7 @@ namespace Dialogue_Data_Entry
 
                 currentTopicNovelty = currentNovelty[featGraph.getFeatureIndex(listScore[maxIndex].Item1.Data)];
                 //if (printCalculation)
-                if (true)
+                if (false)
                 {
                     System.Console.WriteLine("\n\nMax score: " + maxScore);
                     System.Console.WriteLine("Novelty: "+ currentTopicNovelty);
