@@ -102,6 +102,11 @@ namespace Dialogue_Data_Entry
         //one of these nodes the next step in the traversal is automatically taken.
         public List<string> filter_nodes = new List<string>();
 
+        //JOINT MENTIONS:
+        //A list of feature lists, each of which represent
+        //nodes that should be mentioned together
+        public List<List<Feature>> joint_mention_sets = new List<List<Feature>>();
+
         /// <summary>
         /// Create a converter for the specified XML file
         /// </summary>
@@ -549,11 +554,17 @@ namespace Dialogue_Data_Entry
 			// Leading-topic sentence.
             // Only place a leading topic sentence if there isn't already an analogy here.
             if (prevCurr.Count > 1 && !analogy_made) // && !CheckAlreadyMentioned(current))// && countFocusNode == 1)
-			{
+            {
                 Console.WriteLine("creating leading topic for " + last.Data + " to " + first.Data);
-				return_message = LeadingTopic (last, first);
+                return_message = LeadingTopic(last, first);
                 countFocusNode = 0; // Set back to 0
-			}
+            }
+            //Otherwise, this is the first node being mentioned.
+            else if (!analogy_made)
+            {
+                //As the first node, place an introduction phrase before it.
+                return_message = "{First, let's talk about " + first.Data + ".} ";
+            }//end else
 
 
             String to_speak = return_message + speak;
@@ -671,13 +682,33 @@ namespace Dialogue_Data_Entry
                     //specified by the second argument in the command
                     //Console.WriteLine("step_count " + split_input[1]);
                     int step_count = int.Parse(split_input[1]);
+
+                    //TESTING JOINT MENTIONS
+                    //If there are two more colon-separated integers in the command, they are two node IDs that should be mentioned together.
+                    if (split_input.Length > 2)
+                    {
+                        //Since this is just a test, first, clear joint_mention_sets
+                        joint_mention_sets.Clear();
+                        //Get the two indices from the command
+                        int index_1 = int.Parse(split_input[2]);
+                        int index_2 = int.Parse(split_input[3]);
+                        //Add the pair as a list of features to joint_mention_sets.
+                        List<Feature> joint_set = new List<Feature>();
+                        joint_set.Add(this.graph.getFeature(index_1));
+                        joint_set.Add(this.graph.getFeature(index_2));
+                        joint_mention_sets.Add(joint_set);
+                    }//end if
+
                     //Create an answer by calling the ParseInput function step_count times.
                     answer = "";
                     for (int s = 0; s < step_count; s++)
                     {
                         //Get forServer and forLog responses.
+                        //TESTING TOPIC NODE
+                        //Treat every 5th node as topic
                         if (s % 5 == 1)
                         {
+                            //Last parameter true means the current node is the topic node
                             answer += ParseInput("", true, true, false, false);
                         }//end if
                         else
@@ -834,12 +865,21 @@ namespace Dialogue_Data_Entry
                         }//end for*/
 
                         double total_score = 0;
+
+                        //Total score calculation for topic
+                        //Sum score of each path node relative to the current node
+                        /*
                         foreach (Feature path_node in projected_path)
                         {
                             total_score += speaker.calculateScore(path_node, this.topic);
                         }//end foreach
                         //Console.WriteLine("Score for path: " + total_score);
-
+                        */
+                        //Total score calculation for joint mentions
+                        //If a joint mention appears in the path, add an amount (currently just the joint mention weight)
+                        //to the score of the neighbor (first path node) relative to the current node.
+                        total_score = speaker.calculateScore(neighbor_tuple.Item1, this.topic) + this.graph.getSingleWeight(Constant.JointWeightIndex);
+ 
                         if (total_score > highest_score)
                         {
                             highest_score = total_score;

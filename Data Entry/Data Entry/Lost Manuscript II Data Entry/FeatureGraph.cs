@@ -39,6 +39,8 @@ namespace Dialogue_Data_Entry
             weight_array[Constant.SpatialWeightIndex] = 1.0;
             weight_array[Constant.HierarchyWeightIndex] = 100.0;
             weight_array[Constant.TemporalWeightIndex] = 0.2;
+            //joint weight relates to mentioning nodes together
+            weight_array[Constant.JointWeightIndex] = 100.0f;
         }
 
         private void helperMaxDepthDSF(Feature current, int depth, bool[] checkEntry)

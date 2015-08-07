@@ -18,7 +18,8 @@ namespace Dialogue_Data_Entry
         public const int SpatialWeightIndex = 2;
         public const int HierarchyWeightIndex = 3;
         public const int TemporalWeightIndex = 4;
-        public const int WeightArraySize = 5;
+        public const int JointWeightIndex = 5;
+        public const int WeightArraySize = 6;
 
         //Store score components, and score, in return array.
         //Indices are as follows:
