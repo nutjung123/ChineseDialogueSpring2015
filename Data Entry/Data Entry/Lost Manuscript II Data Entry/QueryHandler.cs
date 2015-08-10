@@ -107,6 +107,10 @@ namespace Dialogue_Data_Entry
         //nodes that should be mentioned together
         public List<List<Feature>> joint_mention_sets = new List<List<Feature>>();
 
+        //Which language we are operating in.
+        //Default is English.
+        public int language_mode = Constant.EnglishMode;
+
         /// <summary>
         /// Create a converter for the specified XML file
         /// </summary>
@@ -704,7 +708,6 @@ namespace Dialogue_Data_Entry
                     for (int s = 0; s < step_count; s++)
                     {
                         //Get forServer and forLog responses.
-                        //TESTING TOPIC NODE
                         //Treat every 5th node as topic
                         if (s % 5 == 1)
                         {
@@ -829,7 +832,7 @@ namespace Dialogue_Data_Entry
                 if (!projectAsTopic)
                 {
                     nextTopic = speaker.getNextTopic(nextTopic, "", this.turn);
-                    Console.WriteLine("Next Topic from " + this.topic.Data + " is " + nextTopic.Data);
+                    //Console.WriteLine("Next Topic from " + this.topic.Data + " is " + nextTopic.Data);
                 }//end if
                 //If we are projecting the current node as a topic, pick the next node whose projected
                 //path of nodes relate most to the current node (has the highest score).
@@ -841,11 +844,11 @@ namespace Dialogue_Data_Entry
                     //Get a list of all the neighbors to the current node
                     List<Tuple<Feature, double, string>> all_neighbors = this.topic.Neighbors;
                     //print out all neighbors
-                    /*Console.WriteLine("Neighbors: ");
+                    Console.WriteLine("Neighbors: ");
                     for (int i = 0; i < all_neighbors.Count; i++)
                     {
                         Console.WriteLine(all_neighbors[i].Item1.Data);
-                    }//end for*/
+                    }//end for
 
                     //For each neighbor, find its projected path and sum the score of each node in the path relative to the current node.
                     double highest_score = -10000;
@@ -878,8 +881,19 @@ namespace Dialogue_Data_Entry
                         //Total score calculation for joint mentions
                         //If a joint mention appears in the path, add an amount (currently just the joint mention weight)
                         //to the score of the neighbor (first path node) relative to the current node.
-                        total_score = speaker.calculateScore(neighbor_tuple.Item1, this.topic) + this.graph.getSingleWeight(Constant.JointWeightIndex);
- 
+                        bool joint_mention_exists = true;
+                        //For testing purposes, only check the first list in joint_mention_sets
+                        foreach (Feature temp_node in joint_mention_sets[0])
+                        {
+                            if (!projected_path.Contains(temp_node))
+                                joint_mention_exists = false;
+                        }//end foreach
+                        if (joint_mention_exists)
+                        {
+                            Console.WriteLine("Joint mention exists");
+                            total_score = speaker.calculateScore(neighbor_tuple.Item1, this.topic) + this.graph.getSingleWeight(Constant.JointWeightIndex);
+                        }//end if
+
                         if (total_score > highest_score)
                         {
                             highest_score = total_score;

@@ -37,5 +37,11 @@ namespace Dialogue_Data_Entry
         public const int ScoreArrayHierarchyIndex = 5;
         public const int ScoreArraySize = 6;
 
+        //Language mode constants
+        //  0 = English
+        //  1 = Chinese
+        public const int EnglishMode = 0;
+        public const int ChineseMode = 1;
+
     }
 }
