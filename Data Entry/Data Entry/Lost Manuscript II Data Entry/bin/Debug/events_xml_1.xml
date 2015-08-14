@@ -1,0 +1,752 @@
+<AIMind>
+<Root id="0"/>
+<Feature id="0" data="Israeli Embassy Protest">
+<neighbor dest="1" weight="0" relationship="occurred before"/>
+<neighbor dest="59" weight="0" relationship="occurred in"/>
+<neighbor dest="108" weight="0" relationship="happened with a"/>
+<speak value="A few dozen people have staged a protest outside the Israeli Embassy in Moscow demanding an end to attacks on the Gaza Strip."/>
+</Feature>
+<Feature id="1" data="Canadian Tamil Protest">
+<neighbor dest="0" weight="0" relationship="occurred after"/>
+<neighbor dest="2" weight="0" relationship="occurred before"/>
+<neighbor dest="60" weight="0" relationship="occurred in"/>
+<neighbor dest="109" weight="0" relationship="happened with a"/>
+<speak value="Thousands of Canadian Tamils formed a human chain through Toronto's downtown on Friday to protest a Sri Lankan government offensive aimed at crushing the separatist Tamil Tigers."/>
+</Feature>
+<Feature id="2" data="Madagascar Defense Minister Resignation">
+<neighbor dest="1" weight="0" relationship="occurred after"/>
+<neighbor dest="3" weight="0" relationship="occurred before"/>
+<neighbor dest="61" weight="0" relationship="occurred in"/>
+<neighbor dest="110" weight="0" relationship="happened with a"/>
+<speak value="Madagascar's defense minister resigned in protest Monday after security forces fired on anti-government protesters over the weekend, killing at least 25 people."/>
+</Feature>
+<Feature id="3" data="Kentucky Bourbon Industry Protest">
+<neighbor dest="2" weight="0" relationship="occurred after"/>
+<neighbor dest="4" weight="0" relationship="occurred before"/>
+<neighbor dest="62" weight="0" relationship="occurred in"/>
+<neighbor dest="108" weight="0" relationship="happened with a"/>
+<speak value="Kentucky bourbon industry officials stood shoulder-to-shoulder Tuesday and poured spirits on the state Capitol's front steps to protest a proposed 6-percent sales tax on all booze."/>
+</Feature>
+<Feature id="4" data="New York Post Protest">
+<neighbor dest="3" weight="0" relationship="occurred after"/>
+<neighbor dest="5" weight="0" relationship="occurred before"/>
+<neighbor dest="63" weight="0" relationship="occurred in"/>
+<neighbor dest="108" weight="0" relationship="happened with a"/>
+<speak value="About 200 people, outraged over a New York Post cartoon, have been protesting in front of the newspaper's Manhattan offices."/>
+</Feature>
+<Feature id="5" data="American International Group Inc. Protest">
+<neighbor dest="4" weight="0" relationship="occurred after"/>
+<neighbor dest="6" weight="0" relationship="occurred before"/>
+<neighbor dest="64" weight="0" relationship="occurred in"/>
+<neighbor dest="108" weight="0" relationship="happened with a"/>
+<speak value="A busload of activists -- outnumbered 2-to-1 by reporters and photographers -- are paying visits to the homes of American International Group Inc. executives in Connecticut to protest tens of millions of dollars in bonuses awarded by the company."/>
+</Feature>
+<Feature id="6" data="Madagascar Police Opposition Demonstration">
+<neighbor dest="5" weight="0" relationship="occurred after"/>
+<neighbor dest="7" weight="0" relationship="occurred before"/>
+<neighbor dest="61" weight="0" relationship="occurred in"/>
+<neighbor dest="110" weight="0" relationship="happened with a"/>
+<speak value="Police in Madagascar's capital broke up an opposition demonstration by shooting into the air and using tear gas Saturday, Hospital officials said 34 people were injured."/>
+</Feature>
+<Feature id="7" data="NATO Anniversary Protests">
+<neighbor dest="6" weight="0" relationship="occurred after"/>
+<neighbor dest="8" weight="0" relationship="occurred before"/>
+<neighbor dest="65" weight="0" relationship="occurred in"/>
+<neighbor dest="66" weight="0" relationship="occurred in"/>
+<neighbor dest="110" weight="0" relationship="happened with a"/>
+<speak value="Police in France and Germany encountered small, scattered and peaceful protests Friday in a marked change from the violent clashes that marred the eve of NATO's 60th-anniversary summit."/>
+</Feature>
+<Feature id="8" data="French Fishing Protest">
+<neighbor dest="7" weight="0" relationship="occurred after"/>
+<neighbor dest="9" weight="0" relationship="occurred before"/>
+<neighbor dest="67" weight="0" relationship="occurred in"/>
+<neighbor dest="111" weight="0" relationship="happened with a"/>
+<speak value="The head of a fishing association says fishermen have blocked ports at the French city of Boulogne-sur-Mer on the English Channel to protest fishing quotas."/>
+</Feature>
+<Feature id="9" data="Bangkok Anti-Government Protest">
+<neighbor dest="8" weight="0" relationship="occurred after"/>
+<neighbor dest="10" weight="0" relationship="occurred before"/>
+<neighbor dest="68" weight="0" relationship="occurred in"/>
+<neighbor dest="110" weight="0" relationship="happened with a"/>
+<neighbor dest="111" weight="0" relationship="happened with a"/>
+<speak value="Sixteen buses were burned and 15 damaged in the intense anti-government protests which ended in Bangkok Tuesday, according to Bangkok Mass Transit Authority (BMTA) , Thai News Agency reported."/>
+</Feature>
+<Feature id="10" data="Hungarian Anti-Government Protest">
+<neighbor dest="9" weight="0" relationship="occurred after"/>
+<neighbor dest="11" weight="0" relationship="occurred before"/>
+<neighbor dest="69" weight="0" relationship="occurred in"/>
+<neighbor dest="110" weight="0" relationship="happened with a"/>
+<speak value="An anti-government demonstration was held in the Hungarian capital Budapest on Tuesday, with demonstrators demanding the dissolution of parliament and early elections."/>
+</Feature>
+<Feature id="11" data="Georgian Opposition Protests">
+<neighbor dest="10" weight="0" relationship="occurred after"/>
+<neighbor dest="12" weight="0" relationship="occurred before"/>
+<neighbor dest="70" weight="0" relationship="occurred in"/>
+<neighbor dest="110" weight="0" relationship="happened with a"/>
+<speak value="Georgia's monthlong opposition protests entered a new and dangerous phase Thursday after demonstrators clashed with police, raising the odds that Georgia's third post-Soviet leader would be forced from power like his predecessors."/>
+</Feature>
+<Feature id="12" data="Astana Team Protest">
+<neighbor dest="11" weight="0" relationship="occurred after"/>
+<neighbor dest="13" weight="0" relationship="occurred before"/>
+<neighbor dest="71" weight="0" relationship="occurred in"/>
+<neighbor dest="112" weight="0" relationship="happened with a"/>
+<speak value="Lance Armstrong and other riders on the Astana team are protesting the Kazakhstan squad's lack of salary payments by fading out the sponsors on their jerseys."/>
+</Feature>
+<Feature id="13" data="Sri Lankan British Protest">
+<neighbor dest="12" weight="0" relationship="occurred after"/>
+<neighbor dest="14" weight="0" relationship="occurred before"/>
+<neighbor dest="72" weight="0" relationship="occurred in"/>
+<neighbor dest="108" weight="0" relationship="happened with a"/>
+<speak value="More than a thousand Sri Lankans are protesting outside the British Embassy in Colombo and accusing the British government of supporting the Tamil Tiger rebels."/>
+</Feature>
+<Feature id="14" data="Sikh Cleric Riots">
+<neighbor dest="13" weight="0" relationship="occurred after"/>
+<neighbor dest="15" weight="0" relationship="occurred before"/>
+<neighbor dest="73" weight="0" relationship="occurred in"/>
+<neighbor dest="104" weight="0" relationship="happened with a"/>
+<speak value="Violence subsided in northern Indian cities on Tuesday as troops patrolled streets and a curfew remained in place after riots broke out a day earlier over the killing of a Sikh cleric in Austria."/>
+</Feature>
+<Feature id="15" data="Iranian Paris Protest">
+<neighbor dest="14" weight="0" relationship="occurred after"/>
+<neighbor dest="16" weight="0" relationship="occurred before"/>
+<neighbor dest="74" weight="0" relationship="occurred in"/>
+<neighbor dest="109" weight="0" relationship="happened with a"/>
+<speak value="Several hundred Iranians have rallied in front of the Iranian Embassy in Paris to protest the results of last week's presidential elections and the crackdown on opposition demonstrators in the country."/>
+</Feature>
+<Feature id="16" data="Iranian Football Player Protest">
+<neighbor dest="15" weight="0" relationship="occurred after"/>
+<neighbor dest="17" weight="0" relationship="occurred before"/>
+<neighbor dest="75" weight="0" relationship="occurred in"/>
+<neighbor dest="114" weight="0" relationship="happened with a"/>
+<speak value="At least five Iranian football players wore green bands around their wrists or arms during a World Cup qualifying match against South Korea on Wednesday in an apparent protest against a disputed election at home."/>
+</Feature>
+<Feature id="17" data="Madrin Human Rights Protest">
+<neighbor dest="16" weight="0" relationship="occurred after"/>
+<neighbor dest="18" weight="0" relationship="occurred before"/>
+<neighbor dest="76" weight="0" relationship="occurred in"/>
+<neighbor dest="108" weight="0" relationship="happened with a"/>
+<speak value="About 150 people have demonstrated outside Spain's Foreign Ministry in central Madrid to protest human rights abuses in Iran."/>
+</Feature>
+<Feature id="18" data="Xinjiang Ethnic Riots">
+<neighbor dest="17" weight="0" relationship="occurred after"/>
+<neighbor dest="19" weight="0" relationship="occurred before"/>
+<neighbor dest="77" weight="0" relationship="occurred in"/>
+<neighbor dest="110" weight="0" relationship="happened with a"/>
+<neighbor dest="113" weight="0" relationship="happened with a"/>
+<speak value="Tensions between ethnic Muslims and China's Han majority in the far western Xinjiang region erupted in riots that killed 140 people and injured 828, an official said Monday, marking the deadliest unrest to hit the volatile area in decades."/>
+</Feature>
+<Feature id="19" data="Xinjiang Capital Protest">
+<neighbor dest="18" weight="0" relationship="occurred after"/>
+<neighbor dest="20" weight="0" relationship="occurred before"/>
+<neighbor dest="77" weight="0" relationship="occurred in"/>
+<neighbor dest="115" weight="0" relationship="happened with a"/>
+<speak value="A fresh protest has broken out in the capital of China's volatile Xinjiang region, with a large group of protesters blocking a main road in a stand-off with security forces."/>
+</Feature>
+<Feature id="20" data="Istanbul Xinjiang Protest">
+<neighbor dest="19" weight="0" relationship="occurred after"/>
+<neighbor dest="21" weight="0" relationship="occurred before"/>
+<neighbor dest="78" weight="0" relationship="occurred in"/>
+<neighbor dest="110" weight="0" relationship="happened with a"/>
+<speak value="Thousands of Turks have gathered at a square in Istanbul to protest ethnic violence in China's Xinjiang province that has killed 184 people."/>
+</Feature>
+<Feature id="21" data="Ultra-Orthodox Jerusalem Riot">
+<neighbor dest="20" weight="0" relationship="occurred after"/>
+<neighbor dest="22" weight="0" relationship="occurred before"/>
+<neighbor dest="79" weight="0" relationship="occurred in"/>
+<neighbor dest="113" weight="0" relationship="happened with a"/>
+<speak value="Ultra-Orthodox riot in Jerusalem over the arrest of a woman, suspected of starving her infant son, upgraded Thursday night, local daily Ha'aretz reported on Friday."/>
+</Feature>
+<Feature id="22" data="Ssangyong Motor Factory Occupation">
+<neighbor dest="21" weight="0" relationship="occurred after"/>
+<neighbor dest="23" weight="0" relationship="occurred before"/>
+<neighbor dest="75" weight="0" relationship="occurred in"/>
+<neighbor dest="116" weight="0" relationship="happened with a"/>
+<neighbor dest="117" weight="0" relationship="happened with a"/>
+<speak value="South Korean riot police entered Ssangyong Motor's only factory Monday where hundreds of fired workers, some armed with slingshots, have been occupying part of the facility for two months."/>
+</Feature>
+<Feature id="23" data="Pakistani Jail Riot">
+<neighbor dest="22" weight="0" relationship="occurred after"/>
+<neighbor dest="24" weight="0" relationship="occurred before"/>
+<neighbor dest="80" weight="0" relationship="occurred in"/>
+<neighbor dest="118" weight="0" relationship="happened with a"/>
+<neighbor dest="119" weight="0" relationship="happened with a"/>
+<speak value="Inmates at western Pakistani jail rioted inside the prison Thursday and held 15 police personnel hostage, local TV channel reported."/>
+</Feature>
+<Feature id="24" data="Interim Honduran Government Demonstration">
+<neighbor dest="23" weight="0" relationship="occurred after"/>
+<neighbor dest="25" weight="0" relationship="occurred before"/>
+<neighbor dest="81" weight="0" relationship="occurred in"/>
+<neighbor dest="110" weight="0" relationship="happened with a"/>
+<speak value="Wife of ousted Honduran President Manuel Zelaya returned to the capital Friday and joined a demonstration against the interim government."/>
+</Feature>
+<Feature id="25" data="Belgian Farmers Protest">
+<neighbor dest="24" weight="0" relationship="occurred after"/>
+<neighbor dest="26" weight="0" relationship="occurred before"/>
+<neighbor dest="82" weight="0" relationship="occurred in"/>
+<neighbor dest="110" weight="0" relationship="happened with a"/>
+<speak value="Farmers say they will turn a Belgian highway white on Wednesday by spilling 3 million liters (3.2 million quarts) of milk to protest low prices which are pushing them toward financial ruin."/>
+</Feature>
+<Feature id="26" data="Pittsburgh Demonstrator Protests">
+<neighbor dest="25" weight="0" relationship="occurred after"/>
+<neighbor dest="27" weight="0" relationship="occurred before"/>
+<neighbor dest="83" weight="0" relationship="occurred in"/>
+<neighbor dest="113" weight="0" relationship="happened with a"/>
+<speak value="Businesses vandalized during Group of 20 protests were cleaning up broken glass and getting back to work Friday while demonstrators pledging nonviolence planned an another march to protest environmental, health care and other policies."/>
+</Feature>
+<Feature id="27" data="Amazon Indian Police Clash">
+<neighbor dest="26" weight="0" relationship="occurred after"/>
+<neighbor dest="28" weight="0" relationship="occurred before"/>
+<neighbor dest="84" weight="0" relationship="occurred in"/>
+<neighbor dest="113" weight="0" relationship="happened with a"/>
+<speak value="Police clashed with Amazon Indians protesting proposed water, oil and mining laws Wednesday, leaving one Indian dead and 40 police and nine Indians wounded, Ecuadorean officials said. Indians said two civilians were killed."/>
+</Feature>
+<Feature id="28" data="Armenian Lebanese Protest">
+<neighbor dest="27" weight="0" relationship="occurred after"/>
+<neighbor dest="29" weight="0" relationship="occurred before"/>
+<neighbor dest="85" weight="0" relationship="occurred in"/>
+<neighbor dest="108" weight="0" relationship="happened with a"/>
+<speak value="Thousands of Lebanese of Armenian descent held a peaceful protest in Beirut Tuesday at the start of a visit by Armenia's president who has announced plans to establish relations with Turkey."/>
+</Feature>
+<Feature id="29" data="Italian Magistrate Protest">
+<neighbor dest="28" weight="0" relationship="occurred after"/>
+<neighbor dest="30" weight="0" relationship="occurred before"/>
+<neighbor dest="71" weight="0" relationship="occurred in"/>
+<neighbor dest="108" weight="0" relationship="happened with a"/>
+<speak value="Magistrates throughout Italy are protesting Premier Silvio Berlusconi's latest attack against the judiciary."/>
+</Feature>
+<Feature id="30" data="Greenpeace Barcelona Protest">
+<neighbor dest="29" weight="0" relationship="occurred after"/>
+<neighbor dest="31" weight="0" relationship="occurred before"/>
+<neighbor dest="76" weight="0" relationship="occurred in"/>
+<neighbor dest="110" weight="0" relationship="happened with a"/>
+<speak value="Greenpeace activists protested Friday in Barcelona, Spain, against the role the United States has played in producing greenhouse gases and urged world leaders to attach importance to the climate change."/>
+</Feature>
+<Feature id="31" data="Egyptian World Cup Riot">
+<neighbor dest="30" weight="0" relationship="occurred after"/>
+<neighbor dest="32" weight="0" relationship="occurred before"/>
+<neighbor dest="86" weight="0" relationship="occurred in"/>
+<neighbor dest="113" weight="0" relationship="happened with a"/>
+<speak value="Egyptian fans burned Algerian flags and rioted outside the Algerian Embassy in Cairo, smashing cars and shop windows in an escalating row over their bitter World Cup rivalry."/>
+</Feature>
+<Feature id="32" data="Philippine Journalist Protest">
+<neighbor dest="31" weight="0" relationship="occurred after"/>
+<neighbor dest="33" weight="0" relationship="occurred before"/>
+<neighbor dest="87" weight="0" relationship="occurred in"/>
+<neighbor dest="110" weight="0" relationship="happened with a"/>
+<speak value="Some 1,000 journalists and activists marched Monday in the capital to protest the massacre in the southern Philippines of 57 civilians, including at least 30 journalists and their staff in the world's deadliest attack on the media."/>
+</Feature>
+<Feature id="33" data="Iranian Anti-Government Protest">
+<neighbor dest="32" weight="0" relationship="occurred after"/>
+<neighbor dest="34" weight="0" relationship="occurred before"/>
+<neighbor dest="88" weight="0" relationship="occurred in"/>
+<neighbor dest="110" weight="0" relationship="happened with a"/>
+<speak value="Hard-line militiamen firing tear gas and throwing stones stormed a crowd of thousands of university students protesting for a second day Tuesday, as Iran threatened a tougher crackdown on the opposition after the biggest anti-government demonstrations in months."/>
+</Feature>
+<Feature id="34" data="Copenhagen Climate Change Protest">
+<neighbor dest="33" weight="0" relationship="occurred after"/>
+<neighbor dest="35" weight="0" relationship="occurred before"/>
+<neighbor dest="89" weight="0" relationship="occurred in"/>
+<neighbor dest="110" weight="0" relationship="happened with a"/>
+<speak value="Police detained at least 40 people Friday in the first street protests linked to a two-week climate conference in Copenhagen as negotiators prepared for the final stage of talks on controlling the world's greenhouse gases."/>
+</Feature>
+<Feature id="35" data="New York City Bicyclist Protest">
+<neighbor dest="34" weight="0" relationship="occurred after"/>
+<neighbor dest="36" weight="0" relationship="occurred before"/>
+<neighbor dest="63" weight="0" relationship="occurred in"/>
+<neighbor dest="110" weight="0" relationship="happened with a"/>
+<speak value="Bicyclists who planned to go topless to protest the removal of a New York City bike lane have switched gears. Some pinned plastic breasts over their jackets as they rolled into a snowstorm."/>
+</Feature>
+<Feature id="36" data="Iranian Anti-Government March">
+<neighbor dest="35" weight="0" relationship="occurred after"/>
+<neighbor dest="37" weight="0" relationship="occurred before"/>
+<neighbor dest="88" weight="0" relationship="occurred in"/>
+<neighbor dest="110" weight="0" relationship="happened with a"/>
+<speak value="Tens of thousands of Iranian mourners turned the funeral procession of the country's most senior dissident cleric into an anti-government protest Monday, chanting death to the dictator and slogans in support of the opposition amid heavy security."/>
+</Feature>
+<Feature id="37" data="Bauchi State Riot">
+<neighbor dest="36" weight="0" relationship="occurred after"/>
+<neighbor dest="38" weight="0" relationship="occurred before"/>
+<neighbor dest="90" weight="0" relationship="occurred in"/>
+<neighbor dest="113" weight="0" relationship="happened with a"/>
+<speak value="Riot in Zango area of northern Nigeria's Bauchi State has been put under control as everything is back in order, state police said on Thursday."/>
+</Feature>
+<Feature id="38" data="Swedish Saab Protest">
+<neighbor dest="37" weight="0" relationship="occurred after"/>
+<neighbor dest="39" weight="0" relationship="occurred before"/>
+<neighbor dest="91" weight="0" relationship="occurred in"/>
+<neighbor dest="108" weight="0" relationship="happened with a"/>
+<neighbor dest="116" weight="0" relationship="happened with a"/>
+<speak value="More than 3,000 Saab workers protested outside the car maker's main production plant in southwestern Sweden on Tuesday, urging U.S. owner General Motors to sell the brand rather than close it down."/>
+</Feature>
+<Feature id="39" data="Ireland Air Traffic Controller Walkout">
+<neighbor dest="38" weight="0" relationship="occurred after"/>
+<neighbor dest="40" weight="0" relationship="occurred before"/>
+<neighbor dest="92" weight="0" relationship="occurred in"/>
+<neighbor dest="116" weight="0" relationship="happened with a"/>
+<speak value="More than 120 flights in and out of Ireland were canceled Wednesday when air traffic controllers staged a four-hour walkout in a bid for higher pay -- a protest that elicited little support outside the trade-union movement."/>
+</Feature>
+<Feature id="40" data="Hatian Food Stock Protest">
+<neighbor dest="39" weight="0" relationship="occurred after"/>
+<neighbor dest="41" weight="0" relationship="occurred before"/>
+<neighbor dest="93" weight="0" relationship="occurred in"/>
+<neighbor dest="110" weight="0" relationship="happened with a"/>
+<speak value="Crowds of Haitian people gathered Sunday in a suburb of the ruined capital in protest of a district mayor's alleged stocking up of food aid."/>
+</Feature>
+<Feature id="41" data="Ivory Coast Youth Protest">
+<neighbor dest="40" weight="0" relationship="occurred after"/>
+<neighbor dest="42" weight="0" relationship="occurred before"/>
+<neighbor dest="94" weight="0" relationship="occurred in"/>
+<neighbor dest="110" weight="0" relationship="happened with a"/>
+<speak value="Cote d'Ivoire's administrative offices in the central-west region of Vavoua, a zone under the control of the ex-rebel New Forces (FN), were destroyed by fire on Tuesday amid protests by local youths against the removal of certain names from the voter list."/>
+</Feature>
+<Feature id="42" data="Palestinian Cave of the Patriarchs Protest">
+<neighbor dest="41" weight="0" relationship="occurred after"/>
+<neighbor dest="43" weight="0" relationship="occurred before"/>
+<neighbor dest="95" weight="0" relationship="occurred in"/>
+<neighbor dest="113" weight="0" relationship="happened with a"/>
+<speak value="About 100 Palestinians are protesting near the Cave of the Patriarchs, which is in the West Bank city of Hebron and has been added to an Israeli list of historical sites, an Israeli army spokeswoman said."/>
+</Feature>
+<Feature id="43" data="Athens Austerity Protest">
+<neighbor dest="42" weight="0" relationship="occurred after"/>
+<neighbor dest="44" weight="0" relationship="occurred before"/>
+<neighbor dest="96" weight="0" relationship="occurred in"/>
+<neighbor dest="113" weight="0" relationship="happened with a"/>
+<speak value="Clashes have broken out in central Athens during a protest outside parliament as lawmakers prepared to vote on austerity measures to deal with Greece's debt crisis."/>
+</Feature>
+<Feature id="44" data="Cuban Anti-Government Protest">
+<neighbor dest="43" weight="0" relationship="occurred after"/>
+<neighbor dest="45" weight="0" relationship="occurred before"/>
+<neighbor dest="97" weight="0" relationship="occurred in"/>
+<neighbor dest="110" weight="0" relationship="happened with a"/>
+<speak value="Hundreds of government supporters surrounded a small group of Cuban dissidents as they marched through Havana on Thursday on the seventh anniversary of the arrests of their loved ones, screaming abuse but otherwise allowing the protest to proceed peacefully."/>
+</Feature>
+<Feature id="45" data="Peruvian Miners Clash">
+<neighbor dest="44" weight="0" relationship="occurred after"/>
+<neighbor dest="46" weight="0" relationship="occurred before"/>
+<neighbor dest="98" weight="0" relationship="occurred in"/>
+<neighbor dest="120" weight="0" relationship="happened with a"/>
+<speak value="Clashes in Peru between police and protesting miners have left six miners dead."/>
+</Feature>
+<Feature id="46" data="Lebanese Egg Attack">
+<neighbor dest="45" weight="0" relationship="occurred after"/>
+<neighbor dest="47" weight="0" relationship="occurred before"/>
+<neighbor dest="85" weight="0" relationship="occurred in"/>
+<neighbor dest="121" weight="0" relationship="happened with a"/>
+<speak value="Lebanese of Armenian descent have pelted Turkish businessmen with eggs outside a Beirut hotel to protest their participation in a business conference in Lebanon."/>
+</Feature>
+<Feature id="47" data="Bangkok Anti-Government Demonstration">
+<neighbor dest="46" weight="0" relationship="occurred after"/>
+<neighbor dest="48" weight="0" relationship="occurred before"/>
+<neighbor dest="68" weight="0" relationship="occurred in"/>
+<neighbor dest="122" weight="0" relationship="happened with a"/>
+<speak value="Thai protesters forced a shutdown of Bangkok's busy elevated train system Tuesday and promised to expand their street demonstrations, escalating weeks of anti-government demonstrations that have paralyzed much of the capital."/>
+</Feature>
+<Feature id="48" data="Algerian U.S. Embassy Protest">
+<neighbor dest="47" weight="0" relationship="occurred after"/>
+<neighbor dest="49" weight="0" relationship="occurred before"/>
+<neighbor dest="99" weight="0" relationship="occurred in"/>
+<neighbor dest="123" weight="0" relationship="happened with a"/>
+<speak value="Police in Algeria have blocked a small demonstration of intellectuals and journalists from gathering in front of the U.S. Embassy to protest Israel's raid on an aid flotilla heading to Gaza."/>
+</Feature>
+<Feature id="49" data="South Africa AIDS Awareness Protest">
+<neighbor dest="48" weight="0" relationship="occurred after"/>
+<neighbor dest="50" weight="0" relationship="occurred before"/>
+<neighbor dest="100" weight="0" relationship="occurred in"/>
+<neighbor dest="124" weight="0" relationship="happened with a"/>
+<speak value="AIDS awareness groups said Saturday they are protesting against FIFA for not allowing them to distribute health-related information and condoms at World Cup stadiums and fan events in South Africa."/>
+</Feature>
+<Feature id="50" data="Sri Lankan UN Protest">
+<neighbor dest="49" weight="0" relationship="occurred after"/>
+<neighbor dest="51" weight="0" relationship="occurred before"/>
+<neighbor dest="72" weight="0" relationship="occurred in"/>
+<neighbor dest="110" weight="0" relationship="happened with a"/>
+<speak value="A large crowd gathered outside the UN office in the Sri Lankan capital Colombo Tuesday morning to stage a protest against UN Secretary-General Ban Ki-moon's decision to appoint an expert panel on Sri Lanka' alleged war crimes in the island's civil war that ended last year."/>
+</Feature>
+<Feature id="51" data="Arizonan Immigration Law Protest">
+<neighbor dest="50" weight="0" relationship="occurred after"/>
+<neighbor dest="52" weight="0" relationship="occurred before"/>
+<neighbor dest="101" weight="0" relationship="occurred in"/>
+<neighbor dest="110" weight="0" relationship="happened with a"/>
+<speak value="Hundreds of Angelenos left for Arizona on Thursday to join the protest there as a controversial immigration law takes effect in the U.S. state."/>
+</Feature>
+<Feature id="52" data="Bangladeshi Garment Workers Clash">
+<neighbor dest="51" weight="0" relationship="occurred after"/>
+<neighbor dest="53" weight="0" relationship="occurred before"/>
+<neighbor dest="102" weight="0" relationship="occurred in"/>
+<neighbor dest="113" weight="0" relationship="happened with a"/>
+<neighbor dest="116" weight="0" relationship="happened with a"/>
+<speak value="Thousands of protesting garment workers in Bangladesh clashed with police, injuring dozens of people Saturday amid continued violence over a new minimum wage."/>
+</Feature>
+<Feature id="53" data="Kashmir Anti-Indian Protests">
+<neighbor dest="52" weight="0" relationship="occurred after"/>
+<neighbor dest="54" weight="0" relationship="occurred before"/>
+<neighbor dest="103" weight="0" relationship="occurred in"/>
+<speak value="Protests erupted across Indian-controlled Kashmir on Saturday despite patrols by tens of thousands of police and paramilitary soldiers as security was tightened to quell anti-Indian demonstrations."/>
+</Feature>
+<Feature id="54" data="Afghanistan Quaran Burning Protest">
+<neighbor dest="53" weight="0" relationship="occurred after"/>
+<neighbor dest="55" weight="0" relationship="occurred before"/>
+<neighbor dest="104" weight="0" relationship="occurred in"/>
+<neighbor dest="113" weight="0" relationship="happened with a"/>
+<speak value="Shops and police checkpoints have been set on fire during a protest in Afghanistan over a once-planned Quran burning in the United States."/>
+</Feature>
+<Feature id="55" data="Sydney Asylum Seekers' Protest">
+<neighbor dest="54" weight="0" relationship="occurred after"/>
+<neighbor dest="56" weight="0" relationship="occurred before"/>
+<neighbor dest="105" weight="0" relationship="occurred in"/>
+<neighbor dest="125" weight="0" relationship="happened with a"/>
+<speak value="Eleven asylum seekers protesting on the roof of a Sydney detention center are threatening suicide and some have cut themselves, refugee advocates said on Tuesday."/>
+</Feature>
+<Feature id="56" data="Romanian Austerity Protests">
+<neighbor dest="55" weight="0" relationship="occurred after"/>
+<neighbor dest="57" weight="0" relationship="occurred before"/>
+<neighbor dest="106" weight="0" relationship="occurred in"/>
+<neighbor dest="110" weight="0" relationship="happened with a"/>
+<speak value="About 5,000 Romanian workers protested Tuesday against austerity measures taken by the government to trim the budget deficit during a deep recession."/>
+</Feature>
+<Feature id="57" data="Hochtier AG Employees' Protest">
+<neighbor dest="56" weight="0" relationship="occurred after"/>
+<neighbor dest="58" weight="0" relationship="occurred before"/>
+<neighbor dest="107" weight="0" relationship="occurred in"/>
+<neighbor dest="110" weight="0" relationship="happened with a"/>
+<neighbor dest="126" weight="0" relationship="happened with a"/>
+<speak value="Hundreds of employees of German construction company Hochtief AG have protested outside government offices in Berlin against a planned takeover by Spain's ACS."/>
+</Feature>
+<Feature id="58" data="Manezh Square Riots">
+<neighbor dest="57" weight="0" relationship="occurred after"/>
+<neighbor dest="59" weight="0" relationship="occurred in"/>
+<neighbor dest="127" weight="0" relationship="happened with a"/>
+<speak value="Russian riot policemen cleaned Moscow's Manezh Square near the Kremlin amid threats of more riots in the aftermath of the Dec. 11 riot, local media reported on Monday."/>
+</Feature>
+<Feature id="59" data="Moscow">
+<neighbor dest="0" weight="0" relationship="was the location of"/>
+<neighbor dest="58" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="60" data="Toronto">
+<neighbor dest="1" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="61" data="Madagascar">
+<neighbor dest="2" weight="0" relationship="was the location of"/>
+<neighbor dest="6" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="62" data="Kentucky">
+<neighbor dest="3" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="63" data="New York">
+<neighbor dest="4" weight="0" relationship="was the location of"/>
+<neighbor dest="35" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="64" data="Connecticut">
+<neighbor dest="5" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="65" data="France">
+<neighbor dest="7" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="66" data="Germany">
+<neighbor dest="7" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="67" data="Boulogne-sur-Mer">
+<neighbor dest="8" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="68" data="Bangkok">
+<neighbor dest="9" weight="0" relationship="was the location of"/>
+<neighbor dest="47" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="69" data="Budapest">
+<neighbor dest="10" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="70" data="Georgia">
+<neighbor dest="11" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="71" data="Italy">
+<neighbor dest="12" weight="0" relationship="was the location of"/>
+<neighbor dest="29" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="72" data="Sri Lanka">
+<neighbor dest="13" weight="0" relationship="was the location of"/>
+<neighbor dest="50" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="73" data="India">
+<neighbor dest="14" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="74" data="Paris">
+<neighbor dest="15" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="75" data="South Korea">
+<neighbor dest="16" weight="0" relationship="was the location of"/>
+<neighbor dest="22" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="76" data="Spain">
+<neighbor dest="17" weight="0" relationship="was the location of"/>
+<neighbor dest="30" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="77" data="Xinjiang">
+<neighbor dest="18" weight="0" relationship="was the location of"/>
+<neighbor dest="19" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="78" data="Turkey">
+<neighbor dest="20" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="79" data="Jerusalem">
+<neighbor dest="21" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="80" data="Pakistan">
+<neighbor dest="23" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="81" data="Honduras">
+<neighbor dest="24" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="82" data="Belgium">
+<neighbor dest="25" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="83" data="Pittsburgh">
+<neighbor dest="26" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="84" data="Ecuador">
+<neighbor dest="27" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="85" data="Lebanon">
+<neighbor dest="28" weight="0" relationship="was the location of"/>
+<neighbor dest="46" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="86" data="Egypt">
+<neighbor dest="31" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="87" data="Philippines">
+<neighbor dest="32" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="88" data="Iran">
+<neighbor dest="33" weight="0" relationship="was the location of"/>
+<neighbor dest="36" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="89" data="Copenhagen">
+<neighbor dest="34" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="90" data="Nigeria">
+<neighbor dest="37" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="91" data="Sweden">
+<neighbor dest="38" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="92" data="Ireland">
+<neighbor dest="39" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="93" data="Haiti">
+<neighbor dest="40" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="94" data="Cote d'Ivoire">
+<neighbor dest="41" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="95" data="Palestine">
+<neighbor dest="42" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="96" data="Athens">
+<neighbor dest="43" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="97" data="Cuba">
+<neighbor dest="44" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="98" data="Peru">
+<neighbor dest="45" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="99" data="Algeria">
+<neighbor dest="48" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="100" data="South Africa">
+<neighbor dest="49" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="101" data="Arizona">
+<neighbor dest="51" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="102" data="Bangladesh">
+<neighbor dest="52" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="103" data="Kashmir">
+<neighbor dest="53" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="104" data="Afghanistan">
+<neighbor dest="54" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="105" data="Sydney">
+<neighbor dest="55" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="106" data="Romania">
+<neighbor dest="56" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="107" data="Berlin">
+<neighbor dest="57" weight="0" relationship="was the location of"/>
+<speak value=""/>
+</Feature>
+<Feature id="108" data="Piquet">
+<neighbor dest="0" weight="0" relationship="was an action in"/>
+<neighbor dest="3" weight="0" relationship="was an action in"/>
+<neighbor dest="4" weight="0" relationship="was an action in"/>
+<neighbor dest="5" weight="0" relationship="was an action in"/>
+<neighbor dest="13" weight="0" relationship="was an action in"/>
+<neighbor dest="15" weight="0" relationship="was an action in"/>
+<neighbor dest="17" weight="0" relationship="was an action in"/>
+<neighbor dest="28" weight="0" relationship="was an action in"/>
+<neighbor dest="29" weight="0" relationship="was an action in"/>
+<neighbor dest="38" weight="0" relationship="was an action in"/>
+<speak value=""/>
+</Feature>
+<Feature id="109" data="Human Chain">
+<neighbor dest="1" weight="0" relationship="was an action in"/>
+<speak value=""/>
+</Feature>
+<Feature id="110" data="Demonstration">
+<neighbor dest="2" weight="0" relationship="was an action in"/>
+<neighbor dest="6" weight="0" relationship="was an action in"/>
+<neighbor dest="7" weight="0" relationship="was an action in"/>
+<neighbor dest="9" weight="0" relationship="was an action in"/>
+<neighbor dest="10" weight="0" relationship="was an action in"/>
+<neighbor dest="11" weight="0" relationship="was an action in"/>
+<neighbor dest="18" weight="0" relationship="was an action in"/>
+<neighbor dest="20" weight="0" relationship="was an action in"/>
+<neighbor dest="24" weight="0" relationship="was an action in"/>
+<neighbor dest="25" weight="0" relationship="was an action in"/>
+<neighbor dest="30" weight="0" relationship="was an action in"/>
+<neighbor dest="32" weight="0" relationship="was an action in"/>
+<neighbor dest="33" weight="0" relationship="was an action in"/>
+<neighbor dest="34" weight="0" relationship="was an action in"/>
+<neighbor dest="35" weight="0" relationship="was an action in"/>
+<neighbor dest="36" weight="0" relationship="was an action in"/>
+<neighbor dest="40" weight="0" relationship="was an action in"/>
+<neighbor dest="41" weight="0" relationship="was an action in"/>
+<neighbor dest="44" weight="0" relationship="was an action in"/>
+<neighbor dest="50" weight="0" relationship="was an action in"/>
+<neighbor dest="51" weight="0" relationship="was an action in"/>
+<neighbor dest="56" weight="0" relationship="was an action in"/>
+<neighbor dest="57" weight="0" relationship="was an action in"/>
+<speak value=""/>
+</Feature>
+<Feature id="111" data="Blockade">
+<neighbor dest="8" weight="0" relationship="was an action in"/>
+<neighbor dest="9" weight="0" relationship="was an action in"/>
+<speak value=""/>
+</Feature>
+<Feature id="112" data="Boycott">
+<neighbor dest="12" weight="0" relationship="was an action in"/>
+<speak value=""/>
+</Feature>
+<Feature id="113" data="Riot">
+<neighbor dest="14" weight="0" relationship="was an action in"/>
+<neighbor dest="18" weight="0" relationship="was an action in"/>
+<neighbor dest="21" weight="0" relationship="was an action in"/>
+<neighbor dest="26" weight="0" relationship="was an action in"/>
+<neighbor dest="27" weight="0" relationship="was an action in"/>
+<neighbor dest="31" weight="0" relationship="was an action in"/>
+<neighbor dest="42" weight="0" relationship="was an action in"/>
+<neighbor dest="43" weight="0" relationship="was an action in"/>
+<neighbor dest="52" weight="0" relationship="was an action in"/>
+<neighbor dest="54" weight="0" relationship="was an action in"/>
+<speak value=""/>
+</Feature>
+<Feature id="114" data="Individual Disobedience Display">
+<neighbor dest="16" weight="0" relationship="was an action in"/>
+<speak value=""/>
+</Feature>
+<Feature id="115" data="Road Blockage">
+<neighbor dest="19" weight="0" relationship="was an action in"/>
+<speak value=""/>
+</Feature>
+<Feature id="116" data="Strike">
+<neighbor dest="22" weight="0" relationship="was an action in"/>
+<neighbor dest="38" weight="0" relationship="was an action in"/>
+<neighbor dest="39" weight="0" relationship="was an action in"/>
+<neighbor dest="52" weight="0" relationship="was an action in"/>
+<speak value=""/>
+</Feature>
+<Feature id="117" data="Occupation">
+<neighbor dest="22" weight="0" relationship="was an action in"/>
+<speak value=""/>
+</Feature>
+<Feature id="118" data="Jail Riot">
+<neighbor dest="23" weight="0" relationship="was an action in"/>
+<speak value=""/>
+</Feature>
+<Feature id="119" data="Hostage Capture">
+<neighbor dest="23" weight="0" relationship="was an action in"/>
+<speak value=""/>
+</Feature>
+<Feature id="120" data="Blockage">
+<neighbor dest="45" weight="0" relationship="was an action in"/>
+<speak value=""/>
+</Feature>
+<Feature id="121" data="Egg Attack">
+<neighbor dest="46" weight="0" relationship="was an action in"/>
+<speak value=""/>
+</Feature>
+<Feature id="122" data="Railway Blockage">
+<neighbor dest="47" weight="0" relationship="was an action in"/>
+<speak value=""/>
+</Feature>
+<Feature id="123" data="Demonstration Attempt">
+<neighbor dest="48" weight="0" relationship="was an action in"/>
+<speak value=""/>
+</Feature>
+<Feature id="124" data="Verbal Protest">
+<neighbor dest="49" weight="0" relationship="was an action in"/>
+<speak value=""/>
+</Feature>
+<Feature id="125" data="Individual Protest">
+<neighbor dest="55" weight="0" relationship="was an action in"/>
+<speak value=""/>
+</Feature>
+<Feature id="126" data="Petition">
+<neighbor dest="57" weight="0" relationship="was an action in"/>
+<speak value=""/>
+</Feature>
+<Feature id="127" data="Riot Aftermath">
+<neighbor dest="58" weight="0" relationship="was an action in"/>
+<speak value=""/>
+</Feature>
+</AIMind>
