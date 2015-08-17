@@ -101,6 +101,8 @@ namespace Dialogue_Data_Entry
         //These nodes are still included in traversals, but upon traveling to
         //one of these nodes the next step in the traversal is automatically taken.
         public List<string> filter_nodes = new List<string>();
+        //A list of relationships which should not be used for analogies.
+        public List<String> no_analogy_relationships = new List<string>();
 
         //JOINT MENTIONS:
         //A list of feature lists, each of which represent
@@ -172,6 +174,10 @@ namespace Dialogue_Data_Entry
             filter_nodes.Add("Gold Medallists");
             filter_nodes.Add("Venues");
             filter_nodes.Add("Time");
+
+            //Build list of relationships which should not be used in analogies.
+            no_analogy_relationships.Add("occurred before");
+            no_analogy_relationships.Add("occurred after");
         }
 
 		private string LeadingTopic(Feature last, Feature first)
@@ -500,6 +506,12 @@ namespace Dialogue_Data_Entry
                         //countNode = 1;
                         //break;
                     }
+                    //Check the no_analogy list first to see if an analogy should be made with this relationship.
+                    if (no_analogy_relationships.Contains(old.getRelationshipNeighbor(newOld.Data)))
+                    {
+                        continue;
+                    }//end if
+
                     //If the relationships match and neither relationship is the empty relationship,
                     //form an analogy.
                     //NOTE: Checking relationships in BOTH directions
