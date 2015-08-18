@@ -63,6 +63,7 @@ namespace Dialogue_Data_Entry
     {
         private const string FORMAT = "FORMAT:";
         private const string IDK = "I'm afraid I don't know anything about that topic.";
+        private const string IDK_CN = "对不起，我不知道。";
         private string[] punctuation = { ",", ";", ".", "?", "!", "\'", "\"", "(", ")", "-" };
         private string[] questionWords = { "?", "what", "where", "when" };
         private string[] directionWords = {"inside", "contain", "north", "east", "west", "south",
@@ -203,32 +204,74 @@ namespace Dialogue_Data_Entry
             //First is the current node (the one that has just been traversed to)
             //A set of possible lead-in statements.
             List<string> lead_in_statements = new List<string>();
-            lead_in_statements.Add("{There's also " + first_data + ".} ");
-            lead_in_statements.Add("{But let's talk about " + first_data + ".} ");
-            lead_in_statements.Add("{And have I mentioned " + first_data + "?} ");
-            lead_in_statements.Add("{Now, about " + first_data + ".} ");
-            lead_in_statements.Add("{Now, let's talk about " + first_data + ".} ");
-            lead_in_statements.Add("{I should touch on " + first_data + ".} ");
-            lead_in_statements.Add("{Have you heard of " + first_data + "?} ");
+            if(language_mode == 0)
+            {
+                lead_in_statements.Add("{There's also " + first_data + ".} ");
+                lead_in_statements.Add("{But let's talk about " + first_data + ".} ");
+                lead_in_statements.Add("{And have I mentioned " + first_data + "?} ");
+                lead_in_statements.Add("{Now, about " + first_data + ".} ");
+                lead_in_statements.Add("{Now, let's talk about " + first_data + ".} ");
+                lead_in_statements.Add("{I should touch on " + first_data + ".} ");
+                lead_in_statements.Add("{Have you heard of " + first_data + "?} ");
+            }
+            else
+            {
+                lead_in_statements.Add("{还有" + first_data + "呢。} ");
+                lead_in_statements.Add("{让我们谈论" + first_data + "吧。} ");
+                lead_in_statements.Add("{我刚刚有提到过" + first_data + "吗？} ");
+                lead_in_statements.Add("{关于" + first_data + "。} ");
+                lead_in_statements.Add("{现在让我们谈谈" + first_data + "吧。} ");
+                lead_in_statements.Add("{我觉得有必要提一下" + first_data + "。} ");
+                lead_in_statements.Add("{你有听说过" + first_data + "吗？} ");
+            }
+
 
             //A set of lead-in statements for non-novel nodes
             List<string> non_novel_lead_in_statements = new List<string>();
-            non_novel_lead_in_statements.Add("{There's also " + first_data + ".} ");
-            non_novel_lead_in_statements.Add("{Let's talk about " + first_data + ".} ");
-            non_novel_lead_in_statements.Add("{I'll mention " + first_data + " real quick.} ");
-            non_novel_lead_in_statements.Add("{So, about " + first_data + ".} ");
-            non_novel_lead_in_statements.Add("{Now then, about " + first_data + ".} ");
-            non_novel_lead_in_statements.Add("{Let's talk about " + first_data + " for a moment.} ");
-            non_novel_lead_in_statements.Add("{Have I mentioned " + first_data + "?} ");
-            non_novel_lead_in_statements.Add("{Now, about " + first_data + ".} ");
-            non_novel_lead_in_statements.Add("{Now, let's talk about " + first_data + ".} ");
-            non_novel_lead_in_statements.Add("{I should touch on " + first_data + ".} ");
+            if(language_mode == 0)
+            {
+                non_novel_lead_in_statements.Add("{There's also " + first_data + ".} ");
+                non_novel_lead_in_statements.Add("{Let's talk about " + first_data + ".} ");
+                non_novel_lead_in_statements.Add("{I'll mention " + first_data + " real quick.} ");
+                non_novel_lead_in_statements.Add("{So, about " + first_data + ".} ");
+                non_novel_lead_in_statements.Add("{Now then, about " + first_data + ".} ");
+                non_novel_lead_in_statements.Add("{Let's talk about " + first_data + " for a moment.} ");
+                non_novel_lead_in_statements.Add("{Have I mentioned " + first_data + "?} ");
+                non_novel_lead_in_statements.Add("{Now, about " + first_data + ".} ");
+                non_novel_lead_in_statements.Add("{Now, let's talk about " + first_data + ".} ");
+                non_novel_lead_in_statements.Add("{I should touch on " + first_data + ".} ");
+            }
+            else
+            {
+                non_novel_lead_in_statements.Add("{还有" + first_data + "呢。} ");
+                non_novel_lead_in_statements.Add("{让我们谈谈" + first_data + "吧。} ");
+                non_novel_lead_in_statements.Add("{我想简要提提" + first_data + "。} ");
+                non_novel_lead_in_statements.Add("{然后,关于" + first_data + "。} ");
+                non_novel_lead_in_statements.Add("{现在谈谈" + first_data + "吧。} ");
+                non_novel_lead_in_statements.Add("{让我们聊一会儿" + first_data + " 吧。} ");
+                non_novel_lead_in_statements.Add("{我刚刚有提到" + first_data + "吗？} ");
+                non_novel_lead_in_statements.Add("{那么," + first_data + "。} ");
+                non_novel_lead_in_statements.Add("{现在让我们谈谈" + first_data + "吧。} ");
+                non_novel_lead_in_statements.Add("{我该提及" + first_data + "。} ");
+            }
+
 
             //A set of lead-in statements for novel nodes
             //TODO: Author these again; things like let's talk about something different now.
             List<string> novel_lead_in_statements = new List<string>();
-            novel_lead_in_statements.Add("{Let's talk about something different. ");
-            novel_lead_in_statements.Add("{Let's switch gears. ");
+            if(language_mode == 0)
+            {
+                novel_lead_in_statements.Add("{Let's talk about something different. ");
+                novel_lead_in_statements.Add("{Let's switch gears. ");
+            }
+            else
+            {
+                novel_lead_in_statements.Add("{让我们谈点别的吧。");
+                novel_lead_in_statements.Add("{让我们聊点别的吧。");
+                novel_lead_in_statements.Add("{让我们说点别的什么吧。");
+                novel_lead_in_statements.Add("{让我们换个话题吧。");
+            }
+
 
             Random rand = new Random();
 
@@ -461,18 +504,31 @@ namespace Dialogue_Data_Entry
             }
 
             // 4 nodes
-            sentencePatterns.Add("[Just as " + a1 + " " + r1 + " " + b1
-                + ", so too " + a2 + " " + r2 + " " + b2 + ".] ");
-            sentencePatterns.Add("[" + a2 + " " + r2 + " " + b2
-				+ ", much like " + a1 + " " + r1 + " " + b1 + ".] ");
-            sentencePatterns.Add("[Like " + a1 + " " + r1 + " " + b1 + ", "
-                + a2 + " also " + r2 + " " + b2 + ".] ");
-            sentencePatterns.Add("[The same way that " + a1 + " " + r1 + " " + b1
-                + ", " + a2 + " " + r2 + " " + b2 + ".] ");
-            sentencePatterns.Add("[Remember how " + a1 + " " + r1 + " " + b1
-                + "? Well, in the same way, "+ a2 + " also " + r2 + " " + b2 + ".] ");
-            sentencePatterns.Add("[" + a2 + " also " + r2 + " " + b2
-                + ", similar to how " + a1 + " " + r1 + " " + b1 + ".] ");
+            if(language_mode == 0)
+            {
+                sentencePatterns.Add("[Just as " + a1 + " " + r1 + " " + b1
+                    + ", so too " + a2 + " " + r2 + " " + b2 + ".] ");
+                sentencePatterns.Add("[" + a2 + " " + r2 + " " + b2
+                    + ", much like " + a1 + " " + r1 + " " + b1 + ".] ");
+                sentencePatterns.Add("[Like " + a1 + " " + r1 + " " + b1 + ", "
+                    + a2 + " also " + r2 + " " + b2 + ".] ");
+                sentencePatterns.Add("[The same way that " + a1 + " " + r1 + " " + b1
+                    + ", " + a2 + " " + r2 + " " + b2 + ".] ");
+                sentencePatterns.Add("[Remember how " + a1 + " " + r1 + " " + b1
+                    + "? Well, in the same way, " + a2 + " also " + r2 + " " + b2 + ".] ");
+                sentencePatterns.Add("[" + a2 + " also " + r2 + " " + b2
+                    + ", similar to how " + a1 + " " + r1 + " " + b1 + ".] ");
+            }
+            else
+            {
+                sentencePatterns.Add("[像" + a1 + r1 + b1 + "一样," + a2 + "也" + r2 + b2 + "。] ");
+                sentencePatterns.Add("[就像" + a1 + r1 + b1 + "一样," + a2 + r2 + b2 + "。] ");
+                sentencePatterns.Add("[就像" + a1 + r1 + b1 + "一样," + a2 + "也" + r2 + b2 + "。] ");
+                sentencePatterns.Add("[就如同" + a1 + r1 + b1 + "一样," + a2 + r2 + b2 + "。] ");
+                sentencePatterns.Add("[如同" + a1 + r1 + b1 + "一般," + a2 + r2 + b2 + "。] ");
+                sentencePatterns.Add("[正像" + a1 + r1 + b1 + "一样," + a2 + r2 + b2 + "。] ");
+                sentencePatterns.Add("[" + a2 + r2 + b2 + "," + "正像" + a1 + r1 + b1 + "。] ");
+            }
 
 			int random_int = rnd.Next(sentencePatterns.Count);
 
@@ -642,7 +698,8 @@ namespace Dialogue_Data_Entry
                     if(language_mode == 0) { first_data = first_data.Split(new string[] { "##" }, StringSplitOptions.None)[0]; }
                     else { first_data = first_data.Split(new string[] { "##" }, StringSplitOptions.None)[1]; }
                 }
-                return_message = "{First, let's talk about " + first_data + ".} ";
+                if(language_mode == 0) { return_message = "{First, let's talk about " + first_data + ".} "; }
+                else { return_message = "{首先，让我们谈谈 " + first_data + "。} "; }
             }//end else
 
 
@@ -651,8 +708,16 @@ namespace Dialogue_Data_Entry
             if (out_of_topic_response)
             {
                 //"I'm afraid I don't know anything about ";
-                to_speak = "I'm sorry, I'm afraid I don't understand what you are asking. But here's something I do know about. "
-                    + to_speak;
+                if(language_mode == 0)
+                {
+                    to_speak = "I'm sorry, I'm afraid I don't understand what you are asking. But here's something I do know about. "
+                       + to_speak;
+                }
+                else
+                {
+                    to_speak = "对不起，我不知道您在说什么。但我知道这些。" + to_speak;
+                }
+
             }//end if
 
             if (forLog)
@@ -711,7 +776,9 @@ namespace Dialogue_Data_Entry
         //  how well the nodes in the n-length path from the current node relate to the current node.
         public string ParseInput(string input, bool messageToServer = false, bool forLog = false, bool outOfTopic = false, bool projectAsTopic = false)
         {
-            string answer = IDK;
+            string answer;
+            if(language_mode == 0) { answer = IDK; }
+            else { answer = IDK_CN; }
             string noveltyInfo = "";
             double currentTopicNovelty = -1;
             // Pre-processing
@@ -1021,7 +1088,11 @@ namespace Dialogue_Data_Entry
                 if (b < this.buffer.Length)
                     answer = this.buffer[b++];
                 else
-                    answer = "I've said all I can about that topic!";
+                {
+                    if(language_mode == 0) { answer = "I've said all I can about that topic!"; }
+                    else { answer = "我已经把我知道的都说完了。"; }
+                }
+                    
                 noveltyInfo = speaker.getNovelty(this.topic, this.turn, noveltyAmount);
             }
             // CASE: New topic/question
