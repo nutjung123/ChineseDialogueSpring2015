@@ -183,30 +183,46 @@ namespace Dialogue_Data_Entry
 		private string LeadingTopic(Feature last, Feature first)
 		{
 			string return_message = "";
+            
+            string first_data = first.Data;
+            if (first_data.Contains("##"))
+            {
+                if (language_mode == 0) { first_data = first_data.Split(new string[] { "##" }, StringSplitOptions.None)[0]; }
+                else { first_data = first_data.Split(new string[] { "##" }, StringSplitOptions.None)[1]; }
+            }
+            string last_data = last.Data;
+            if (last_data.Contains("##"))
+            {
+                if (language_mode == 0) { last_data = last_data.Split(new string[] { "##" }, StringSplitOptions.None)[0]; }
+                else { last_data = last_data.Split(new string[] { "##" }, StringSplitOptions.None)[1]; }
+            }
+
+            // 8.18: replace first.Data with first_data, last.Data with last_data,
+            // last.getRelationshipNeighbor(first.Data) with relationship
 
             //First is the current node (the one that has just been traversed to)
             //A set of possible lead-in statements.
             List<string> lead_in_statements = new List<string>();
-            lead_in_statements.Add("{There's also " + first.Data + ".} ");
-            lead_in_statements.Add("{But let's talk about " + first.Data + ".} ");
-            lead_in_statements.Add("{And have I mentioned " + first.Data + "?} ");
-            lead_in_statements.Add("{Now, about " + first.Data + ".} ");
-            lead_in_statements.Add("{Now, let's talk about " + first.Data + ".} ");
-            lead_in_statements.Add("{I should touch on " + first.Data + ".} ");
-            lead_in_statements.Add("{Have you heard of " + first.Data + "?} ");
+            lead_in_statements.Add("{There's also " + first_data + ".} ");
+            lead_in_statements.Add("{But let's talk about " + first_data + ".} ");
+            lead_in_statements.Add("{And have I mentioned " + first_data + "?} ");
+            lead_in_statements.Add("{Now, about " + first_data + ".} ");
+            lead_in_statements.Add("{Now, let's talk about " + first_data + ".} ");
+            lead_in_statements.Add("{I should touch on " + first_data + ".} ");
+            lead_in_statements.Add("{Have you heard of " + first_data + "?} ");
 
             //A set of lead-in statements for non-novel nodes
             List<string> non_novel_lead_in_statements = new List<string>();
-            non_novel_lead_in_statements.Add("{There's also " + first.Data + ".} ");
-            non_novel_lead_in_statements.Add("{Let's talk about " + first.Data + ".} ");
-            non_novel_lead_in_statements.Add("{I'll mention " + first.Data + " real quick.} ");
-            non_novel_lead_in_statements.Add("{So, about " + first.Data + ".} ");
-            non_novel_lead_in_statements.Add("{Now then, about " + first.Data + ".} ");
-            non_novel_lead_in_statements.Add("{Let's talk about " + first.Data + " for a moment.} ");
-            non_novel_lead_in_statements.Add("{Have I mentioned " + first.Data + "?} ");
-            non_novel_lead_in_statements.Add("{Now, about " + first.Data + ".} ");
-            non_novel_lead_in_statements.Add("{Now, let's talk about " + first.Data + ".} ");
-            non_novel_lead_in_statements.Add("{I should touch on " + first.Data + ".} ");
+            non_novel_lead_in_statements.Add("{There's also " + first_data + ".} ");
+            non_novel_lead_in_statements.Add("{Let's talk about " + first_data + ".} ");
+            non_novel_lead_in_statements.Add("{I'll mention " + first_data + " real quick.} ");
+            non_novel_lead_in_statements.Add("{So, about " + first_data + ".} ");
+            non_novel_lead_in_statements.Add("{Now then, about " + first_data + ".} ");
+            non_novel_lead_in_statements.Add("{Let's talk about " + first_data + " for a moment.} ");
+            non_novel_lead_in_statements.Add("{Have I mentioned " + first_data + "?} ");
+            non_novel_lead_in_statements.Add("{Now, about " + first_data + ".} ");
+            non_novel_lead_in_statements.Add("{Now, let's talk about " + first_data + ".} ");
+            non_novel_lead_in_statements.Add("{I should touch on " + first_data + ".} ");
 
             //A set of lead-in statements for novel nodes
             //TODO: Author these again; things like let's talk about something different now.
@@ -219,20 +235,27 @@ namespace Dialogue_Data_Entry
 			// Check if there is a relationship between two nodes
 			if (last.getNeighbor(first.Data) != null || first.getNeighbor(last.Data) != null)
 			{
-				// Check if last has first as its neighbor
-				if (!last.getRelationshipNeighbor (first.Data).Equals("")
+                string relationship = last.getRelationshipNeighbor(first.Data);
+                if (relationship.Contains("##"))
+                {
+                    if (language_mode == 0) { relationship = relationship.Split(new string[] { "##" }, StringSplitOptions.None)[0]; }
+                    else { relationship = relationship.Split(new string[] { "##" }, StringSplitOptions.None)[1]; }
+                }
+
+                // Check if last has first as its neighbor
+                if (!last.getRelationshipNeighbor (first.Data).Equals("")
                     && !(last.getRelationshipNeighbor (first.Data) == null))
                 {
-					return_message = "{" + last.Data + " " + last.getRelationshipNeighbor(first.Data) + " " 
-						+ first.Data + ".} ";
+					return_message = "{" + last_data + " " + relationship + " " 
+						+ first_data + ".} ";
                     return return_message;
 				}//end if
 				// If last is a child node of first (first is a parent of last)
 				else if (!last.getRelationshipParent (first.Data).Equals("")
                             && !(last.getRelationshipParent(first.Data) == null))
 				{
-					return_message = "{" + last.Data + " " + last.getRelationshipParent(first.Data) + " " 
-						+ first.Data + ".} ";
+					return_message = "{" + last_data + " " + relationship + " " 
+						+ first_data + ".} ";
                     return return_message;
 				}//end else if
 			}//end if
@@ -399,12 +422,45 @@ namespace Dialogue_Data_Entry
                 return "";
             }//end if
 
-			//if (old.getRelationshipNeighbor(newOld.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data)) &&
-			//	old.getRelationshipNeighbor(newOld.Data) != "" && prevOfCurr.getRelationshipNeighbor(current.Data) != "")
-			//{
-			//string relationship = old.getRelationshipNeighbor(newOld.Data);
+            //if (old.getRelationshipNeighbor(newOld.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data)) &&
+            //	old.getRelationshipNeighbor(newOld.Data) != "" && prevOfCurr.getRelationshipNeighbor(current.Data) != "")
+            //{
+            //string relationship = old.getRelationshipNeighbor(newOld.Data);
 
-			// 4 nodes
+            // enable bilingual mode
+
+            if (a1.Contains("##"))
+            {
+                if (language_mode == 0) { a1 = a1.Split(new string[] { "##" }, StringSplitOptions.None)[0]; }
+                else { a1 = a1.Split(new string[] { "##" }, StringSplitOptions.None)[1]; }
+            }
+            if (b1.Contains("##"))
+            {
+                if (language_mode == 0) { b1 = b1.Split(new string[] { "##" }, StringSplitOptions.None)[0]; }
+                else { b1 = b1.Split(new string[] { "##" }, StringSplitOptions.None)[1]; }
+            }
+            if (a2.Contains("##"))
+            {
+                if (language_mode == 0) { a2 = a2.Split(new string[] { "##" }, StringSplitOptions.None)[0]; }
+                else { a2 = a2.Split(new string[] { "##" }, StringSplitOptions.None)[1]; }
+            }
+            if (b2.Contains("##"))
+            {
+                if (language_mode == 0) { b2 = b2.Split(new string[] { "##" }, StringSplitOptions.None)[0]; }
+                else { b2 = b2.Split(new string[] { "##" }, StringSplitOptions.None)[1]; }
+            }
+            if (r1.Contains("##"))
+            {
+                if (language_mode == 0) { r1 = r1.Split(new string[] { "##" }, StringSplitOptions.None)[0]; }
+                else { r1 = r1.Split(new string[] { "##" }, StringSplitOptions.None)[1]; }
+            }
+            if (r2.Contains("##"))
+            {
+                if (language_mode == 0) { r2 = r2.Split(new string[] { "##" }, StringSplitOptions.None)[0]; }
+                else { r2 = r2.Split(new string[] { "##" }, StringSplitOptions.None)[1]; }
+            }
+
+            // 4 nodes
             sentencePatterns.Add("[Just as " + a1 + " " + r1 + " " + b1
                 + ", so too " + a2 + " " + r2 + " " + b2 + ".] ");
             sentencePatterns.Add("[" + a2 + " " + r2 + " " + b2
@@ -579,7 +635,14 @@ namespace Dialogue_Data_Entry
             else if (!analogy_made)
             {
                 //As the first node, place an introduction phrase before it.
-                return_message = "{First, let's talk about " + first.Data + ".} ";
+                // 8.18: replaced first.Data with first_data
+                string first_data = first.Data;
+                if (first_data.Contains("##"))
+                {
+                    if(language_mode == 0) { first_data = first_data.Split(new string[] { "##" }, StringSplitOptions.None)[0]; }
+                    else { first_data = first_data.Split(new string[] { "##" }, StringSplitOptions.None)[1]; }
+                }
+                return_message = "{First, let's talk about " + first_data + ".} ";
             }//end else
 
 
@@ -1105,6 +1168,18 @@ namespace Dialogue_Data_Entry
             input = input.ToLower();
             foreach (string item in this.features)
             {
+                string parse_item = item;
+                parse_item = parse_item.Split(new string[] { "##" }, StringSplitOptions.None)[0];
+                if (input.Contains(RemovePunctuation(parse_item.ToLower())))
+                {
+                    if (parse_item.Length > targetLen)
+                    {
+                        target = this.graph.getFeature(item);
+                        targetLen = target.Data.Length;
+                    }
+                }
+                /*
+                // original
                 if (input.Contains(RemovePunctuation(item.ToLower())))
                 {
                     if (item.Length > targetLen)
@@ -1113,6 +1188,7 @@ namespace Dialogue_Data_Entry
                         targetLen = target.Data.Length;
                     }
                 }
+                */
             }
             return target;
         }
@@ -1232,7 +1308,22 @@ namespace Dialogue_Data_Entry
             List<string> stuff = new List<string>();
             string[] speaks = FindSpeak(feature);
             if (speaks.Length > 0)
+            {
+                // parse output according to language mode
+                if (speaks[0].Contains("##"))
+                {
+                    if (language_mode == 0)
+                    {
+                        speaks[0] = speaks[0].Split(new string[] { "##" }, StringSplitOptions.None)[0];
+                    }
+                    else
+                    {
+                        speaks[0] = speaks[0].Split(new string[] { "##" }, StringSplitOptions.None)[1];
+                    }
+                }
                 stuff.AddRange(speaks);
+            }
+                
             stuff.AddRange(SpeakNeighborRelations(feature.Data, FindAllNeighbors(feature)));
             if (stuff.Count() == 0)
             {

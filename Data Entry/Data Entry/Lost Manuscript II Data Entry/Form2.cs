@@ -64,6 +64,8 @@ namespace Dialogue_Data_Entry
             string query = inputBox.Text;
             if (myHandler == null)
                 myHandler = new QueryHandler(featGraph, temporalConstraintList);
+            if (EnglishRadioButton.Checked) { myHandler.language_mode = 0; }
+            else { myHandler.language_mode = 1; }
             chatBox.AppendText("User: "+query+"\r\n");
             string answer = myHandler.ParseInput(query,false);
             chatBox.AppendText("System:"+answer+"\r\n");
