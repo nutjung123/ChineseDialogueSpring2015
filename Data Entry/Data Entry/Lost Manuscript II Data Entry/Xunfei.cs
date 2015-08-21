@@ -712,6 +712,36 @@ namespace Dialogue_Data_Entry
             string login_param = "appid = 55817bb6, work_dir =   .  ";
             Begin_ProcessVoice(text, filename, param, login_param);
         }
+
+        public static void ProcessVoice(string text, string filename, int language_mode = 1, string preferred_sex = "female", int voicespeed = 5)
+        {
+            VoiceName voicename = VoiceName.xiaoyan;
+            if (language_mode == Constant.ChineseMode)
+            {
+                if (preferred_sex == "female")
+                {
+                    voicename = VoiceName.xiaoyan;
+                }
+                else
+                {
+                    voicename = VoiceName.xiaoyu;
+                }
+            }
+            else if (language_mode == Constant.EnglishMode)
+            {
+                if (preferred_sex == "female")
+                {
+                    voicename = VoiceName.Catherine;
+                }
+                else
+                {
+                    voicename = VoiceName.henry;
+                }
+            }
+            string param = string.Format(" vcn={0}, spd ={1}, vol = 50, bgs=0, aue=speex-wb, smk = 3", voicename, voicespeed);
+            string login_param = "appid = 55817bb6, work_dir =   .  ";
+            Begin_ProcessVoice(text, filename, param, login_param);
+        }
     }
 
 }
