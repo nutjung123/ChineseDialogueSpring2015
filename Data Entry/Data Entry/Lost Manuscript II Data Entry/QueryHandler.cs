@@ -910,6 +910,13 @@ namespace Dialogue_Data_Entry
                     noveltyInfo = speaker.getNovelty(this.topic, this.turn, noveltyAmount);
                     return "Novelty:" + noveltyInfo + ":Proximal:" + speaker.getProximal(this.topic, noveltyAmount);
                 }//end else if
+                //SET_LANGUAGE command from Unity front-end.
+                else if (split_input[0].Equals("SET_LANGUAGE"))
+                {
+                    //Index 1 is the new language mode.
+                    language_mode = int.Parse(split_input[1]);
+                    return "Language set to " + language_mode;
+                }//end else if
             }//end else if
 
             // CASE: Nothing / Move on to next topic
