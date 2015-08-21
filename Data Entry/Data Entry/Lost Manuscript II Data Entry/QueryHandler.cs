@@ -914,8 +914,9 @@ namespace Dialogue_Data_Entry
                 else if (split_input[0].Equals("SET_LANGUAGE"))
                 {
                     //Index 1 is the new language mode.
-                    language_mode = int.Parse(split_input[1]);
-                    return "Language set to " + language_mode;
+                    language_mode_display = int.Parse(split_input[1]);
+                    language_mode_tts = int.Parse(split_input[2]);
+                    return "Language to display set to " + language_mode_display + ": Language of TTS set to " + language_mode_tts;
                 }//end else if
             }//end else if
 
