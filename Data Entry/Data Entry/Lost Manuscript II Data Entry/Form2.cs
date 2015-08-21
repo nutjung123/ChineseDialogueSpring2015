@@ -64,38 +64,12 @@ namespace Dialogue_Data_Entry
             string query = inputBox.Text;
             if (myHandler == null)
                 myHandler = new QueryHandler(featGraph, temporalConstraintList);
-
-            if (EnglishRadioButton.Checked)
-            {
-                myHandler.language_mode_display = Constant.EnglishMode;
-                if (checkBox1.Checked) { myHandler.language_mode_tts = Constant.EnglishMode; }
-                else { myHandler.language_mode_tts = Constant.ChineseMode; }
-            }
-            else
-            {
-                myHandler.language_mode_display = Constant.ChineseMode;
-                if(checkBox1.Checked) { myHandler.language_mode_tts = Constant.ChineseMode; }
-                else { myHandler.language_mode_tts = Constant.EnglishMode; }
-            }
-
+            if (EnglishRadioButton.Checked) { myHandler.language_mode = 0; }
+            else { myHandler.language_mode = 1; }
             chatBox.AppendText("User: "+query+"\r\n");
             string answer = myHandler.ParseInput(query,false);
-            string display = ParseOutput(answer, myHandler.language_mode_display);
-
-            chatBox.AppendText("System:" + display + "\r\n");
-
-            if (checkBox2.Checked)
-            {
-                string text;
-                if (checkBox1.Checked) { text = display; }
-                else { text = ParseOutput(answer, myHandler.language_mode_tts); }
-                //MessageBox.Show(text);
-                XunfeiFunction.ProcessVoice(text, "out.wav", myHandler.language_mode_tts);
-                //MessageBox.Show("success");
-                Play_TTS_file("out.wav");
-            }
-            
-            inputBox.Clear(); 
+            chatBox.AppendText("System:"+answer+"\r\n");
+            inputBox.Clear();
         }
 
         private void ServerModeButton_Click(object sender, EventArgs e)
@@ -237,25 +211,6 @@ namespace Dialogue_Data_Entry
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             StopServerbutton_Click(sender, e);
-        }
-
-        private string ParseOutput(string to_parse, int language_mode)
-        {
-            string answer = "";
-            string[] answers = to_parse.Split(new string[] { "##" }, StringSplitOptions.None);
-
-            for(int i=0; i<answers.Length; i++)
-            {
-                if(language_mode == Constant.EnglishMode && i%2 == 0)
-                {
-                    answer += answers[i];
-                }
-                if(language_mode == Constant.ChineseMode && i%2 == 1)
-                {
-                    answer += answers[i];
-                }
-            }
-            return answer;
         }
 
         NAudio.Wave.WaveIn sourceStream = null;

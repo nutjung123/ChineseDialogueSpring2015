@@ -39,8 +39,6 @@
             this.EnglishRadioButton = new System.Windows.Forms.RadioButton();
             this.ChineseRadioButton = new System.Windows.Forms.RadioButton();
             this.TTSbutton = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // inputBox
@@ -145,7 +143,7 @@
             // 
             // TTSbutton
             // 
-            this.TTSbutton.Location = new System.Drawing.Point(649, 151);
+            this.TTSbutton.Location = new System.Drawing.Point(649, 180);
             this.TTSbutton.Name = "TTSbutton";
             this.TTSbutton.Size = new System.Drawing.Size(75, 23);
             this.TTSbutton.TabIndex = 10;
@@ -153,35 +151,11 @@
             this.TTSbutton.UseVisualStyleBackColor = true;
             this.TTSbutton.Click += new System.EventHandler(this.TTSbutton_Click);
             // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(649, 209);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(83, 17);
-            this.checkBox1.TabIndex = 11;
-            this.checkBox1.Text = "Same Lang.";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(649, 186);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(89, 17);
-            this.checkBox2.TabIndex = 12;
-            this.checkBox2.Text = "TTS Enabled";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(736, 370);
-            this.Controls.Add(this.checkBox2);
-            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.TTSbutton);
             this.Controls.Add(this.ChineseRadioButton);
             this.Controls.Add(this.EnglishRadioButton);
@@ -214,7 +188,5 @@
         private System.Windows.Forms.RadioButton EnglishRadioButton;
         private System.Windows.Forms.RadioButton ChineseRadioButton;
         private System.Windows.Forms.Button TTSbutton;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.CheckBox checkBox2;
     }
 }

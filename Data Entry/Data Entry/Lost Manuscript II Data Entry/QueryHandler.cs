@@ -62,7 +62,8 @@ namespace Dialogue_Data_Entry
     class QueryHandler
     {
         private const string FORMAT = "FORMAT:";
-        private const string IDK = "I'm afraid I don't know anything about that topic." + "##" + "对不起，我不知道。" + "##";
+        private const string IDK = "I'm afraid I don't know anything about that topic.";
+        private const string IDK_CN = "对不起，我不知道。";
         private string[] punctuation = { ",", ";", ".", "?", "!", "\'", "\"", "(", ")", "-" };
         private string[] questionWords = { "?", "what", "where", "when" };
         private string[] directionWords = {"inside", "contain", "north", "east", "west", "south",
@@ -111,8 +112,7 @@ namespace Dialogue_Data_Entry
 
         //Which language we are operating in.
         //Default is English.
-        public int language_mode_display = Constant.EnglishMode;
-        public int language_mode_tts = Constant.EnglishMode;
+        public int language_mode = Constant.EnglishMode;
 
         /// <summary>
         /// Create a converter for the specified XML file
@@ -185,83 +185,120 @@ namespace Dialogue_Data_Entry
 		{
 			string return_message = "";
             
-            string first_data_en = first.Data;
-            string first_data_cn = first.Data;
-            if (first.Data.Contains("##"))
+            string first_data = first.Data;
+            if (first_data.Contains("##"))
             {
-                first_data_en = first.Data.Split(new string[] { "##" }, StringSplitOptions.None)[0];
-                first_data_cn = first.Data.Split(new string[] { "##" }, StringSplitOptions.None)[1];
+                if (language_mode == 0) { first_data = first_data.Split(new string[] { "##" }, StringSplitOptions.None)[0]; }
+                else { first_data = first_data.Split(new string[] { "##" }, StringSplitOptions.None)[1]; }
+            }
+            string last_data = last.Data;
+            if (last_data.Contains("##"))
+            {
+                if (language_mode == 0) { last_data = last_data.Split(new string[] { "##" }, StringSplitOptions.None)[0]; }
+                else { last_data = last_data.Split(new string[] { "##" }, StringSplitOptions.None)[1]; }
             }
 
-            string last_data_en = last.Data;
-            string last_data_cn = last.Data;
-            if (last.Data.Contains("##"))
-            {
-                last_data_en = last.Data.Split(new string[] { "##" }, StringSplitOptions.None)[0];
-                last_data_cn = last.Data.Split(new string[] { "##" }, StringSplitOptions.None)[1];
-            }
+            // 8.18: replace first.Data with first_data, last.Data with last_data,
+            // last.getRelationshipNeighbor(first.Data) with relationship
 
             //First is the current node (the one that has just been traversed to)
             //A set of possible lead-in statements.
             List<string> lead_in_statements = new List<string>();
-            lead_in_statements.Add("{There's also " + first_data_en + ".} " + "##" + "{还有" + first_data_cn + "呢。} " + "##");
-            lead_in_statements.Add("{But let's talk about " + first_data_en + ".} " + "##" + "{让我们谈论" + first_data_cn + "吧。} " + "##");
-            lead_in_statements.Add("{And have I mentioned " + first_data_en + "?} " + "##" + "{我刚刚有提到过" + first_data_cn + "吗？} " + "##");
-            lead_in_statements.Add("{Now, about " + first_data_en + ".} " + "##" + "{然后关于" + first_data_cn + "。} " + "##");
-            lead_in_statements.Add("{Now, let's talk about " + first_data_en + ".} " + "##" + "{现在让我们谈谈" + first_data_cn + "吧。} " + "##");
-            lead_in_statements.Add("{I should touch on " + first_data_en + ".} " + "##" + "{我觉得有必要提一下" + first_data_cn + "。} " + "##");
-            lead_in_statements.Add("{Have you heard of " + first_data_en + "?} " + "##" + "{你有听说过" + first_data_cn + "吗？} " + "##");
+            if(language_mode == 0)
+            {
+                lead_in_statements.Add("{There's also " + first_data + ".} ");
+                lead_in_statements.Add("{But let's talk about " + first_data + ".} ");
+                lead_in_statements.Add("{And have I mentioned " + first_data + "?} ");
+                lead_in_statements.Add("{Now, about " + first_data + ".} ");
+                lead_in_statements.Add("{Now, let's talk about " + first_data + ".} ");
+                lead_in_statements.Add("{I should touch on " + first_data + ".} ");
+                lead_in_statements.Add("{Have you heard of " + first_data + "?} ");
+            }
+            else
+            {
+                lead_in_statements.Add("{还有" + first_data + "呢。} ");
+                lead_in_statements.Add("{让我们谈论" + first_data + "吧。} ");
+                lead_in_statements.Add("{我刚刚有提到过" + first_data + "吗？} ");
+                lead_in_statements.Add("{关于" + first_data + "。} ");
+                lead_in_statements.Add("{现在让我们谈谈" + first_data + "吧。} ");
+                lead_in_statements.Add("{我觉得有必要提一下" + first_data + "。} ");
+                lead_in_statements.Add("{你有听说过" + first_data + "吗？} ");
+            }
+
 
             //A set of lead-in statements for non-novel nodes
             List<string> non_novel_lead_in_statements = new List<string>();
-            non_novel_lead_in_statements.Add("{There's also " + first_data_en + ".} " + "##" + "{还有" + first_data_cn + "呢。} " + "##");
-            non_novel_lead_in_statements.Add("{Let's talk about " + first_data_en + ".} " + "##" + "{让我们谈谈" + first_data_cn + "吧。} " + "##");
-            non_novel_lead_in_statements.Add("{I'll mention " + first_data_en + " real quick.} " + "##" + "{我想简要提提" + first_data_cn + "。} " + "##");
-            non_novel_lead_in_statements.Add("{So, about " + first_data_en + ".} " + "##" + "{那么,关于" + first_data_cn + "。} " + "##");
-            non_novel_lead_in_statements.Add("{Now then, about " + first_data_en + ".} " + "##" + "{现在谈谈" + first_data_cn + "吧。} " + "##");
-            non_novel_lead_in_statements.Add("{Let's talk about " + first_data_en + " for a moment.} " + "##" + "{让我们聊一会儿" + first_data_cn + " 吧。} " + "##");
-            non_novel_lead_in_statements.Add("{Have I mentioned " + first_data_en + "?} " + "##" + "{我刚刚有提到" + first_data_cn + "吗？} " + "##");
-            non_novel_lead_in_statements.Add("{Now, about " + first_data_en + ".} " + "##" + "{然后关于" + first_data_cn + "。} " + "##");
-            non_novel_lead_in_statements.Add("{Now, let's talk about " + first_data_en + ".} " + "##" + "{现在让我们谈谈" + first_data_cn + "吧。} " + "##");
-            non_novel_lead_in_statements.Add("{I should touch on " + first_data_en + ".} " + "##" + "{我该提及" + first_data_cn + "。} " + "##");
-            
+            if(language_mode == 0)
+            {
+                non_novel_lead_in_statements.Add("{There's also " + first_data + ".} ");
+                non_novel_lead_in_statements.Add("{Let's talk about " + first_data + ".} ");
+                non_novel_lead_in_statements.Add("{I'll mention " + first_data + " real quick.} ");
+                non_novel_lead_in_statements.Add("{So, about " + first_data + ".} ");
+                non_novel_lead_in_statements.Add("{Now then, about " + first_data + ".} ");
+                non_novel_lead_in_statements.Add("{Let's talk about " + first_data + " for a moment.} ");
+                non_novel_lead_in_statements.Add("{Have I mentioned " + first_data + "?} ");
+                non_novel_lead_in_statements.Add("{Now, about " + first_data + ".} ");
+                non_novel_lead_in_statements.Add("{Now, let's talk about " + first_data + ".} ");
+                non_novel_lead_in_statements.Add("{I should touch on " + first_data + ".} ");
+            }
+            else
+            {
+                non_novel_lead_in_statements.Add("{还有" + first_data + "呢。} ");
+                non_novel_lead_in_statements.Add("{让我们谈谈" + first_data + "吧。} ");
+                non_novel_lead_in_statements.Add("{我想简要提提" + first_data + "。} ");
+                non_novel_lead_in_statements.Add("{然后,关于" + first_data + "。} ");
+                non_novel_lead_in_statements.Add("{现在谈谈" + first_data + "吧。} ");
+                non_novel_lead_in_statements.Add("{让我们聊一会儿" + first_data + " 吧。} ");
+                non_novel_lead_in_statements.Add("{我刚刚有提到" + first_data + "吗？} ");
+                non_novel_lead_in_statements.Add("{那么," + first_data + "。} ");
+                non_novel_lead_in_statements.Add("{现在让我们谈谈" + first_data + "吧。} ");
+                non_novel_lead_in_statements.Add("{我该提及" + first_data + "。} ");
+            }
+
+
             //A set of lead-in statements for novel nodes
             //TODO: Author these again; things like let's talk about something different now.
             List<string> novel_lead_in_statements = new List<string>();
-            novel_lead_in_statements.Add("{Let's talk about something different. " + "##" + "{让我们聊点别的吧。" + "##");
-            novel_lead_in_statements.Add("{Let's talk about something else. " + "##" + "{让我们说点别的什么吧。" + "##");
-            novel_lead_in_statements.Add("{Let's switch gears. " + "##" + "{让我们换个话题吧。" + "##");
+            if(language_mode == 0)
+            {
+                novel_lead_in_statements.Add("{Let's talk about something different. ");
+                novel_lead_in_statements.Add("{Let's switch gears. ");
+            }
+            else
+            {
+                novel_lead_in_statements.Add("{让我们谈点别的吧。");
+                novel_lead_in_statements.Add("{让我们聊点别的吧。");
+                novel_lead_in_statements.Add("{让我们说点别的什么吧。");
+                novel_lead_in_statements.Add("{让我们换个话题吧。");
+            }
+
 
             Random rand = new Random();
 
 			// Check if there is a relationship between two nodes
 			if (last.getNeighbor(first.Data) != null || first.getNeighbor(last.Data) != null)
 			{
-                string relationship_en = last.getRelationshipNeighbor(first.Data);
-                string relationship_cn = last.getRelationshipNeighbor(first.Data);
-
-                if (relationship_en.Contains("##"))
+                string relationship = last.getRelationshipNeighbor(first.Data);
+                if (relationship.Contains("##"))
                 {
-                    relationship_en = relationship_en.Split(new string[] { "##" }, StringSplitOptions.None)[0];
-                    relationship_cn = relationship_cn.Split(new string[] { "##" }, StringSplitOptions.None)[1];
+                    if (language_mode == 0) { relationship = relationship.Split(new string[] { "##" }, StringSplitOptions.None)[0]; }
+                    else { relationship = relationship.Split(new string[] { "##" }, StringSplitOptions.None)[1]; }
                 }
 
                 // Check if last has first as its neighbor
                 if (!last.getRelationshipNeighbor (first.Data).Equals("")
                     && !(last.getRelationshipNeighbor (first.Data) == null))
                 {
-					return_message = "{" + last_data_en + " " + relationship_en + " " 
-						+ first_data_en + ".} " + "##" + "{" + last_data_cn + " " + relationship_cn + " "
-                        + first_data_cn + ".} " + "##";
+					return_message = "{" + last_data + " " + relationship + " " 
+						+ first_data + ".} ";
                     return return_message;
 				}//end if
 				// If last is a child node of first (first is a parent of last)
 				else if (!last.getRelationshipParent (first.Data).Equals("")
                             && !(last.getRelationshipParent(first.Data) == null))
 				{
-                    return_message = "{" + last_data_en + " " + relationship_en + " "
-                        + first_data_en + ".} " + "##" + "{" + last_data_cn + " " + relationship_cn + " "
-                        + first_data_cn + ".} " + "##";
+					return_message = "{" + last_data + " " + relationship + " " 
+						+ first_data + ".} ";
                     return return_message;
 				}//end else if
 			}//end if
@@ -435,79 +472,63 @@ namespace Dialogue_Data_Entry
 
             // enable bilingual mode
 
-            string a1_en = a1;
-            string a1_cn = a1;
             if (a1.Contains("##"))
             {
-                a1_en = a1.Split(new string[] { "##" }, StringSplitOptions.None)[0];
-                a1_cn = a1.Split(new string[] { "##" }, StringSplitOptions.None)[1];
+                if (language_mode == 0) { a1 = a1.Split(new string[] { "##" }, StringSplitOptions.None)[0]; }
+                else { a1 = a1.Split(new string[] { "##" }, StringSplitOptions.None)[1]; }
             }
-
-            string b1_en = b1;
-            string b1_cn = b1;
             if (b1.Contains("##"))
             {
-                b1_en = b1.Split(new string[] { "##" }, StringSplitOptions.None)[0];
-                b1_cn = b1.Split(new string[] { "##" }, StringSplitOptions.None)[1];
+                if (language_mode == 0) { b1 = b1.Split(new string[] { "##" }, StringSplitOptions.None)[0]; }
+                else { b1 = b1.Split(new string[] { "##" }, StringSplitOptions.None)[1]; }
             }
-
-            string r1_en = r1;
-            string r1_cn = r1;
-            if (r1.Contains("##"))
-            {
-                r1_en = r1.Split(new string[] { "##" }, StringSplitOptions.None)[0];
-                r1_cn = r1.Split(new string[] { "##" }, StringSplitOptions.None)[1];
-            }
-
-            string a2_en = a2;
-            string a2_cn = a2;
             if (a2.Contains("##"))
             {
-                a2_en = a2.Split(new string[] { "##" }, StringSplitOptions.None)[0];
-                a2_cn = a2.Split(new string[] { "##" }, StringSplitOptions.None)[1];
+                if (language_mode == 0) { a2 = a2.Split(new string[] { "##" }, StringSplitOptions.None)[0]; }
+                else { a2 = a2.Split(new string[] { "##" }, StringSplitOptions.None)[1]; }
             }
-
-            string b2_en = b2;
-            string b2_cn = b2;
             if (b2.Contains("##"))
             {
-                b2_en = b2.Split(new string[] { "##" }, StringSplitOptions.None)[0];
-                b2_cn = b2.Split(new string[] { "##" }, StringSplitOptions.None)[1];
+                if (language_mode == 0) { b2 = b2.Split(new string[] { "##" }, StringSplitOptions.None)[0]; }
+                else { b2 = b2.Split(new string[] { "##" }, StringSplitOptions.None)[1]; }
             }
-
-            string r2_en = r2;
-            string r2_cn = r2;
+            if (r1.Contains("##"))
+            {
+                if (language_mode == 0) { r1 = r1.Split(new string[] { "##" }, StringSplitOptions.None)[0]; }
+                else { r1 = r1.Split(new string[] { "##" }, StringSplitOptions.None)[1]; }
+            }
             if (r2.Contains("##"))
             {
-                r2_en = r2.Split(new string[] { "##" }, StringSplitOptions.None)[0];
-                r2_cn = r2.Split(new string[] { "##" }, StringSplitOptions.None)[1];
+                if (language_mode == 0) { r2 = r2.Split(new string[] { "##" }, StringSplitOptions.None)[0]; }
+                else { r2 = r2.Split(new string[] { "##" }, StringSplitOptions.None)[1]; }
             }
 
             // 4 nodes
-            sentencePatterns.Add("[Just as " + a1_en + " " + r1_en + " " + b1_en
-                + ", so too " + a2_en + " " + r2_en + " " + b2_en + ".] " + "##"
-                + "[正像" + a1_cn + r1_cn + b1_cn + "一样," + a2_cn + r2_cn + b2_cn + "。] " + "##");
-
-            sentencePatterns.Add("[" + a2_en + " " + r2_en + " " + b2_en
-                + ", much like " + a1_en + " " + r1_en + " " + b1_en + ".] " + "##"
-                + "[" + a2_cn + r2_cn + b2_cn + "," + "就像" + a1_cn + r1_cn + b1_cn + "。] " + "##");
-
-            sentencePatterns.Add("[Like " + a1_en + " " + r1_en + " " + b1_en + ", "
-                + a2_en + " also " + r2_en + " " + b2_en + ".] " + "##"
-                + "[像" + a1_cn + r1_cn + b1_cn + "一样," + a2_cn + "也" + r2_cn + b2_cn + "。] " + "##");
-
-            sentencePatterns.Add("[The same way that " + a1_en + " " + r1_en + " " + b1_en
-                + ", " + a2_en + " " + r2_en + " " + b2_en + ".] " + "##"
-                + "[如同" + a1_cn + r1_cn + b1_cn + "一般," + a2_cn + r2_cn + b2_cn + "。] " + "##");
-
-            sentencePatterns.Add("[Remember how " + a1_en + " " + r1_en + " " + b1_en
-                + "? Well, in the same way, " + a2_en + " also " + r2_en + " " + b2_en + ".] " + "##"
-                + "[就像" + a1_cn + r1_cn + b1_cn + "一样," + a2_cn + "也" + r2_cn + b2_cn + "。] ");
-
-            sentencePatterns.Add("[" + a2_en + " also " + r2_en + " " + b2_en
-                + ", similar to how " + a1_en + " " + r1_en + " " + b1_en + ".] " + "##"
-                + "[" + a2_cn + r2_cn + b2_cn + "," + "正像" + a1_cn + r1_cn + b1_cn + "。] " + "##");
-
+            if(language_mode == 0)
+            {
+                sentencePatterns.Add("[Just as " + a1 + " " + r1 + " " + b1
+                    + ", so too " + a2 + " " + r2 + " " + b2 + ".] ");
+                sentencePatterns.Add("[" + a2 + " " + r2 + " " + b2
+                    + ", much like " + a1 + " " + r1 + " " + b1 + ".] ");
+                sentencePatterns.Add("[Like " + a1 + " " + r1 + " " + b1 + ", "
+                    + a2 + " also " + r2 + " " + b2 + ".] ");
+                sentencePatterns.Add("[The same way that " + a1 + " " + r1 + " " + b1
+                    + ", " + a2 + " " + r2 + " " + b2 + ".] ");
+                sentencePatterns.Add("[Remember how " + a1 + " " + r1 + " " + b1
+                    + "? Well, in the same way, " + a2 + " also " + r2 + " " + b2 + ".] ");
+                sentencePatterns.Add("[" + a2 + " also " + r2 + " " + b2
+                    + ", similar to how " + a1 + " " + r1 + " " + b1 + ".] ");
+            }
+            else
+            {
+                sentencePatterns.Add("[像" + a1 + r1 + b1 + "一样," + a2 + "也" + r2 + b2 + "。] ");
+                sentencePatterns.Add("[就像" + a1 + r1 + b1 + "一样," + a2 + r2 + b2 + "。] ");
+                sentencePatterns.Add("[就像" + a1 + r1 + b1 + "一样," + a2 + "也" + r2 + b2 + "。] ");
+                sentencePatterns.Add("[就如同" + a1 + r1 + b1 + "一样," + a2 + r2 + b2 + "。] ");
+                sentencePatterns.Add("[如同" + a1 + r1 + b1 + "一般," + a2 + r2 + b2 + "。] ");
+                sentencePatterns.Add("[正像" + a1 + r1 + b1 + "一样," + a2 + r2 + b2 + "。] ");
+                sentencePatterns.Add("[" + a2 + r2 + b2 + "," + "正像" + a1 + r1 + b1 + "。] ");
+            }
 
 			int random_int = rnd.Next(sentencePatterns.Count);
 
@@ -671,16 +692,14 @@ namespace Dialogue_Data_Entry
             {
                 //As the first node, place an introduction phrase before it.
                 // 8.18: replaced first.Data with first_data
-                string first_data_en = first.Data;
-                string first_data_cn = first.Data;
-
-                if (first.Data.Contains("##"))
+                string first_data = first.Data;
+                if (first_data.Contains("##"))
                 {
-                    first_data_en = first.Data.Split(new string[] { "##" }, StringSplitOptions.None)[0];
-                    first_data_cn = first.Data.Split(new string[] { "##" }, StringSplitOptions.None)[1];
+                    if(language_mode == 0) { first_data = first_data.Split(new string[] { "##" }, StringSplitOptions.None)[0]; }
+                    else { first_data = first_data.Split(new string[] { "##" }, StringSplitOptions.None)[1]; }
                 }
-                return_message = "{First, let's talk about " + first_data_en + ".} " + "##" + "{首先，让我们谈谈 " + first_data_cn + "。} " + "##";
-
+                if(language_mode == 0) { return_message = "{First, let's talk about " + first_data + ".} "; }
+                else { return_message = "{首先，让我们谈谈 " + first_data + "。} "; }
             }//end else
 
 
@@ -689,8 +708,15 @@ namespace Dialogue_Data_Entry
             if (out_of_topic_response)
             {
                 //"I'm afraid I don't know anything about ";
-                to_speak = "I'm sorry, I'm afraid I don't understand what you are asking. But here's something I do know about. "
-                   + "##" + "对不起，我不知道您在说什么。但我知道这些。" + "##" + to_speak;
+                if(language_mode == 0)
+                {
+                    to_speak = "I'm sorry, I'm afraid I don't understand what you are asking. But here's something I do know about. "
+                       + to_speak;
+                }
+                else
+                {
+                    to_speak = "对不起，我不知道您在说什么。但我知道这些。" + to_speak;
+                }
 
             }//end if
 
@@ -750,7 +776,9 @@ namespace Dialogue_Data_Entry
         //  how well the nodes in the n-length path from the current node relate to the current node.
         public string ParseInput(string input, bool messageToServer = false, bool forLog = false, bool outOfTopic = false, bool projectAsTopic = false)
         {
-            string answer = IDK;
+            string answer;
+            if(language_mode == 0) { answer = IDK; }
+            else { answer = IDK_CN; }
             string noveltyInfo = "";
             double currentTopicNovelty = -1;
             // Pre-processing
@@ -1069,7 +1097,8 @@ namespace Dialogue_Data_Entry
                     answer = this.buffer[b++];
                 else
                 {
-                    answer = "I've said all I can about that topic!" + "##" + "我已经把我知道的都说完了。" + "##";
+                    if(language_mode == 0) { answer = "I've said all I can about that topic!"; }
+                    else { answer = "我已经把我知道的都说完了。"; }
                 }
                     
                 noveltyInfo = speaker.getNovelty(this.topic, this.turn, noveltyAmount);
@@ -1359,6 +1388,18 @@ namespace Dialogue_Data_Entry
             string[] speaks = FindSpeak(feature);
             if (speaks.Length > 0)
             {
+                // parse output according to language mode
+                if (speaks[0].Contains("##"))
+                {
+                    if (language_mode == 0)
+                    {
+                        speaks[0] = speaks[0].Split(new string[] { "##" }, StringSplitOptions.None)[0];
+                    }
+                    else
+                    {
+                        speaks[0] = speaks[0].Split(new string[] { "##" }, StringSplitOptions.None)[1];
+                    }
+                }
                 stuff.AddRange(speaks);
             }
                 
