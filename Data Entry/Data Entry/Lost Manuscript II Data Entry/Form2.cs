@@ -80,7 +80,7 @@ namespace Dialogue_Data_Entry
 
             chatBox.AppendText("User: "+query+"\r\n");
             string answer = myHandler.ParseInput(query,false);
-            string display = ParseOutput(answer, myHandler.language_mode_display);
+            string display = myHandler.ParseOutput(answer, myHandler.language_mode_display);
 
             chatBox.AppendText("System:" + display + "\r\n");
 
@@ -88,7 +88,7 @@ namespace Dialogue_Data_Entry
             {
                 string text;
                 if (checkBox1.Checked) { text = display; }
-                else { text = ParseOutput(answer, myHandler.language_mode_tts); }
+                else { text = myHandler.ParseOutput(answer, myHandler.language_mode_tts); }
                 //MessageBox.Show(text);
                 XunfeiFunction.ProcessVoice(text, "out.wav", myHandler.language_mode_tts);
                 //MessageBox.Show("success");
@@ -239,7 +239,7 @@ namespace Dialogue_Data_Entry
             StopServerbutton_Click(sender, e);
         }
 
-        private string ParseOutput(string to_parse, int language_mode)
+        /*private string ParseOutput(string to_parse, int language_mode)
         {
             string answer = "";
             string[] answers = to_parse.Split(new string[] { "##" }, StringSplitOptions.None);
@@ -256,7 +256,7 @@ namespace Dialogue_Data_Entry
                 }
             }
             return answer;
-        }
+        }*/
 
         NAudio.Wave.WaveIn sourceStream = null;
         //NAudio.Wave.DirectSoundOut waveOut = null;

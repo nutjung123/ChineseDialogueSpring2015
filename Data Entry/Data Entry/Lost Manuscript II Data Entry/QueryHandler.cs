@@ -1348,6 +1348,26 @@ namespace Dialogue_Data_Entry
             return output.Count() > 0 ? output.ToArray() : new string[] { IDK };
         }
 
+        //Parses a bilingual output based on the language_mode passed in
+        public string ParseOutput(string to_parse, int language_mode)
+        {
+            string answer = "";
+            string[] answers = to_parse.Split(new string[] { "##" }, StringSplitOptions.None);
+
+            for (int i = 0; i < answers.Length; i++)
+            {
+                if (language_mode == Constant.EnglishMode && i % 2 == 0)
+                {
+                    answer += answers[i];
+                }
+                if (language_mode == Constant.ChineseMode && i % 2 == 1)
+                {
+                    answer += answers[i];
+                }
+            }
+            return answer;
+        }
+
         private string[] FindSpeak(Feature feature)
         {
             return feature.Speaks.ToArray();
