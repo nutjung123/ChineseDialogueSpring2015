@@ -196,7 +196,7 @@ namespace Dialogue_Data_Entry
 
                 if (myHandler == null)
                     myHandler = new QueryHandler(featGraph, temporalConstraintList);
-                //Console.WriteLine("Query: " + query);
+                Console.WriteLine("Query: " + query);
                 
                 this.Invoke((MethodInvoker)delegate
                 {
@@ -204,14 +204,51 @@ namespace Dialogue_Data_Entry
                 });
                 
                 string answer = myHandler.ParseInput(query, true);
-                
+                Console.WriteLine("Answer: " + answer);
                 this.Invoke((MethodInvoker)delegate
                 {
                     chatBox.AppendText("System:" + answer + "\r\n");
                 });
 
-                //Console.WriteLine("Send: " + answer);
-                myServer.SendDataToClient(answer);
+                if (answer.Contains("##"))
+                {
+                    string tts = answer.Split(new string[] { "##" }, StringSplitOptions.None)[1];
+                    answer = answer.Split(new string[] { "##" }, StringSplitOptions.None)[0];
+
+                    Console.WriteLine("Answer contains ##. Send: " + answer);
+                    myServer.SendDataToClient(answer);
+                    /*
+                    try
+                    {
+                        File.Delete("audio/out.wav");
+                        Console.WriteLine("Deleted audio file");
+                    }
+                    catch(DirectoryNotFoundException dirnotfound)
+                    {
+                        Console.WriteLine(dirnotfound.Message);
+                    }
+                    */
+                    Console.WriteLine("tts text: " + tts);
+                    
+                    if (myHandler.language_mode_tts == Constant.ChineseMode)
+                    {
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            Console.WriteLine("Xunfei begins writing");
+                            XunfeiFunction.ProcessVoice(tts, "audio/out.wav", myHandler.language_mode_tts);
+                            Console.WriteLine("written new audio file");
+                        });
+
+                        Play_TTS_file("audio/out.wav");
+                    }
+                                        
+                }
+                else
+                {
+                    Console.WriteLine("Send: " + answer);
+                    myServer.SendDataToClient(answer);
+                }
+                Console.WriteLine("The returned answer is " + answer);
             }
             myServer.CloseServer();
             myServer = null;
@@ -357,6 +394,7 @@ namespace Dialogue_Data_Entry
         }
         private void Play_TTS_file(string filename)
         {
+            Console.WriteLine("In Play_TTS_file start");
             NAudio.Wave.WaveFileReader audio = new NAudio.Wave.WaveFileReader(filename);
             NAudio.Wave.IWavePlayer player = new NAudio.Wave.WaveOut(NAudio.Wave.WaveCallbackInfo.FunctionCallback());
             player.Init(audio);
@@ -372,6 +410,7 @@ namespace Dialogue_Data_Entry
                     break;
                 }
             };
+            Console.WriteLine("After Play_TTS_File while loop");
         }
 
         private string run_translator(string text)

@@ -114,6 +114,9 @@ namespace Dialogue_Data_Entry
         public int language_mode_display = Constant.EnglishMode;
         public int language_mode_tts = Constant.EnglishMode;
 
+        //A string to be used for text-to-speech
+        public string buffered_tts = "";
+
         /// <summary>
         /// Create a converter for the specified XML file
         /// </summary>
@@ -502,7 +505,7 @@ namespace Dialogue_Data_Entry
 
             sentencePatterns.Add("[Remember how " + a1_en + " " + r1_en + " " + b1_en
                 + "? Well, in the same way, " + a2_en + " also " + r2_en + " " + b2_en + ".] " + "##"
-                + "[就像" + a1_cn + r1_cn + b1_cn + "一样," + a2_cn + "也" + r2_cn + b2_cn + "。] ");
+                + "[就像" + a1_cn + r1_cn + b1_cn + "一样," + a2_cn + "也" + r2_cn + b2_cn + "。] " + "##");
 
             sentencePatterns.Add("[" + a2_en + " also " + r2_en + " " + b2_en
                 + ", similar to how " + a1_en + " " + r1_en + " " + b1_en + ".] " + "##"
@@ -694,10 +697,18 @@ namespace Dialogue_Data_Entry
 
             }//end if
 
+            string tts = ParseOutput(to_speak, language_mode_tts);
+            buffered_tts = tts;
+            to_speak = ParseOutput(to_speak, language_mode_display);
+
             if (forLog)
                 return_message = to_speak + "\r\n";
             else
+            {
                 return_message = " ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + to_speak + ":Novelty:" + noveltyInfo + ":Proximal:" + proximalInfo;
+                //return_message += "##" + tts;
+            }
+                
 
             //Console.WriteLine("to_speak: " + to_speak);
 
@@ -789,8 +800,9 @@ namespace Dialogue_Data_Entry
             // Check
             if (this.topic == null)
                 this.topic = this.graph.Root;
+            //Console.WriteLine("Before new feature speaker in parse input");
             FeatureSpeaker speaker = new FeatureSpeaker(this.graph, temporalConstraintList, prevSpatial, topicHistory);
-
+            //Console.WriteLine("after new speaker in parse input");
             if (split_input.Length != 0 || messageToServer)
             {
                 //Step-through command from Query window.
@@ -840,6 +852,7 @@ namespace Dialogue_Data_Entry
                 // GET_NODE_VALUES command from Unity front-end
                 if (split_input[0].Equals("GET_NODE_VALUES"))
                 {
+                    Console.WriteLine("In get node values");
                     //Get the node we wish to get a set of values for, by data.
                     //"data" is represented by each node's data field in the XML.
                     //In the split input string, index 1 is the data of the node we want
@@ -917,6 +930,21 @@ namespace Dialogue_Data_Entry
                     language_mode_display = int.Parse(split_input[1]);
                     language_mode_tts = int.Parse(split_input[2]);
                     return "Language to display set to " + language_mode_display + ": Language of TTS set to " + language_mode_tts;
+                }//end else if
+                //BEGIN_TTS command from Unity front-end.
+                else if (split_input[0].Equals("BEGIN_TTS"))
+                {
+                    if (buffered_tts.Equals(""))
+                    {
+                        return "-1";
+                    }//end if
+                    else
+                    {
+                        string to_return = "TTS_COMPLETE##" + buffered_tts;
+                        buffered_tts = "";
+
+                        return to_return;
+                    }
                 }//end else if
             }//end else if
 
@@ -1431,6 +1459,25 @@ namespace Dialogue_Data_Entry
                     neighbors[i].Item2.Invert().ToString().ToLower(),
                     neighbors[i].Item1);
             return neighborRelations;
+        }
+
+        private string ParseOutput(string to_parse, int language_mode)
+        {
+            string answer = "";
+            string[] answers = to_parse.Split(new string[] { "##" }, StringSplitOptions.None);
+
+            for (int i = 0; i < answers.Length; i++)
+            {
+                if (language_mode == Constant.EnglishMode && i % 2 == 0)
+                {
+                    answer += answers[i];
+                }
+                if (language_mode == Constant.ChineseMode && i % 2 == 1)
+                {
+                    answer += answers[i];
+                }
+            }
+            return answer;
         }
     }
 
