@@ -182,6 +182,9 @@ namespace Dialogue_Data_Entry
             //Build list of relationships which should not be used in analogies.
             no_analogy_relationships.Add("occurred before");
             no_analogy_relationships.Add("occurred after");
+            no_analogy_relationships.Add("include");
+            no_analogy_relationships.Add("includes");
+            no_analogy_relationships.Add("included");
         }
 
 		private string LeadingTopic(Feature last, Feature first)
@@ -196,6 +199,8 @@ namespace Dialogue_Data_Entry
                 first_data_cn = first.Data.Split(new string[] { "##" }, StringSplitOptions.None)[1];
             }
 
+            Console.WriteLine("In LeadingTopic, first_data_en " + first_data_en + " first_data_cn " + first_data_cn);
+
             string last_data_en = last.Data;
             string last_data_cn = last.Data;
             if (last.Data.Contains("##"))
@@ -203,6 +208,8 @@ namespace Dialogue_Data_Entry
                 last_data_en = last.Data.Split(new string[] { "##" }, StringSplitOptions.None)[0];
                 last_data_cn = last.Data.Split(new string[] { "##" }, StringSplitOptions.None)[1];
             }
+
+            Console.WriteLine("In LeadingTopic, last_data_en " + last_data_en + " last_data_cn " + last_data_cn);
 
             //First is the current node (the one that has just been traversed to)
             //A set of possible lead-in statements.
@@ -240,21 +247,30 @@ namespace Dialogue_Data_Entry
 			// Check if there is a relationship between two nodes
 			if (last.getNeighbor(first.Data) != null || first.getNeighbor(last.Data) != null)
 			{
-                string relationship_en = last.getRelationshipNeighbor(first.Data);
-                string relationship_cn = last.getRelationshipNeighbor(first.Data);
+                string relationship_neighbor_en = last.getRelationshipNeighbor(first.Data);
+                string relationship_neighbor_cn = last.getRelationshipNeighbor(first.Data);
+                string relationship_parent_en = last.getRelationshipParent(first.Data);
+                string relationship_parent_cn = last.getRelationshipParent(first.Data);
 
-                if (relationship_en.Contains("##"))
+                Console.WriteLine("In LeadingTopic, relationship_neighbor_en " + relationship_neighbor_en + " relationship_neighbor_cn " + relationship_neighbor_cn);
+
+                if (relationship_neighbor_en.Contains("##"))
                 {
-                    relationship_en = relationship_en.Split(new string[] { "##" }, StringSplitOptions.None)[0];
-                    relationship_cn = relationship_cn.Split(new string[] { "##" }, StringSplitOptions.None)[1];
+                    relationship_neighbor_en = relationship_neighbor_en.Split(new string[] { "##" }, StringSplitOptions.None)[0];
+                    relationship_neighbor_cn = relationship_neighbor_cn.Split(new string[] { "##" }, StringSplitOptions.None)[1];
                 }
+                if (relationship_parent_en.Contains("##"))
+                {
+                    relationship_parent_en = relationship_parent_en.Split(new string[] { "##" }, StringSplitOptions.None)[0];
+                    relationship_parent_cn = relationship_parent_cn.Split(new string[] { "##" }, StringSplitOptions.None)[1];
+                }//end if
 
                 // Check if last has first as its neighbor
                 if (!last.getRelationshipNeighbor (first.Data).Equals("")
                     && !(last.getRelationshipNeighbor (first.Data) == null))
                 {
-					return_message = "{" + last_data_en + " " + relationship_en + " " 
-						+ first_data_en + ".} " + "##" + "{" + last_data_cn + " " + relationship_cn + " "
+					return_message = "{" + last_data_en + " " + relationship_neighbor_en + " " 
+						+ first_data_en + ".} " + "##" + "{" + last_data_cn + " " + relationship_neighbor_cn + " "
                         + first_data_cn + ".} " + "##";
                     return return_message;
 				}//end if
@@ -262,8 +278,8 @@ namespace Dialogue_Data_Entry
 				else if (!last.getRelationshipParent (first.Data).Equals("")
                             && !(last.getRelationshipParent(first.Data) == null))
 				{
-                    return_message = "{" + last_data_en + " " + relationship_en + " "
-                        + first_data_en + ".} " + "##" + "{" + last_data_cn + " " + relationship_cn + " "
+                    return_message = "{" + last_data_en + " " + relationship_parent_en + " "
+                        + first_data_en + ".} " + "##" + "{" + last_data_cn + " " + relationship_parent_cn + " "
                         + first_data_cn + ".} " + "##";
                     return return_message;
 				}//end else if
@@ -946,6 +962,18 @@ namespace Dialogue_Data_Entry
                         return to_return;
                     }
                 }//end else if
+                //GET_TTS command from Unity front-end.
+                else if (split_input[0].Equals("GET_TTS"))
+                {
+                    if (buffered_tts.Equals(""))
+                    {
+                        return "-1";
+                    }//end if
+                    else
+                    {
+                        return buffered_tts;
+                    }//end else
+                }//end else if
             }//end else if
 
             // CASE: Nothing / Move on to next topic
@@ -1461,24 +1489,6 @@ namespace Dialogue_Data_Entry
             return neighborRelations;
         }
 
-        private string ParseOutput(string to_parse, int language_mode)
-        {
-            string answer = "";
-            string[] answers = to_parse.Split(new string[] { "##" }, StringSplitOptions.None);
-
-            for (int i = 0; i < answers.Length; i++)
-            {
-                if (language_mode == Constant.EnglishMode && i % 2 == 0)
-                {
-                    answer += answers[i];
-                }
-                if (language_mode == Constant.ChineseMode && i % 2 == 1)
-                {
-                    answer += answers[i];
-                }
-            }
-            return answer;
-        }
     }
 
     static class ExtensionMethods

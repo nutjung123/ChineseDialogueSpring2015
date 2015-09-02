@@ -48,7 +48,7 @@ namespace Dialogue_Data_Entry
 
         private void label1_Click(object sender, EventArgs e)
         {
-
+            MessageBox.Show("领引建设了");
         }
 
         private void inputBox_KeyDown(object sender, KeyEventArgs e)
@@ -230,17 +230,15 @@ namespace Dialogue_Data_Entry
                     */
                     Console.WriteLine("tts text: " + tts);
                     
-                    if (myHandler.language_mode_tts == Constant.ChineseMode)
+                    this.Invoke((MethodInvoker)delegate
                     {
-                        this.Invoke((MethodInvoker)delegate
-                        {
-                            Console.WriteLine("Xunfei begins writing");
-                            XunfeiFunction.ProcessVoice(tts, "audio/out.wav", myHandler.language_mode_tts);
-                            Console.WriteLine("written new audio file");
-                        });
+                        Console.WriteLine("Xunfei begins writing");
+                        XunfeiFunction.ProcessVoice(tts, "audio/out.wav", myHandler.language_mode_tts);
+                        Console.WriteLine("written new audio file");
+                    });
 
-                        Play_TTS_file("audio/out.wav");
-                    }
+                    Play_TTS_file("audio/out.wav");
+            
                                         
                 }
                 else
