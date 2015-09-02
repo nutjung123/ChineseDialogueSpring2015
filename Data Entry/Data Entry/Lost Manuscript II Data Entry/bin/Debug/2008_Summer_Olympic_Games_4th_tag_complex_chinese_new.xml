@@ -30,13 +30,13 @@
 <parent dest="45" weight="1" relationship="was partially held by##部分被举办于##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
 <parent dest="55" weight="1" relationship="was partially held by##部分被举办于##"/>
-<speak value="A sport played in or on water.##一项在水中或水上进行的运动。##"/>
+<speak value="Aquatics are sports played in or on water.##一项在水中或水上进行的运动。##"/>
 </Feature>
 <Feature id="2" data="Archery##射箭##">
 <neighbor dest="29" weight="1" relationship="is a kind of##是一种##"/>
 <parent dest="34" weight="1" relationship="was held by##被举办于##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
-<speak value="A sport of using a bow to propel arrows.##一项用弓射箭的运动。##"/>
+<speak value="Archery is a sport which involves using a bow to propel arrows.##一项用弓射箭的运动。##"/>
 </Feature>
 <Feature id="3" data="Athletics##田径##">
 <neighbor dest="162" weight="0" relationship="includes##包括##"/>
@@ -49,19 +49,19 @@
 <neighbor dest="29" weight="1" relationship="is a kind of##是一种##"/>
 <parent dest="32" weight="1" relationship="was held by##被举办于##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
-<speak value="A sport of competing in track and field events, including running races and various competitions in jumping and throwing.##一项包含径赛和田赛，例如跑步、跳跃与投掷的竞技运动。##"/>
+<speak value="Athletics are sports which involve competing in track and field events, including running races and various competitions in jumping and throwing.##一项包含径赛和田赛，例如跑步、跳跃与投掷的竞技运动。##"/>
 </Feature>
 <Feature id="4" data="Badminton##羽毛球##">
 <neighbor dest="29" weight="1" relationship="is a kind of##是一种##"/>
 <parent dest="38" weight="1" relationship="was held by##被举办于##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
-<speak value="A racquet sport played by either two opposing players (singles) or two opposing pairs (doubles), who take positions on opposite halves of a rectangular court divided by a net.##一项在被网隔开的方形球场上，两方运动员各占据场地的一半，使用球拍进行的运动。##"/>
+<speak value="Badminton is a racquet sport played by either two opposing players (singles) or two opposing pairs (doubles), who take positions on opposite halves of a rectangular court divided by a net.##一项在被网隔开的方形球场上，两方运动员各占据场地的一半，使用球拍进行的运动。##"/>
 </Feature>
 <Feature id="5" data="Baseball##棒球##">
 <neighbor dest="29" weight="1" relationship="is a kind of##是一种##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
 <parent dest="60" weight="1" relationship="was held by##被举办于##"/>
-<speak value="A bat-and-ball sport played between two teams of nine players each who take turns batting and fielding.##一项各有九人的两队轮流上场用球棒击球的运动。##"/>
+<speak value="Baseball is a bat-and-ball sport played between two teams of nine players each who take turns batting and fielding.##一项各有九人的两队轮流上场用球棒击球的运动。##"/>
 </Feature>
 <Feature id="6" data="Basketball##篮球##">
 <neighbor dest="258" weight="0" relationship="includes##包括##"/>
@@ -69,19 +69,19 @@
 <neighbor dest="29" weight="1" relationship="is a kind of##是一种##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
 <parent dest="46" weight="1" relationship="was held by##被举办于##"/>
-<speak value="A sport played by two teams of five players on a rectangular court.##一项各有五人的两队在长方形球场上进行的运动。##"/>
+<speak value="Basketball is a sport played by two teams of five players on a rectangular court.##一项各有五人的两队在长方形球场上进行的运动。##"/>
 </Feature>
 <Feature id="7" data="Boxing##拳击##">
 <neighbor dest="29" weight="1" relationship="is a kind of##是一种##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
 <parent dest="53" weight="1" relationship="was held by##被举办于##"/>
-<speak value="A martial art and combat sport in which two people engage in a contest of strength, speed, reflexes, endurance and will, by throwing punches at each other, usually with gloved hands.##一项两人带着手套向彼此挥拳猛击，比试力量、速度、反应、持久与意志的搏斗运动。##"/>
+<speak value="Boxing is a martial art and combat sport in which two people engage in a contest of strength, speed, reflexes, endurance and will, by throwing punches at each other, usually with gloved hands.##一项两人带着手套向彼此挥拳猛击，比试力量、速度、反应、持久与意志的搏斗运动。##"/>
 </Feature>
 <Feature id="8" data="Canoe/Kayak##皮划艇##">
 <neighbor dest="29" weight="1" relationship="is a kind of##是一种##"/>
 <parent dest="45" weight="1" relationship="was held by##被举办于##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
-<speak value="A paddle sport in which you kneel or sit facing forward in an open or closed-decked canoe, and propel yourself with a single-bladed paddle, under your own power.##一项面冲前方跪在或坐在有着露天或非露天甲板的独木舟上，通过自己的力量用单叶片划桨前进的运动。##"/>
+<speak value="Canoe/Kayak is a paddle sport in which you kneel or sit facing forward in an open or closed-decked canoe, and propel yourself with a single-bladed paddle, under your own power.##一项面冲前方跪在或坐在有着露天或非露天甲板的独木舟上，通过自己的力量用单叶片划桨前进的运动。##"/>
 </Feature>
 <Feature id="9" data="Cycling##自行车##">
 <neighbor dest="131" weight="0" relationship="includes##包括##"/>
@@ -91,21 +91,21 @@
 <parent dest="44" weight="1" relationship="was partially held by##部分被举办于##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
 <parent dest="59" weight="1" relationship="was partially held by##部分被举办于##"/>
-<speak value="A sport of using bicycles.##一项使用自行车的运动。##"/>
+<speak value="Cycling is a sport involving the use bicycles.##一项使用自行车的运动。##"/>
 </Feature>
 <Feature id="10" data="Equestrian##马术##">
 <neighbor dest="167" weight="0" relationship="includes##包括##"/>
 <neighbor dest="29" weight="1" relationship="is a kind of##是一种##"/>
 <parent dest="61" weight="1" relationship="was held by##被举办于##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
-<speak value="A sport same as horseback riding.##一项像骑马一样的运动。##"/>
+<speak value="Equestrian is a sport involving horseback riding.##一项像骑马一样的运动。##"/>
 </Feature>
 <Feature id="11" data="Fencing##击剑##">
 <neighbor dest="105" weight="0" relationship="includes##包括##"/>
 <neighbor dest="29" weight="1" relationship="is a kind of##是一种##"/>
 <parent dest="35" weight="1" relationship="was held by##被举办于##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
-<speak value="A sport of modern state of the western art of combat with the small sword.##源自西方搏击技巧的现代版，一项使用细剑搏斗的运动##"/>
+<speak value="Fencing is a sport which involves the western art of combat with the small sword.##源自西方搏击技巧的现代版，一项使用细剑搏斗的运动##"/>
 </Feature>
 <Feature id="12" data="Football##足球##">
 <neighbor dest="200" weight="0" relationship="includes##包括##"/>
@@ -117,7 +117,7 @@
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
 <parent dest="66" weight="1" relationship="was partially held by##部分被举办于##"/>
 <parent dest="54" weight="1" relationship="was partially held by##部分被举办于##"/>
-<speak value="A sport which players kick the ball with the foot to score a goal.##一项运动员用脚踢球得分的运动。##"/>
+<speak value="Football is a sport in which players kick a ball to score goals.##一项运动员用脚踢球得分的运动。##"/>
 </Feature>
 <Feature id="13" data="Gymnastics##体操##">
 <neighbor dest="137" weight="0" relationship="includes##包括##"/>
@@ -126,26 +126,26 @@
 <parent dest="31" weight="1" relationship="was partially held by##部分被举办于##"/>
 <parent dest="38" weight="1" relationship="was partially held by##部分被举办于##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
-<speak value="A sport involving the performance of exercises requiring physical strength, flexibility, power, agility, coordination, grace, balance and control.##一项涉及体力、力量、柔韧、敏捷、平衡、协调和优雅的身体操练展示运动。##"/>
+<speak value="Gymnastics is a sport involving the performance of exercises requiring physical strength, flexibility, power, agility, coordination, grace, balance and control.##一项涉及体力、力量、柔韧、敏捷、平衡、协调和优雅的身体操练展示运动。##"/>
 </Feature>
 <Feature id="14" data="Handball##手球##">
 <neighbor dest="29" weight="1" relationship="is a kind of##是一种##"/>
 <parent dest="31" weight="1" relationship="was partially held by##部分被举办于##"/>
 <parent dest="52" weight="1" relationship="was partially held by##部分被举办于##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
-<speak value="A team sport in which two teams of seven players each (six outfield players and a goalkeeper) pass a ball using their hands with the aim of throwing it into the goal of the other team.##一项两队各有七人（六人外野，一人守门）用手传接球并以射进彼此球门为目标的团体运动。##"/>
+<speak value="Handball is a team sport in which two teams of seven players each (six outfield players and a goalkeeper) pass a ball using their hands with the aim of throwing it into the goal of the other team.##一项两队各有七人（六人外野，一人守门）用手传接球并以射进彼此球门为目标的团体运动。##"/>
 </Feature>
 <Feature id="15" data="Hockey##曲棍球##">
 <neighbor dest="29" weight="1" relationship="is a kind of##是一种##"/>
 <parent dest="36" weight="1" relationship="was held by##被举办于##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
-<speak value="A sport in which two teams play against each other by trying to maneuver a ball or a puck into the opponent&apos;s goal using a hockey stick.##一项两队互相攻击并试图用曲棍球棍将球射进对方球门的运动。##"/>
+<speak value="Hockey is a sport in which two teams play against each other by trying to maneuver a ball or a puck into the opponent&apos;s goal using a hockey stick.##一项两队互相攻击并试图用曲棍球棍将球射进对方球门的运动。##"/>
 </Feature>
 <Feature id="16" data="Judo##柔道##">
 <neighbor dest="29" weight="1" relationship="is a kind of##是一种##"/>
 <parent dest="37" weight="1" relationship="was held by##被举办于##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
-<speak value="A sport in which two people fight without weapons and try to throw each other to the ground.##一项两人徒手试图将对方摔到地上的运动。##"/>
+<speak value="Judo is a sport in which two people fight without weapons and try to throw each other to the ground.##一项两人徒手试图将对方摔到地上的运动。##"/>
 </Feature>
 <Feature id="17" data="Modern Pentathlon##现代五项##">
 <neighbor dest="29" weight="1" relationship="is a kind of##是一种##"/>
@@ -153,21 +153,21 @@
 <parent dest="51" weight="1" relationship="was partially held by##部分被举办于##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
 <parent dest="55" weight="1" relationship="was partially held by##部分被举办于##"/>
-<speak value="A sport that comprises five events: horse riding with jumps, fencing, freestyle swimming, pistol shooting, and cross-country running.##一项包括马术、击剑、游泳、射击和跑步五个项目的运动。##"/>
+<speak value="The Modern Pentathlon is a sport comprising of five events: horse riding with jumps, fencing, freestyle swimming, pistol shooting, and cross-country running.##一项包括马术、击剑、游泳、射击和跑步五个项目的运动。##"/>
 </Feature>
 <Feature id="18" data="Rowing##赛艇##">
 <neighbor dest="158" weight="0" relationship="includes##包括##"/>
 <neighbor dest="29" weight="1" relationship="is a kind of##是一种##"/>
 <parent dest="45" weight="1" relationship="was held by##被举办于##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
-<speak value="The sport of propelling a boat using the motion of oars in the water.##一项通过桨的运动推动小艇在水中前进的运动。##"/>
+<speak value="Rowing is a sport that includes propelling a boat using the motion of oars in the water.##一项通过桨的运动推动小艇在水中前进的运动。##"/>
 </Feature>
 <Feature id="19" data="Sailing##帆船##">
 <neighbor dest="169" weight="0" relationship="includes##包括##"/>
 <neighbor dest="29" weight="1" relationship="is a kind of##是一种##"/>
 <parent dest="62" weight="1" relationship="was held by##被举办于##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
-<speak value="The sport that uses sailboats.##一项使用帆船的运动。##"/>
+<speak value="Sailing is the sport of using sailboats.##一项使用帆船的运动。##"/>
 </Feature>
 <Feature id="20" data="Shooting##射击##">
 <neighbor dest="121" weight="0" relationship="includes##包括##"/>
@@ -176,38 +176,38 @@
 <parent dest="47" weight="1" relationship="was partially held by##部分被举办于##"/>
 <parent dest="43" weight="1" relationship="was partially held by##部分被举办于##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
-<speak value="A competitive sport involving tests of proficiency (accuracy and speed) using various types of guns such as firearms and airguns.##一项使用不同种类的枪支，如火枪和气枪，测试熟练度（精准度和速度）的竞技运动。##"/>
+<speak value="Shooting is a competitive sport involving tests of proficiency (accuracy and speed) using various types of guns such as firearms and airguns.##一项使用不同种类的枪支，如火枪和气枪，测试熟练度（精准度和速度）的竞技运动。##"/>
 </Feature>
 <Feature id="21" data="Softball##垒球##">
 <neighbor dest="29" weight="1" relationship="is a kind of##是一种##"/>
 <parent dest="49" weight="1" relationship="was held by##被举办于##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
-<speak value="A variant of baseball played with a larger ball on a smaller field.##一项由棒球发展而来，但用更大的求在更小的场地上进行的运动。##"/>
+<speak value="Softball is a variant of baseball played with a larger ball on a smaller field.##一项由棒球发展而来，但用更大的求在更小的场地上进行的运动。##"/>
 </Feature>
 <Feature id="22" data="Table Tennis##乒乓球##">
 <neighbor dest="29" weight="1" relationship="is a kind of##是一种##"/>
 <parent dest="40" weight="1" relationship="was held by##被举办于##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
-<speak value="A sport in which two or four players hit a lightweight ball back and forth across a table using a small, round bat.##一项两人或四人用小而圆的球拍在桌子上来回打一个轻质球的运动。##"/>
+<speak value="Table Tennis is a sport in which two or four players hit a lightweight ball back and forth across a table using a small, round bat.##一项两人或四人用小而圆的球拍在桌子上来回打一个轻质球的运动。##"/>
 </Feature>
 <Feature id="23" data="Taekwondo##跆拳道##">
 <neighbor dest="29" weight="1" relationship="is a kind of##是一种##"/>
 <parent dest="37" weight="1" relationship="was held by##被举办于##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
-<speak value="A Korean martial art and sport with a heavy emphasis on kicks.##一项源自韩国且尤其强调踢打的运动。##"/>
+<speak value="Taekwondo is a sport and a Korean martial art with a heavy emphasis on kicks.##一项源自韩国且尤其强调踢打的运动。##"/>
 </Feature>
 <Feature id="24" data="Tennis##网球##">
 <neighbor dest="148" weight="0" relationship="includes##包括##"/>
 <neighbor dest="29" weight="1" relationship="is a kind of##是一种##"/>
 <parent dest="33" weight="1" relationship="was held by##被举办于##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
-<speak value="A sport in which two or four players strike a ball with rackets over a net stretched across a court.##一项两人或四人隔着球网，用球拍将球击打至对方场地的运动。##"/>
+<speak value="Tennis is a sport in which two or four players strike a ball with rackets over a net stretched across a court.##一项两人或四人隔着球网，用球拍将球击打至对方场地的运动。##"/>
 </Feature>
 <Feature id="25" data="Triathlon##铁人三项##">
 <neighbor dest="29" weight="1" relationship="is a kind of##是一种##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
 <parent dest="58" weight="1" relationship="was held by##被举办于##"/>
-<speak value="A multiple-stage sport involving the completion of three continuous and sequential endurance disciplines, most popularly swimming, cycling, and running.##一项按顺序连续完成三项耐力运动的多阶段性运动，常见的项目有游泳、自行车和马拉松。##"/>
+<speak value="The Triathlon is a multiple-stage sport involving the completion of three continuous and sequential endurance disciplines, most popularly swimming, cycling, and running.##一项按顺序连续完成三项耐力运动的多阶段性运动，常见的项目有游泳、自行车和马拉松。##"/>
 </Feature>
 <Feature id="26" data="Volleyball##排球##">
 <neighbor dest="203" weight="0" relationship="includes##包括##"/>
@@ -218,20 +218,20 @@
 <parent dest="48" weight="1" relationship="was partially held by##部分被举办于##"/>
 <parent dest="56" weight="1" relationship="was partially held by##部分被举办于##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
-<speak value="A team sport in which two teams of six players are separated by a net.##一项各有六人的两队隔着球网进行的团体性运动。##"/>
+<speak value="Volleyball is a team sport in which two teams of six players are separated by a net.##一项各有六人的两队隔着球网进行的团体性运动。##"/>
 </Feature>
 <Feature id="27" data="Weightlifting##举重##">
 <neighbor dest="29" weight="1" relationship="is a kind of##是一种##"/>
 <parent dest="41" weight="1" relationship="was held by##被举办于##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
-<speak value="A sport in which the athlete attempts a maximum-weight single lift of a barbell loaded with weight plates.##一项运动员试图将负载着最大重量板的杠铃一次性举起的运动。##"/>
+<speak value="Weightlifting is a sport in which the athlete attempts a maximum-weight single lift of a barbell loaded with weight plates.##一项运动员试图将负载着最大重量板的杠铃一次性举起的运动。##"/>
 </Feature>
 <Feature id="28" data="Wrestling##摔跤##">
 <neighbor dest="171" weight="0" relationship="includes##包括##"/>
 <neighbor dest="29" weight="1" relationship="is a kind of##是一种##"/>
 <parent dest="39" weight="1" relationship="was held by##被举办于##"/>
 <parent dest="29" weight="0" relationship="is a kind of##是一种##"/>
-<speak value="A combat sport involving grappling type techniques such as clinch fighting, throws and Takedowns, joint locks, pins and other grappling holds.##一项涉及各种格斗技巧，如缠斗技、扔拆技、关节技、牵制技和其他格斗锁技的搏斗运动。##"/>
+<speak value="Wrestling is a combat sport involving grappling type techniques such as clinch fighting, throws and Takedowns, joint locks, pins and other grappling holds.##一项涉及各种格斗技巧，如缠斗技、扔拆技、关节技、牵制技和其他格斗锁技的搏斗运动。##"/>
 </Feature>
 <Feature id="29" data="Sports##运动项目##">
 <neighbor dest="1" weight="0" relationship="includes##包括##"/>
@@ -291,7 +291,7 @@
 <parent dest="26" weight="1" relationship="includes##包括##"/>
 <parent dest="27" weight="1" relationship="includes##包括##"/>
 <parent dest="28" weight="1" relationship="includes##包括##"/>
-<speak value="Competitive leisure activities which need physical effort and skill.##需要体力和技巧的竞技休闲活动。##"/>
+<speak value="Sports are competitive leisure activities which need physical effort and skill.##需要体力和技巧的竞技休闲活动。##"/>
 </Feature>
 <Feature id="30" data="Beijing National Aquatics Center##北京国家游泳中心##">
 <neighbor dest="118" weight="0" relationship="is the venue where the gold medal was won by##是金牌被获得的场地##"/>
@@ -334,7 +334,7 @@
 <parent dest="32" weight="1" relationship="is west of##在西方于##"/>
 <parent dest="37" weight="1" relationship="is east of##在东方于##"/>
 <parent dest="76" weight="0" relationship="belongs to##属于##"/>
-<speak value="The aquatics center that was built alongside Beijing National Stadium in the Olympic Green for the swimming competitions of the 2008 Summer Olympics.##在国家体育场旁边位于奥林匹克公园的游泳中心是2008年夏季奥运会水上项目的比赛场馆。##"/>
+<speak value="The Beijing National Aquatics Center was built alongside the Beijing National Stadium in the Olympic Green for the swimming competitions of the 2008 Summer Olympics.##在国家体育场旁边位于奥林匹克公园的游泳中心是2008年夏季奥运会水上项目的比赛场馆。##"/>
 </Feature>
 <Feature id="31" data="Beijing National Indoor Stadium##北京国家体育馆##">
 <neighbor dest="30" weight="1" relationship="is north of##在北方于##"/>
@@ -351,7 +351,7 @@
 <parent dest="74" weight="1" relationship="is west of##在西方于##"/>
 <parent dest="35" weight="1" relationship="is south of##在南方于##"/>
 <parent dest="76" weight="0" relationship="belongs to##属于##"/>
-<speak value="The indoor arena that was constructed resembling a traditional Chinese folding fan.##外观类似中国传统折扇的室内场馆。##"/>
+<speak value="The Beijing National Indoor Stadium is the indoor arena that was constructed resembling a traditional Chinese folding fan.##外观类似中国传统折扇的室内场馆。##"/>
 </Feature>
 <Feature id="32" data="Beijing National Stadium##北京国家体育场##">
 <neighbor dest="211" weight="0" relationship="is the venue where the gold medal was won by##是金牌被获得的场地##"/>
@@ -386,7 +386,7 @@
 <parent dest="76" weight="0" relationship="belongs to##属于##"/>
 <parent dest="52" weight="1" relationship="is north of##在北方于##"/>
 <parent dest="59" weight="1" relationship="is west of##在西方于##"/>
-<speak value="The stadium was designed for athletics events throughout the 2008 Summer Olympics.##该体育场是为了2008年夏季奥运会的田径项目而设计的。##"/>
+<speak value="The Beijing National Stadium was designed for athletics events throughout the 2008 Summer Olympics.##该体育场是为了2008年夏季奥运会的田径项目而设计的。##"/>
 </Feature>
 <Feature id="33" data="Olympic Green Tennis Center##奥林匹克公园网球中心##">
 <neighbor dest="34" weight="1" relationship="is north of##在北方于##"/>
@@ -396,7 +396,7 @@
 <parent dest="148" weight="1" relationship="held##举办了##"/>
 <parent dest="34" weight="1" relationship="is north of##在北方于##"/>
 <parent dest="76" weight="0" relationship="belongs to##属于##"/>
-<speak value="The tennis center that hosted the tennis preliminaries and finals of singles and doubles for men and women at the 2008 Summer Olympics.##在2008年夏季奥运会中举办了网球男女子单双打预赛和决赛的网球中心。##"/>
+<speak value="The Olympic Green Tennis Center hosted the tennis preliminaries and finals of singles and doubles for men and women at the 2008 Summer Olympics.##在2008年夏季奥运会中举办了网球男女子单双打预赛和决赛的网球中心。##"/>
 </Feature>
 <Feature id="34" data="Olympic Green Archery Field##奥林匹克公园射箭场##">
 <neighbor dest="2" weight="0" relationship="partially held##举办了部分##"/>
@@ -405,7 +405,7 @@
 <parent dest="36" weight="1" relationship="is north of##在北方于##"/>
 <parent dest="33" weight="1" relationship="is south of##在南方于##"/>
 <parent dest="76" weight="0" relationship="belongs to##属于##"/>
-<speak value="The archery field, hosted the archery events, was one of nine temporary venues for the 2008 Summer Olympics.##举办了射箭项目的射箭场是2008年夏季奥运会的九个临时赛场之一。##"/>
+<speak value="The Olympic Green Archery Field hosted the archery events and was one of nine temporary venues for the 2008 Summer Olympics.##举办了射箭项目的射箭场是2008年夏季奥运会的九个临时赛场之一。##"/>
 </Feature>
 <Feature id="35" data="Olympic Green Convention Center##奥林匹克公园会议中心##">
 <neighbor dest="31" weight="1" relationship="is north of##在北方于##"/>
@@ -416,7 +416,7 @@
 <parent dest="105" weight="1" relationship="held##举办了##"/>
 <parent dest="31" weight="1" relationship="is north of##在北方于##"/>
 <parent dest="76" weight="0" relationship="belongs to##属于##"/>
-<speak value="The convention center, covers an area of 270,000 square meters, was used for fencing in the 2008 Summer Olympics.##该会议中心占地270000平方米，在2008年夏季奥运会期间被于击剑项目。##"/>
+<speak value="The Olympic Green Convention Center covers an area of 270,000 square meters and was used for fencing in the 2008 Summer Olympics.##该会议中心占地270000平方米，在2008年夏季奥运会期间被于击剑项目。##"/>
 </Feature>
 <Feature id="36" data="Olympic Green Hockey Stadium##奥林匹克公园曲棍球场##">
 <neighbor dest="72" weight="1" relationship="is north of##在北方于##"/>
@@ -424,7 +424,7 @@
 <neighbor dest="34" weight="1" relationship="is south of##在南方于##"/>
 <parent dest="34" weight="1" relationship="is south of##在南方于##"/>
 <parent dest="76" weight="0" relationship="belongs to##属于##"/>
-<speak value="The hockey stadium, hosted the hockey competitions, was one of nine temporary venues for the 2008 Summer Olympics.##举办了曲棍球项目的曲棍球场是2008年夏季奥运会的九个临时赛场之一。##"/>
+<speak value="The Olympic Green Hockey Stadium hosted the hockey competitions and was one of nine temporary venues for the 2008 Summer Olympics.##举办了曲棍球项目的曲棍球场是2008年夏季奥运会的九个临时赛场之一。##"/>
 </Feature>
 <Feature id="37" data="Beijing Science and Technology University Gymnasium##北京科技大学体育馆##">
 <neighbor dest="30" weight="1" relationship="is west of##在西方于##"/>
@@ -436,7 +436,7 @@
 <parent dest="41" weight="1" relationship="is northeast of##在东北方于##"/>
 <parent dest="39" weight="1" relationship="is southeast of##在东南方于##"/>
 <parent dest="69" weight="0" relationship="belongs to##属于##"/>
-<speak value="Consisting of a main gym and a comprehensive facility, the gymnasium is an indoor arena located on the campus of the Beijing University of Science and Technology.##由主体育馆和综合设施组成，该体育馆是一个位于北京科技大学的室内场馆。##"/>
+<speak value="Consisting of a main gym and a comprehensive facility, the Beijing Science and Technology University Gymnasium is an indoor arena located on the campus of the Beijing University of Science and Technology.##由主体育馆和综合设施组成，该体育馆是一个位于北京科技大学的室内场馆。##"/>
 </Feature>
 <Feature id="38" data="Beijing University of Technology Gymnasium##北京工业大学体育馆##">
 <neighbor dest="4" weight="0" relationship="held##举办了##"/>
@@ -448,7 +448,7 @@
 <parent dest="56" weight="1" relationship="is south of##在南方于##"/>
 <parent dest="69" weight="0" relationship="belongs to##属于##"/>
 <parent dest="53" weight="1" relationship="is southeast of##在东南方于##"/>
-<speak value="Located on the campus of the Beijing University of Technology, the gymnasium hosted badminton and rhythmic gymnastics events at 2008 Summer Olympics.##位于北京工业大学的体育馆于2008年夏季奥运会期间举办了羽毛球和艺术体操项目。##"/>
+<speak value="Located on the campus of the Beijing University of Technology, the Beijing University of Technology Gymnasium hosted badminton and rhythmic gymnastics events at 2008 Summer Olympics.##位于北京工业大学的体育馆于2008年夏季奥运会期间举办了羽毛球和艺术体操项目。##"/>
 </Feature>
 <Feature id="39" data="China Agricultural University Gymnasium##中国农业大学体育馆##">
 <neighbor dest="37" weight="1" relationship="is northwest of##在西北方于##"/>
@@ -463,7 +463,7 @@
 <parent dest="40" weight="1" relationship="is northeast of##在东北方于##"/>
 <parent dest="58" weight="1" relationship="is south of##在南方于##"/>
 <parent dest="69" weight="0" relationship="belongs to##属于##"/>
-<speak value="Located on the campus of the China Agricultural University in Beijing, the gymnasium, with staggered stair-like rooftop, hosted the wrestling events at 2008 Summer Olympics.##位于北京中国农业大学的体育馆有着交错楼梯般的屋顶。该体育馆于2008年夏季奥运会期间举办了摔跤项目。##"/>
+<speak value="Located on the campus of the China Agricultural University in Beijing, the China Agricultural University Gymnasium, with staggered stair-like rooftop, hosted the wrestling events at 2008 Summer Olympics.##位于北京中国农业大学的体育馆有着交错楼梯般的屋顶。该体育馆于2008年夏季奥运会期间举办了摔跤项目。##"/>
 </Feature>
 <Feature id="40" data="Peking University Gymnasium##北京大学体育馆##">
 <neighbor dest="41" weight="1" relationship="is northwest of##在西北方于##"/>
@@ -473,7 +473,7 @@
 <parent dest="41" weight="1" relationship="is northwest of##在西北方于##"/>
 <parent dest="39" weight="1" relationship="is southwest of##在西南方于##"/>
 <parent dest="69" weight="0" relationship="belongs to##属于##"/>
-<speak value="The gymnasium, nicknamed China&apos;s Spine, is an indoor arena located in the southeastern part of Peking University.##该体育馆有着中国之脊的别称，是位于北京大学东南方的室内场馆。##"/>
+<speak value="The Peking University Gymnasium, nicknamed China&apos;s Spine, is an indoor arena located in the southeastern part of Peking University.##该体育馆有着中国之脊的别称，是位于北京大学东南方的室内场馆。##"/>
 </Feature>
 <Feature id="41" data="Beijing University of Aeronautics and Astronautics Gymnasium##北京航空航天大学体育馆##">
 <neighbor dest="37" weight="1" relationship="is southwest of##在西南方于##"/>
@@ -484,7 +484,7 @@
 <parent dest="39" weight="1" relationship="is south of##在南方于##"/>
 <parent dest="40" weight="1" relationship="is southeast of##在东南方于##"/>
 <parent dest="69" weight="0" relationship="is southwest of##在西南方于##"/>
-<speak value="Located on the campus of Beijing University of Aeronautics and Astronautics, the gymnasium, a 5,400-seat indoor arena hosted weightlifting competitions at 2008 Summer Olympics.##位于北京航空航天大学的体育馆是一个5400座的室内场馆。该体育馆于2008年夏季奥运会期间举办了举重项目。##"/>
+<speak value="Located on the campus of Beijing University of Aeronautics and Astronautics, the Beijing University of Aeronautics and Astronautics Gymnasium, a 5,400-seat indoor arena, hosted weightlifting competitions at 2008 Summer Olympics.##位于北京航空航天大学的体育馆是一个5400座的室内场馆。该体育馆于2008年夏季奥运会期间举办了举重项目。##"/>
 </Feature>
 <Feature id="42" data="Beijing Institute of Technology Gymnasium##北京理工大学体育馆##">
 <neighbor dest="47" weight="1" relationship="is east of##在东方于##"/>
@@ -496,7 +496,7 @@
 <parent dest="47" weight="1" relationship="is east of##在东方于##"/>
 <parent dest="48" weight="1" relationship="is northwest of##在西北方于##"/>
 <parent dest="69" weight="0" relationship="belongs to##属于##"/>
-<speak value="Located on the campus of Beijing Institute of Technology, the gymnasium, a 5,000-seat indoor arena, hosted volleyball competitions at 2008 Summer Olympics.##位于北京理工大学的体育馆是一个5000座的室内场馆。该体育馆于2008年夏季奥运会期间举办了排球项目。##"/>
+<speak value="Located on the campus of Beijing Institute of Technology, the Beijing Institute of Technology Gymnasium, a 5,000-seat indoor arena, hosted volleyball competitions at 2008 Summer Olympics.##位于北京理工大学的体育馆是一个5000座的室内场馆。该体育馆于2008年夏季奥运会期间举办了排球项目。##"/>
 </Feature>
 <Feature id="43" data="Beijing Shooting Range Hall##北京射击馆##">
 <neighbor dest="47" weight="1" relationship="is south of##在南方于##"/>
@@ -505,7 +505,7 @@
 <parent dest="47" weight="1" relationship="is south of##在南方于##"/>
 <parent dest="44" weight="1" relationship="is north of##在北方于##"/>
 <parent dest="67" weight="0" relationship="belongs to##属于##"/>
-<speak value="The shooting range hall hosted the qualifying rounds and finals of ten shooting events at the 2008 Summer Olympics, consisting of all 10-, 25- and 50-meter events.##该射击馆于2008年夏季奥运会举办了是个射击项目的排位赛和总决赛，包括所有的10米、25米和50米的项目。##"/>
+<speak value="The Beijing Shooting Range Hall hosted the qualifying rounds and finals of ten shooting events at the 2008 Summer Olympics, consisting of all 10-, 25- and 50-meter events.##该射击馆于2008年夏季奥运会举办了是个射击项目的排位赛和总决赛，包括所有的10米、25米和50米的项目。##"/>
 </Feature>
 <Feature id="44" data="Laoshan Velodrome##老山自行车馆##">
 <neighbor dest="43" weight="1" relationship="is south of##在南方于##"/>
@@ -514,7 +514,7 @@
 <parent dest="43" weight="1" relationship="is south of##在南方于##"/>
 <parent dest="50" weight="1" relationship="is north of##在北方于##"/>
 <parent dest="67" weight="0" relationship="belongs to##属于##"/>
-<speak value="The velodrome hosted track cycling disciplines during the Olympics with a capacity of 6,000 spectators, a 250-meter oval shaped track, and a total land surface of 32,920 square meters.##该自行车馆占地32920平方米，可容纳6000名观众，有着250米的椭圆形轨道，并于奥运会期间举办了自行车项目。##"/>
+<speak value="The Laoshan Velodrome hosted track cycling disciplines during the Olympics with a capacity of 6,000 spectators, a 250-meter oval shaped track, and a total land surface of 32,920 square meters.##该自行车馆占地32920平方米，可容纳6000名观众，有着250米的椭圆形轨道，并于奥运会期间举办了自行车项目。##"/>
 </Feature>
 <Feature id="45" data="Shunyi Olympic Rowing-Canoeing Park##顺义奥林匹克水上公园##">
 <neighbor dest="150" weight="0" relationship="is the venue where the gold medal was won by##是金牌被获得的场地##"/>
@@ -531,7 +531,7 @@
 <neighbor dest="152" weight="0" relationship="is the venue where the gold medal was won by##是金牌被获得的场地##"/>
 <parent dest="158" weight="1" relationship="held##举办了##"/>
 <parent dest="67" weight="0" relationship="belongs to##属于##"/>
-<speak value="The park was built for the rowing, canoeing and 10 km open-water swimming events in the 2008 Summer Olympics.##该公园是为了2008年夏季奥运会的赛艇、皮划艇和10公里公开水域游泳比赛项目而建造的。##"/>
+<speak value="The Shunyi Olympic Rowing-Canoeing Park was built for the rowing, canoeing and 10 km open-water swimming events in the 2008 Summer Olympics.##该公园是为了2008年夏季奥运会的赛艇、皮划艇和10公里公开水域游泳比赛项目而建造的。##"/>
 </Feature>
 <Feature id="46" data="Wukesong Indoor Stadium##五棵松体育馆##">
 <neighbor dest="6" weight="0" relationship="held##举办了##"/>
@@ -545,7 +545,7 @@
 <parent dest="57" weight="1" relationship="is east of##在东方于##"/>
 <parent dest="67" weight="0" relationship="belongs to##属于##"/>
 <parent dest="60" weight="1" relationship="is west of##在西方于##"/>
-<speak value="The stadium is an indoor arena for the 2008 Summer Olympics basketball preliminaries and finals.##该体育场是2008年夏季奥运会篮球预赛和决赛的室内场馆。##"/>
+<speak value="The Wukesong Indoor Stadium is an indoor arena for the 2008 Summer Olympics basketball preliminaries and finals.##该体育场是2008年夏季奥运会篮球预赛和决赛的室内场馆。##"/>
 </Feature>
 <Feature id="47" data="Beijing Shooting Range Clay Target Field##北京射击场飞碟靶场##">
 <neighbor dest="42" weight="1" relationship="is west of##在西方于##"/>
@@ -558,7 +558,7 @@
 <parent dest="42" weight="1" relationship="is west of##在西方于##"/>
 <parent dest="43" weight="1" relationship="is north of##在北方于##"/>
 <parent dest="67" weight="0" relationship="belongs to##属于##"/>
-<speak value="The shooting range hosted men&apos;s and women&apos;s skeet shooting and trap shooting events at the 2008 Summer Olympics.##该靶场于2008年夏季奥运会举办了男女双向和多向飞靶射击项目。##"/>
+<speak value="The Beijing Shooting Range Clay Target Field hosted men&apos;s and women&apos;s skeet shooting and trap shooting events at the 2008 Summer Olympics.##该靶场于2008年夏季奥运会举办了男女双向和多向飞靶射击项目。##"/>
 </Feature>
 <Feature id="48" data="Capital Indoor Stadium##首都体育馆##">
 <neighbor dest="42" weight="1" relationship="is southeast of##在东南方于##"/>
@@ -567,7 +567,7 @@
 <parent dest="244" weight="1" relationship="held##举办了##"/>
 <parent dest="42" weight="1" relationship="is southeast of##在东南方于##"/>
 <parent dest="67" weight="0" relationship="belongs to##属于##"/>
-<speak value="The stadium hosted volleyball events at the 2008 Summer Olympics.##该体育场于2008年夏季奥运会期间举办了排球项目。##"/>
+<speak value="The Capital Indoor Stadium hosted volleyball events at the 2008 Summer Olympics.##该体育场于2008年夏季奥运会期间举办了排球项目。##"/>
 </Feature>
 <Feature id="49" data="Fengtai Sports Center Softball Field##丰台体育中心垒球场##">
 <neighbor dest="21" weight="0" relationship="held##举办了##"/>
@@ -575,7 +575,7 @@
 <neighbor dest="60" weight="1" relationship="is south of##在南方于##"/>
 <parent dest="67" weight="0" relationship="belongs to##属于##"/>
 <parent dest="46" weight="1" relationship="is south of##在南方于##"/>
-<speak value="The field hosted the softball competitions at the 2008 Summer Olympics.##该场地于2008年夏季奥运会期间举办了垒球项目。##"/>
+<speak value="The Fengtai Sports Center Softball Field hosted the softball competitions at the 2008 Summer Olympics.##该场地于2008年夏季奥运会期间举办了垒球项目。##"/>
 </Feature>
 <Feature id="50" data="Laoshan Mountain Bike Course##老山山地自行车场##">
 <neighbor dest="9" weight="0" relationship="partially held##举办了部分##"/>
@@ -584,7 +584,7 @@
 <parent dest="57" weight="1" relationship="is north of##在北方于##"/>
 <parent dest="44" weight="1" relationship="is south of##在南方于##"/>
 <parent dest="67" weight="0" relationship="belongs to##属于##"/>
-<speak value="The course hosted the mountain bike competitions at the 2008 Summer Olympics.##该车场于2008年夏季奥运会期间举办了山地自行车项目。##"/>
+<speak value="The Laoshan Mountain Bike Course hosted the mountain bike competitions at the 2008 Summer Olympics.##该车场于2008年夏季奥运会期间举办了山地自行车项目。##"/>
 </Feature>
 <Feature id="51" data="Olympic Sports Center Stadium##奥体中心体育场##">
 <neighbor dest="17" weight="0" relationship="partially held##举办了部分##"/>
@@ -593,7 +593,7 @@
 <parent dest="52" weight="1" relationship="is south of##在南方于##"/>
 <parent dest="67" weight="0" relationship="belongs to##属于##"/>
 <parent dest="55" weight="1" relationship="is southwest of##在西南方于##"/>
-<speak value="The stadium hosted football matches and the running and riding parts of the modern pentathlon events at the 2008 Summer Olympics.##该体育场于2008年夏季奥运会期间举办了足球项目和现代五项项目中的跑步和马术。##"/>
+<speak value="The Olympic Sports Center Stadium hosted football matches and the running and riding parts of the modern pentathlon events at the 2008 Summer Olympics.##该体育场于2008年夏季奥运会期间举办了足球项目和现代五项项目中的跑步和马术。##"/>
 </Feature>
 <Feature id="52" data="Olympic Sports Center Gymnasium##奥体中心体育馆##">
 <neighbor dest="32" weight="1" relationship="is south of##在南方于##"/>
@@ -604,7 +604,7 @@
 <parent dest="51" weight="1" relationship="is north of##在北方于##"/>
 <parent dest="67" weight="0" relationship="belongs to##属于##"/>
 <parent dest="55" weight="1" relationship="is west of##在西方于##"/>
-<speak value="The gymnasium hosted the handball tournaments up to and including the quarter-finals at the 2008 Summer Olympics.##该体育场于2008年夏季奥运会期间举办了手球项目直到并包括半决赛。##"/>
+<speak value="The Olympic Sports Center Gymnasium hosted the handball tournaments up to and including the quarter-finals at the 2008 Summer Olympics.##该体育场于2008年夏季奥运会期间举办了手球项目直到并包括半决赛。##"/>
 </Feature>
 <Feature id="53" data="Worker&apos;s Stadium##工人体育场##">
 <neighbor dest="38" weight="1" relationship="is northwest of##在西北方于##"/>
@@ -618,7 +618,7 @@
 <parent dest="67" weight="0" relationship="belongs to##属于##"/>
 <parent dest="59" weight="1" relationship="is south of##在南方于##"/>
 <parent dest="54" weight="1" relationship="is east of##在东方于##"/>
-<speak value="The stadium hosted the football quarter-finals and semi-finals, and the women&apos;s gold medal final at the 2008 Summer Olympics.##该体育场于2008年夏季奥运会期间举办了足球项目的四分之一决赛和半决赛，以及女子金牌决赛。##"/>
+<speak value="The Worker&apos;s Stadium hosted the football quarter-finals and semi-finals, and the women&apos;s gold medal final at the 2008 Summer Olympics.##该体育场于2008年夏季奥运会期间举办了足球项目的四分之一决赛和半决赛，以及女子金牌决赛。##"/>
 </Feature>
 <Feature id="54" data="Worker&apos;s Gymnasium##工人体育馆##">
 <neighbor dest="12" weight="0" relationship="partially held##举办了部分##"/>
@@ -626,7 +626,7 @@
 <neighbor dest="53" weight="1" relationship="is west of##在西方于##"/>
 <parent dest="67" weight="0" relationship="belongs to##属于##"/>
 <parent dest="53" weight="1" relationship="is west of##在西方于##"/>
-<speak value="The gymnasium hosted the boxing events at the 2008 Summer Olympics.##该体育馆于2008年夏季奥运会期间举办了拳击项目。##"/>
+<speak value="The Worker&apos;s Gymnasium hosted the boxing events at the 2008 Summer Olympics.##该体育馆于2008年夏季奥运会期间举办了拳击项目。##"/>
 </Feature>
 <Feature id="55" data="Ying Tung Natatorium of National Olympic Sports Center##英东游泳馆##">
 <neighbor dest="1" weight="0" relationship="partially held##举办了部分##"/>
@@ -637,7 +637,7 @@
 <parent dest="52" weight="1" relationship="is east of##在东方于##"/>
 <parent dest="51" weight="1" relationship="is northeast of##在东北方于##"/>
 <parent dest="67" weight="0" relationship="belongs to##属于##"/>
-<speak value="The sports center hosted water polo matches and the swimming part of the modern pentathlon event at the 2008 Summer Olympics.##该体育中心于2008年夏季奥运会期间举办了水球项目和现代五项中的游泳项目。##"/>
+<speak value="The Ying Tung Natatorium of National Olympic Sports Center hosted water polo matches and the swimming part of the modern pentathlon event at the 2008 Summer Olympics.##该体育中心于2008年夏季奥运会期间举办了水球项目和现代五项中的游泳项目。##"/>
 </Feature>
 <Feature id="56" data="Chaoyang Park Beach Volleyball Ground##朝阳公园沙滩排球场##">
 <neighbor dest="38" weight="1" relationship="is north of##在北方于##"/>
@@ -652,7 +652,7 @@
 <parent dest="38" weight="1" relationship="is north of##在北方于##"/>
 <parent dest="67" weight="0" relationship="belongs to##属于##"/>
 <parent dest="53" weight="1" relationship="is east of##在东方于##"/>
-<speak value="The ground was a temporary venue for the beach volleyball matches at the 2008 Summer Olympics.##该场地于2008年夏季奥运会期间曾是沙滩排球项目的临时赛场。##"/>
+<speak value="The Chaoyang Park Beach Volleyball Ground was a temporary venue for the beach volleyball matches at the 2008 Summer Olympics.##该场地于2008年夏季奥运会期间曾是沙滩排球项目的临时赛场。##"/>
 </Feature>
 <Feature id="57" data="Laoshan Bicycle Moto Cross Venue##老山小轮车赛场##">
 <neighbor dest="9" weight="0" relationship="partially held##举办了部分##"/>
@@ -660,14 +660,14 @@
 <neighbor dest="46" weight="1" relationship="is west of##在西方于##"/>
 <parent dest="50" weight="1" relationship="is south of##在南方于##"/>
 <parent dest="67" weight="0" relationship="belongs to##属于##"/>
-<speak value="This venue was a temporary venue for the men&apos;s and women&apos;s BMX racing events at the 2008 Summer Olympics.##该场馆于2008年夏季奥运会期间曾是男女子自行车越野赛项目的临时赛场。##"/>
+<speak value="The Laoshan Bicycle Moto Cross Venue was a temporary venue for the men&apos;s and women&apos;s BMX racing events at the 2008 Summer Olympics.##该场馆于2008年夏季奥运会期间曾是男女子自行车越野赛项目的临时赛场。##"/>
 </Feature>
 <Feature id="58" data="Triathlon Venue##铁人三项赛场##">
 <neighbor dest="39" weight="1" relationship="is north of##在北方于##"/>
 <neighbor dest="25" weight="0" relationship="held##举办了##"/>
 <parent dest="39" weight="1" relationship="is north of##在北方于##"/>
 <parent dest="67" weight="0" relationship="belongs to##属于##"/>
-<speak value="The Shisanling Reservoir was temporarily used for the Triathlon events at the 2008 Summer Olympics, during which it was known as the Triathlon Venue.##十三陵水库于2008年夏季奥运会期间曾被临时用于铁人三项项目并被称为铁人三项赛场。##"/>
+<speak value="The Shisanling Reservoir Triathlon Venue was temporarily used for the Triathlon events at the 2008 Summer Olympics, during which it was known as the Triathlon Venue.##十三陵水库于2008年夏季奥运会期间曾被临时用于铁人三项项目并被称为铁人三项赛场。##"/>
 </Feature>
 <Feature id="59" data="Urban Road Cycling Course##城区公路自行车赛场##">
 <neighbor dest="32" weight="1" relationship="is east of##在东方于##"/>
@@ -677,7 +677,7 @@
 <parent dest="131" weight="1" relationship="held##举办了##"/>
 <parent dest="67" weight="0" relationship="belongs to##属于##"/>
 <parent dest="54" weight="1" relationship="is north of##在北方于##"/>
-<speak value="A temporary venue that started at the North Square of Yongdingmen in Beijing&apos;s Chongwen District and ended at Juyong Pass in Changping District.##一个始于北京崇文区永定门北广场，终于昌平区居庸关的临时赛场。##"/>
+<speak value="Urban Road Cycling Course was a temporary venue that started at the North Square of Yongdingmen in Beijing&apos;s Chongwen District and ended at Juyong Pass in Changping District.##一个始于北京崇文区永定门北广场，终于昌平区居庸关的临时赛场。##"/>
 </Feature>
 <Feature id="60" data="Wukesong Sports Center Baseball Field##五棵松棒球场##">
 <neighbor dest="5" weight="0" relationship="held##举办了##"/>
@@ -685,7 +685,7 @@
 <parent dest="49" weight="1" relationship="is north of##在北方于##"/>
 <parent dest="67" weight="0" relationship="belongs to##属于##"/>
 <parent dest="46" weight="1" relationship="is east of##在东方于##"/>
-<speak value="The field was a temporary venue for baseball events at the 2008 Summer Olympics.##该场地于2008年夏季奥运会期间曾是棒球项目的临时赛场。##"/>
+<speak value="The Wukesong Sports Center Baseball Field was a temporary venue for baseball events at the 2008 Summer Olympics.##该场地于2008年夏季奥运会期间曾是棒球项目的临时赛场。##"/>
 </Feature>
 <Feature id="61" data="Hong Kong Equestrian Venues##香港马术比赛场地##">
 <neighbor dest="164" weight="0" relationship="is the venue where the gold medal was won by##是金牌被获得的场地##"/>
@@ -696,7 +696,7 @@
 <neighbor dest="165" weight="0" relationship="is the venue where the gold medal was won by##是金牌被获得的场地##"/>
 <parent dest="167" weight="1" relationship="held##举办了##"/>
 <parent dest="70" weight="0" relationship="belongs to##属于##"/>
-<speak value="The venue was located in the Hong Kong Sports Institute, where was taken over and prepared by the Hong Kong Jockey Club in order to make way for the Olympics.##该场馆坐落于香港运动所，后被香港赛马会接管并为迎接奥运会而做准备。##"/>
+<speak value="The Hong Kong Equestrian Venues was located in the Hong Kong Sports Institute, where it was taken over and prepared by the Hong Kong Jockey Club in order to make way for the Olympics.##该场馆坐落于香港运动所，后被香港赛马会接管并为迎接奥运会而做准备。##"/>
 </Feature>
 <Feature id="62" data="Qingdao International Sailing Center##青岛国际帆船中心##">
 <neighbor dest="168" weight="0" relationship="is the venue where the gold medal was won by##是金牌被获得的场地##"/>
@@ -704,7 +704,7 @@
 <neighbor dest="19" weight="0" relationship="held##举办了##"/>
 <parent dest="169" weight="1" relationship="held##举办了##"/>
 <parent dest="70" weight="0" relationship="belongs to##属于##"/>
-<speak value="The center hosted the Olympic Sailing competitions.##该中心于2008年奥运会期间举办了帆船项目。##"/>
+<speak value="The Qingdao International Sailing Center hosted the Olympic Sailing competitions.##该中心于2008年奥运会期间举办了帆船项目。##"/>
 </Feature>
 <Feature id="63" data="Qinghuangdao Olympic Sports Center Stadium##秦皇岛奥林匹克体育场##">
 <neighbor dest="12" weight="0" relationship="partially held##举办了部分##"/>
@@ -712,7 +712,7 @@
 <neighbor dest="199" weight="0" relationship="is the venue where the gold medal was won by##是金牌被获得的场地##"/>
 <parent dest="200" weight="0" relationship="held##举办了##"/>
 <parent dest="70" weight="0" relationship="belongs to##属于##"/>
-<speak value="The stadium served as one of the football venues at the 2008 Summer Olympics.##该体育场于2008年夏季奥运会期间曾任足球项目的赛场之一。##"/>
+<speak value="The Qinghuangdao Olympic Sports Center Stadium served as one of the football venues at the 2008 Summer Olympics.##该体育场于2008年夏季奥运会期间曾任足球项目的赛场之一。##"/>
 </Feature>
 <Feature id="64" data="Shanghai Stadium##上海体育场##">
 <neighbor dest="12" weight="0" relationship="partially held##举办了部分##"/>
@@ -720,7 +720,7 @@
 <neighbor dest="199" weight="0" relationship="is the venue where the gold medal was won by##是金牌被获得的场地##"/>
 <parent dest="200" weight="0" relationship="held##举办了##"/>
 <parent dest="70" weight="0" relationship="belongs to##属于##"/>
-<speak value="The stadium was used for football preliminaries at the 2008 Summer Olympics.##该体育场于2008年夏季奥运会期间曾被用作足球项目的预赛。##"/>
+<speak value="The Shanghai Stadium was used for football preliminaries at the 2008 Summer Olympics.##该体育场于2008年夏季奥运会期间曾被用作足球项目的预赛。##"/>
 </Feature>
 <Feature id="65" data="Shenyang Olympic Sports Center Stadium##沈阳奥林匹克体育中心体育场##">
 <neighbor dest="12" weight="0" relationship="partially held##举办了部分##"/>
@@ -728,13 +728,13 @@
 <neighbor dest="199" weight="0" relationship="is the venue where the gold medal was won by##是金牌被获得的场地##"/>
 <parent dest="200" weight="0" relationship="held##举办了##"/>
 <parent dest="70" weight="0" relationship="belongs to##属于##"/>
-<speak value="The stadium hosted football matches at the 2008 Summer Olympics.##该体育场于2008年夏季奥运会期间举办了足球项目。##"/>
+<speak value="The Shenyang Olympic Sports Center Stadium hosted football matches at the 2008 Summer Olympics.##该体育场于2008年夏季奥运会期间举办了足球项目。##"/>
 </Feature>
 <Feature id="66" data="Tianjin Olympic Center Stadium##天津奥林匹克中心体育场##">
 <neighbor dest="12" weight="0" relationship="partially held##举办了部分##"/>
 <neighbor dest="89" weight="1" relationship="is in##在##"/>
 <parent dest="70" weight="0" relationship="belongs to##属于##"/>
-<speak value="The stadium hosted football preliminaries at the 2008 Summer Olympics.##该体育场于2008年夏季奥运会期间曾被用作足球项目的预赛。##"/>
+<speak value="The Tianjin Olympic Center Stadium hosted football preliminaries at the 2008 Summer Olympics.##该体育场于2008年夏季奥运会期间曾被用作足球项目的预赛。##"/>
 </Feature>
 <Feature id="67" data="Other Venues##其他场馆##">
 <neighbor dest="47" weight="0" relationship="include##包括##"/>
@@ -756,7 +756,7 @@
 <neighbor dest="60" weight="0" relationship="include##包括##"/>
 <neighbor dest="55" weight="0" relationship="include##包括##"/>
 <parent dest="94" weight="0" relationship="belongs to##属于##"/>
-<speak value="Other Venues in Beijing that are not belong to Olympic Green or universities.##其它不属于奥林匹克公园或大学的场馆。##"/>
+<speak value="There were other venues in Beijing that did not belong to Olympic Green or universities.##其它不属于奥林匹克公园或大学的场馆。##"/>
 </Feature>
 <Feature id="68" data="Olympic Green##奥林匹克公园##">
 <neighbor dest="72" weight="0" relationship="include##包括##"/>
@@ -781,7 +781,7 @@
 <neighbor dest="39" weight="0" relationship="include##包括##"/>
 <neighbor dest="40" weight="0" relationship="include##包括##"/>
 <parent dest="94" weight="0" relationship="belongs to##属于##"/>
-<speak value="Venues that belong to universities.##属于大学的场馆。##"/>
+<speak value="Universities Gymnasiums are venues that belong to universities.##属于大学的场馆。##"/>
 </Feature>
 <Feature id="70" data="Venues outside Beijing##北京外的场馆##">
 <neighbor dest="61" weight="0" relationship="include##包括##"/>
@@ -791,12 +791,12 @@
 <neighbor dest="65" weight="0" relationship="include##包括##"/>
 <neighbor dest="66" weight="0" relationship="include##包括##"/>
 <parent dest="94" weight="0" relationship="belongs to##属于##"/>
-<speak value="Venues at the 2008 Summer Olympics that are outside the host city Beijing.##2008年夏季奥运会中，不在主办城市北京的赛场。##"/>
+<speak value="Some venues at the 2008 Summer Olympics were outside the host city Beijing.##2008年夏季奥运会中，不在主办城市北京的赛场。##"/>
 </Feature>
 <Feature id="71" data="Promenade##景观大道##">
 <neighbor dest="68" weight="1" relationship="is in##在##"/>
 <parent dest="68" weight="0" relationship="is in##在##"/>
-<speak value="The park itself hosted some of the athletic events at the 2008 Games.##该公园本身于2008年夏季奥运会期间举办了一些田径项目。##"/>
+<speak value="The Promenade hosted some of the athletic events at the 2008 Games.##该公园本身于2008年夏季奥运会期间举办了一些田径项目。##"/>
 </Feature>
 <Feature id="72" data="Beijing Olympic Village##北京奥运村##">
 <neighbor dest="68" weight="1" relationship="is in##在##"/>
@@ -805,14 +805,14 @@
 <parent dest="36" weight="1" relationship="is south of##在南方于##"/>
 <parent dest="68" weight="0" relationship="is in##在##"/>
 <parent dest="75" weight="1" relationship="is west of##在西方于##"/>
-<speak value="An Olympic Village that hosted the attendees, which included competitors and their coaches, at the 2008 Summer Olympics.##一个于2008年夏季奥运会期间接待了与会者的奥运村，包括参赛者和他们的教练。##"/>
+<speak value="Beijing Olympic Village was an Olympic Village that hosted the attendees, which included competitors and their coaches, at the 2008 Summer Olympics.##一个于2008年夏季奥运会期间接待了与会者的奥运村，包括参赛者和他们的教练。##"/>
 </Feature>
 <Feature id="73" data="Digital Beijing Building##数字北京大厦##">
 <neighbor dest="31" weight="1" relationship="is west of##在西方于##"/>
 <neighbor dest="68" weight="1" relationship="is in##在##"/>
 <parent dest="31" weight="1" relationship="is west of##在西方于##"/>
 <parent dest="68" weight="0" relationship="is in##在##"/>
-<speak value="The building served as a data center at the 2008 Summer Olympics.##该建筑于2008年夏季奥运会期间曾担任过数据中心。##"/>
+<speak value="The Digital Beijing Building served as a data center at the 2008 Summer Olympics.##该建筑于2008年夏季奥运会期间曾担任过数据中心。##"/>
 </Feature>
 <Feature id="74" data="Ling Long Pagoda##玲珑塔##">
 <neighbor dest="31" weight="1" relationship="is east of##在东方于##"/>
@@ -821,14 +821,14 @@
 <parent dest="31" weight="1" relationship="is east of##在东方于##"/>
 <parent dest="32" weight="1" relationship="is north of##在北方于##"/>
 <parent dest="68" weight="0" relationship="is in##在##"/>
-<speak value="Operated by Beijing Olympic Broadcasting, a tower has international broadcast studios, which offering skyline views as backdrops of Olympic broadcasts.##由北京奥运广播运转，该塔拥有提供地平线样观作为奥运广播背景的国际广播室。##"/>
+<speak value="Operated by Beijing Olympic Broadcasting, a Ling Long Pagoda has international broadcast studios, which offer skyline views as backdrops of Olympic broadcasts.##由北京奥运广播运转，该塔拥有提供地平线样观作为奥运广播背景的国际广播室。##"/>
 </Feature>
 <Feature id="75" data="Olympic Park Observation Tower##瞭望塔##">
 <neighbor dest="72" weight="1" relationship="is east of##在东方于##"/>
 <neighbor dest="68" weight="1" relationship="is in##在##"/>
 <parent dest="72" weight="1" relationship="is east of##在东方于##"/>
 <parent dest="68" weight="0" relationship="is in##在##"/>
-<speak value="An observation tower whose five circular roofs are meant to evoke the Olympic rings.##一个观察塔，其五个圆形屋顶是为了唤起奥运五环。##"/>
+<speak value="The Olympic Park Observation Tower's five circular roofs are meant to evoke the Olympic rings.##一个观察塔，其五个圆形屋顶是为了唤起奥运五环。##"/>
 </Feature>
 <Feature id="76" data="Olympic Green Venues##奥林匹克公园场馆##">
 <neighbor dest="30" weight="0" relationship="include##包括##"/>
@@ -840,32 +840,32 @@
 <neighbor dest="33" weight="0" relationship="include##包括##"/>
 <parent dest="68" weight="0" relationship="is in##在##"/>
 <parent dest="94" weight="0" relationship="belongs to##属于##"/>
-<speak value="Venues that are inside the Olympic Green.##在奥林匹克公园内部的赛场。##"/>
+<speak value="Several venues were inside the Olympic Green.##在奥林匹克公园内部的赛场。##"/>
 </Feature>
 <Feature id="77" data="Beibei##贝贝##">
 <neighbor dest="82" weight="1" relationship="is a##是##"/>
 <parent dest="82" weight="0" relationship="is a##是##"/>
-<speak value="Female Fuwa representing Oceania, sea, prosperity and aquatic sports.##代表了大洋洲、海洋、繁荣和水上项目的女性福娃。##"/>
+<speak value="Beibei is the female Fuwa representing Oceania, sea, prosperity and aquatic sports.##代表了大洋洲、海洋、繁荣和水上项目的女性福娃。##"/>
 </Feature>
 <Feature id="78" data="Jingjing##晶晶##">
 <neighbor dest="82" weight="1" relationship="is a##是##"/>
 <parent dest="82" weight="0" relationship="is a##是##"/>
-<speak value="Male Fuwa representing Europe, forest, happiness and weightlifting and judo sports.##代表了欧洲、森林、欢乐和力量项目的男性福娃。##"/>
+<speak value="Jingjing is the male Fuwa representing Europe, forest, happiness and weightlifting and judo sports.##代表了欧洲、森林、欢乐和力量项目的男性福娃。##"/>
 </Feature>
 <Feature id="79" data="Huanhuan##欢欢##">
 <neighbor dest="82" weight="1" relationship="is a##是##"/>
 <parent dest="82" weight="0" relationship="is a##是##"/>
-<speak value="Male Fuwa representing America, fire, passion and ball sports and racquet sports.##代表了美洲、火焰、热情和球类项目的男性福娃。##"/>
+<speak value="Huanhuan is the male Fuwa representing America, fire, passion and ball sports and racquet sports.##代表了美洲、火焰、热情和球类项目的男性福娃。##"/>
 </Feature>
 <Feature id="80" data="Yingying##迎迎##">
 <neighbor dest="82" weight="1" relationship="is a##是##"/>
 <parent dest="82" weight="0" relationship="is a##是##"/>
-<speak value="Male Fuwa representing Asia, earth, health and track and field sports.##代表了亚洲、陆地、健康和田径项目的男性福娃。##"/>
+<speak value="Yingying is the male Fuwa representing Asia, earth, health and track and field sports.##代表了亚洲、陆地、健康和田径项目的男性福娃。##"/>
 </Feature>
 <Feature id="81" data="Nini##妮妮##">
 <neighbor dest="82" weight="1" relationship="is a##是##"/>
 <parent dest="82" weight="0" relationship="is a##是##"/>
-<speak value="Female Fuwa representing Africa, sky, good fortune and gymnastics.##代表了非洲、天空、好运和体操项目的女性福娃。##"/>
+<speak value="Nini is the female Fuwa representing Africa, sky, good fortune and gymnastics.##代表了非洲、天空、好运和体操项目的女性福娃。##"/>
 </Feature>
 <Feature id="82" data="Fuwa##福娃##">
 <neighbor dest="77" weight="0" relationship="includes##包括##"/>
@@ -886,54 +886,54 @@
 <neighbor dest="82" weight="0" relationship="are##是##"/>
 <parent dest="0" weight="0" relationship="was had by##被有##"/>
 <parent dest="82" weight="1" relationship="are##是##"/>
-<speak value="A person or animal that is adopted by a team or other group as a symbolic figure.##被一个团队或团体采用作为象征的人或物。##"/>
+<speak value="A Mascot is a person or animal that is adopted by a team or other group as a symbolic figure.##被一个团队或团体采用作为象征的人或物。##"/>
 </Feature>
 <Feature id="84" data="Beijing##北京##">
 <neighbor dest="91" weight="1" relationship="was##是##"/>
 <parent dest="91" weight="0" relationship="was##是##"/>
-<speak value="City that hosted the 2008 Summer Olympics.##2008年夏季奥运会的主要举办城市。##"/>
+<speak value="Beijing is the city that hosted the 2008 Summer Olympics.##2008年夏季奥运会的主要举办城市。##"/>
 </Feature>
 <Feature id="85" data="Shanghai##上海##">
 <neighbor dest="92" weight="1" relationship="was one of##曾是##"/>
 <parent dest="92" weight="0" relationship="was one of the##是##"/>
 <parent dest="64" weight="1" relationship="has##有##"/>
-<speak value="City that co hosted the 2008 Summer Olympics.##协助举办了2008年夏季奥运会的城市。##"/>
+<speak value="Shanghai is a city that co hosted the 2008 Summer Olympics.##协助举办了2008年夏季奥运会的城市。##"/>
 </Feature>
 <Feature id="86" data="Qingdao##青岛##">
 <neighbor dest="92" weight="1" relationship="was one of##曾是##"/>
 <parent dest="92" weight="0" relationship="was one of the##是##"/>
 <parent dest="62" weight="1" relationship="has##有##"/>
-<speak value="City that co hosted the 2008 Summer Olympics.##协助举办了2008年夏季奥运会的城市。##"/>
+<speak value="Qingdao is a city that co hosted the 2008 Summer Olympics.##协助举办了2008年夏季奥运会的城市。##"/>
 </Feature>
 <Feature id="87" data="Hong Kong##香港##">
 <neighbor dest="92" weight="1" relationship="was one of##曾是##"/>
 <parent dest="92" weight="0" relationship="was one of the##是##"/>
 <parent dest="61" weight="1" relationship="has##有##"/>
-<speak value="City that co hosted the 2008 Summer Olympics.##协助举办了2008年夏季奥运会的城市。##"/>
+<speak value="Hong Kong is a city that co hosted the 2008 Summer Olympics.##协助举办了2008年夏季奥运会的城市。##"/>
 </Feature>
 <Feature id="88" data="Qinghuangdao##秦皇岛##">
 <neighbor dest="92" weight="1" relationship="was one of##曾是##"/>
 <parent dest="92" weight="0" relationship="was one of the##是##"/>
 <parent dest="63" weight="1" relationship="has##有##"/>
-<speak value="City that co hosted the 2008 Summer Olympics.##协助举办了2008年夏季奥运会的城市。##"/>
+<speak value="Qinghuangdao is a city that co hosted the 2008 Summer Olympics.##协助举办了2008年夏季奥运会的城市。##"/>
 </Feature>
 <Feature id="89" data="Tianjin##天津##">
 <neighbor dest="92" weight="1" relationship="was one of##曾是##"/>
 <parent dest="92" weight="0" relationship="was one of the##是##"/>
 <parent dest="66" weight="1" relationship="has##有##"/>
-<speak value="City that co hosted the 2008 Summer Olympics.##协助举办了2008年夏季奥运会的城市。##"/>
+<speak value="Tianjin is a city that co hosted the 2008 Summer Olympics.##协助举办了2008年夏季奥运会的城市。##"/>
 </Feature>
 <Feature id="90" data="Shenyang##沈阳##">
 <neighbor dest="92" weight="1" relationship="was one of##曾是##"/>
 <parent dest="92" weight="0" relationship="was one of the##是##"/>
 <parent dest="65" weight="1" relationship="has##有##"/>
-<speak value="City that co hosted the 2008 Summer Olympics.##协助举办了2008年夏季奥运会的城市。##"/>
+<speak value="Shenyang is a city that co hosted the 2008 Summer Olympics.##协助举办了2008年夏季奥运会的城市。##"/>
 </Feature>
 <Feature id="91" data="Host City##主办城市##">
 <neighbor dest="84" weight="0" relationship="was##是##"/>
 <parent dest="84" weight="1" relationship="is##是##"/>
 <parent dest="93" weight="0" relationship="belongs to##属于##"/>
-<speak value="City that host events.##运动项目的主要举办城市。##"/>
+<speak value="The Host Citiy is the city that hosted the main events.##运动项目的主要举办城市。##"/>
 </Feature>
 <Feature id="92" data="Co Host Cities##协办城市##">
 <neighbor dest="87" weight="0" relationship="include##包括##"/>
@@ -949,13 +949,13 @@
 <parent dest="85" weight="1" relationship="include##包括##"/>
 <parent dest="90" weight="1" relationship="include##包括##"/>
 <parent dest="89" weight="1" relationship="include##包括##"/>
-<speak value="Cities that helped hosting events.##协助举办了运动项目的城市。##"/>
+<speak value="Co Host Cities are cities that helped host events.##协助举办了运动项目的城市。##"/>
 </Feature>
 <Feature id="93" data="Cities##城市##">
 <neighbor dest="92" weight="0" relationship="include##包括##"/>
 <neighbor dest="91" weight="0" relationship="include##包括##"/>
 <parent dest="0" weight="0" relationship="was had by##被有##"/>
-<speak value="Large and permanent human settlements.##大型永久性人类居住区。##"/>
+<speak value="Cities are large and permanent human settlements.##大型永久性人类居住区。##"/>
 </Feature>
 <Feature id="94" data="Venues##比赛场馆##">
 <neighbor dest="76" weight="0" relationship="include##包括##"/>
@@ -963,29 +963,29 @@
 <neighbor dest="69" weight="0" relationship="include##包括##"/>
 <neighbor dest="70" weight="0" relationship="include##包括##"/>
 <parent dest="0" weight="0" relationship="was had by##被有##"/>
-<speak value="Places where sports events take place.##体育赛事的举办地点。##"/>
+<speak value="Venues are places where sport events take place.##体育赛事的举办地点。##"/>
 </Feature>
 <Feature id="95" data="You and Me##我和你##">
 <neighbor dest="96" weight="1" relationship="is##是##"/>
 <parent dest="96" weight="0" relationship="is##是##"/>
-<speak value="The theme song for the 2008 Summer Olympics, which was performed in the opening ceremony by Liu Huan and Sarah Brightman.##由刘欢和Sara Brightman在开幕式上表演的2008年夏季奥运会主题曲。##"/>
+<speak value="You and Me is the theme song for the 2008 Summer Olympics, which was performed in the opening ceremony by Liu Huan and Sarah Brightman.##由刘欢和Sara Brightman在开幕式上表演的2008年夏季奥运会主题曲。##"/>
 </Feature>
 <Feature id="96" data="Anthem##主题歌##">
 <neighbor dest="95" weight="0" relationship="is##是##"/>
 <parent dest="0" weight="0" relationship="was had by##被有##"/>
 <parent dest="95" weight="1" relationship="is##是##"/>
-<speak value="Theme song that used to represent a particular gathering.##用来代表特定集会的主题曲。##"/>
+<speak value="An Anthem is a theme song that used to represent a particular gathering.##用来代表特定集会的主题曲。##"/>
 </Feature>
 <Feature id="97" data="One World, One Dream##同一个世界，同一个梦想##">
 <neighbor dest="98" weight="1" relationship="is##是##"/>
 <parent dest="98" weight="0" relationship="is##是##"/>
-<speak value="Official motto for the 2008 Summer Olympics, which called upon the whole world to join in the Olympic spirit and build a better future for humanity.##2008年夏季奥运会的官方口号呼吁全世界都加入奥林匹克精神为人类建设一个更美好的未来。##"/>
+<speak value="One World, One Dream is the official motto for the 2008 Summer Olympics, which called upon the whole world to join in the Olympic spirit and build a better future for humanity.##2008年夏季奥运会的官方口号呼吁全世界都加入奥林匹克精神为人类建设一个更美好的未来。##"/>
 </Feature>
 <Feature id="98" data="Motto##口号##">
 <neighbor dest="97" weight="0" relationship="is##是##"/>
 <parent dest="0" weight="0" relationship="was had by##被有##"/>
 <parent dest="97" weight="1" relationship="is##是##"/>
-<speak value="A short sentence or phrase that expresses a rule for sensible behaviour, especially a way of behaving in a particular situation.##一个简短的句子或短语，表达了一种对理智行为的约束，特别是在特定情况下的行为方式。##"/>
+<speak value="A Motto is a short sentence or phrase that expresses a rule for sensible behaviour, especially a way of behaving in a particular situation.##一个简短的句子或短语，表达了一种对理智行为的约束，特别是在特定情况下的行为方式。##"/>
 </Feature>
 <Feature id="99" data="Aug. 8th, 2008##2008年8月8日##">
 <neighbor dest="101" weight="1" relationship="has##有##"/>
@@ -1032,7 +1032,7 @@
 <neighbor dest="99" weight="1" relationship="include##包括##"/>
 <neighbor dest="260" weight="0" relationship="include##包括##"/>
 <parent dest="0" weight="0" relationship="was had by##被有##"/>
-<speak value="The duration of the 2008 Summer Olympics.##2008年夏季奥运会持续的时间。##"/>
+<speak value="The 2008 Summer Olympics took place over several days.##2008年夏季奥运会持续的时间。##"/>
 </Feature>
 <Feature id="104" data="Mariel Zagunis">
 <neighbor dest="105" weight="0" relationship="won a gold medal in##曾赢得金牌##"/>
@@ -1042,7 +1042,7 @@
 <parent dest="278" weight="0" relationship="is##是##"/>
 <parent dest="259" weight="1" relationship="is one of##是一个##"/>
 <parent dest="35" weight="1" relationship="competed in##参赛于##"/>
-<speak value="American sabre fencer that won the gold medals in the individual sabre at the 2004 Summer Olympics and the 2008 Summer Olympics. She is the second American to win a gold medal in Olympic fencing.##Mariel Zagunis是一名美国佩剑击剑选手。她曾在2004与2008夏季奥运会获得了女子个人佩剑比赛的金牌。她是第二位在奥运会击剑项目获得了金牌的美国选手。##"/>
+<speak value="Mariel Zagunis is an American sabre fencer that won the gold medals in the individual sabre at the 2004 Summer Olympics and the 2008 Summer Olympics. She is the second American to win a gold medal in Olympic fencing.##Mariel Zagunis是一名美国佩剑击剑选手。她曾在2004与2008夏季奥运会获得了女子个人佩剑比赛的金牌。她是第二位在奥运会击剑项目获得了金牌的美国选手。##"/>
 </Feature>
 <Feature id="105" data="(Fencing) Women&apos;s Sabre##女子个人佩剑##">
 <neighbor dest="260" weight="1" relationship="took place on##曾举办于##"/>
@@ -2235,7 +2235,7 @@
 <parent dest="186" weight="1" relationship="includes##包括##"/>
 <parent dest="187" weight="1" relationship="includes##包括##"/>
 <parent dest="53" weight="1" relationship="competed in##参赛于##"/>
-<speak value="The team has been one of the most successful in international women&apos;s soccer, winning two Women&apos;s World Cup titles, four Olympic gold medals, and ten Algarve Cups. It was ranked No. 1 in the FIFA Women&apos;s World Rankings continuously from March 2008 to December 2014, and is currently ranked No. 2.##美国国家女子足球队是国际上最成功的女子足球队之一，获得过两次女子足球世界杯奖项，四次奥运女子足球金牌，以及十次阿尔加夫杯冠军。球队自2008年3月至2014年12月在国际足联女足的排名一直是世界第一。目前排名第二。##"/>
+<speak value="The United States Women&apos;s National Soccer Team has been one of the most successful in international women&apos;s soccer, winning two Women&apos;s World Cup titles, four Olympic gold medals, and ten Algarve Cups. It was ranked No. 1 in the FIFA Women&apos;s World Rankings continuously from March 2008 to December 2014, and is currently ranked No. 2.##美国国家女子足球队是国际上最成功的女子足球队之一，获得过两次女子足球世界杯奖项，四次奥运女子足球金牌，以及十次阿尔加夫杯冠军。球队自2008年3月至2014年12月在国际足联女足的排名一直是世界第一。目前排名第二。##"/>
 </Feature>
 <Feature id="200" data="(Football) Women&apos;s Tournament##女子足球锦标赛##">
 <neighbor dest="198" weight="1" relationship="was won by##被赢##"/>
@@ -3075,7 +3075,7 @@
 <parent dest="254" weight="1" relationship="included##曾包括##"/>
 <parent dest="253" weight="1" relationship="includes##包括##"/>
 <parent dest="46" weight="1" relationship="competed in##参赛于##"/>
-<speak value="The team represents the U.S. in international men&apos;s basketball, and has won medals in all seventeen Olympic tournaments it has entered, among which fourteen golds.##这只代表美国的参赛队伍在世界奥林匹克篮球锦标赛上获得十七枚奖牌，其中金牌十四块。##"/>
+<speak value="The United States Men&apos;s National Basketball Team represents the U.S. in international men&apos;s basketball, and has won medals in all seventeen Olympic tournaments it has entered, among which fourteen golds.##这只代表美国的参赛队伍在世界奥林匹克篮球锦标赛上获得十七枚奖牌，其中金牌十四块。##"/>
 </Feature>
 <Feature id="258" data="(Basketball) Men&apos;s Tournament##男子篮球锦标赛##">
 <neighbor dest="100" weight="1" relationship="took place on##曾举办于##"/>
@@ -3344,7 +3344,7 @@
 <parent dest="139" weight="1" relationship="includes##包括##"/>
 <parent dest="120" weight="1" relationship="includes##包括##"/>
 <parent dest="165" weight="1" relationship="includes##包括##"/>
-<speak value="Athletes who have won gold medals.##获得金牌的运动员。##"/>
+<speak value="Gold medalists are athletes who have won gold medals.##获得金牌的运动员。##"/>
 </Feature>
 <Feature id="260" data="Aug. 9th, 2008##2008年8月9日##">
 <neighbor dest="105" weight="0" relationship="has##有##"/>
@@ -3551,7 +3551,7 @@
 <parent dest="160" weight="1" relationship="include##包括##"/>
 <parent dest="244" weight="1" relationship="include##包括##"/>
 <parent dest="171" weight="1" relationship="include##包括##"/>
-<speak value="Sport events in which American athletes have won gold medals.##美国运动员获得金牌的项目。##"/>
+<speak value="Gold Sports are sport events in which American athletes have won gold medals.##美国运动员获得金牌的项目。##"/>
 </Feature>
 <Feature id="276" data="United States Olympic Committee (USOC)##美国奥林匹克委员会##">
 <neighbor dest="259" weight="0" relationship="has##有##"/>
@@ -3672,7 +3672,7 @@
 <parent dest="139" weight="1" relationship="include##包括##"/>
 <parent dest="120" weight="1" relationship="include##包括##"/>
 <parent dest="165" weight="1" relationship="include##包括##"/>
-<speak value="Male athletes who have won gold medals at the 2008 Summer Olympics.##在2008夏季奥运会获得金牌的男运动员。##"/>
+<speak value="Many Male athletes won gold medals at the 2008 Summer Olympics.##在2008夏季奥运会获得金牌的男运动员。##"/>
 </Feature>
 <Feature id="278" data="Female##女性##">
 <neighbor dest="211" weight="0" relationship="includes##包括##"/>
@@ -3794,6 +3794,6 @@
 <parent dest="228" weight="1" relationship="include##包括##"/>
 <parent dest="187" weight="1" relationship="include##包括##"/>
 <parent dest="147" weight="1" relationship="include##包括##"/>
-<speak value="Female athletes who have won gold medals at the 2008 Summer Olympics.##在2008夏季奥运会获得金牌的女运动员。##"/>
+<speak value="Many Female athletes won gold medals at the 2008 Summer Olympics.##在2008夏季奥运会获得金牌的女运动员。##"/>
 </Feature>
 </AIMind>

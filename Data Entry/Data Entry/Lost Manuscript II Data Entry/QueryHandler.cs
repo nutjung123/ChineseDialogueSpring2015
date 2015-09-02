@@ -178,6 +178,24 @@ namespace Dialogue_Data_Entry
             filter_nodes.Add("Gold Medallists");
             filter_nodes.Add("Venues");
             filter_nodes.Add("Time");
+            filter_nodes.Add("Aug. 8th, 2008");
+            filter_nodes.Add("Aug. 24th, 2008");
+            filter_nodes.Add("Aug. 9th, 2008");
+            filter_nodes.Add("Aug. 10th, 2008");
+            filter_nodes.Add("Aug. 11th, 2008");
+            filter_nodes.Add("Aug. 12th, 2008");
+            filter_nodes.Add("Aug. 13th, 2008");
+            filter_nodes.Add("Aug. 14th, 2008");
+            filter_nodes.Add("Aug. 15th, 2008");
+            filter_nodes.Add("Aug. 16th, 2008");
+            filter_nodes.Add("Aug. 17th, 2008");
+            filter_nodes.Add("Aug. 18th, 2008");
+            filter_nodes.Add("Aug. 19th, 2008");
+            filter_nodes.Add("Aug. 20th, 2008");
+            filter_nodes.Add("Aug. 21st, 2008");
+            filter_nodes.Add("Aug. 22nd, 2008");
+            filter_nodes.Add("Aug. 23rd, 2008");
+
 
             //Build list of relationships which should not be used in analogies.
             no_analogy_relationships.Add("occurred before");
@@ -185,6 +203,8 @@ namespace Dialogue_Data_Entry
             no_analogy_relationships.Add("include");
             no_analogy_relationships.Add("includes");
             no_analogy_relationships.Add("included");
+            no_analogy_relationships.Add("has");
+            no_analogy_relationships.Add("had");
         }
 
 		private string LeadingTopic(Feature last, Feature first)
