@@ -637,7 +637,8 @@ namespace Dialogue_Data_Entry
                         //break;
                     }
                     //Check the no_analogy list first to see if an analogy should be made with this relationship.
-                    if (no_analogy_relationships.Contains(old.getRelationshipNeighbor(newOld.Data)))
+                    //NOTE: List only contains the english half of each relationship. Check 0th index of split.
+                    if (no_analogy_relationships.Contains(old.getRelationshipNeighbor(newOld.Data).Split(new string[] { "##" }, StringSplitOptions.None)[0]))
                     {
                         continue;
                     }//end if

@@ -40,17 +40,7 @@ namespace Dialogue_Data_Entry
 
         public FeatureSpeaker(FeatureGraph featG,List<TemporalConstraint> myTemporalConstraintList)
         {
-            //FILTERING:
-            //Build list of filter nodes.
-            //Each filter node is identified by its Data values in the XML
-            filter_nodes.Add("Male");
-            filter_nodes.Add("Female");
-            filter_nodes.Add("Cities");
-            filter_nodes.Add("Sports");
-            filter_nodes.Add("Gold Medallists");
-            filter_nodes.Add("Venues");
-            filter_nodes.Add("Time");
-
+            setFilterNodes();
             //define dramaticFunction manually here
             this.temporalConstraintList = new List<TemporalConstraint>();
             for (int x = 0; x < myTemporalConstraintList.Count(); x++)
@@ -65,17 +55,7 @@ namespace Dialogue_Data_Entry
 
         public FeatureSpeaker(FeatureGraph featG, List<TemporalConstraint> myTemporalConstraintList,string prevSpatial,List<string> topicH)
         {
-            //FILTERING:
-            //Build list of filter nodes.
-            //Each filter node is identified by its Data values in the XML
-            filter_nodes.Add("Male");
-            filter_nodes.Add("Female");
-            filter_nodes.Add("Cities");
-            filter_nodes.Add("Sports");
-            filter_nodes.Add("Gold Medallists");
-            filter_nodes.Add("Venues");
-            filter_nodes.Add("Time");
-
+            setFilterNodes();
             this.temporalConstraintList = new List<TemporalConstraint>();
             for (int x = 0; x < myTemporalConstraintList.Count();x++ )
             {
@@ -89,6 +69,36 @@ namespace Dialogue_Data_Entry
             //define dramaticFunction manually here
             expectedDramaticV = new double[20] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
         }
+
+        private void setFilterNodes()
+        {
+            //Build list of filter nodes.
+            //Each filter node is identified by its Data values in the XML
+            filter_nodes.Add("Male");
+            filter_nodes.Add("Female");
+            filter_nodes.Add("Cities");
+            filter_nodes.Add("Sports");
+            filter_nodes.Add("Gold Medallists");
+            filter_nodes.Add("Venues");
+            filter_nodes.Add("Time");
+            filter_nodes.Add("Aug. 8th, 2008");
+            filter_nodes.Add("Aug. 24th, 2008");
+            filter_nodes.Add("Aug. 9th, 2008");
+            filter_nodes.Add("Aug. 10th, 2008");
+            filter_nodes.Add("Aug. 11th, 2008");
+            filter_nodes.Add("Aug. 12th, 2008");
+            filter_nodes.Add("Aug. 13th, 2008");
+            filter_nodes.Add("Aug. 14th, 2008");
+            filter_nodes.Add("Aug. 15th, 2008");
+            filter_nodes.Add("Aug. 16th, 2008");
+            filter_nodes.Add("Aug. 17th, 2008");
+            filter_nodes.Add("Aug. 18th, 2008");
+            filter_nodes.Add("Aug. 19th, 2008");
+            filter_nodes.Add("Aug. 20th, 2008");
+            filter_nodes.Add("Aug. 21st, 2008");
+            filter_nodes.Add("Aug. 22nd, 2008");
+            filter_nodes.Add("Aug. 23rd, 2008");
+        }//end method setFilterNodes
 
         //call this function with height =-1;
         private void getHeight(Feature current, Feature target, int h, bool[] checkEntry, ref int height)
@@ -390,6 +400,13 @@ namespace Dialogue_Data_Entry
             score += spatialConstraintValue * spatialConstraintW;
             score += (hierachyConstraintValue * hierachyConstraintW);
             score += (temporalConstraintValue * temporalConstraintW);
+
+            //If this is a filter node, artificially set its score low
+            if (filter_nodes.Contains(current.Data.Split(new string[] { "##" }, StringSplitOptions.None)[0]))
+            {
+                Console.WriteLine("Filtering out node " + current.Data);
+                score = -1000000;
+            }//end if
 
             //if (hierachyConstraintValue > 0)
             //  Console.WriteLine("hierarchy constraint for " + current.Data + " from " + oldTopic.Data + ": " + hierachyConstraintValue);
