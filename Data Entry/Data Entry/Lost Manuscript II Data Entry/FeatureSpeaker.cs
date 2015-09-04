@@ -81,6 +81,9 @@ namespace Dialogue_Data_Entry
             filter_nodes.Add("Gold Medallists");
             filter_nodes.Add("Venues");
             filter_nodes.Add("Time");
+            filter_nodes.Add("Motto");
+            filter_nodes.Add("Anthem");
+            filter_nodes.Add("Mascots");
             filter_nodes.Add("Aug. 8th, 2008");
             filter_nodes.Add("Aug. 24th, 2008");
             filter_nodes.Add("Aug. 9th, 2008");
@@ -401,8 +404,9 @@ namespace Dialogue_Data_Entry
             score += (hierachyConstraintValue * hierachyConstraintW);
             score += (temporalConstraintValue * temporalConstraintW);
 
-            //If this is a filter node, artificially set its score low
-            if (filter_nodes.Contains(current.Data.Split(new string[] { "##" }, StringSplitOptions.None)[0]))
+            //If this is a filter node, or the same node as the focus node, artificially set its score low
+            if (filter_nodes.Contains(current.Data.Split(new string[] { "##" }, StringSplitOptions.None)[0])
+                || current.Data.Equals(oldTopic.Data))
             {
                 Console.WriteLine("Filtering out node " + current.Data);
                 score = -1000000;

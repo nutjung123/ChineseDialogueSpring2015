@@ -235,32 +235,32 @@ namespace Dialogue_Data_Entry
             //A set of possible lead-in statements.
             List<string> lead_in_statements = new List<string>();
             lead_in_statements.Add("{There's also " + first_data_en + ".} " + "##" + "{还有" + first_data_cn + "呢。} " + "##");
-            lead_in_statements.Add("{But let's talk about " + first_data_en + ".} " + "##" + "{让我们谈论" + first_data_cn + "吧。} " + "##");
-            lead_in_statements.Add("{And have I mentioned " + first_data_en + "?} " + "##" + "{我刚刚有提到过" + first_data_cn + "吗？} " + "##");
-            lead_in_statements.Add("{Now, about " + first_data_en + ".} " + "##" + "{然后关于" + first_data_cn + "。} " + "##");
-            lead_in_statements.Add("{Now, let's talk about " + first_data_en + ".} " + "##" + "{现在让我们谈谈" + first_data_cn + "吧。} " + "##");
-            lead_in_statements.Add("{I should touch on " + first_data_en + ".} " + "##" + "{我觉得有必要提一下" + first_data_cn + "。} " + "##");
-            lead_in_statements.Add("{Have you heard of " + first_data_en + "?} " + "##" + "{你有听说过" + first_data_cn + "吗？} " + "##");
+            lead_in_statements.Add("{But let's talk about " + first_data_en + ".} " + "##" + "{我们来聊聊" + first_data_cn + "吧。} " + "##");
+            lead_in_statements.Add("{And have I mentioned " + first_data_en + "?} " + "##" + "{之前我说过" + first_data_cn + "吗？} " + "##");
+            lead_in_statements.Add("{Now, about " + first_data_en + ".} " + "##" + "{接下来是" + first_data_cn + "。} " + "##");
+            lead_in_statements.Add("{Now, let's talk about " + first_data_en + ".} " + "##" + "{接着我们说说" + first_data_cn + "吧。} " + "##");
+            lead_in_statements.Add("{I should touch on " + first_data_en + ".} " + "##" + "{我要谈谈关于" + first_data_cn + "。} " + "##");
+            lead_in_statements.Add("{Have you heard of " + first_data_en + "?} " + "##" + "{你听说过" + first_data_cn + "吗？} " + "##");
 
             //A set of lead-in statements for non-novel nodes
             List<string> non_novel_lead_in_statements = new List<string>();
             non_novel_lead_in_statements.Add("{There's also " + first_data_en + ".} " + "##" + "{还有" + first_data_cn + "呢。} " + "##");
-            non_novel_lead_in_statements.Add("{Let's talk about " + first_data_en + ".} " + "##" + "{让我们谈谈" + first_data_cn + "吧。} " + "##");
+            non_novel_lead_in_statements.Add("{Let's talk about " + first_data_en + ".} " + "##" + "{我们谈谈" + first_data_cn + "吧。} " + "##");
             non_novel_lead_in_statements.Add("{I'll mention " + first_data_en + " real quick.} " + "##" + "{我想简要提提" + first_data_cn + "。} " + "##");
-            non_novel_lead_in_statements.Add("{So, about " + first_data_en + ".} " + "##" + "{那么,关于" + first_data_cn + "。} " + "##");
+            non_novel_lead_in_statements.Add("{So, about " + first_data_en + ".} " + "##" + "{那么,说说" + first_data_cn + "。} " + "##");
             non_novel_lead_in_statements.Add("{Now then, about " + first_data_en + ".} " + "##" + "{现在谈谈" + first_data_cn + "吧。} " + "##");
-            non_novel_lead_in_statements.Add("{Let's talk about " + first_data_en + " for a moment.} " + "##" + "{让我们聊一会儿" + first_data_cn + " 吧。} " + "##");
-            non_novel_lead_in_statements.Add("{Have I mentioned " + first_data_en + "?} " + "##" + "{我刚刚有提到" + first_data_cn + "吗？} " + "##");
-            non_novel_lead_in_statements.Add("{Now, about " + first_data_en + ".} " + "##" + "{然后关于" + first_data_cn + "。} " + "##");
-            non_novel_lead_in_statements.Add("{Now, let's talk about " + first_data_en + ".} " + "##" + "{现在让我们谈谈" + first_data_cn + "吧。} " + "##");
-            non_novel_lead_in_statements.Add("{I should touch on " + first_data_en + ".} " + "##" + "{我该提及" + first_data_cn + "。} " + "##");
-            
+            non_novel_lead_in_statements.Add("{Let's talk about " + first_data_en + " for a moment.} " + "##" + "{我们聊一会儿" + first_data_cn + " 吧。} " + "##");
+            non_novel_lead_in_statements.Add("{Have I mentioned " + first_data_en + "?} " + "##" + "{之前我说过" + first_data_cn + "吗？} " + "##");
+            non_novel_lead_in_statements.Add("{Now, about " + first_data_en + ".} " + "##" + "{接着是" + first_data_cn + "。} " + "##");
+            non_novel_lead_in_statements.Add("{Now, let's talk about " + first_data_en + ".} " + "##" + "{现在我们谈谈" + first_data_cn + "吧。} " + "##");
+            non_novel_lead_in_statements.Add("{I should touch on " + first_data_en + ".} " + "##" + "{我要说说" + first_data_cn + "。} " + "##");
+
             //A set of lead-in statements for novel nodes
             //TODO: Author these again; things like let's talk about something different now.
             List<string> novel_lead_in_statements = new List<string>();
-            novel_lead_in_statements.Add("{Let's talk about something different. " + "##" + "{让我们聊点别的吧。" + "##");
-            novel_lead_in_statements.Add("{Let's talk about something else. " + "##" + "{让我们说点别的什么吧。" + "##");
-            novel_lead_in_statements.Add("{Let's switch gears. " + "##" + "{让我们换个话题吧。" + "##");
+            novel_lead_in_statements.Add("{Let's talk about something different. " + "##" + "{我们聊点别的吧。" + "##");
+            novel_lead_in_statements.Add("{Let's talk about something else. " + "##" + "{我们说点其他的吧。" + "##");
+            novel_lead_in_statements.Add("{Let's switch gears. " + "##" + "{我们换个话题吧。" + "##");
 
             Random rand = new Random();
 

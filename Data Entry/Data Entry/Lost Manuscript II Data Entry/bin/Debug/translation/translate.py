@@ -12,16 +12,21 @@ def translate(text, language):
 if(len(sys.argv) > 1):
     text_to_translate = sys.argv[1]
 else:
-    print "No words translated"
+    #print "No words translated"
     exit()
     
 #print text_to_translate
 #print translate(text_to_translate, 'en')
 #uni_text = unicode(text_to_translate)
 
-text_to_translate = text_to_translate.decode(sys.stdin.encoding or locale.getpreferredencoding(True)).encode('utf-8')
+#text_to_translate = text_to_translate.decode(sys.stdin.encoding or locale.getpreferredencoding(True)).encode('utf-8')
+
+print (translate(text_to_translate,'en'))
+
 #print text_to_translate
-print translate(text_to_translate,'en')
+
+#print translate(text_to_translate,'en')
+#print "testing"
 
 #print type(text_to_translate)
 #print text_to_translate

@@ -164,6 +164,7 @@ namespace Dialogue_Data_Entry
                         this.Invoke((MethodInvoker)delegate
                         {
                             translated_query += run_translator(translated_query);
+                            Console.WriteLine(translated_query);
                         });
                     }
 
@@ -413,6 +414,7 @@ namespace Dialogue_Data_Entry
 
         private string run_translator(string text)
         {
+            Console.WriteLine("Start of translator");
             string result = null;
             Process p = new Process();
             p.StartInfo.FileName = "python";
@@ -433,6 +435,7 @@ namespace Dialogue_Data_Entry
             reader.Dispose();
             p.Close();
             p.Dispose();
+            Console.WriteLine("transltor result: " + result);
             return result;
         }
     }
