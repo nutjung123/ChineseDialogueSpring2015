@@ -48,7 +48,7 @@ namespace Dialogue_Data_Entry
 
         private void label1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("领引建设了");
+
         }
 
         private void inputBox_KeyDown(object sender, KeyEventArgs e)
@@ -90,9 +90,9 @@ namespace Dialogue_Data_Entry
                 if (checkBox1.Checked) { text = display; }
                 else { text = myHandler.ParseOutput(answer, myHandler.language_mode_tts); }
                 //MessageBox.Show(text);
-                XunfeiFunction.ProcessVoice(text, "out.wav", myHandler.language_mode_tts);
+                XunfeiFunction.ProcessVoice(text, "audio/out.wav", myHandler.language_mode_tts);
                 //MessageBox.Show("success");
-                Play_TTS_file("out.wav");
+                Play_TTS_file("audio/out.wav");
             }
             
             inputBox.Clear(); 
@@ -178,6 +178,8 @@ namespace Dialogue_Data_Entry
                     }
                     continue;
                 }
+                /*
+                // testing Xunfei TTS
                 if (query.Contains("TTS#"))
                 {
                     string language = query.Split('#')[1];
@@ -194,7 +196,7 @@ namespace Dialogue_Data_Entry
                     myServer.SendDataToClient("TTS completed.");
                     continue;
                 }
-
+                */
                 if (myHandler == null)
                     myHandler = new QueryHandler(featGraph, temporalConstraintList);
                 Console.WriteLine("Query: " + query);
@@ -414,13 +416,27 @@ namespace Dialogue_Data_Entry
 
         private string run_translator(string text)
         {
-            Console.WriteLine("Start of translator");
+            string result = null;
+            string version = run_python("detect.py");
+            if (version.StartsWith("2."))
+            {
+                result = run_python("translate.py \"" + text + "\"");
+            }
+            else
+            {
+                result = run_python("translate3.py \"" + text + "\"");
+            }
+            return result;
+        }
+
+        private string run_python(string filename)
+        {
+            //MessageBox.Show(filename);
             string result = null;
             Process p = new Process();
             p.StartInfo.FileName = "python";
-            // assuming asr text not empty
             p.StartInfo.WorkingDirectory = "translation/";
-            p.StartInfo.Arguments = "translate.py \"" + text + "\"";
+            p.StartInfo.Arguments = filename;
 
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardOutput = true;
@@ -428,14 +444,12 @@ namespace Dialogue_Data_Entry
             p.StartInfo.CreateNoWindow = true;
             p.Start();
 
-            StreamReader reader = p.StandardOutput;
-            result = reader.ReadToEnd();
+            result = p.StandardOutput.ReadToEnd();
+            p.WaitForExit();
             //MessageBox.Show(result);
-            reader.Close();
-            reader.Dispose();
+
             p.Close();
             p.Dispose();
-            Console.WriteLine("transltor result: " + result);
             return result;
         }
     }

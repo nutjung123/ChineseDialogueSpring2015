@@ -608,6 +608,19 @@ namespace Dialogue_Data_Entry
                 return null;
         }
 
+        public static string IatModeTranslate(string filename, int language_mode)
+        {
+            string login_configs = "appid = 55817bb6, work_dir =   .  ";//登录参数
+            string param1 = "sub=iat,auf=audio/L16;rate=16000,aue=speex-wb,ent=sms16k,rst=plain,rse=gb2312";
+            string param2 = "sub=iat,auf=audio/L16;rate=16000,aue=speex-wb,ent=sms-en16k,rst=plain,rse=gb2312";
+            if (language_mode == Constant.ChineseMode)
+                return TranslateVoiceFile(login_configs, param1, filename);
+            else if (language_mode == Constant.EnglishMode)
+                return TranslateVoiceFile(login_configs, param2, filename);
+            else
+                return null;
+        }
+
         public static void Begin_ProcessVoice(string text, string filename, string _params, string _login_configs)//合成声音
         {
             string login_configs = _login_configs;//登录参数
