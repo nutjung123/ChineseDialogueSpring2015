@@ -1,4 +1,4 @@
-# for python2
+# for python3
 
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
@@ -16,7 +16,7 @@ if(len(sys.argv) > 1):
 else:
     print("No words translated")
     exit()
-
-text_to_translate = text_to_translate.decode(sys.stdin.encoding or locale.getpreferredencoding(True)).encode('utf-8')
+    
+##text_to_translate = text_to_translate.decode(sys.stdin.encoding or locale.getpreferredencoding(True)).encode('utf-8')
 #print text_to_translate
 print(translate(text_to_translate,'en'))
