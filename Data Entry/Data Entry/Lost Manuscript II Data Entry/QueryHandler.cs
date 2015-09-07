@@ -349,12 +349,6 @@ namespace Dialogue_Data_Entry
             string r1 = "";
 			string r2 = "";
 
-
-            /*(old.getRelationshipNeighbor(newOld.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data))
-                            || newOld.getRelationshipNeighbor(old.Data).Equals(current.getRelationshipNeighbor(prevOfCurr.Data))
-                            || newOld.getRelationshipNeighbor(old.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data))
-                            || old.getRelationshipNeighbor(newOld.Data).Equals(current.getRelationshipNeighbor(prevOfCurr.Data))*/
-
 			//Check equivalent and similarity
 			bool found = false;
             bool directional = false;
@@ -414,45 +408,6 @@ namespace Dialogue_Data_Entry
 					found = true;
 				}
 			}
-
-			/*
-            else if (old.getRelationshipNeighbor(newOld.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data)))
-            {
-                a1 = old.Data;
-                b1 = newOld.Data;
-                a2 = prevOfCurr.Data;
-                b2 = current.Data;
-                r1 = old.getRelationshipNeighbor(newOld.Data);
-				r2 = prevOfCurr.getRelationshipNeighbor(current.Data);
-            }//end if
-            else if (newOld.getRelationshipNeighbor(old.Data).Equals(current.getRelationshipNeighbor(prevOfCurr.Data)))
-            {
-                a1 = newOld.Data;
-                b1 = old.Data;
-                a2 = current.Data;
-                b2 = prevOfCurr.Data;
-                r1 = newOld.getRelationshipNeighbor(old.Data);
-				r2 = current.getRelationshipNeighbor(prevOfCurr.Data);
-            }//end else if
-            else if (newOld.getRelationshipNeighbor(old.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data)))
-            {
-                a1 = newOld.Data;
-                b1 = old.Data;
-                a2 = prevOfCurr.Data;
-                b2 = current.Data;
-                r1 = newOld.getRelationshipNeighbor(old.Data);
-				r2 = prevOfCurr.getRelationshipNeighbor(current.Data);
-            }//end else if
-            else if (old.getRelationshipNeighbor(newOld.Data).Equals(current.getRelationshipNeighbor(prevOfCurr.Data)))
-            {
-                a1 = old.Data;
-                b1 = newOld.Data;
-                a2 = current.Data;
-                b2 = prevOfCurr.Data;
-                r1 = old.getRelationshipNeighbor(newOld.Data);
-				r2 = current.getRelationshipNeighbor (prevOfCurr.Data);
-            }//end else if
-            */
 
             //If there is a blank relationship, no analogy may be made.
 			if (r1.Equals("") || r2.Equals(""))
@@ -558,6 +513,44 @@ namespace Dialogue_Data_Entry
 
 			return return_message;
 		}
+
+        //Return information about the given node's neighbors
+        private string AdjacentNodeInfo(Feature current)
+        {
+            string return_string = " Also, ";
+
+            //Get n adjacent nodes randomly for the given node.
+            int n = 2;
+            List<Tuple<Feature, double, string>> neighbor_list = new List<Tuple<Feature, double, string>>();
+            
+            for (int i = 0; i < n; i++)
+            {
+                //Get a random neighbor's data that hasn't already
+                //been added to the list of neighbors' data.
+                int random_index = new Random().Next(current.Neighbors.Count);
+                Tuple<Feature, double, string> neighbor = current.Neighbors[random_index];
+                if (!neighbor_list.Contains(neighbor))
+                    neighbor_list.Add(neighbor);
+                else
+                    i -= 1;
+            }//end for
+
+            int neighbor_count = 0;
+            foreach (Tuple<Feature, double, string> neighbor_tuple in neighbor_list)
+            {
+                //LeadingTopic("current" node, node we just came from)
+                return_string += LeadingTopic(neighbor_tuple.Item1, current);
+                neighbor_count += 1;
+                if (neighbor_count == neighbor_list.Count - 1)
+                    return_string += ", and ";
+                else if (neighbor_count == neighbor_list.Count)
+                    return_string += ".";
+                else
+                    return_string += ", ";
+            }//end foreach
+
+            return return_string;
+        }//end method AdjacentNodeInfo
 
 		// Check to see if the name of the node is already mentioned in the speaks
 		public bool CheckAlreadyMentioned(Feature feat)
@@ -723,8 +716,11 @@ namespace Dialogue_Data_Entry
 
             }//end else
 
-
             String to_speak = return_message + speak;
+
+            //Add adjacent node info to the end of the message.
+            //
+            to_speak += AdjacentNodeInfo(feat);
 
             if (out_of_topic_response)
             {
