@@ -207,7 +207,10 @@ namespace Dialogue_Data_Entry
             no_analogy_relationships.Add("had");
         }
 
-		private string LeadingTopic(Feature last, Feature first)
+        //optional parameter for_additional_info, if set true, will avoid any actual leading statements
+        //except for relationship mentions. If no relationship mention can be made, then blank string
+        //is returned.
+		private string LeadingTopic(Feature last, Feature first, bool for_additional_info = false)
 		{
 			string return_message = "";
             
@@ -304,7 +307,12 @@ namespace Dialogue_Data_Entry
                     return return_message;
 				}//end else if
 			}//end if
-			// Neither neighbor or parent/child
+			// Neither neighbor or parent/child.
+            //If this is for additional info, return blank string; the two nodes
+            //are not neighbors or have a blank relationship.
+            if (for_additional_info)
+                return "";
+
 			// NEED TO consider novelty value (low)
 			//else if (last.getNeighbor(first.Data) == null || first.getNeighbor(last.Data) == null)
 
@@ -515,38 +523,54 @@ namespace Dialogue_Data_Entry
 		}
 
         //Return information about the given node's neighbors
-        private string AdjacentNodeInfo(Feature current)
+        private string AdjacentNodeInfo(Feature current, Feature last)
         {
-            string return_string = " Also, ";
+            string return_string = ""; //" Also, ";
 
             //Get n adjacent nodes randomly for the given node.
             int n = 2;
             List<Tuple<Feature, double, string>> neighbor_list = new List<Tuple<Feature, double, string>>();
-            
-            for (int i = 0; i < n; i++)
-            {
+
+            neighbor_list = current.Neighbors;
+
+            //for (int i = 0; i < n; i++)
+            //{
                 //Get a random neighbor's data that hasn't already
                 //been added to the list of neighbors' data.
-                int random_index = new Random().Next(current.Neighbors.Count);
-                Tuple<Feature, double, string> neighbor = current.Neighbors[random_index];
-                if (!neighbor_list.Contains(neighbor))
-                    neighbor_list.Add(neighbor);
-                else
-                    i -= 1;
-            }//end for
+                //int random_index = new Random().Next(current.Neighbors.Count);
+                //Tuple<Feature, double, string> neighbor = current.Neighbors[random_index];
+                //if (!neighbor_list.Contains(neighbor))
+                //    neighbor_list.Add(neighbor);
+                //else
+                //    i -= 1;
+            //}//end for
 
             int neighbor_count = 0;
-            foreach (Tuple<Feature, double, string> neighbor_tuple in neighbor_list)
+            String relationship_return = "";
+            foreach (Tuple<Feature, double, string> neighbor_tuple in current.Neighbors)
             {
                 //LeadingTopic("current" node, node we just came from)
-                return_string += LeadingTopic(neighbor_tuple.Item1, current);
+                //Don't do the node we just came from
+                if (neighbor_tuple.Item3.Equals(last.Data))
+                    continue;
+
+                relationship_return = LeadingTopic(neighbor_tuple.Item1, current);
+                if (relationship_return.Equals(""))
+                    continue;
+
+                return_string += relationship_return;
+
                 neighbor_count += 1;
-                if (neighbor_count == neighbor_list.Count - 1)
+                
+                if (neighbor_count == n - 1)
                     return_string += ", and ";
-                else if (neighbor_count == neighbor_list.Count)
+                else if (neighbor_count == n)
                     return_string += ".";
                 else
                     return_string += ", ";
+
+                if (neighbor_count == n)
+                    break;
             }//end foreach
 
             return return_string;
@@ -720,7 +744,7 @@ namespace Dialogue_Data_Entry
 
             //Add adjacent node info to the end of the message.
             //
-            to_speak += AdjacentNodeInfo(feat);
+            to_speak += AdjacentNodeInfo(feat, last);
 
             if (out_of_topic_response)
             {
