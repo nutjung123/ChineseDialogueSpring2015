@@ -558,16 +558,14 @@ namespace Dialogue_Data_Entry
                 if (relationship_return.Equals(""))
                     continue;
 
+                if (neighbor_count == n - 1)
+                    return_string += ", and ";
+                else if (neighbor_count != 0)
+                    return_string += ", ";
+
                 return_string += relationship_return;
 
                 neighbor_count += 1;
-                
-                if (neighbor_count == n - 1)
-                    return_string += ", and ";
-                else if (neighbor_count == n)
-                    return_string += ".";
-                else
-                    return_string += ", ";
 
                 if (neighbor_count == n)
                     break;
