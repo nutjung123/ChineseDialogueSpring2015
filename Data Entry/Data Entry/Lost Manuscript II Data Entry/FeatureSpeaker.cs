@@ -51,6 +51,7 @@ namespace Dialogue_Data_Entry
             }
             this.featGraph = featG;
             expectedDramaticV = new double[20] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
+            setPartialOrderConstraints();
         }
 
         public FeatureSpeaker(FeatureGraph featG, List<TemporalConstraint> myTemporalConstraintList,string prevSpatial,List<string> topicH)
@@ -68,6 +69,7 @@ namespace Dialogue_Data_Entry
             this.topicHistory = new List<string>(topicH);
             //define dramaticFunction manually here
             expectedDramaticV = new double[20] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
+            setPartialOrderConstraints();
         }
 
         private void setFilterNodes()
@@ -102,6 +104,19 @@ namespace Dialogue_Data_Entry
             filter_nodes.Add("Aug. 22nd, 2008");
             filter_nodes.Add("Aug. 23rd, 2008");
         }//end method setFilterNodes
+
+        //Set the partial order constraints for each feature
+        private void setPartialOrderConstraints()
+        {
+            List<string> feature_data = featGraph.getFeatureNames();
+            //Go through each feature and add its parents' data as constraints
+            //in the feature graph.
+            foreach (string temp_data in feature_data)
+            {
+                featGraph.setPartialOrderConstraints(temp_data
+                    , featGraph.getFeature(temp_data).getParentData());
+            }//end foreach
+        }//end method setPartialOrderConstraints
 
         //call this function with height =-1;
         private void getHeight(Feature current, Feature target, int h, bool[] checkEntry, ref int height)
@@ -519,81 +534,6 @@ namespace Dialogue_Data_Entry
             return_array[Constant.ScoreArrayHierarchyIndex] = hierachyConstraintValue;
 
             return return_array;
-
-            /*double score = 0;
-            int currentIndex = featGraph.getFeatureIndex(current.Data);
-
-            //Get the weights from the graph.
-            double[] weight_array = featGraph.getWeightArray();
-            double discussAmountW = weight_array[0];
-            double noveltyW = weight_array[1];
-            double spatialConstraintW = weight_array[2];
-            double hierachyConstraintW = weight_array[3];
-
-            // novelty
-
-            double noveltyValue = calculateNovelty(current, oldTopic);
-
-            //getting novelty information
-            if (currentNovelty != null)
-            {
-                currentNovelty[currentIndex] = noveltyValue;
-            }
-
-            //spatial Constraint
-            double spatialConstraintValue = 0.0;
-            if (spatialConstraint(current, oldTopic))
-            {
-                spatialConstraintValue = 1.0;
-            }
-            //hierachy Constraint
-            double hierachyConstraintValue = 0.0;
-            if (hierachyConstraint(current, oldTopic))
-            {
-                hierachyConstraintValue = 1.0;
-            }
-
-            //check mentionCount
-            float DiscussedAmount = current.DiscussedAmount;
-
-            score += (DiscussedAmount * discussAmountW);
-            score += (Math.Abs(expectedDramaticV[currentTurn % expectedDramaticV.Count()] - noveltyValue) * noveltyW);
-            score += spatialConstraintValue * spatialConstraintW;
-            score += hierachyConstraintValue * hierachyConstraintW;
-
-            if (printCalculation)
-            {
-                System.Console.WriteLine("Have been addressed before: " + DiscussedAmount);
-                System.Console.WriteLine("Spatial Constraint Satisfied: " + spatialConstraintValue);
-                System.Console.WriteLine("Hierachy Constraint Satisfied: " + hierachyConstraintValue);
-
-                string scoreFormula = "";
-                scoreFormula += "score = Have Been Addressed * " + discussAmountW + " + abs(expectedDramaticV[" + currentTurn + "] - dramaticValue)*" + noveltyW;
-                scoreFormula += " + spatialConstraint*" + spatialConstraintW;
-                scoreFormula += " + hierachyConstraint*" + hierachyConstraintW;
-                scoreFormula += " = " + score;
-                System.Console.WriteLine(scoreFormula);
-            }
-
-            //Store score components, and score, in return array.
-            //Indices are as follows:
-            //0 = score
-            //1 = novelty
-            //2 = discussed amount
-            //3 = expected dramatic value
-            //4 = spatial constraint value
-            //5 = hierarchy constraint value
-            double[] return_array = new double[Constant.ScoreArraySize];
-
-            //NOTE: Weights are NOT included.
-            return_array[Constant.ScoreArrayScoreIndex] = score;
-            return_array[Constant.ScoreArrayNoveltyIndex] = noveltyValue;
-            return_array[Constant.ScoreArrayDiscussedAmountIndex] = DiscussedAmount;
-            return_array[Constant.ScoreArrayExpectedDramaticIndex] = expectedDramaticV[currentTurn % expectedDramaticV.Count()];
-            return_array[Constant.ScoreArraySpatialIndex] = spatialConstraintValue;
-            return_array[Constant.ScoreArrayHierarchyIndex] = hierachyConstraintValue;
-
-            return return_array;*/
         }//End method calculateScoreComponents
 
         //BFS to travel the whole graph
@@ -736,6 +676,27 @@ namespace Dialogue_Data_Entry
                             Console.WriteLine("Filtering out " + listScore[x].Item1.Data);
                             continue;
                         }//end if
+
+                        //PARTIAL ORDER CONSTRAINTS:
+                        //Check whether this node's constraints are fulfilled.
+                        //If not, do not include it for consideration as the next node.
+                        //First, get the constraints for this node.
+                        List<string> constraints = featGraph.getPartialOrderConstraints(listScore[x].Item1.Data);
+                        bool parent_appears = false;
+                        //Go through each parent name on the list.
+                        foreach (string temp_data in constraints)
+                        {
+                            //Check if it appears in the topic history list.
+                            if (topicHistory.Contains(temp_data))
+                            {
+                                parent_appears = true;
+                            }//end if
+                        }//end foreach
+                        //If at least one parent appears in the history list, we
+                        //may traverse to this node.
+                        //Otherwise, we must reject the node as a candidate.
+                        if (!parent_appears)
+                            continue;
 
                         maxScore = listScore[x].Item2;
                         maxIndex = x;

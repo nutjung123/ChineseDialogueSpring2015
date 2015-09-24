@@ -115,6 +115,41 @@ namespace Dialogue_Data_Entry
             return true;
         }
 
+        // This function is used to get a Feature that is a parent of this Feature, it takes a string and preforms a binary search over the list
+        public Feature getParent(string data)
+        {
+            int imax = parents.Count - 1;
+            int imin = 0;
+            while (imax >= imin)
+            {
+                int imid = (imax + imin) / 2;
+                if (String.Compare(parents[imid].Item1.Data, data) < 0)
+                {
+                    imin = imid + 1;
+                }
+                else if (String.Compare(parents[imid].Item1.Data, data) > 0)
+                {
+                    imax = imid - 1;
+                }
+                else
+                {
+                    return parents[imin].Item1;
+                }
+            }
+            return null;
+        } //end getParent
+        //Return a list of all of this feature's parents' string data
+        public List<string> getParentData()
+        {
+            List<string> return_list = new List<string>();
+
+            foreach (Tuple<Feature, double, string> temp_tuple in parents)
+            {
+                return_list.Add(temp_tuple.Item1.data);
+            }//end foreach
+
+            return return_list;
+        }//end method getParentData
         public bool addParent(Feature parent, double weight = 1.0, string relationship = "")
         {
             if (parents.Count == 0)

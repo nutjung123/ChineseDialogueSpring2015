@@ -1,0 +1,73 @@
+<AIMind>
+<Root id="0"/>
+<Feature id="0" data="IDLE">
+<neighbor dest="1" weight="0" relationship=""/>
+<neighbor dest="2" weight="0" relationship=""/>
+<speak value="Some sort of idle chatter here"/>
+</Feature>
+<Feature id="1" data="TalkToBoss">
+<neighbor dest="3" weight="0" relationship=""/>
+<parent dest="0" weight="0" relationship=""/>
+<speak value="Talk to boss"/>
+</Feature>
+<Feature id="2" data="FixUpBar">
+<neighbor dest="3" weight="0" relationship=""/>
+<parent dest="0" weight="0" relationship=""/>
+<speak value="Fix up bar"/>
+</Feature>
+<Feature id="3" data="ChitChat">
+<neighbor dest="4" weight="0" relationship=""/>
+<parent dest="1" weight="0" relationship=""/>
+<parent dest="2" weight="0" relationship=""/>
+<speak value="Chit-chat"/>
+</Feature>
+<Feature id="4" data="Opener">
+<neighbor dest="5" weight="0" relationship=""/>
+<neighbor dest="6" weight="0" relationship=""/>
+<neighbor dest="7" weight="0" relationship=""/>
+<parent dest="3" weight="0" relationship=""/>
+<speak value="Some opener"/>
+</Feature>
+<Feature id="5" data="BarTenderType">
+<neighbor dest="8" weight="0" relationship=""/>
+<parent dest="4" weight="0" relationship=""/>
+<speak value="Bar tender type"/>
+</Feature>
+<Feature id="6" data="MusicType">
+<neighbor dest="8" weight="0" relationship=""/>
+<parent dest="4" weight="0" relationship=""/>
+<speak value="Music type"/>
+</Feature>
+<Feature id="7" data="Hobby">
+<neighbor dest="8" weight="0" relationship=""/>
+<parent dest="4" weight="0" relationship=""/>
+<speak value="Hobby"/>
+</Feature>
+<Feature id="8" data="FollowUp">
+<neighbor dest="9" weight="0" relationship=""/>
+<neighbor dest="10" weight="0" relationship=""/>
+<neighbor dest="11" weight="0" relationship=""/>
+<parent dest="5" weight="0" relationship=""/>
+<parent dest="6" weight="0" relationship=""/>
+<parent dest="7" weight="0" relationship=""/>
+<speak value="Follow up"/>
+</Feature>
+<Feature id="9" data="SelfDisclosure">
+<neighbor dest="10" weight="0" relationship=""/>
+<neighbor dest="11" weight="0" relationship=""/>
+<parent dest="8" weight="0" relationship=""/>
+<speak value="Self-disclosure"/>
+</Feature>
+<Feature id="10" data="ExtraStatement">
+<neighbor dest="11" weight="0" relationship=""/>
+<parent dest="8" weight="0" relationship=""/>
+<parent dest="9" weight="0" relationship=""/>
+<speak value="Extra statement"/>
+</Feature>
+<Feature id="11" data="Payoff">
+<parent dest="8" weight="0" relationship=""/>
+<parent dest="9" weight="0" relationship=""/>
+<parent dest="10" weight="0" relationship=""/>
+<speak value="Payoff"/>
+</Feature>
+</AIMind>

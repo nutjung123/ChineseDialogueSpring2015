@@ -21,6 +21,15 @@ namespace Dialogue_Data_Entry
         //  3 - hierarchy constraint weight
         private double[] weight_array;
 
+        //Partial Order Constraint list
+        //Each constraint is a tuple.
+        //The first element is the string data of the feature that
+        //the constraint is for.
+        //The second element is a list of string data for the feature(s)
+        //that must have been visited prior to visiting the feature
+        //in the first element.
+        private List<Tuple<string, List<string>>> partial_order_constraints;
+
         public FeatureGraph()
         {
             features = new List<Feature>();
@@ -41,6 +50,8 @@ namespace Dialogue_Data_Entry
             weight_array[Constant.TemporalWeightIndex] = 0.2;
             //joint weight relates to mentioning nodes together
             weight_array[Constant.JointWeightIndex] = 100.0f;
+
+            partial_order_constraints = new List<Tuple<string, List<string>>>();
         }
 
         private void helperMaxDepthDSF(Feature current, int depth, bool[] checkEntry)
@@ -480,5 +491,43 @@ namespace Dialogue_Data_Entry
         {
             get { return this.features; }
         }
+
+        //NOTE: Overwrites existing constraints for the data.
+        public void setPartialOrderConstraints(string data, List<string> constraints)
+        {
+            //First, check if there is already an entry for the data.
+            bool already_exists = false;
+            Tuple<string, List<string>> temp_tuple = null;
+            foreach (Tuple<string, List<string>> poc_tuple in partial_order_constraints)
+            {
+                if (poc_tuple.Item1.Equals(data))
+                {
+                    already_exists = true;
+                    temp_tuple = poc_tuple;
+                }//end if
+            }//end foreach
+            //If there is already an entry, remove it
+            if (already_exists)
+                partial_order_constraints.Remove(temp_tuple);
+
+            //Add a new tuple to the partial order constraint list
+            partial_order_constraints.Add(new Tuple<string, List<string>>(data, constraints));
+        }//end method setPartialOrderConstraints
+        //Get a list of constraints for a given feature
+        public List<string> getPartialOrderConstraints(string data)
+        {
+            //Find the constraint list corresponding to the given string data
+            foreach (Tuple<string, List<string>> poc_tuple in partial_order_constraints)
+            {
+                //If there are constraints for the string data, return them
+                if (poc_tuple.Item1.Equals(data))
+                    return poc_tuple.Item2;
+            }//end foreach
+
+            //Otherwise, return an empty list
+            Console.WriteLine("No constraints found for " + data + ", returning null");
+            return new List<string>();
+        }//end method getPartialOrderConstraints
+
     }
 }
