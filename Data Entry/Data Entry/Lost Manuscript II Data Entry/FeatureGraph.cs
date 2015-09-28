@@ -30,6 +30,11 @@ namespace Dialogue_Data_Entry
         //in the first element.
         private List<Tuple<string, List<string>>> partial_order_constraints;
 
+        //A list of constraints for the system.
+        //Each constraint consists of the name of the feature the node is for
+        //and a list of clauses AND or OR with each other.
+        private List<Tuple<string, List<Clause>>> constraint_list;
+
         public FeatureGraph()
         {
             features = new List<Feature>();
@@ -529,5 +534,151 @@ namespace Dialogue_Data_Entry
             return new List<string>();
         }//end method getPartialOrderConstraints
 
+        //Add a new constraint to the constraint list
+        public void addConstraint(Tuple<string, List<Clause>> new_constraint)
+        {
+            constraint_list.Add(new_constraint);
+        }//end method addConstraint
+        //Add a new constraint to the constraint list
+        public void addConstraint(string feature, string constraint)
+        {
+            
+        }//end method addConstraint
+
+        //Clear all constraints
+        public void clearConstraints()
+        {
+            constraint_list.Clear();
+        }//end method clearConstraints
+
+        //Get a list of feature names for which the constraints are satisfied.
+        //Base this off of an input list of features that have been traversed.
+        public List<string> getSatisfiedFeatures(List<string> history_list)
+        {
+            List<string> return_list = new List<string>();
+
+            //Go through each constraint
+            string current_feature = "";
+            List<Clause> temp_clause_list = new List<Clause>();
+            foreach (Tuple<string, List<Clause>> constraint in constraint_list)
+            {
+                //Pull out each item
+                current_feature = constraint.Item1;
+                temp_clause_list = constraint.Item2;
+
+                bool constraint_true = true;
+
+                //If there is only one clause, just check it.
+                if (temp_clause_list.Count == 1)
+                {
+                    constraint_true = evaluateClause(temp_clause_list[0], history_list);
+                }//end if
+                else
+                {
+                    //Go through and "fold up" the clauses to determine if the entire constraint is true or false.
+                    bool previous_result = true;
+                    for (int i = 0; i < temp_clause_list.Count; i++)
+                    {
+                        //If this is the first clause, check it alone.
+                        if (i == 0)
+                        {
+                            previous_result = evaluateClause(temp_clause_list[0], history_list);
+                            continue;
+                        }//end if
+
+                        //For any other clause, check it against the previous result to determine 
+                        //the total result.
+                        //If their relationship is an AND, both clauses must be true.
+                        if (temp_clause_list[i].getOuterRelationshipId() == 0)
+                        {
+                            if (previous_result && evaluateClause(temp_clause_list[i], history_list))
+                                previous_result = true;
+                            else
+                                previous_result = false;
+                        }//end if
+                        //If their relationship is an OR, at least one clause must be true.
+                        else if (temp_clause_list[i].getOuterRelationshipId() == 1)
+                        {
+                            if (previous_result || evaluateClause(temp_clause_list[i], history_list))
+                                previous_result = true;
+                            else
+                                previous_result = false;
+                        }//end if
+                    }//end for
+
+                    //previous_result now tells us whether the constraint is true or false
+                    constraint_true = previous_result;
+                }//end else
+
+                //If the constraint is true, add the name of this feature
+                //to the return list (if it is not already there).
+                if (constraint_true)
+                {
+
+                }//end if
+
+            }//end foreach
+
+            return return_list;
+        }//end method getConstraints
+
+        //Decide whether a clause is true or false based on the clause and a feature history list.
+        private bool evaluateClause(Clause input_clause, List<string> history_list)
+        {
+            //Determine whether the clause is true or false.
+            bool clause_true = false;
+            //ID = 0 is A > B, which means A must be later than B
+            //ID = 1 is A < B, which means A must be sooner than B
+            //See which of the names in the clause appears in the history list first.
+            int name_1_index = history_list.IndexOf(input_clause.getName1());
+            int name_2_index = history_list.IndexOf(input_clause.getName2());
+
+            if (input_clause.getInnerRelationshipId() == 0)
+            {
+                //The first name must be later than the second name
+                //If the second name doesn't appear at all, this clause if false.
+                if (name_2_index == -1)
+                {
+                    clause_true = false;
+                }//end if
+                //If the first name doesn't appear at all and the second one does, this clause is true.
+                else if (name_1_index == -1)
+                {
+                    clause_true = true;
+                }//end if
+                //If the second name has a lesser index than the first, this clause is true.
+                else if (name_2_index < name_1_index)
+                {
+                    clause_true = true;
+                }//end else if
+                //Otherwise, the clause if false
+                else
+                    clause_true = false;
+            }//end if
+            else if (input_clause.getInnerRelationshipId() == 1)
+            {
+                //The second name must be later than the first.
+                //If the first name doesn't appear at all, this clause if false.
+                if (name_1_index == -1)
+                {
+                    clause_true = false;
+                }//end if
+                //If the second name doesn't appear at all and the first one does, this clause is true.
+                else if (name_2_index == -1)
+                {
+                    clause_true = true;
+                }//end if
+                //If the first name has a lesser index than the second, this clause is true.
+                else if (name_1_index < name_2_index)
+                {
+                    clause_true = true;
+                }//end else if
+                //Otherwise, the clause is false
+                else
+                    clause_true = false;
+            }//end else if
+
+            return clause_true;
+        }//end method evaluateClause
     }
 }

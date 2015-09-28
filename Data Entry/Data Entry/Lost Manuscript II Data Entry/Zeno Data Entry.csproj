@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Clause.cs" />
     <Compile Include="Constant.cs" />
     <Compile Include="QueryHandler.cs" />
     <Compile Include="SynchronousSocketClient.cs" />
