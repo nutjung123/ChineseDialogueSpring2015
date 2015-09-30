@@ -19,10 +19,17 @@ namespace Dialogue_Data_Entry
         //Inner relationships:
         //  A > B, A later than B, is id 0
         //  A < B, A before B, is id 1
+        //  Truth relationship, T, is id 2.
+        //      For A T to be true, A has to have appeared in
+        //      the history list at least once. B doesn't matter.
 
         //Outer relationships:
         // C1 V C2, C1 AND C2, is id 0
         // C1 ^ C2, C1 OR C2, is id 1
+
+        //Negation:
+        //If the NOT boolean is TRUE, then any condition
+        //whethere this clause would be TRUE it is now FALSE.
 
         private string name_1;
         private string name_2;
@@ -63,6 +70,10 @@ namespace Dialogue_Data_Entry
         {
             return outer_relationship_id;
         }//end method getOuterRelationshipId
+        public bool getNot()
+        {
+            return not;
+        }//end method getNot
 
         //Mutators
         public void setName1(string n1)
@@ -81,5 +92,9 @@ namespace Dialogue_Data_Entry
         {
             outer_relationship_id = outer_rel_id;
         }//end method setOuterRelationshipId
+        public void setNot(bool n)
+        {
+            not = n;
+        }//end method setNot
     }
 }

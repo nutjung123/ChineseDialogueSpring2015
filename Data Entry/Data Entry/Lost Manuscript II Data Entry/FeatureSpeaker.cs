@@ -108,14 +108,27 @@ namespace Dialogue_Data_Entry
         //Set the partial order constraints for each feature
         private void setPartialOrderConstraints()
         {
-            List<string> feature_data = featGraph.getFeatureNames();
+            //Hard-coded constraints, based on the bartender XML file.
+
+            
+            /*List<string> feature_data = featGraph.getFeatureNames();
             //Go through each feature and add its parents' data as constraints
             //in the feature graph.
+
             foreach (string temp_data in feature_data)
             {
-                featGraph.setPartialOrderConstraints(temp_data
-                    , featGraph.getFeature(temp_data).getParentData());
-            }//end foreach
+                //Tuple<string, List<Clause>> new_constraint
+                //Make a simple Truth clause for each parent.
+                List<Clause> temp_clauses = new List<Clause>();
+                foreach (string parent_data in featGraph.getFeature(temp_data).getParentData())
+                {
+                    //public Clause(string n1, string n2, int in_rel_id, int out_rel_id, bool n)
+                    temp_clauses.Add(new Clause(parent_data, "", ));
+                }//end foreach
+
+                //featGraph.addConstraint(new Tuple<string, List<Clause>>(temp_data, ));
+
+            }//end foreach*/
         }//end method setPartialOrderConstraints
 
         //call this function with height =-1;

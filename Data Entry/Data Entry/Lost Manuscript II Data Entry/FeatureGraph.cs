@@ -534,12 +534,12 @@ namespace Dialogue_Data_Entry
             return new List<string>();
         }//end method getPartialOrderConstraints
 
-        //Add a new constraint to the constraint list
+        //Add a new constraint to the constraint list.
         public void addConstraint(Tuple<string, List<Clause>> new_constraint)
         {
             constraint_list.Add(new_constraint);
         }//end method addConstraint
-        //Add a new constraint to the constraint list
+        //Add a new constraint to the constraint list by parsing it as a string.
         public void addConstraint(string feature, string constraint)
         {
             
@@ -612,9 +612,11 @@ namespace Dialogue_Data_Entry
 
                 //If the constraint is true, add the name of this feature
                 //to the return list (if it is not already there).
+                //It is elligible for selection.
                 if (constraint_true)
                 {
-
+                    if (!return_list.Contains(constraint.Item1))
+                        return_list.Add(constraint.Item1);
                 }//end if
 
             }//end foreach
@@ -633,8 +635,12 @@ namespace Dialogue_Data_Entry
             int name_1_index = history_list.IndexOf(input_clause.getName1());
             int name_2_index = history_list.IndexOf(input_clause.getName2());
 
-            if (input_clause.getInnerRelationshipId() == 0)
+            int inner_rel_id = input_clause.getInnerRelationshipId();
+
+            if (inner_rel_id == 0)
             {
+                //relationship A > B
+
                 //The first name must be later than the second name
                 //If the second name doesn't appear at all, this clause if false.
                 if (name_2_index == -1)
@@ -655,8 +661,10 @@ namespace Dialogue_Data_Entry
                 else
                     clause_true = false;
             }//end if
-            else if (input_clause.getInnerRelationshipId() == 1)
+            else if (inner_rel_id == 1)
             {
+                //relationship A < B
+
                 //The second name must be later than the first.
                 //If the first name doesn't appear at all, this clause if false.
                 if (name_1_index == -1)
@@ -677,6 +685,31 @@ namespace Dialogue_Data_Entry
                 else
                     clause_true = false;
             }//end else if
+            else if (inner_rel_id == 2)
+            {
+                //relationship A true
+
+                //The first name must have appeared at all in the history list.
+                //If the first name doesn't appear at all, this clause is false.
+                if (name_1_index == -1)
+                {
+                    clause_true = false;
+                }//end if
+                //Otherwise, this clause is true.
+                else
+                {
+                    clause_true = true;
+                }//end else
+            }//end else if
+
+            //If the clause is negated, negate it here.
+            if (input_clause.getNot())
+            {
+                if (clause_true)
+                    clause_true = false;
+                else
+                    clause_true = true;
+            }//end if
 
             return clause_true;
         }//end method evaluateClause
