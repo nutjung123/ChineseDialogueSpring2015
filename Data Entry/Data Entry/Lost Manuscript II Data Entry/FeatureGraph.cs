@@ -33,7 +33,7 @@ namespace Dialogue_Data_Entry
         //A list of constraints for the system.
         //Each constraint consists of the name of the feature the node is for
         //and a list of clauses AND or OR with each other.
-        private List<Tuple<string, List<Clause>>> constraint_list;
+        public List<Constraint> constraint_list;
 
         public FeatureGraph()
         {
@@ -57,6 +57,7 @@ namespace Dialogue_Data_Entry
             weight_array[Constant.JointWeightIndex] = 100.0f;
 
             partial_order_constraints = new List<Tuple<string, List<string>>>();
+            constraint_list = new List<Constraint>();
         }
 
         private void helperMaxDepthDSF(Feature current, int depth, bool[] checkEntry)
@@ -535,7 +536,7 @@ namespace Dialogue_Data_Entry
         }//end method getPartialOrderConstraints
 
         //Add a new constraint to the constraint list.
-        public void addConstraint(Tuple<string, List<Clause>> new_constraint)
+        public void addConstraint(Constraint new_constraint)
         {
             constraint_list.Add(new_constraint);
         }//end method addConstraint
@@ -560,11 +561,11 @@ namespace Dialogue_Data_Entry
             //Go through each constraint
             string current_feature = "";
             List<Clause> temp_clause_list = new List<Clause>();
-            foreach (Tuple<string, List<Clause>> constraint in constraint_list)
+            foreach (Constraint constraint in constraint_list)
             {
                 //Pull out each item
-                current_feature = constraint.Item1;
-                temp_clause_list = constraint.Item2;
+                current_feature = constraint.name;
+                temp_clause_list = constraint.clauses;
 
                 bool constraint_true = true;
 
@@ -615,8 +616,10 @@ namespace Dialogue_Data_Entry
                 //It is elligible for selection.
                 if (constraint_true)
                 {
-                    if (!return_list.Contains(constraint.Item1))
-                        return_list.Add(constraint.Item1);
+                    //Also check if the node is already in the history list; no repeats allowed.
+                    if (!return_list.Contains(constraint.name)
+                        && !history_list.Contains(constraint.name))
+                        return_list.Add(constraint.name);
                 }//end if
 
             }//end foreach

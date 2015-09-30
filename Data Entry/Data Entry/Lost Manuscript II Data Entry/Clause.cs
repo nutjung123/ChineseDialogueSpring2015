@@ -6,7 +6,7 @@ using System.Text;
 namespace Dialogue_Data_Entry
 {
     //A clause in a constraint.
-    class Clause
+    public class Clause
     {
         //A clause consists of two feature names, the relationship
         //between them, and the clause's relationship to other clauses.

@@ -109,26 +109,127 @@ namespace Dialogue_Data_Entry
         private void setPartialOrderConstraints()
         {
             //Hard-coded constraints, based on the bartender XML file.
+            //IDLE first node
+            //TalkToBoss and FixUpBar follow IDLE
+            //TalkToBoss = (IDLE) ^ !(FixUpBar)
+            Constraint talk_to_boss_constraint
+                = new Constraint(
+                    "TalkToBoss"
+                    , new List<Clause>() {
+                        new Clause("IDLE", "", 2, -1, false)
+                        , new Clause("FixUpBar", "", 2, 0, true)
+                        });
+            //FixUpBar = (IDLE) ^ !(TalkToBoss)
+            Constraint fix_up_bar_constraint
+                = new Constraint(
+                    "FixUpBar"
+                    , new List<Clause>() {
+                        new Clause("IDLE", "", 2, -1, false)
+                        , new Clause("TalkToBoss", "", 2, 0, true)
+                        });
 
-            
-            /*List<string> feature_data = featGraph.getFeatureNames();
-            //Go through each feature and add its parents' data as constraints
-            //in the feature graph.
+            //ChitChat comes after either TalkToBoss or FixUpBar
+            //ChitChat = (TalkToBoss) V (FixUpBar)
+            Constraint chit_chat_constraint
+                = new Constraint(
+                    "ChitChat"
+                    , new List<Clause> {
+                        new Clause("TalkToBoss", "", 2, -1, false)
+                        , new Clause("FixUpBar", "", 2, 1, false)
+                        });
 
-            foreach (string temp_data in feature_data)
-            {
-                //Tuple<string, List<Clause>> new_constraint
-                //Make a simple Truth clause for each parent.
-                List<Clause> temp_clauses = new List<Clause>();
-                foreach (string parent_data in featGraph.getFeature(temp_data).getParentData())
-                {
-                    //public Clause(string n1, string n2, int in_rel_id, int out_rel_id, bool n)
-                    temp_clauses.Add(new Clause(parent_data, "", ));
-                }//end foreach
+            //Opener comes after only ChitChat
+            //Opener = (ChitChat)
+            Constraint opener_constraint
+                = new Constraint(
+                    "Opener"
+                    , new List<Clause> {
+                        new Clause("ChitChat", "", 2, -1, false)
+                        });
 
-                //featGraph.addConstraint(new Tuple<string, List<Clause>>(temp_data, ));
+            //Either BarTenderType, MusicType, or Hobby can come after Opener
+            //BarTenderType = (Opener) ^ !(MusicType) ^ !(Hobby)
+            Constraint bar_tender_type_constraint
+                = new Constraint(
+                    "BarTenderType"
+                    , new List<Clause> {
+                         new Clause("Opener", "", 2, -1, false)
+                         , new Clause("MusicType", "", 2, 0, true)
+                         , new Clause("Hobby", "", 2, 0, true)
+                         });
+            //MusicType = (Opener) ^ !(BarTenderType) ^ !(Hobby)
+            Constraint music_type_constraint
+                = new Constraint(
+                    "MusicType"
+                    , new List<Clause> {
+                         new Clause("Opener", "", 2, -1, false)
+                         , new Clause("BarTenderType", "", 2, 0, true)
+                         , new Clause("Hobby", "", 2, 0, true)
+                         });
+            //Hobby = (Opener) ^ !(BarTenderType) ^ !(MusicType)
+            Constraint hobby_constraint
+                = new Constraint(
+                    "Hobby"
+                    , new List<Clause> {
+                         new Clause("Opener", "", 2, -1, false)
+                         , new Clause("BarTenderType", "", 2, 0, true)
+                         , new Clause("MusicType", "", 2, 0, true)
+                         });
 
-            }//end foreach*/
+            //FollowUp follows after either BarTenderType, MusicType, or Hobby
+            //FollowUp = (BarTenderType) V (MusicType) V (Hobby)
+            Constraint follow_up_constraint
+                = new Constraint(
+                    "FollowUp"
+                    , new List<Clause> {
+                         new Clause("BarTenderType", "", 2, -1, false)
+                         , new Clause("MusicType", "", 2, 1, false)
+                         , new Clause("Hobby", "", 2, 1, false)
+                         });
+
+            //SelfDisclosure can come after FollowUp, but not after ExtraStatement or Payoff
+            //SelfDisclosure = (FollowUp) ^ !(ExtraStatement) ^ !(Payoff)
+            Constraint self_disclosure_constraint
+                = new Constraint(
+                    "SelfDisclosure"
+                    , new List<Clause> {
+                         new Clause("FollowUp", "", 2, -1, false)
+                         , new Clause("ExtraStatement", "", 2, 0, true)
+                         , new Clause("Payoff", "", 2, 0, true)
+                         });
+
+            //ExtraStatement can come after FollowUp or SelfDisclosure, but not after Payoff
+            //ExtraStatement = (FollowUp) V (SelfDisclosure) ^ !(Payoff)
+            Constraint extra_statement_constraint
+                = new Constraint(
+                    "ExtraStatement"
+                    , new List<Clause> {
+                         new Clause("FollowUp", "", 2, -1, false)
+                         , new Clause("SelfDisclosure", "", 2, 1, false)
+                         , new Clause("Payoff", "", 2, 0, true)
+                         });
+
+            //Payoff can come after FollowUp or ExtraStatement. It is also the last node.
+            //Payoff = (FollowUp) V (ExtraStatement)
+            Constraint payoff_constraint
+                = new Constraint(
+                    "Payoff"
+                    , new List<Clause> {
+                         new Clause("FollowUp", "", 2, -1, false)
+                         , new Clause("ExtraStatement", "", 2, 1, false)
+                         });
+
+            featGraph.addConstraint(talk_to_boss_constraint);
+            featGraph.addConstraint(fix_up_bar_constraint);
+            featGraph.addConstraint(chit_chat_constraint);
+            featGraph.addConstraint(opener_constraint);
+            featGraph.addConstraint(bar_tender_type_constraint);
+            featGraph.addConstraint(music_type_constraint);
+            featGraph.addConstraint(hobby_constraint);
+            featGraph.addConstraint(follow_up_constraint);
+            featGraph.addConstraint(self_disclosure_constraint);
+            featGraph.addConstraint(extra_statement_constraint);
+            featGraph.addConstraint(payoff_constraint);
         }//end method setPartialOrderConstraints
 
         //call this function with height =-1;
@@ -673,6 +774,12 @@ namespace Dialogue_Data_Entry
                 {
                     return null;
                 }
+
+                //CONSTRAINT CHECKING:
+                //Find all feature names that are candidates for selection by
+                //checking their constraints.
+                List<string> candidate_feature_names = featGraph.getSatisfiedFeatures(topicHistory);
+
                 double maxScore = listScore[0].Item2;
                 int maxIndex = 0;
                 for (int x = 1; x < listScore.Count; x++)
@@ -690,26 +797,12 @@ namespace Dialogue_Data_Entry
                             continue;
                         }//end if
 
-                        //PARTIAL ORDER CONSTRAINTS:
-                        //Check whether this node's constraints are fulfilled.
-                        //If not, do not include it for consideration as the next node.
-                        //First, get the constraints for this node.
-                        List<string> constraints = featGraph.getPartialOrderConstraints(listScore[x].Item1.Data);
-                        bool parent_appears = false;
-                        //Go through each parent name on the list.
-                        foreach (string temp_data in constraints)
+                        //CONSTRAINT CHECKING:
+                        //If the node does not appear as a candidate for selection, skip over it.
+                        if (!candidate_feature_names.Contains(listScore[x].Item1.Data))
                         {
-                            //Check if it appears in the topic history list.
-                            if (topicHistory.Contains(temp_data))
-                            {
-                                parent_appears = true;
-                            }//end if
-                        }//end foreach
-                        //If at least one parent appears in the history list, we
-                        //may traverse to this node.
-                        //Otherwise, we must reject the node as a candidate.
-                        if (!parent_appears)
                             continue;
+                        }//end if
 
                         maxScore = listScore[x].Item2;
                         maxIndex = x;
