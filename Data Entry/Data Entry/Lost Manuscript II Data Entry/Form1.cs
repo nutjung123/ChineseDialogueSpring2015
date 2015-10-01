@@ -37,7 +37,8 @@ namespace Dialogue_Data_Entry
         //private string defaultFilename = @"\2008_Summer_Olympic_Games_4th_simple_tag.xml";
         //private string defaultFilename = @"\2008_Summer_Olympic_Games_4th_tag10.xml";
         //private string defaultFilename = @"\2008_Summer_Olympic_Games_4th_revised.xml";
-        private string defaultFilename = @"\2008_Summer_Olympic_Games_4th_tag_complex_chinese_new.xml";
+        //private string defaultFilename = @"\2008_Summer_Olympic_Games_4th_tag_complex_chinese_new.xml";
+        private string defaultFilename = @"\empac_xml.xml";
         private string constraintFilename = @"\constraint.txt";
 
         public Form1()

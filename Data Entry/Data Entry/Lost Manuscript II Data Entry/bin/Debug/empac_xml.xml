@@ -1,0 +1,264 @@
+<AIMind>
+<Root id="0"/>
+<Feature id="0" data="EMPAC Floor plan">
+<neighbor dest="1" weight="0" relationship=" "/>
+<neighbor dest="2" weight="0" relationship=" "/>
+<speak value=""/>
+</Feature>
+<Feature id="1" data="EMPAC Exterior">
+<neighbor dest="0" weight="0" relationship=" "/>
+<neighbor dest="3" weight="0" relationship=" "/>
+<neighbor dest="4" weight="0" relationship=" "/>
+<neighbor dest="5" weight="0" relationship=" "/>
+<neighbor dest="6" weight="0" relationship=" "/>
+<neighbor dest="7" weight="0" relationship=" "/>
+<neighbor dest="8" weight="0" relationship=" "/>
+<neighbor dest="9" weight="0" relationship=" "/>
+<neighbor dest="10" weight="0" relationship=" "/>
+<neighbor dest="11" weight="0" relationship=" "/>
+<speak value="EMPAC_Exterior_1"/>
+</Feature>
+<Feature id="2" data="EMPAC Interior">
+<neighbor dest="0" weight="0" relationship=" "/>
+<neighbor dest="11" weight="0" relationship=" "/>
+<neighbor dest="17" weight="0" relationship=" "/>
+<neighbor dest="18" weight="0" relationship=" "/>
+<neighbor dest="19" weight="0" relationship=" "/>
+<neighbor dest="21" weight="0" relationship=" "/>
+<neighbor dest="24" weight="0" relationship=" "/>
+<neighbor dest="25" weight="0" relationship=" "/>
+<speak value="EMPAC_fromInterior_toExterior"/>
+</Feature>
+<Feature id="3" data="EMPAC Exterior 2">
+<neighbor dest="1" weight="0" relationship=" "/>
+<neighbor dest="4" weight="0" relationship=" "/>
+<neighbor dest="5" weight="0" relationship=" "/>
+<neighbor dest="6" weight="0" relationship=" "/>
+<neighbor dest="7" weight="0" relationship=" "/>
+<neighbor dest="8" weight="0" relationship=" "/>
+<neighbor dest="9" weight="0" relationship=" "/>
+<neighbor dest="10" weight="0" relationship=" "/>
+<speak value="EMPAC_Exterior_2"/>
+</Feature>
+<Feature id="4" data="EMPAC Exterior 3">
+<neighbor dest="1" weight="0" relationship=" "/>
+<neighbor dest="3" weight="0" relationship=" "/>
+<neighbor dest="5" weight="0" relationship=" "/>
+<neighbor dest="6" weight="0" relationship=" "/>
+<neighbor dest="7" weight="0" relationship=" "/>
+<neighbor dest="8" weight="0" relationship=" "/>
+<neighbor dest="9" weight="0" relationship=" "/>
+<neighbor dest="10" weight="0" relationship=" "/>
+<speak value="EMPAC_Exterior_3"/>
+</Feature>
+<Feature id="5" data="EMPAC Exterior 4">
+<neighbor dest="1" weight="0" relationship=" "/>
+<neighbor dest="3" weight="0" relationship=" "/>
+<neighbor dest="4" weight="0" relationship=" "/>
+<neighbor dest="6" weight="0" relationship=" "/>
+<neighbor dest="7" weight="0" relationship=" "/>
+<neighbor dest="8" weight="0" relationship=" "/>
+<neighbor dest="9" weight="0" relationship=" "/>
+<neighbor dest="10" weight="0" relationship=" "/>
+<speak value="EMPAC_Exterior_4"/>
+</Feature>
+<Feature id="6" data="EMPAC Exterior 5">
+<neighbor dest="1" weight="0" relationship=" "/>
+<neighbor dest="3" weight="0" relationship=" "/>
+<neighbor dest="4" weight="0" relationship=" "/>
+<neighbor dest="5" weight="0" relationship=" "/>
+<neighbor dest="7" weight="0" relationship=" "/>
+<neighbor dest="8" weight="0" relationship=" "/>
+<neighbor dest="9" weight="0" relationship=" "/>
+<neighbor dest="10" weight="0" relationship=" "/>
+<speak value="EMPAC_Exterior_5"/>
+</Feature>
+<Feature id="7" data="EMPAC Exterior 6">
+<neighbor dest="1" weight="0" relationship=" "/>
+<neighbor dest="3" weight="0" relationship=" "/>
+<neighbor dest="4" weight="0" relationship=" "/>
+<neighbor dest="5" weight="0" relationship=" "/>
+<neighbor dest="6" weight="0" relationship=" "/>
+<neighbor dest="8" weight="0" relationship=" "/>
+<neighbor dest="9" weight="0" relationship=" "/>
+<neighbor dest="10" weight="0" relationship=" "/>
+<speak value="EMPAC_Exterior_6"/>
+</Feature>
+<Feature id="8" data="EMPAC Exterior 7">
+<neighbor dest="1" weight="0" relationship=" "/>
+<neighbor dest="3" weight="0" relationship=" "/>
+<neighbor dest="4" weight="0" relationship=" "/>
+<neighbor dest="5" weight="0" relationship=" "/>
+<neighbor dest="6" weight="0" relationship=" "/>
+<neighbor dest="7" weight="0" relationship=" "/>
+<neighbor dest="9" weight="0" relationship=" "/>
+<neighbor dest="10" weight="0" relationship=" "/>
+<speak value="EMPAC_Exterior_7"/>
+</Feature>
+<Feature id="9" data="EMPAC Exterior 8">
+<neighbor dest="1" weight="0" relationship=" "/>
+<neighbor dest="3" weight="0" relationship=" "/>
+<neighbor dest="4" weight="0" relationship=" "/>
+<neighbor dest="5" weight="0" relationship=" "/>
+<neighbor dest="6" weight="0" relationship=" "/>
+<neighbor dest="7" weight="0" relationship=" "/>
+<neighbor dest="8" weight="0" relationship=" "/>
+<neighbor dest="10" weight="0" relationship=" "/>
+<speak value="EMPAC_Exterior_8"/>
+</Feature>
+<Feature id="10" data="EMPAC Exterior 9">
+<neighbor dest="1" weight="0" relationship=" "/>
+<neighbor dest="3" weight="0" relationship=" "/>
+<neighbor dest="4" weight="0" relationship=" "/>
+<neighbor dest="5" weight="0" relationship=" "/>
+<neighbor dest="6" weight="0" relationship=" "/>
+<neighbor dest="7" weight="0" relationship=" "/>
+<neighbor dest="8" weight="0" relationship=" "/>
+<neighbor dest="9" weight="0" relationship=" "/>
+<speak value="EMPAC_Exterior_9"/>
+</Feature>
+<Feature id="11" data="EMPAC Lobby">
+<neighbor dest="1" weight="0" relationship=" "/>
+<neighbor dest="2" weight="0" relationship=" "/>
+<neighbor dest="12" weight="0" relationship=" "/>
+<neighbor dest="13" weight="0" relationship=" "/>
+<neighbor dest="14" weight="0" relationship=" "/>
+<neighbor dest="15" weight="0" relationship=" "/>
+<neighbor dest="16" weight="0" relationship=" "/>
+<speak value="EMPACLobby1"/>
+</Feature>
+<Feature id="12" data="EMPAC Lobby 2">
+<neighbor dest="11" weight="0" relationship=" "/>
+<neighbor dest="13" weight="0" relationship=" "/>
+<neighbor dest="14" weight="0" relationship=" "/>
+<neighbor dest="15" weight="0" relationship=" "/>
+<neighbor dest="16" weight="0" relationship=" "/>
+<speak value="EMPACLobby2"/>
+</Feature>
+<Feature id="13" data="EMPAC Lobby 3 Cafe a">
+<neighbor dest="11" weight="0" relationship=" "/>
+<neighbor dest="12" weight="0" relationship=" "/>
+<neighbor dest="14" weight="0" relationship=" "/>
+<neighbor dest="15" weight="0" relationship=" "/>
+<neighbor dest="16" weight="0" relationship=" "/>
+<speak value="EMPAC_Lobby_3_Cafe_a"/>
+</Feature>
+<Feature id="14" data="EMPAC Lobby 4 Cafe b">
+<neighbor dest="11" weight="0" relationship=" "/>
+<neighbor dest="12" weight="0" relationship=" "/>
+<neighbor dest="13" weight="0" relationship=" "/>
+<neighbor dest="15" weight="0" relationship=" "/>
+<neighbor dest="16" weight="0" relationship=" "/>
+<speak value="EMPAC_Lobby_4_Cafe_b"/>
+</Feature>
+<Feature id="15" data="EMPAC Corridor Lobby Public Space">
+<neighbor dest="11" weight="0" relationship=" "/>
+<neighbor dest="12" weight="0" relationship=" "/>
+<neighbor dest="13" weight="0" relationship=" "/>
+<neighbor dest="14" weight="0" relationship=" "/>
+<neighbor dest="16" weight="0" relationship=" "/>
+<speak value="EMPACCorridorLobbyPublicSpace"/>
+</Feature>
+<Feature id="16" data="EMPAC Lobby Detail 3">
+<neighbor dest="11" weight="0" relationship=" "/>
+<neighbor dest="12" weight="0" relationship=" "/>
+<neighbor dest="13" weight="0" relationship=" "/>
+<neighbor dest="14" weight="0" relationship=" "/>
+<neighbor dest="15" weight="0" relationship=" "/>
+<speak value="EMPACLobby_Detail_3"/>
+</Feature>
+<Feature id="17" data="Theater">
+<neighbor dest="2" weight="0" relationship=" "/>
+<speak value="Theater"/>
+</Feature>
+<Feature id="18" data="EMPAC Interior Offices">
+<neighbor dest="2" weight="0" relationship=" "/>
+<speak value="EMPACInteriorOffices"/>
+</Feature>
+<Feature id="19" data="EMPAC Studio 1">
+<neighbor dest="2" weight="0" relationship=" "/>
+<neighbor dest="20" weight="0" relationship=" "/>
+<speak value="EMPACStudio1"/>
+</Feature>
+<Feature id="20" data="EMPAC Studio 1 Configuration 2">
+<neighbor dest="19" weight="0" relationship=" "/>
+<speak value="EMPACStudio1_Configuration_2"/>
+</Feature>
+<Feature id="21" data="EMPAC Staircase 1">
+<neighbor dest="2" weight="0" relationship=" "/>
+<neighbor dest="22" weight="0" relationship=" "/>
+<neighbor dest="23" weight="0" relationship=" "/>
+<speak value="EMPAC_StairCase_1"/>
+</Feature>
+<Feature id="22" data="EMPAC Staircase Detail 2">
+<neighbor dest="21" weight="0" relationship=" "/>
+<speak value="EMPAC_Staircase_Detail_2"/>
+</Feature>
+<Feature id="23" data="EMPAC Staircase Detail 3">
+<neighbor dest="21" weight="0" relationship=" "/>
+<speak value="EMPAC_Staircase_Detail_3"/>
+</Feature>
+<Feature id="24" data="EMPAC Artist In Residence Studio">
+<neighbor dest="2" weight="0" relationship=" "/>
+<speak value="EMPAC_ArtistInResidenceStudio"/>
+</Feature>
+<Feature id="25" data="Concert Hall">
+<neighbor dest="2" weight="0" relationship=" "/>
+<neighbor dest="26" weight="0" relationship=" "/>
+<neighbor dest="27" weight="0" relationship=" "/>
+<neighbor dest="28" weight="0" relationship=" "/>
+<neighbor dest="29" weight="0" relationship=" "/>
+<neighbor dest="30" weight="0" relationship=" "/>
+<neighbor dest="31" weight="0" relationship=" "/>
+<neighbor dest="32" weight="0" relationship=" "/>
+<neighbor dest="33" weight="0" relationship=" "/>
+<neighbor dest="34" weight="0" relationship=" "/>
+<neighbor dest="35" weight="0" relationship=" "/>
+<neighbor dest="36" weight="0" relationship=" "/>
+<speak value="ConcertHallBanners"/>
+</Feature>
+<Feature id="26" data="Concert Hall Ceiling">
+<neighbor dest="25" weight="0" relationship=" "/>
+<speak value="ConcertHallCeiling"/>
+</Feature>
+<Feature id="27" data="Concert Hall Choral Terrace Seating">
+<neighbor dest="25" weight="0" relationship=" "/>
+<speak value="ConcertHallChoralTerraceSeating"/>
+</Feature>
+<Feature id="28" data="Concert Hall From Balcony">
+<neighbor dest="25" weight="0" relationship=" "/>
+<speak value="ConcertHallFromBalcony"/>
+</Feature>
+<Feature id="29" data="Concert Hall Lower Seating Area">
+<neighbor dest="25" weight="0" relationship=" "/>
+<speak value="ConcertHallLowerSeatingArea"/>
+</Feature>
+<Feature id="30" data="Concert Hall Side Gallery">
+<neighbor dest="25" weight="0" relationship=" "/>
+<speak value="ConcertHallSideGallery"/>
+</Feature>
+<Feature id="31" data="Concert Hall Side Wall Detail 2">
+<neighbor dest="25" weight="0" relationship=" "/>
+<speak value="ConcertHallSideWallDetail_2"/>
+</Feature>
+<Feature id="32" data="Concert Hall Side Wall Detail 3">
+<neighbor dest="25" weight="0" relationship=" "/>
+<speak value="ConcertHallSidewallDetail_3"/>
+</Feature>
+<Feature id="33" data="Concert Hall Stage Wall Detail 1">
+<neighbor dest="25" weight="0" relationship=" "/>
+<speak value="ConcertHallStageWallDetail_1"/>
+</Feature>
+<Feature id="34" data="Concert Hall Stage Wall Detail 2">
+<neighbor dest="25" weight="0" relationship=" "/>
+<speak value="ConcertHallStageWallDetail_2"/>
+</Feature>
+<Feature id="35" data="Concert Hall Under Balcony Seating">
+<neighbor dest="25" weight="0" relationship=" "/>
+<speak value="ConcertHallUndBalconySeating"/>
+</Feature>
+<Feature id="36" data="Concert Hall Wall Detail 1">
+<neighbor dest="25" weight="0" relationship=" "/>
+<speak value="ConcertHallWallDetail_1"/>
+</Feature>
+</AIMind>
