@@ -7,7 +7,9 @@
 <Feature id="1" data="Greeting">
 <neighbor dest="2" weight="0" relationship=""/>
 <neighbor dest="3" weight="0" relationship=""/>
-<speak value="A greeting"/>
+<speak value="[Greeting 1] How you doing?"/>
+<speak value="[Greeting 2] How's it going?"/>
+<speak value="[Greeting 3] Hi."/>
 </Feature>
 <Feature id="2" data="GreetingReaddress">
 <neighbor dest="3" weight="0" relationship=""/>
@@ -15,14 +17,16 @@
 </Feature>
 <Feature id="3" data="Backstory">
 <neighbor dest="4" weight="0" relationship=""/>
-<speak value="Some backstory"/>
+<speak value="[Backstory 1] I'm not doing so well myself, the still is down so I'm not serving any drinks. Listen though I was thinking when I come back on-line, I could create some personalized drinks for the orderer, that are specialized just to them based on their interests or their likes or dislikes. Let me try something out on you, okay? What I would do is I would ask you a few questions to get to know you a little bit better. I might ask you a question like..."/>
+<speak value="[Backstory 2] I'm not having such a great day, the still is down, I'm not serving any drinks. But I was thinking when I come back on-line a great way to generate revenue for the bar would be to create personalized drinks. You know, drinks that are specifically catered to those orderers based on your likes, your dislikes, your interests. Help me out with this, I'll ask you a question, like um...."/>
 </Feature>
-<Feature id="4" data="OriginQuestion">
-<neighbor dest="5" weight="0" relationship=""/>
-<neighbor dest="6" weight="0" relationship=""/>
-<neighbor dest="7" weight="0" relationship=""/>
-<neighbor dest="11" weight="0" relationship=""/>
-<speak value="The origin question"/>
+<Feature id="4" data="OriginQuestionLeadin">
+<neighbor dest="19" weight="0" relationship=""/>
+<neighbor dest="20" weight="0" relationship=""/>
+<neighbor dest="21" weight="0" relationship=""/>
+<neighbor dest="22" weight="0" relationship=""/>
+<speak value="[Question Lead-in 1] How about this."/>
+<speak value="[Question Lead-in 2] Alright, I've got one."/>
 </Feature>
 <Feature id="5" data="Readdress">
 <neighbor dest="6" weight="0" relationship=""/>
@@ -37,19 +41,32 @@
 <Feature id="7" data="FollowupQuestion">
 <neighbor dest="8" weight="0" relationship=""/>
 <neighbor dest="12" weight="0" relationship=""/>
-<speak value="A followup question"/>
+<speak value="[Followup Question 1] What do you really like about those things?"/>
+<speak value="[Followup Question 2] What do you enjoy about that?"/>
+<speak value="[Followup Question 3] What do you like about that?"/>
 </Feature>
 <Feature id="8" data="GenericPayoffLeadIn">
 <neighbor dest="9" weight="0" relationship=""/>
-<speak value="Generic lead in to a payoff"/>
+<neighbor dest="13" weight="0" relationship=""/>
+<neighbor dest="14" weight="0" relationship=""/>
+<neighbor dest="15" weight="0" relationship=""/>
+<neighbor dest="16" weight="0" relationship=""/>
+<neighbor dest="17" weight="0" relationship=""/>
+<speak value="[Payoff Lead-in 1] So based on our conversation, the drink I would make for you is..."/>
+<speak value="[Payoff Lead-in 2] So based on what you've told me, I would make for you a drink called..."/>
 </Feature>
-<Feature id="9" data="Payoff">
+<Feature id="9" data="PayoffAlderanAle">
 <neighbor dest="10" weight="0" relationship=""/>
-<speak value="Payoff based on all the collected information"/>
+<speak value="[Payoff Alderan Ale 1] I would make for you an Alderan Ale, because it's creamy, it's smooth and most important it's easy."/>
+<speak value="[Payoff Alderan Ale 2] An Alderan Ale, because it's creamy, it's smooth, it's easy."/>
 </Feature>
 <Feature id="10" data="ExitTransition">
 <neighbor dest="0" weight="0" relationship=""/>
-<speak value="Exit transition back to being idle"/>
+<speak value="[Exit Transition 1] You come back and see me. If the still is working it's on me."/>
+<speak value="[Exit Transition 2] Come back and see me, okay? If the still is working it's on me."/>
+<speak value="[Exit Transition 3] You have a great day."/>
+<speak value="[Exit Transition 4] Have a great day."/>
+<speak value="[Exit Transition 5] I'll talk to you soon, I've got to get back to working on the still."/>
 </Feature>
 <Feature id="11" data="Transition">
 <neighbor dest="4" weight="0" relationship=""/>
@@ -57,6 +74,70 @@
 </Feature>
 <Feature id="12" data="RedirectTransition">
 <neighbor dest="4" weight="0" relationship=""/>
-<speak value="Original question doesn't have enough info, redirect transition to new question"/>
+<speak value="[Redirect Transition 1] Let me try this a different way."/>
+<speak value="[Redirect Transition 2] Let me try a different way."/>
+<speak value="[Redirect Transition 3] I'm going to try a different approach."/>
+<speak value="[Redirect Transition 4] I'm going to try a different approach here."/>
+<speak value="[Redirect Transition 5] Let me come at this from another angle."/>
+</Feature>
+<Feature id="13" data="PayoffSarlacSour">
+<neighbor dest="10" weight="0" relationship=""/>
+<speak value="[Payoff Sarlac Sour 1] A Sarlac Sour. It's bitter, it's got a bit of a bite to it, it's tangy, it's very very sharp."/>
+<speak value="[Payoff Sarlac Sour 2] A Sarlac Sour. It's bitter, sour, has quite a bite to it, it's tangy, super sharp."/>
+</Feature>
+<Feature id="14" data="PayoffSpicyRancour">
+<neighbor dest="10" weight="0" relationship=""/>
+<speak value="[Payoff Spicy Rancour 1] A Spicy Rancor. It's spicy, it's salty, it's got quite a kick to it. I mean it really lets you know you're alive."/>
+<speak value="[Payoff Spicy Rancour 2] A Spicy Rancor, because it's salty, it's got a real kick to it, it's super spicy. It lets you know that you are alive."/>
+</Feature>
+<Feature id="15" data="PayoffSweetNaboo">
+<neighbor dest="10" weight="0" relationship=""/>
+<speak value="[Payoff Sweet Naboo 1] It's flowery, it's sweet, it's refreshing, it's invigorating. Perfect."/>
+<speak value="[Payoff Sweet Naboo 2] It's flowery and sweet, refreshing. It's perfect for you."/>
+</Feature>
+<Feature id="16" data="PayoffTwilekSurprise">
+<neighbor dest="10" weight="0" relationship=""/>
+<speak value="[Payoff Twilek Surprise 1] The Twilek, it's a little bit of everything, it's a surprise. It's sweet, it's spicy, it's smooth, yet it's still sour. Everything you'd ever want in a drink."/>
+<speak value="[Payoff Twilek Surprise 2] The Twileek, it's a surprise drink. It's sweet, it's spicy, sour yet smooth. It has everything you'd ever want in one drink."/>
+</Feature>
+<Feature id="17" data="PayoffWarmBanthaMilk">
+<neighbor dest="10" weight="0" relationship=""/>
+<speak value="[Payoff Warm Bantha Milk 1] A warm Bantha Milk. It's hardy, it's sturdy, thick, it's warm, it's comforting."/>
+<speak value="[Payoff Warm Bantha Milk 2] A warm Bantha Milk. It's warm, hardy, thick, sturdy. It's a comfort drink."/>
+</Feature>
+<Feature id="18" data="OriginQuestionResponse">
+<neighbor dest="5" weight="0" relationship=""/>
+<neighbor dest="6" weight="0" relationship=""/>
+<neighbor dest="7" weight="0" relationship=""/>
+<neighbor dest="11" weight="0" relationship=""/>
+<speak value="[Question Response 1] Okay."/>
+<speak value="[Question Response 2] Alright."/>
+<speak value="[Question Response 3] Oh great."/>
+<speak value="[Question Response 4] Yeah."/>
+<speak value="[Question Response 5] Yeah, yeah."/>
+<speak value="[Question Response 6] Interesting."/>
+<speak value="[Question Response 7] Interesting, interesting."/>
+<speak value="[Question Response 8] Right."/>
+<speak value="[Question Response 9] Right, right."/>
+</Feature>
+<Feature id="19" data="OriginQuestionAnimals">
+<neighbor dest="18" weight="0" relationship=""/>
+<speak value="[Question Animals 1] Do you own any animals?."/>
+</Feature>
+<Feature id="20" data="OriginQuestionHobbies">
+<neighbor dest="18" weight="0" relationship=""/>
+<speak value="[Question Hobbies 1] What is one of your favourite hobbies?"/>
+<speak value="[Question Hobbies 2] What're some of your favourite hobbies?"/>
+<speak value="[Question Hobbies 3] What're some of your hobbies?"/>
+</Feature>
+<Feature id="21" data="OriginQuestionAdmire">
+<neighbor dest="18" weight="0" relationship=""/>
+<speak value="[Question Admire 1] Who is someone that you really admire? Maybe a friend or a family member."/>
+<speak value="[Question Admire 2] Who is someone that you really admire, you know? maybe a friend or a family member."/>
+<speak value="[Question Admire 3] Who is someone you really admire, you know? Like a friend or a family member."/>
+</Feature>
+<Feature id="22" data="OriginQuestionThingsToDo">
+<neighbor dest="18" weight="0" relationship=""/>
+<speak value="[Question ThingsToDo 1] What are some of your favourite things to do?"/>
 </Feature>
 </AIMind>

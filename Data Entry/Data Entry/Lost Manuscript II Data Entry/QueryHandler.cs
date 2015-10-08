@@ -1506,7 +1506,9 @@ namespace Dialogue_Data_Entry
 
         private string[] FindSpeak(Feature feature)
         {
-            return feature.Speaks.ToArray();
+            //return feature.Speaks.ToArray();
+            //Return only the speak value indicated in the feature's speak_index
+            return new string[1] { feature.getSpeak(feature.speak_index) };
         }
 
         private string[] FindStuffToSay(Feature feature)

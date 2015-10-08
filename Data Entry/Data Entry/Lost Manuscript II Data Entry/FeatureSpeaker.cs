@@ -772,7 +772,8 @@ namespace Dialogue_Data_Entry
                 //If we're in finite state mode, traverse to the next state and return
                 //its corresponding feature.
                 finite_state_machine.goToNextState();
-                Feature next = finite_state_machine.getCurrentState().getStateFeature();
+                //Have the state choose a speak value for its feature
+                Feature next = finite_state_machine.getCurrentState().getFeatureWithNextSpeak();
                 Console.WriteLine("Next topic: " + next.Data);
                 return next;
             }//end else if

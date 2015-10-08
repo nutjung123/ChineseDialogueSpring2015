@@ -18,6 +18,13 @@ namespace Dialogue_Data_Entry
         private List<double> shortestDistance;         //list of shortestDistance to all nodes (index is id)
         private int level, dist;
         public bool flag;                                // This is a public general use flag that can be used for things like traversals and stuff like that
+
+        //Which speak value should be used to display this feature.
+        public int speak_index;
+
+        //A map of sub-feature id's to sub-features.
+        //A sub-feature is an alternate form of this feature, containing a different speak value, neighbors, etc.
+        private Dictionary<int, Feature> subfeatures;
        
         public Feature(string data)
         {
@@ -30,6 +37,8 @@ namespace Dialogue_Data_Entry
             this.level = 0;
             this.dist = 0;
             this.shortestDistance = new List<double>();
+            this.subfeatures = new Dictionary<int, Feature>();
+            this.speak_index = 0;
         }
 
         // This function is used to get a Feature that is a neighbor of this Feature, it takes a string and preforms a binary search over the list
@@ -170,6 +179,29 @@ namespace Dialogue_Data_Entry
             return true;
         }
 
+        //Add a single subfeature
+        public void addSubFeature(int sub_id, Feature subfeat)
+        {
+            subfeatures.Add(sub_id, subfeat);
+        }//end method addSubfeature
+        //Get a single subfeature
+        public Feature getSubFeature(int sub_id)
+        {
+            Feature return_feature = null;
+            subfeatures.TryGetValue(sub_id, out return_feature);
+            return return_feature;
+        }//end method getSubfeature
+        //Get all subfeatures
+        public Dictionary<int, Feature> getSubFeatures()
+        {
+            return subfeatures;
+        }//end method getSubFeatures
+        //Get a list of subfeature ID's
+        public List<int> getSubFeatureIDs()
+        {
+            return subfeatures.Keys.ToList();
+        }//end method getSubFeatureIDs
+
         public string getRelationshipNeighbor(string neighbor)
         {
             for (int x = 0; x < neighbors.Count; x++)
@@ -292,7 +324,11 @@ namespace Dialogue_Data_Entry
 
         public string getSpeak(int index)
         {
-            return this.speaks[index];
+            //If the index is invalid, just return the first element
+            if (index >= speaks.Count)
+                return this.speaks[0];
+            else
+                return this.speaks[index];
         }
         public void addSpeak(string newSpeak)
         {
