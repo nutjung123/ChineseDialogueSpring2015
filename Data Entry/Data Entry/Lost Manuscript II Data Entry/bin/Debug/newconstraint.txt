@@ -1,0 +1,48 @@
+firstConstraint
+AND fourth > fifth
+AND second > third
+OR fifth > fourth
+AND fifth < fourth
+AND third > third
+OR fifth > fourth
+AND fourth > first
+AND first < third
+OR third > second
+OR fourth > first
+AND fifth > fourth
+AND third < fourth
+
+secondConstraint
+OR third < fourth
+AND second > first
+AND fifth > third
+AND first > second
+OR third < third
+OR first > first
+OR fifth < second
+OR fifth < fifth
+AND first > fourth
+AND first < first
+
+thirdConstraint
+OR fourth < second
+AND first < first
+OR second < first
+AND first > third
+AND first < fourth
+OR third > fourth
+OR fourth > third
+
+fourthConstraint
+OR first < first
+AND fourth < first
+
+fifthConstraint
+AND second > first
+OR first > third
+OR second > third
+AND second > third
+AND third < first
+AND second < second
+AND fifth > fourth
+

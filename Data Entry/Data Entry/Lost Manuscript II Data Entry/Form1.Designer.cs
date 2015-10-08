@@ -71,6 +71,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.featureRemoverCheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.constriantTypeComboBox = new System.Windows.Forms.ComboBox();
             this.fifthArgumentTextBox = new System.Windows.Forms.TextBox();
             this.quantityLabel = new System.Windows.Forms.Label();
             this.fourthArgumentComboBox = new System.Windows.Forms.ComboBox();
@@ -93,6 +94,9 @@
             this.firstArgumentTextBox = new System.Windows.Forms.TextBox();
             this.showConstraintListBox = new System.Windows.Forms.ListBox();
             this.featureForConstraintListBox = new System.Windows.Forms.ListBox();
+            this.NewConstraintEditor = new System.Windows.Forms.TabPage();
+            this.clauseListBox = new System.Windows.Forms.ListBox();
+            this.showNewConstraintListBox = new System.Windows.Forms.ListBox();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.label10 = new System.Windows.Forms.Label();
@@ -122,12 +126,13 @@
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.constriantTypeComboBox = new System.Windows.Forms.ComboBox();
+            this.featureForNewConstraintListBox = new System.Windows.Forms.ListBox();
             this.tabControl1.SuspendLayout();
             this.FeatureCreator.SuspendLayout();
             this.FeatureEditor.SuspendLayout();
             this.FeatureRemover.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.NewConstraintEditor.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -138,6 +143,7 @@
             this.tabControl1.Controls.Add(this.FeatureEditor);
             this.tabControl1.Controls.Add(this.FeatureRemover);
             this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.NewConstraintEditor);
             this.tabControl1.Location = new System.Drawing.Point(3, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -595,6 +601,19 @@
             this.tabPage1.Text = "Constraint Editor";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // constriantTypeComboBox
+            // 
+            this.constriantTypeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.constriantTypeComboBox.FormattingEnabled = true;
+            this.constriantTypeComboBox.Items.AddRange(new object[] {
+            "turn",
+            "topic"});
+            this.constriantTypeComboBox.Location = new System.Drawing.Point(737, 93);
+            this.constriantTypeComboBox.Name = "constriantTypeComboBox";
+            this.constriantTypeComboBox.Size = new System.Drawing.Size(127, 21);
+            this.constriantTypeComboBox.TabIndex = 25;
+            this.constriantTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.constriantTypeComboBox_SelectedIndexChanged);
+            // 
             // fifthArgumentTextBox
             // 
             this.fifthArgumentTextBox.Enabled = false;
@@ -817,6 +836,37 @@
             this.featureForConstraintListBox.TabIndex = 0;
             this.featureForConstraintListBox.SelectedIndexChanged += new System.EventHandler(this.featureForConstraintListBox_SelectedIndexChanged);
             // 
+            // NewConstraintEditor
+            // 
+            this.NewConstraintEditor.Controls.Add(this.clauseListBox);
+            this.NewConstraintEditor.Controls.Add(this.showNewConstraintListBox);
+            this.NewConstraintEditor.Controls.Add(this.featureForNewConstraintListBox);
+            this.NewConstraintEditor.Location = new System.Drawing.Point(4, 22);
+            this.NewConstraintEditor.Name = "NewConstraintEditor";
+            this.NewConstraintEditor.Padding = new System.Windows.Forms.Padding(3);
+            this.NewConstraintEditor.Size = new System.Drawing.Size(1030, 653);
+            this.NewConstraintEditor.TabIndex = 4;
+            this.NewConstraintEditor.Text = "New Constraint Editor";
+            this.NewConstraintEditor.UseVisualStyleBackColor = true;
+            // 
+            // clauseListBox
+            // 
+            this.clauseListBox.FormattingEnabled = true;
+            this.clauseListBox.Location = new System.Drawing.Point(476, 17);
+            this.clauseListBox.Name = "clauseListBox";
+            this.clauseListBox.Size = new System.Drawing.Size(209, 615);
+            this.clauseListBox.TabIndex = 3;
+            this.clauseListBox.SelectedIndexChanged += new System.EventHandler(this.clauseListBox_SelectedIndexChanged);
+            // 
+            // showNewConstraintListBox
+            // 
+            this.showNewConstraintListBox.FormattingEnabled = true;
+            this.showNewConstraintListBox.Location = new System.Drawing.Point(246, 17);
+            this.showNewConstraintListBox.Name = "showNewConstraintListBox";
+            this.showNewConstraintListBox.Size = new System.Drawing.Size(209, 615);
+            this.showNewConstraintListBox.TabIndex = 2;
+            this.showNewConstraintListBox.SelectedIndexChanged += new System.EventHandler(this.showNewConstraintListBox_SelectedIndexChanged);
+            // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
@@ -1000,7 +1050,7 @@
             // 
             this.treeTrunkToolStripMenuItem.Name = "treeTrunkToolStripMenuItem";
             this.treeTrunkToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
-            this.treeTrunkToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.treeTrunkToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
             this.treeTrunkToolStripMenuItem.Text = "Tree Trunk";
             this.treeTrunkToolStripMenuItem.Click += new System.EventHandler(this.treeTrunkToolStripMenuItem_Click);
             // 
@@ -1009,7 +1059,7 @@
             this.fullTreeToolStripMenuItem.Name = "fullTreeToolStripMenuItem";
             this.fullTreeToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.T)));
-            this.fullTreeToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.fullTreeToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
             this.fullTreeToolStripMenuItem.Text = "Full Tree";
             this.fullTreeToolStripMenuItem.Click += new System.EventHandler(this.fullTreeToolStripMenuItem_Click);
             // 
@@ -1053,18 +1103,14 @@
             this.panel1.Size = new System.Drawing.Size(1057, 636);
             this.panel1.TabIndex = 6;
             // 
-            // constriantTypeComboBox
+            // featureForNewConstraintListBox
             // 
-            this.constriantTypeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.constriantTypeComboBox.FormattingEnabled = true;
-            this.constriantTypeComboBox.Items.AddRange(new object[] {
-            "turn",
-            "topic"});
-            this.constriantTypeComboBox.Location = new System.Drawing.Point(737, 93);
-            this.constriantTypeComboBox.Name = "constriantTypeComboBox";
-            this.constriantTypeComboBox.Size = new System.Drawing.Size(127, 21);
-            this.constriantTypeComboBox.TabIndex = 25;
-            this.constriantTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.constriantTypeComboBox_SelectedIndexChanged);
+            this.featureForNewConstraintListBox.FormattingEnabled = true;
+            this.featureForNewConstraintListBox.Location = new System.Drawing.Point(18, 17);
+            this.featureForNewConstraintListBox.Name = "featureForNewConstraintListBox";
+            this.featureForNewConstraintListBox.Size = new System.Drawing.Size(209, 615);
+            this.featureForNewConstraintListBox.TabIndex = 1;
+            this.featureForNewConstraintListBox.SelectedIndexChanged += new System.EventHandler(this.featureForNewConstraintListBox_SelectedIndexChanged);
             // 
             // Form1
             // 
@@ -1087,6 +1133,7 @@
             this.FeatureRemover.PerformLayout();
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.NewConstraintEditor.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.panel1.ResumeLayout(false);
@@ -1191,6 +1238,10 @@
         private System.Windows.Forms.Label symbolTwoTopicLabel;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.ComboBox constriantTypeComboBox;
+        private System.Windows.Forms.TabPage NewConstraintEditor;
+        private System.Windows.Forms.ListBox showNewConstraintListBox;
+        private System.Windows.Forms.ListBox clauseListBox;
+        private System.Windows.Forms.ListBox featureForNewConstraintListBox;
     }
 }
 
