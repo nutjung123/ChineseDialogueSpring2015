@@ -56,11 +56,11 @@ namespace Dialogue_Data_Entry
             }
             this.featGraph = featG;
             expectedDramaticV = new double[20] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
-            setFiniteStateMachine();
+            //setFiniteStateMachine();
             //setPartialOrderConstraints();
         }
 
-        public FeatureSpeaker(FeatureGraph featG, List<TemporalConstraint> myTemporalConstraintList,string prevSpatial,List<string> topicH)
+        public FeatureSpeaker(FeatureGraph featG, List<TemporalConstraint> myTemporalConstraintList,string prevSpatial,List<string> topicH, StateMachine fsm = null)
         {
             setFilterNodes();
             this.temporalConstraintList = new List<TemporalConstraint>();
@@ -75,15 +75,17 @@ namespace Dialogue_Data_Entry
             this.topicHistory = new List<string>(topicH);
             //define dramaticFunction manually here
             expectedDramaticV = new double[20] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
-            setFiniteStateMachine();
+
+            if (fsm != null)
+            {
+                finite_state_mode = true;
+                finite_state_machine = fsm;
+            }//end if
+            else
+                finite_state_mode = false;
+            //setFiniteStateMachine();
             //setPartialOrderConstraints();
         }
-
-        private void setFiniteStateMachine()
-        {
-            finite_state_mode = true;
-
-        }//end method setFiniteStateMachine
 
         private void setFilterNodes()
         {
@@ -769,7 +771,10 @@ namespace Dialogue_Data_Entry
             {
                 //If we're in finite state mode, traverse to the next state and return
                 //its corresponding feature.
-
+                finite_state_machine.goToNextState();
+                Feature next = finite_state_machine.getCurrentState().getStateFeature();
+                Console.WriteLine("Next topic: " + next.Data);
+                return next;
             }//end else if
             else if (turn > 1 && query == "")
             {

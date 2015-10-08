@@ -117,6 +117,9 @@ namespace Dialogue_Data_Entry
         //A string to be used for text-to-speech
         public string buffered_tts = "";
 
+        //The state machine
+        StateMachine finite_state_machine;
+
         /// <summary>
         /// Create a converter for the specified XML file
         /// </summary>
@@ -196,7 +199,6 @@ namespace Dialogue_Data_Entry
             filter_nodes.Add("Aug. 22nd, 2008");
             filter_nodes.Add("Aug. 23rd, 2008");
 
-
             //Build list of relationships which should not be used in analogies.
             no_analogy_relationships.Add("occurred before");
             no_analogy_relationships.Add("occurred after");
@@ -205,7 +207,46 @@ namespace Dialogue_Data_Entry
             no_analogy_relationships.Add("included");
             no_analogy_relationships.Add("has");
             no_analogy_relationships.Add("had");
+
+            setFiniteStateMachine();
         }
+
+        //Create a finite state machine 
+        private void setFiniteStateMachine()
+        {
+            Console.WriteLine("setFiniteStateMachine");
+            //finite_state_mode = true;
+
+            //Automatically create states based on the feature graph.
+            //In FSM mode, any neighbor of a feature is a next
+            //state for that feature.
+
+            //First, create states of each feature.
+            Dictionary<String, State> features_as_states = new Dictionary<string, State>();
+            State temp_state = null;
+            State first_state = null;
+            foreach (Feature temp_feature in graph.Features)
+            {
+                //Get a string list of all this feature's neighbors
+                List<String> temp_list = new List<String>();
+                foreach (Tuple<Feature, Double, string> temp_neighbor_entry in temp_feature.Neighbors)
+                {
+                    temp_list.Add(temp_neighbor_entry.Item1.Data);
+                }//end foreach
+
+                //Create a new state with the feature and its string list of neighbors
+                temp_state = new State(temp_feature, temp_list);
+                //Add the feature to the map of states
+                features_as_states.Add(temp_feature.Data, temp_state);
+
+                //Check if this feature is the root feature. If so, set it as the first state.
+                if (temp_feature.Data.Equals(graph.Root.Data))
+                    first_state = temp_state;
+            }//end foreach
+
+            //Create a new state machine using the map of states
+            finite_state_machine = new StateMachine(first_state, features_as_states);
+        }//end method setFiniteStateMachine
 
         //optional parameter for_additional_info, if set true, will avoid any actual leading statements
         //except for relationship mentions. If no relationship mention can be made, then blank string
@@ -856,7 +897,7 @@ namespace Dialogue_Data_Entry
             if (this.topic == null)
                 this.topic = this.graph.Root;
             //Console.WriteLine("Before new feature speaker in parse input");
-            FeatureSpeaker speaker = new FeatureSpeaker(this.graph, temporalConstraintList, prevSpatial, topicHistory);
+            FeatureSpeaker speaker = new FeatureSpeaker(this.graph, temporalConstraintList, prevSpatial, topicHistory, this.finite_state_machine);
             //Console.WriteLine("after new speaker in parse input");
             if (split_input.Length != 0 || messageToServer)
             {
@@ -1049,7 +1090,7 @@ namespace Dialogue_Data_Entry
                 if (!projectAsTopic)
                 {
                     nextTopic = speaker.getNextTopic(nextTopic, "", this.turn);
-                    //Console.WriteLine("Next Topic from " + this.topic.Data + " is " + nextTopic.Data);
+                    Console.WriteLine("Next Topic from " + this.topic.Data + " is " + nextTopic.Data);
                 }//end if
                 //If we are projecting the current node as a topic, pick the next node whose projected
                 //path of nodes relate most to the current node (has the highest score).

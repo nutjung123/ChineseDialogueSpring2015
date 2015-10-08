@@ -9,11 +9,11 @@ namespace Dialogue_Data_Entry
     class StateMachine
     {
         //A map of all states with their names as keys
-        Dictionary<String, State> all_states;
+        private Dictionary<String, State> all_states;
         //The FSM's current state
-        State current_state;
+        private State current_state;
         //A history of the names of states previously traversed
-        List<String> state_history;
+        private List<String> state_history;
 
         //Pass in the first state and a list of states
         public StateMachine(State first, Dictionary<String, State> states)
@@ -47,9 +47,22 @@ namespace Dialogue_Data_Entry
         public void goToNextState()
         {
             //Record the current state in the history
-            state_history.Add(current_state.getStateName());
+            Console.WriteLine("Current state: " + current_state.getStateName());
+            Console.WriteLine("Current state history: ");
+            foreach (string temp_entry in state_history)
+            {
+                Console.WriteLine("     " + temp_entry);
+            }//end foreach
             //Traverse to the next state
-            current_state = determineNextState();
+            State next_state = determineNextState();
+            current_state = next_state;
+            Console.WriteLine("Next state: " + current_state.getStateName());
+            state_history.Add(current_state.getStateName());
+            Console.WriteLine("Next state history: ");
+            foreach (string temp_entry in state_history)
+            {
+                Console.WriteLine("     " + temp_entry);
+            }//end foreach
         }//end method goToNextState
 
         //From the current state, choose which state to traverse to next.
