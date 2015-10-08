@@ -30,6 +30,11 @@ namespace Dialogue_Data_Entry
         private string[] Directional_Words = {"north", "east", "west", "south",
                                       "northeast", "northwest", "southeast", "southwest"};
 
+        //Whether or not we are using the finite state machine
+        private bool finite_state_mode;
+        //The FSM
+        private StateMachine finite_state_machine;
+
         //FILTERING:
         //A list of nodes to filter out of mention.
         //Nodes in this list won't be spoken explicitly unless they
@@ -51,7 +56,8 @@ namespace Dialogue_Data_Entry
             }
             this.featGraph = featG;
             expectedDramaticV = new double[20] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
-            setPartialOrderConstraints();
+            setFiniteStateMachine();
+            //setPartialOrderConstraints();
         }
 
         public FeatureSpeaker(FeatureGraph featG, List<TemporalConstraint> myTemporalConstraintList,string prevSpatial,List<string> topicH)
@@ -69,8 +75,15 @@ namespace Dialogue_Data_Entry
             this.topicHistory = new List<string>(topicH);
             //define dramaticFunction manually here
             expectedDramaticV = new double[20] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
-            setPartialOrderConstraints();
+            setFiniteStateMachine();
+            //setPartialOrderConstraints();
         }
+
+        private void setFiniteStateMachine()
+        {
+            finite_state_mode = true;
+
+        }//end method setFiniteStateMachine
 
         private void setFilterNodes()
         {
@@ -752,6 +765,12 @@ namespace Dialogue_Data_Entry
                 return oldTopic;
 
             }
+            else if (finite_state_mode)
+            {
+                //If we're in finite state mode, traverse to the next state and return
+                //its corresponding feature.
+
+            }//end else if
             else if (turn > 1 && query == "")
             {
                 //next topic case
@@ -775,10 +794,10 @@ namespace Dialogue_Data_Entry
                     return null;
                 }
 
-                //CONSTRAINT CHECKING:
+                //PARTIAL ORDER CONSTRAINT CHECKING:
                 //Find all feature names that are candidates for selection by
                 //checking their constraints.
-                List<string> candidate_feature_names = featGraph.getSatisfiedFeatures(topicHistory);
+                //List<string> candidate_feature_names = featGraph.getSatisfiedFeatures(topicHistory);
 
                 double maxScore = listScore[0].Item2;
                 int maxIndex = 0;
@@ -797,12 +816,12 @@ namespace Dialogue_Data_Entry
                             continue;
                         }//end if
 
-                        //CONSTRAINT CHECKING:
+                        //PARTIAL ORDER CONSTRAINT CHECKING:
                         //If the node does not appear as a candidate for selection, skip over it.
-                        if (!candidate_feature_names.Contains(listScore[x].Item1.Data))
+                        /*if (!candidate_feature_names.Contains(listScore[x].Item1.Data))
                         {
                             continue;
-                        }//end if
+                        }//end if*/
 
                         maxScore = listScore[x].Item2;
                         maxIndex = x;
@@ -814,7 +833,7 @@ namespace Dialogue_Data_Entry
                 if (false)
                 {
                     System.Console.WriteLine("\n\nMax score: " + maxScore);
-                    System.Console.WriteLine("Novelty: "+ currentTopicNovelty);
+                    System.Console.WriteLine("Novelty: " + currentTopicNovelty);
                     System.Console.WriteLine("Node: " + listScore[maxIndex].Item1.Data);
                     System.Console.WriteLine("==========================================");
                 }

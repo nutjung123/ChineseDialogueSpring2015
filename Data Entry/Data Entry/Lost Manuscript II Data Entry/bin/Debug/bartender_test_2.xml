@@ -1,0 +1,62 @@
+<AIMind>
+<Root id="0"/>
+<Feature id="0" data="IDLE">
+<neighbor dest="1" weight="0" relationship=""/>
+<speak value="Idle chatter"/>
+</Feature>
+<Feature id="1" data="Greeting">
+<neighbor dest="2" weight="0" relationship=""/>
+<neighbor dest="3" weight="0" relationship=""/>
+<speak value="A greeting"/>
+</Feature>
+<Feature id="2" data="GreetingReaddress">
+<neighbor dest="3" weight="0" relationship=""/>
+<speak value="Readdress the greeting"/>
+</Feature>
+<Feature id="3" data="Backstory">
+<neighbor dest="4" weight="0" relationship=""/>
+<speak value="Some backstory"/>
+</Feature>
+<Feature id="4" data="OriginQuestion">
+<neighbor dest="5" weight="0" relationship=""/>
+<neighbor dest="6" weight="0" relationship=""/>
+<neighbor dest="7" weight="0" relationship=""/>
+<neighbor dest="11" weight="0" relationship=""/>
+<speak value="The origin question"/>
+</Feature>
+<Feature id="5" data="Readdress">
+<neighbor dest="6" weight="0" relationship=""/>
+<neighbor dest="7" weight="0" relationship=""/>
+<neighbor dest="11" weight="0" relationship=""/>
+<speak value="Readdress the origin question"/>
+</Feature>
+<Feature id="6" data="SpecificOpener">
+<neighbor dest="7" weight="0" relationship=""/>
+<speak value="An opener specific to the question"/>
+</Feature>
+<Feature id="7" data="FollowupQuestion">
+<neighbor dest="8" weight="0" relationship=""/>
+<neighbor dest="12" weight="0" relationship=""/>
+<speak value="A followup question"/>
+</Feature>
+<Feature id="8" data="GenericPayoffLeadIn">
+<neighbor dest="9" weight="0" relationship=""/>
+<speak value="Generic lead in to a payoff"/>
+</Feature>
+<Feature id="9" data="Payoff">
+<neighbor dest="10" weight="0" relationship=""/>
+<speak value="Payoff based on all the collected information"/>
+</Feature>
+<Feature id="10" data="ExitTransition">
+<neighbor dest="0" weight="0" relationship=""/>
+<speak value="Exit transition back to being idle"/>
+</Feature>
+<Feature id="11" data="Transition">
+<neighbor dest="4" weight="0" relationship=""/>
+<speak value="Transition to a new question"/>
+</Feature>
+<Feature id="12" data="RedirectTransition">
+<neighbor dest="4" weight="0" relationship=""/>
+<speak value="Original question doesn't have enough info, redirect transition to new question"/>
+</Feature>
+</AIMind>
