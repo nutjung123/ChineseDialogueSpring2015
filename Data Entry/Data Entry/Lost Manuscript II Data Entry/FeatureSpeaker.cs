@@ -767,6 +767,7 @@ namespace Dialogue_Data_Entry
                 return oldTopic;
 
             }
+            //TODO: What if there is a query?
             else if (finite_state_mode)
             {
                 //If we're in finite state mode, traverse to the next state and return

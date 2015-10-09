@@ -143,3 +143,4 @@ C:\Users\Nathaniel\Git\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manu
 C:\Users\Nathaniel\Git\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\bin\Debug\Dialogue Data Entry.exe
 C:\Users\Nathaniel\Git\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\bin\Debug\Dialogue Data Entry.pdb
 C:\Users\Nathaniel\Git\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\bin\Debug\AIMLbot.dll
+C:\Users\zevsm_000\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Zeno Data Entry.csprojResolveAssemblyReference.cache
