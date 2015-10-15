@@ -46,6 +46,7 @@ namespace Dialogue_Data_Entry
         //Go to the next state
         public void goToNextState()
         {
+            //With no parameters, let state machine decide which state to go to.
             //Record the current state in the history
             Console.WriteLine("Current state: " + current_state.getStateName());
             Console.WriteLine("Current state history: ");
@@ -55,6 +56,40 @@ namespace Dialogue_Data_Entry
             }//end foreach
             //Traverse to the next state
             State next_state = determineNextState();
+            current_state = next_state;
+            Console.WriteLine("Next state: " + current_state.getStateName());
+            state_history.Add(current_state.getStateName());
+            Console.WriteLine("Next state history: ");
+            foreach (string temp_entry in state_history)
+            {
+                Console.WriteLine("     " + temp_entry);
+            }//end foreach
+        }//end method goToNextState
+        //Go to the next state based on index
+        public void goToNextState(int next_state_index)
+        {
+            //With no parameters, let state machine decide which state to go to.
+            //Record the current state in the history
+            Console.WriteLine("Current state: " + current_state.getStateName());
+            Console.WriteLine("Current state history: ");
+            foreach (string temp_entry in state_history)
+            {
+                Console.WriteLine("     " + temp_entry);
+            }//end foreach
+            //Traverse to the next state
+            //Try to get the state indicated by the index
+            State next_state = null;
+            bool retrieval_success = all_states.TryGetValue(current_state.getNextStateNames()[next_state_index], out next_state);
+
+            //If we did not successfully retrieve a state, use the default method of getting the next state
+            if (!retrieval_success)
+            {
+                Console.WriteLine("Did not get state based on index");
+                goToNextState();
+                return;
+            }//end if
+
+            //Otherwise, continue with the retrieved state.
             current_state = next_state;
             Console.WriteLine("Next state: " + current_state.getStateName());
             state_history.Add(current_state.getStateName());

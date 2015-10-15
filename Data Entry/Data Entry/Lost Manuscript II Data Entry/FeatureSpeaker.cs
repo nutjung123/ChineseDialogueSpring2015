@@ -767,12 +767,19 @@ namespace Dialogue_Data_Entry
                 return oldTopic;
 
             }
-            //TODO: What if there is a query?
             else if (finite_state_mode)
             {
                 //If we're in finite state mode, traverse to the next state and return
                 //its corresponding feature.
-                finite_state_machine.goToNextState();
+
+                //Check if the query is an integer
+                int int_query = 0;
+                bool int_parse_success = int.TryParse(query, out int_query);
+                //If so, pass the int query to the state machine
+                if (int_parse_success)
+                    finite_state_machine.goToNextState(int_query);
+                else
+                    finite_state_machine.goToNextState();
                 //Have the state choose a speak value for its feature
                 Feature next = finite_state_machine.getCurrentState().getFeatureWithNextSpeak();
                 Console.WriteLine("Next topic: " + next.Data);

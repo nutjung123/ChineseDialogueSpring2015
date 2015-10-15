@@ -898,6 +898,54 @@ namespace Dialogue_Data_Entry
                 this.topic = this.graph.Root;
             //Console.WriteLine("Before new feature speaker in parse input");
             FeatureSpeaker speaker = new FeatureSpeaker(this.graph, temporalConstraintList, prevSpatial, topicHistory, this.finite_state_machine);
+
+
+            //For state transitions
+            bool state_transitions = true;
+            if (state_transitions)
+            {
+                //Input to the state machine.
+                //Treat this as searching for a new topic.
+                Feature nextTopic = this.topic;
+                string[] newBuffer;
+
+                nextTopic = speaker.getNextTopic(nextTopic, input, this.turn);
+                Console.WriteLine("Next Topic from " + this.topic.Data + " is " + nextTopic.Data);
+
+                noveltyInfo = speaker.getNovelty(nextTopic, this.turn, noveltyAmount);
+                currentTopicNovelty = speaker.getCurrentTopicNovelty();
+                noveltyValue = speaker.getCurrentTopicNovelty();
+                //newBuffer = FindStuffToSay(nextTopic);
+                //MessageBox.Show("Explored " + nextTopic.Data + " with " + newBuffer.Length + " speaks.");
+
+                nextTopic.DiscussedAmount += 1;
+                this.graph.setFeatureDiscussedAmount(nextTopic.Data, nextTopic.DiscussedAmount);
+                this.topic = nextTopic;
+                // talk about
+                //this.buffer = newBuffer;
+                //answer = this.buffer[b++];
+
+                //Return the speak value of whatever state we have transitioned into,
+                //as well as a numbered list of the states that follow it.
+                answer = this.topic.getSpeak(this.topic.speak_index);
+                State current_state = finite_state_machine.getCurrentState();
+                List<string> next_state_names = current_state.getNextStateNames();
+
+                answer += "\n " + "Next States: ";
+
+                for (int i = 0; i < next_state_names.Count; i++)
+                {
+                    answer += "\n " + "(" + i + ") - " + next_state_names[i] + ", ";
+                }//end for
+
+                //Update 
+                updateHistory(this.topic);
+                this.turn++;
+
+                return answer;
+            }//end if
+
+
             //Console.WriteLine("after new speaker in parse input");
             if (split_input.Length != 0 || messageToServer)
             {
@@ -1054,6 +1102,7 @@ namespace Dialogue_Data_Entry
                         return buffered_tts;
                     }//end else
                 }//end else if
+
             }//end else if
 
             // CASE: Nothing / Move on to next topic
