@@ -742,7 +742,7 @@ namespace Dialogue_Data_Entry
 
             //Add adjacent node info to the end of the message.
             //
-            to_speak += AdjacentNodeInfo(feat, last);
+            //to_speak += AdjacentNodeInfo(feat, last);
 
             if (out_of_topic_response)
             {
