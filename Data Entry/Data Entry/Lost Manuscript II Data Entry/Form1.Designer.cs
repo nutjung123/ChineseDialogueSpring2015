@@ -95,8 +95,27 @@
             this.showConstraintListBox = new System.Windows.Forms.ListBox();
             this.featureForConstraintListBox = new System.Windows.Forms.ListBox();
             this.NewConstraintEditor = new System.Windows.Forms.TabPage();
+            this.saveClauseButton = new System.Windows.Forms.Button();
+            this.label21 = new System.Windows.Forms.Label();
+            this.topic2TextBox = new System.Windows.Forms.TextBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.innerComboBox = new System.Windows.Forms.ComboBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.outerComboBox = new System.Windows.Forms.ComboBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.topic1TextBox = new System.Windows.Forms.TextBox();
+            this.notCheckBox = new System.Windows.Forms.CheckBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.constraintNameTextBox = new System.Windows.Forms.TextBox();
+            this.deleteConstraintButton = new System.Windows.Forms.Button();
+            this.newConstraintButton = new System.Windows.Forms.Button();
+            this.deleteClauseButton = new System.Windows.Forms.Button();
+            this.newClauseButton = new System.Windows.Forms.Button();
+            this.openConstraintsJsonButton = new System.Windows.Forms.Button();
+            this.saveCostaintsJsonButton = new System.Windows.Forms.Button();
             this.clauseListBox = new System.Windows.Forms.ListBox();
             this.showNewConstraintListBox = new System.Windows.Forms.ListBox();
+            this.featureForNewConstraintListBox = new System.Windows.Forms.ListBox();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.label10 = new System.Windows.Forms.Label();
@@ -126,7 +145,6 @@
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.featureForNewConstraintListBox = new System.Windows.Forms.ListBox();
             this.tabControl1.SuspendLayout();
             this.FeatureCreator.SuspendLayout();
             this.FeatureEditor.SuspendLayout();
@@ -838,6 +856,24 @@
             // 
             // NewConstraintEditor
             // 
+            this.NewConstraintEditor.Controls.Add(this.saveClauseButton);
+            this.NewConstraintEditor.Controls.Add(this.label21);
+            this.NewConstraintEditor.Controls.Add(this.topic2TextBox);
+            this.NewConstraintEditor.Controls.Add(this.label20);
+            this.NewConstraintEditor.Controls.Add(this.innerComboBox);
+            this.NewConstraintEditor.Controls.Add(this.label19);
+            this.NewConstraintEditor.Controls.Add(this.outerComboBox);
+            this.NewConstraintEditor.Controls.Add(this.label16);
+            this.NewConstraintEditor.Controls.Add(this.topic1TextBox);
+            this.NewConstraintEditor.Controls.Add(this.notCheckBox);
+            this.NewConstraintEditor.Controls.Add(this.label12);
+            this.NewConstraintEditor.Controls.Add(this.constraintNameTextBox);
+            this.NewConstraintEditor.Controls.Add(this.deleteConstraintButton);
+            this.NewConstraintEditor.Controls.Add(this.newConstraintButton);
+            this.NewConstraintEditor.Controls.Add(this.deleteClauseButton);
+            this.NewConstraintEditor.Controls.Add(this.newClauseButton);
+            this.NewConstraintEditor.Controls.Add(this.openConstraintsJsonButton);
+            this.NewConstraintEditor.Controls.Add(this.saveCostaintsJsonButton);
             this.NewConstraintEditor.Controls.Add(this.clauseListBox);
             this.NewConstraintEditor.Controls.Add(this.showNewConstraintListBox);
             this.NewConstraintEditor.Controls.Add(this.featureForNewConstraintListBox);
@@ -849,23 +885,208 @@
             this.NewConstraintEditor.Text = "New Constraint Editor";
             this.NewConstraintEditor.UseVisualStyleBackColor = true;
             // 
+            // saveClauseButton
+            // 
+            this.saveClauseButton.Location = new System.Drawing.Point(722, 363);
+            this.saveClauseButton.Name = "saveClauseButton";
+            this.saveClauseButton.Size = new System.Drawing.Size(123, 30);
+            this.saveClauseButton.TabIndex = 22;
+            this.saveClauseButton.Text = "Save Clause";
+            this.saveClauseButton.UseVisualStyleBackColor = true;
+            this.saveClauseButton.Click += new System.EventHandler(this.saveClauseButton_Click);
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label21.Location = new System.Drawing.Point(719, 300);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(152, 13);
+            this.label21.TabIndex = 21;
+            this.label21.Text = "Second Topic or Number:";
+            // 
+            // topic2TextBox
+            // 
+            this.topic2TextBox.Location = new System.Drawing.Point(722, 316);
+            this.topic2TextBox.Name = "topic2TextBox";
+            this.topic2TextBox.Size = new System.Drawing.Size(209, 20);
+            this.topic2TextBox.TabIndex = 20;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label20.Location = new System.Drawing.Point(719, 231);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(114, 13);
+            this.label20.TabIndex = 19;
+            this.label20.Text = "Inner Relationship:";
+            // 
+            // innerComboBox
+            // 
+            this.innerComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.innerComboBox.FormattingEnabled = true;
+            this.innerComboBox.Items.AddRange(new object[] {
+            ">",
+            "<"});
+            this.innerComboBox.Location = new System.Drawing.Point(722, 247);
+            this.innerComboBox.Name = "innerComboBox";
+            this.innerComboBox.Size = new System.Drawing.Size(154, 21);
+            this.innerComboBox.TabIndex = 18;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.Location = new System.Drawing.Point(719, 56);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(116, 13);
+            this.label19.TabIndex = 17;
+            this.label19.Text = "Outer Relationship:";
+            // 
+            // outerComboBox
+            // 
+            this.outerComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.outerComboBox.FormattingEnabled = true;
+            this.outerComboBox.Items.AddRange(new object[] {
+            "AND",
+            "OR"});
+            this.outerComboBox.Location = new System.Drawing.Point(722, 72);
+            this.outerComboBox.Name = "outerComboBox";
+            this.outerComboBox.Size = new System.Drawing.Size(154, 21);
+            this.outerComboBox.TabIndex = 16;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.Location = new System.Drawing.Point(719, 168);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(133, 13);
+            this.label16.TabIndex = 15;
+            this.label16.Text = "First Topic or Number:";
+            // 
+            // topic1TextBox
+            // 
+            this.topic1TextBox.Location = new System.Drawing.Point(722, 184);
+            this.topic1TextBox.Name = "topic1TextBox";
+            this.topic1TextBox.Size = new System.Drawing.Size(209, 20);
+            this.topic1TextBox.TabIndex = 14;
+            // 
+            // notCheckBox
+            // 
+            this.notCheckBox.AutoSize = true;
+            this.notCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.notCheckBox.Location = new System.Drawing.Point(722, 118);
+            this.notCheckBox.Name = "notCheckBox";
+            this.notCheckBox.Size = new System.Drawing.Size(86, 24);
+            this.notCheckBox.TabIndex = 13;
+            this.notCheckBox.Text = "Negate";
+            this.notCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(243, 56);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(104, 13);
+            this.label12.TabIndex = 12;
+            this.label12.Text = "Constriant Name:";
+            // 
+            // constraintNameTextBox
+            // 
+            this.constraintNameTextBox.Location = new System.Drawing.Point(246, 72);
+            this.constraintNameTextBox.Name = "constraintNameTextBox";
+            this.constraintNameTextBox.Size = new System.Drawing.Size(209, 20);
+            this.constraintNameTextBox.TabIndex = 11;
+            // 
+            // deleteConstraintButton
+            // 
+            this.deleteConstraintButton.Location = new System.Drawing.Point(246, 537);
+            this.deleteConstraintButton.Name = "deleteConstraintButton";
+            this.deleteConstraintButton.Size = new System.Drawing.Size(209, 30);
+            this.deleteConstraintButton.TabIndex = 10;
+            this.deleteConstraintButton.Text = "Delete Constraint";
+            this.deleteConstraintButton.UseVisualStyleBackColor = true;
+            this.deleteConstraintButton.Click += new System.EventHandler(this.deleteConstraintButton_Click);
+            // 
+            // newConstraintButton
+            // 
+            this.newConstraintButton.Location = new System.Drawing.Point(246, 17);
+            this.newConstraintButton.Name = "newConstraintButton";
+            this.newConstraintButton.Size = new System.Drawing.Size(209, 30);
+            this.newConstraintButton.TabIndex = 9;
+            this.newConstraintButton.Text = "New Constraint";
+            this.newConstraintButton.UseVisualStyleBackColor = true;
+            this.newConstraintButton.Click += new System.EventHandler(this.newConstraintButton_Click);
+            // 
+            // deleteClauseButton
+            // 
+            this.deleteClauseButton.Location = new System.Drawing.Point(484, 537);
+            this.deleteClauseButton.Name = "deleteClauseButton";
+            this.deleteClauseButton.Size = new System.Drawing.Size(209, 30);
+            this.deleteClauseButton.TabIndex = 8;
+            this.deleteClauseButton.Text = "Delete Clause";
+            this.deleteClauseButton.UseVisualStyleBackColor = true;
+            this.deleteClauseButton.Click += new System.EventHandler(this.deleteClauseButton_Click);
+            // 
+            // newClauseButton
+            // 
+            this.newClauseButton.Location = new System.Drawing.Point(865, 363);
+            this.newClauseButton.Name = "newClauseButton";
+            this.newClauseButton.Size = new System.Drawing.Size(123, 30);
+            this.newClauseButton.TabIndex = 7;
+            this.newClauseButton.Text = "New Clause";
+            this.newClauseButton.UseVisualStyleBackColor = true;
+            this.newClauseButton.Click += new System.EventHandler(this.newClauseButton_Click);
+            // 
+            // openConstraintsJsonButton
+            // 
+            this.openConstraintsJsonButton.Location = new System.Drawing.Point(722, 537);
+            this.openConstraintsJsonButton.Name = "openConstraintsJsonButton";
+            this.openConstraintsJsonButton.Size = new System.Drawing.Size(123, 30);
+            this.openConstraintsJsonButton.TabIndex = 6;
+            this.openConstraintsJsonButton.Text = "Open File";
+            this.openConstraintsJsonButton.UseVisualStyleBackColor = true;
+            this.openConstraintsJsonButton.Click += new System.EventHandler(this.openConstraintsJsonButton_Click);
+            // 
+            // saveCostaintsJsonButton
+            // 
+            this.saveCostaintsJsonButton.Location = new System.Drawing.Point(865, 537);
+            this.saveCostaintsJsonButton.Name = "saveCostaintsJsonButton";
+            this.saveCostaintsJsonButton.Size = new System.Drawing.Size(123, 30);
+            this.saveCostaintsJsonButton.TabIndex = 5;
+            this.saveCostaintsJsonButton.Text = "Save File";
+            this.saveCostaintsJsonButton.UseVisualStyleBackColor = true;
+            this.saveCostaintsJsonButton.Click += new System.EventHandler(this.saveCostaintsJsonButton_Click);
+            // 
             // clauseListBox
             // 
             this.clauseListBox.FormattingEnabled = true;
-            this.clauseListBox.Location = new System.Drawing.Point(476, 17);
+            this.clauseListBox.Location = new System.Drawing.Point(484, 17);
             this.clauseListBox.Name = "clauseListBox";
-            this.clauseListBox.Size = new System.Drawing.Size(209, 615);
+            this.clauseListBox.Size = new System.Drawing.Size(209, 511);
             this.clauseListBox.TabIndex = 3;
             this.clauseListBox.SelectedIndexChanged += new System.EventHandler(this.clauseListBox_SelectedIndexChanged);
             // 
             // showNewConstraintListBox
             // 
             this.showNewConstraintListBox.FormattingEnabled = true;
-            this.showNewConstraintListBox.Location = new System.Drawing.Point(246, 17);
+            this.showNewConstraintListBox.Location = new System.Drawing.Point(246, 108);
             this.showNewConstraintListBox.Name = "showNewConstraintListBox";
-            this.showNewConstraintListBox.Size = new System.Drawing.Size(209, 615);
+            this.showNewConstraintListBox.Size = new System.Drawing.Size(209, 420);
             this.showNewConstraintListBox.TabIndex = 2;
             this.showNewConstraintListBox.SelectedIndexChanged += new System.EventHandler(this.showNewConstraintListBox_SelectedIndexChanged);
+            // 
+            // featureForNewConstraintListBox
+            // 
+            this.featureForNewConstraintListBox.FormattingEnabled = true;
+            this.featureForNewConstraintListBox.Location = new System.Drawing.Point(18, 17);
+            this.featureForNewConstraintListBox.Name = "featureForNewConstraintListBox";
+            this.featureForNewConstraintListBox.Size = new System.Drawing.Size(209, 550);
+            this.featureForNewConstraintListBox.TabIndex = 1;
+            this.featureForNewConstraintListBox.SelectedIndexChanged += new System.EventHandler(this.featureForNewConstraintListBox_SelectedIndexChanged);
             // 
             // openFileDialog1
             // 
@@ -1103,15 +1324,6 @@
             this.panel1.Size = new System.Drawing.Size(1057, 636);
             this.panel1.TabIndex = 6;
             // 
-            // featureForNewConstraintListBox
-            // 
-            this.featureForNewConstraintListBox.FormattingEnabled = true;
-            this.featureForNewConstraintListBox.Location = new System.Drawing.Point(18, 17);
-            this.featureForNewConstraintListBox.Name = "featureForNewConstraintListBox";
-            this.featureForNewConstraintListBox.Size = new System.Drawing.Size(209, 615);
-            this.featureForNewConstraintListBox.TabIndex = 1;
-            this.featureForNewConstraintListBox.SelectedIndexChanged += new System.EventHandler(this.featureForNewConstraintListBox_SelectedIndexChanged);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1134,6 +1346,7 @@
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.NewConstraintEditor.ResumeLayout(false);
+            this.NewConstraintEditor.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.panel1.ResumeLayout(false);
@@ -1242,6 +1455,24 @@
         private System.Windows.Forms.ListBox showNewConstraintListBox;
         private System.Windows.Forms.ListBox clauseListBox;
         private System.Windows.Forms.ListBox featureForNewConstraintListBox;
+        private System.Windows.Forms.Button openConstraintsJsonButton;
+        private System.Windows.Forms.Button saveCostaintsJsonButton;
+        private System.Windows.Forms.Button deleteConstraintButton;
+        private System.Windows.Forms.Button newConstraintButton;
+        private System.Windows.Forms.Button deleteClauseButton;
+        private System.Windows.Forms.Button newClauseButton;
+        private System.Windows.Forms.TextBox constraintNameTextBox;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.CheckBox notCheckBox;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox topic2TextBox;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.ComboBox innerComboBox;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.ComboBox outerComboBox;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.TextBox topic1TextBox;
+        private System.Windows.Forms.Button saveClauseButton;
     }
 }
 

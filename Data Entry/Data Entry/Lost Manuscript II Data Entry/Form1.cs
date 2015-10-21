@@ -23,7 +23,6 @@ namespace Dialogue_Data_Entry
         private string currentQueryFolderName;
         private int queryCounter;
         private int selectedIndex;
-        private Constraint selectedConstraint;
         private const string BAD_CHARS = "";
         //private const string BAD_CHARS = "<>()\"\'";
         private int tIndex = -1;
@@ -39,7 +38,7 @@ namespace Dialogue_Data_Entry
         //private string defaultFilename = @"\2008_Summer_Olympic_Games_4th_tag10.xml";
         //private string defaultFilename = @"\2008_Summer_Olympic_Games_4th_revised.xml";
         //private string defaultFilename = @"\2008_Summer_Olympic_Games_4th_tag_complex_chinese_new.xml";
-        private string defaultFilename = @"\bartender_test_2.xml";
+        private string defaultFilename = @"\bartender_test.xml";
         private string constraintFilename = @"\constraint.txt";
 
         public Form1()
@@ -93,7 +92,7 @@ namespace Dialogue_Data_Entry
 
             openDefaultXMLFile();
             openDefaultConstraintFile();
-            openDefaultNewConstraintFile();
+            openDefaultConstraintJsonFile();
 
             //Open the query window
             openQueryWindow();

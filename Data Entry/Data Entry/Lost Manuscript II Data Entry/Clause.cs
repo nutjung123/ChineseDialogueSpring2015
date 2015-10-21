@@ -31,11 +31,11 @@ namespace Dialogue_Data_Entry
         //If the NOT boolean is TRUE, then any condition
         //whethere this clause would be TRUE it is now FALSE.
 
-        private string name_1;
-        private string name_2;
-        private int inner_relationship_id;
-        private int outer_relationship_id;
-        private bool not;
+        public string name_1;
+        public string name_2;
+        public int inner_relationship_id;
+        public int outer_relationship_id;
+        public bool not;
 
         public Clause(string n1, string n2, int in_rel_id, int out_rel_id, bool n)
         {
