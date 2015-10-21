@@ -22,10 +22,6 @@ namespace Dialogue_Data_Entry
         //Which speak value should be used to display this feature.
         public int speak_index;
 
-        //A map of sub-feature id's to sub-features.
-        //A sub-feature is an alternate form of this feature, containing a different speak value, neighbors, etc.
-        private Dictionary<int, Feature> subfeatures;
-       
         public Feature(string data)
         {
             this.speaks = new List<string>();
@@ -37,7 +33,6 @@ namespace Dialogue_Data_Entry
             this.level = 0;
             this.dist = 0;
             this.shortestDistance = new List<double>();
-            this.subfeatures = new Dictionary<int, Feature>();
             this.speak_index = 0;
         }
 
@@ -178,29 +173,6 @@ namespace Dialogue_Data_Entry
             this.parents.Add(new Tuple<Feature, double, string>(parent, weight, relationship));
             return true;
         }
-
-        //Add a single subfeature
-        public void addSubFeature(int sub_id, Feature subfeat)
-        {
-            subfeatures.Add(sub_id, subfeat);
-        }//end method addSubfeature
-        //Get a single subfeature
-        public Feature getSubFeature(int sub_id)
-        {
-            Feature return_feature = null;
-            subfeatures.TryGetValue(sub_id, out return_feature);
-            return return_feature;
-        }//end method getSubfeature
-        //Get all subfeatures
-        public Dictionary<int, Feature> getSubFeatures()
-        {
-            return subfeatures;
-        }//end method getSubFeatures
-        //Get a list of subfeature ID's
-        public List<int> getSubFeatureIDs()
-        {
-            return subfeatures.Keys.ToList();
-        }//end method getSubFeatureIDs
 
         public string getRelationshipNeighbor(string neighbor)
         {
