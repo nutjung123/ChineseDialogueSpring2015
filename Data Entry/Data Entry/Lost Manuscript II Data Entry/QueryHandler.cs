@@ -868,7 +868,10 @@ namespace Dialogue_Data_Entry
         //outOfTopic indicates whether or not we are continuing out-of-topic handling.
         //projectAsTopic true means we use forward projection to choose the next node to traverse to based on
         //  how well the nodes in the n-length path from the current node relate to the current node.
-        public string ParseInput(string input, bool messageToServer = false, List<string> current_keywords = null)
+
+        //feature_discussion_mode = 0 means regular, single-feature traversal
+        //feature_discussion_mode = 1 means presenting a feature as well as n of its neighbors
+        public string ParseInput(string input, bool messageToServer = false, List<string> current_keywords = null, int feature_discussion_mode = 0)
         {
             if (current_keywords == null)
                 current_keywords = new List<string>();
@@ -916,8 +919,13 @@ namespace Dialogue_Data_Entry
             
             FeatureSpeaker speaker = new FeatureSpeaker(this.graph, temporalConstraintList, prevSpatial, topicHistory, this.finite_state_machine, current_keywords);
 
+            //DEBUG
+            Console.WriteLine("Current state: " + finite_state_machine.getCurrentState().getStateName());
+            Console.WriteLine("Turn: " + turn);
+            //END DEBUG
+
             //Check for specific commands.
-            if (split_input.Length != 0 || messageToServer)
+            if (!String.IsNullOrEmpty(input) || messageToServer)
             {
                 //Step-through command.
                 if (split_input[0].Equals("STEP"))
@@ -927,18 +935,133 @@ namespace Dialogue_Data_Entry
                     //Console.WriteLine("step_count " + split_input[1]);
                     int step_count = int.Parse(split_input[1]);
 
+                    //DEBUG
+                    Console.WriteLine("Stepping for: " + step_count + " steps");
+                    //END DEBUG
+
                     //Create an answer by calling the ParseInput function step_count times.
                     answer = "";
                     for (int s = 0; s < step_count; s++)
                     {
                         //Pass the current keywords on with each step
                         answer += ParseInput("", false, current_keywords);
-                        answer += "\n";
+                        answer += "\n ";
                     }
                     //Console.WriteLine("answer " + answer);
                     //Just return this answer by itself
                     return answer;
                 }//end if
+                //Next state command
+                else if (split_input[0].Equals("NEXTSTATE"))
+                {
+                    //Transition to the next state.
+
+                    //Treat this as searching for a new topic.
+                    Feature nextTopic = this.topic;
+                    string[] newBuffer;
+
+                    //Get the next topic as a state transition
+                    nextTopic = speaker.getNextTopic(nextTopic, input, this.turn, true);
+                    Console.WriteLine("Next State from " + this.topic.Data + " is " + nextTopic.Data);
+
+                    noveltyInfo = speaker.getNovelty(nextTopic, this.turn, noveltyAmount);
+                    currentTopicNovelty = speaker.getCurrentTopicNovelty();
+                    noveltyValue = speaker.getCurrentTopicNovelty();
+                    //newBuffer = FindStuffToSay(nextTopic);
+                    //MessageBox.Show("Explored " + nextTopic.Data + " with " + newBuffer.Length + " speaks.");
+
+                    nextTopic.DiscussedAmount += 1;
+                    this.graph.setFeatureDiscussedAmount(nextTopic.Data, nextTopic.DiscussedAmount);
+                    this.topic = nextTopic;
+
+                    //Return the speak value of whatever state we have transitioned into,
+                    //as well as a numbered list of the states that follow it.
+                    answer = this.topic.getSpeak(this.topic.speak_index);
+                    State current_state = finite_state_machine.getCurrentState();
+                    List<string> next_state_names = current_state.getNextStateNames();
+
+                    answer += "\n " + "Next States: ";
+
+                    for (int i = 0; i < next_state_names.Count; i++)
+                    {
+                        answer += "\n " + "(" + i + ") - " + next_state_names[i] + ", ";
+                    }//end for
+
+                    //Update 
+                    updateHistory(this.topic);
+                    this.turn++;
+
+                    return answer;
+                }//end if
+                //Payoff command
+                else if (split_input[0].Equals("PAYOFF"))
+                {
+                    //Start a payoff.
+                    //Take the history of keywords and pass them to a FeatureSpeaker.
+                    speaker = new FeatureSpeaker(this.graph, temporalConstraintList, prevSpatial, topicHistory, this.finite_state_machine, keyword_history);
+                    //Find the topic related to the most keywords.
+                    //Treat this as searching for a new topic.
+                    Feature nextTopic = this.topic;
+
+                    Feature central_topic = speaker.getKeywordTopic();
+                    nextTopic = central_topic;
+
+                    string[] newBuffer;
+
+                    //Get the next topic
+                    Console.WriteLine("Central topic is " + nextTopic.Data);
+
+                    noveltyInfo = speaker.getNovelty(nextTopic, this.turn, noveltyAmount);
+                    currentTopicNovelty = speaker.getCurrentTopicNovelty();
+                    noveltyValue = speaker.getCurrentTopicNovelty();
+                    newBuffer = FindStuffToSay(nextTopic);
+                    //MessageBox.Show("Explored " + nextTopic.Data + " with " + newBuffer.Length + " speaks.");
+
+                    nextTopic.DiscussedAmount += 1;
+                    this.graph.setFeatureDiscussedAmount(nextTopic.Data, nextTopic.DiscussedAmount);
+                    this.topic = nextTopic;
+                    // talk about
+                    this.buffer = newBuffer;
+                    answer = this.buffer[b++];
+
+                    //Update 
+                    updateHistory(this.topic);
+                    this.turn++;
+
+                    //Talk about this topic's neighbors
+                    string temp_answer = "";
+                    for (int i = 0; i < 2; i++)
+                    {
+                        //Get the next topic off of the central topic
+                        nextTopic = central_topic;
+                        string[] newBuffer_2;
+
+                        //Get the next topic
+                        nextTopic = speaker.getNextTopic(nextTopic, "", this.turn, false);
+                        Console.WriteLine("Next Topic from " + this.topic.Data + " is " + nextTopic.Data);
+
+                        noveltyInfo = speaker.getNovelty(nextTopic, this.turn, noveltyAmount);
+                        currentTopicNovelty = speaker.getCurrentTopicNovelty();
+                        noveltyValue = speaker.getCurrentTopicNovelty();
+                        newBuffer_2 = FindStuffToSay(nextTopic);
+                        //MessageBox.Show("Explored " + nextTopic.Data + " with " + newBuffer.Length + " speaks.");
+
+                        nextTopic.DiscussedAmount += 1;
+                        this.graph.setFeatureDiscussedAmount(nextTopic.Data, nextTopic.DiscussedAmount);
+                        this.topic = nextTopic;
+                        // talk about
+                        this.buffer = newBuffer_2;
+                        temp_answer = this.buffer[b++];
+
+                        //Update 
+                        updateHistory(this.topic);
+                        this.turn++;
+
+                        answer += temp_answer;
+                    }//end for
+
+                    return answer;
+                }//end else if
                 //Input with no command.
                 else
                 {
@@ -959,56 +1082,83 @@ namespace Dialogue_Data_Entry
                             keyword_history.Add(keyword);
                         }//end foreach
 
-                        //2. Perform an 2-step traversal based on the keywords we just received.
+                        //2. Perform an 1-step traversal based on the keywords we just received.
                         //Pass the temp_keywords as the step's current_keywords.
-                        answer += ParseInput("STEP:2", false, temp_keywords);
+                        //answer = ParseInput("STEP:1", false, temp_keywords);
+                        answer = "";
 
-                        //3. Transition to the next state.
-                        //Treat this as searching for a new topic.
-                        Feature nextTopic = this.topic;
-                        string[] newBuffer;
-
-                        //Get the next topic as a state transition
-                        nextTopic = speaker.getNextTopic(nextTopic, input, this.turn, true);
-                        Console.WriteLine("Next Topic from " + this.topic.Data + " is " + nextTopic.Data);
-
-                        noveltyInfo = speaker.getNovelty(nextTopic, this.turn, noveltyAmount);
-                        currentTopicNovelty = speaker.getCurrentTopicNovelty();
-                        noveltyValue = speaker.getCurrentTopicNovelty();
-                        //newBuffer = FindStuffToSay(nextTopic);
-                        //MessageBox.Show("Explored " + nextTopic.Data + " with " + newBuffer.Length + " speaks.");
-
-                        nextTopic.DiscussedAmount += 1;
-                        this.graph.setFeatureDiscussedAmount(nextTopic.Data, nextTopic.DiscussedAmount);
-                        this.topic = nextTopic;
-                        // talk about
-                        //this.buffer = newBuffer;
-                        //answer = this.buffer[b++];
-
-                        //Return the speak value of whatever state we have transitioned into,
-                        //as well as a numbered list of the states that follow it.
-                        answer = this.topic.getSpeak(this.topic.speak_index);
-                        State current_state = finite_state_machine.getCurrentState();
-                        List<string> next_state_names = current_state.getNextStateNames();
-
-                        answer += "\n " + "Next States: ";
-
-                        for (int i = 0; i < next_state_names.Count; i++)
+                        String temp_answer = "";
+                        for (int i = 0; i < temp_keywords.Count; i++)
                         {
-                            answer += "\n " + "(" + i + ") - " + next_state_names[i] + ", ";
+                            //Find the next topic by finding a feature from the ith keyword
+                            Feature nextTopic = FindFeature(temp_keywords[i]);
+                            string[] newBuffer_2;
+
+                            Console.WriteLine("Next Topic from " + this.topic.Data + " is " + nextTopic.Data);
+
+                            noveltyInfo = speaker.getNovelty(nextTopic, this.turn, noveltyAmount);
+                            currentTopicNovelty = speaker.getCurrentTopicNovelty();
+                            noveltyValue = speaker.getCurrentTopicNovelty();
+                            newBuffer_2 = FindStuffToSay(nextTopic);
+                            //MessageBox.Show("Explored " + nextTopic.Data + " with " + newBuffer.Length + " speaks.");
+
+                            nextTopic.DiscussedAmount += 1;
+                            this.graph.setFeatureDiscussedAmount(nextTopic.Data, nextTopic.DiscussedAmount);
+                            this.topic = nextTopic;
+                            // talk about
+                            this.buffer = newBuffer_2;
+                            temp_answer = this.buffer[b++];
+
+                            //Update 
+                            updateHistory(this.topic);
+                            this.turn++;
+
+                            answer += temp_answer;
                         }//end for
 
-                        //Update 
-                        updateHistory(this.topic);
-                        this.turn++;
+                        //DEBUG
+                        Console.WriteLine("answer after step: " + answer);
+                        //END DEBUG
+
+                        //3. Transition to the next state.
+                        answer += ParseInput("NEXTSTATE", false, temp_keywords);
 
                         return answer;
                     }//end if
                 }//end else
             }//end if
             //If there is no input, just continue to the next feature.
-            if (string.IsNullOrEmpty(input))
-            {
+            else if (string.IsNullOrEmpty(input))
+            {                
+                //DEBUG
+                Console.WriteLine("No input, continuing to next topic");
+                //END DEBUG
+
+                Feature nextTopic = this.topic;
+                string[] newBuffer;
+
+                //Get the next topic
+                nextTopic = speaker.getNextTopic(nextTopic, input, this.turn, false);
+                Console.WriteLine("Next Topic from " + this.topic.Data + " is " + nextTopic.Data);
+
+                noveltyInfo = speaker.getNovelty(nextTopic, this.turn, noveltyAmount);
+                currentTopicNovelty = speaker.getCurrentTopicNovelty();
+				noveltyValue = speaker.getCurrentTopicNovelty();
+                newBuffer = FindStuffToSay(nextTopic);
+                //MessageBox.Show("Explored " + nextTopic.Data + " with " + newBuffer.Length + " speaks.");
+
+                nextTopic.DiscussedAmount += 1;
+                this.graph.setFeatureDiscussedAmount(nextTopic.Data, nextTopic.DiscussedAmount);
+                this.topic = nextTopic;
+                // talk about
+                this.buffer = newBuffer;
+                answer = this.buffer[b++];
+
+                //Update 
+                updateHistory(this.topic);
+                this.turn++;
+
+                return answer;
             }//end if
 
 
@@ -1334,7 +1484,7 @@ namespace Dialogue_Data_Entry
                 if (messageToServer)
                 {
                     //Return message to Unity front-end with both novel and proximal nodes
-                    return MessageToServer(this.topic, answer, noveltyInfo, speaker.getProximal(this.topic, noveltyAmount), forLog, outOfTopic);
+                    return MessageToServer(this.topic, answer, noveltyInfo, speaker.getProximal(this.topic, noveltyAmount));
                 }
 
                 return answer;// +" <Novelty Info: " + noveltyInfo + " > <Proximal Info: " + speaker.getProximal(this.topic, noveltyAmount) + ">";

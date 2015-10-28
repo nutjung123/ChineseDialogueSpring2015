@@ -846,9 +846,9 @@ namespace Dialogue_Data_Entry
                 //checking their constraints.
                 //List<string> candidate_feature_names = featGraph.getSatisfiedFeatures(topicHistory);
 
-                double maxScore = listScore[0].Item2;
+                double maxScore = -Double.MaxValue;
                 int maxIndex = 0;
-                for (int x = 1; x < listScore.Count; x++)
+                for (int x = 0; x < listScore.Count; x++)
                 {
                     if (listScore[x].Item2 > maxScore)
                     {
@@ -872,12 +872,16 @@ namespace Dialogue_Data_Entry
 
                         //If this is a state feature, skip it.
                         if (listScore[x].Item1.is_state)
+                        {
+                            Console.WriteLine("Filtering out state feature " + listScore[x].Item1.Data);
                             continue;
+                        }//end if
 
                         maxScore = listScore[x].Item2;
                         maxIndex = x;
                     }
                 }
+                Console.WriteLine("Max score item: " + listScore[maxIndex].Item1.Data);
 
                 currentTopicNovelty = currentNovelty[featGraph.getFeatureIndex(listScore[maxIndex].Item1.Data)];
                 //if (printCalculation)
@@ -896,7 +900,68 @@ namespace Dialogue_Data_Entry
                 //answer question case
             }
             return null;
-        }
+        }//end getNextTopic
+
+        //Return the feature connected to the most keywords
+        public Feature getKeywordTopic()
+        {
+            //First, try to find features from each keyword
+            List<Feature> keywords_as_features = new List<Feature>();
+
+            Feature temp_feature = null;
+            foreach (String keyword in current_keywords)
+            {
+                //Try to get a feature for this keyword
+                temp_feature = featGraph.getFeature(keyword);
+                if (temp_feature != null)
+                    keywords_as_features.Add(temp_feature);
+            }//end foreach
+
+            //Now that there is a list of keywords as features, count the occurrence
+            //of each keywords' neighbors
+            Dictionary<Feature, int> feature_occurrence = new Dictionary<Feature, int>();
+            foreach (Feature keyword_feature in keywords_as_features)
+            {
+                List<Feature> features_to_check = new List<Feature>();
+                //features_to_check.Add(keyword_feature);
+                foreach (Tuple<Feature, double, string> temp_neighbor_entry in keyword_feature.Neighbors)
+                {
+                    features_to_check.Add(temp_neighbor_entry.Item1);
+                }//end foreach
+
+                foreach (Feature feature_to_check in features_to_check)
+                {
+                    //First, check if the feature is already in the dictionary
+                    if (feature_occurrence.ContainsKey(feature_to_check))
+                    {
+                        //If so, increment its count
+                        int current_count = 0;
+                        feature_occurrence.TryGetValue(feature_to_check, out current_count);
+                        feature_occurrence[feature_to_check] = current_count + 1;
+                    }//end if
+                    else
+                    {
+                        //If not, create a new dictionary entry for the feature
+                        feature_occurrence.Add(feature_to_check, 1);
+                    }//end else
+                }//end foreach
+            }//end foreach
+
+            //Find the feature with the highest count
+            int highest_count = 0;
+            Feature return_feature = null;
+
+            foreach(KeyValuePair<Feature, int> temp_pair in feature_occurrence)
+            {
+                if (temp_pair.Value > highest_count)
+                {
+                    highest_count = temp_pair.Value;
+                    return_feature = temp_pair.Key;
+                }//end if
+            }//end foreach
+
+            return return_feature;
+        }//end method getKeywordTopic
 
         public double getCurrentTopicNovelty()
         {

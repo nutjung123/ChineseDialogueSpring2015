@@ -39,7 +39,7 @@ namespace Dialogue_Data_Entry
             //double hierachyConstraintW = 1.0;
             //double temporalConstraintW = 1.0;
             weight_array = new double[Constant.WeightArraySize];
-            weight_array[Constant.DiscussAmountWeightIndex] = -100.0;
+            weight_array[Constant.DiscussAmountWeightIndex] = -3.0;
             weight_array[Constant.NoveltyWeightIndex] = -1.0;
             weight_array[Constant.SpatialWeightIndex] = 1.0;
             weight_array[Constant.HierarchyWeightIndex] = 100.0;

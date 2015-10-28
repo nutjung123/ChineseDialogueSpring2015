@@ -2,7 +2,7 @@
 <Root id="0"/>
 <Feature id="0" data="Intro" state="true">
 <neighbor dest="1" weight="0" relationship=""/>
-<speak value="[Intro 1] How you doing?"/>
+<speak value="[Intro 1] How are you doing?"/>
 <speak value="[Intro 2] How's it going?"/>
 <speak value="[Intro 3] Hi."/>
 </Feature>
@@ -32,6 +32,8 @@
 <neighbor dest="5" weight="0" relationship=""/>
 <neighbor dest="6" weight="0" relationship=""/>
 <neighbor dest="7" weight="0" relationship=""/>
+<neighbor dest="10" weight="0" relationship=""/>
+<neighbor dest="12" weight="0" relationship=""/>
 <speak value="[Rain 1] As a droid, I'm not too fond of rain."/>
 <speak value="[Rain 2] Rain's alright, as long as my parts aren't showing."/>
 </Feature>
@@ -39,14 +41,18 @@
 <neighbor dest="4" weight="0" relationship=""/>
 <neighbor dest="7" weight="0" relationship=""/>
 <neighbor dest="8" weight="0" relationship=""/>
+<neighbor dest="10" weight="0" relationship=""/>
+<neighbor dest="11" weight="0" relationship=""/>
 <speak value="[Hot 1] The heat's never good for my circuits."/>
-<speak value="[Hot 2] You ever been to Tatooine? Now that's heat."/>
+<speak value="[Hot 2] I can withstand heat higher than most humans. But that doesn't mean it's comfortable!"/>
 </Feature>
 <Feature id="6" data="Cold" state="false">
 <neighbor dest="4" weight="0" relationship=""/>
 <neighbor dest="7" weight="0" relationship=""/>
 <neighbor dest="8" weight="0" relationship=""/>
 <neighbor dest="9" weight="0" relationship=""/>
+<neighbor dest="12" weight="0" relationship=""/>
+<neighbor dest="13" weight="0" relationship=""/>
 <speak value="[Cold 1] Cold don't usually bother me much, so long as my joints can actuate."/>
 <speak value="[Cold 2] If yer talkin' about cold then Hoth's the place for you."/>
 </Feature>
@@ -55,19 +61,43 @@
 <neighbor dest="5" weight="0" relationship=""/>
 <neighbor dest="6" weight="0" relationship=""/>
 <neighbor dest="9" weight="0" relationship=""/>
+<neighbor dest="12" weight="0" relationship=""/>
 <speak value="[Cloudy 1] Cloudy days really do a number on my solar cells."/>
 <speak value="[Cloudy 2] You haven't seen cloudy 'till you've been to Cloud City itself."/>
 </Feature>
 <Feature id="8" data="Sunny" state="false">
 <neighbor dest="5" weight="0" relationship=""/>
 <neighbor dest="6" weight="0" relationship=""/>
-<speak value="[Sunny 1] Sun's good for you. Good for me, too, if I'm needin' a little extra energy."/>
-<speak value="[Sunny 2] Tatooine's twice as sunny as anyplace around here. And by that I mean it literally has two suns."/>
+<neighbor dest="11" weight="0" relationship=""/>
+<speak value="[Sunny 1] Sun's good for you. Good for me, too, if my solar cells are clean."/>
+<speak value="[Sunny 2] A nice, sunny day's all you need sometimes, ya know?"/>
 </Feature>
 <Feature id="9" data="Snow" state="false">
 <neighbor dest="6" weight="0" relationship=""/>
 <neighbor dest="7" weight="0" relationship=""/>
+<neighbor dest="13" weight="0" relationship=""/>
 <speak value="[Snow 1] I personally like snow, but it gets in my locomotors whenever I step out."/>
-<speak value="[Snow 2] I've seen snowpiles the size of this bar on Hoth, and that was on a light day."/>
+<speak value="[Snow 2] "/>
+</Feature>
+<Feature id="10" data="Kashyyyk" state="false">
+<neighbor dest="4" weight="0" relationship=""/>
+<neighbor dest="5" weight="0" relationship=""/>
+<speak value="[Kashyyyk 1] Kashyyyk's covered in hot, rainy jungles all year round."/>
+</Feature>
+<Feature id="11" data="Tatooine" state="false">
+<neighbor dest="5" weight="0" relationship=""/>
+<neighbor dest="8" weight="0" relationship=""/>
+<speak value="[Tatooine 1] Tatooine's twice as hot and sunny as anyplace around here. And by that I mean it literally has twice the number of scorching suns."/>
+</Feature>
+<Feature id="12" data="Kamino" state="false">
+<neighbor dest="4" weight="0" relationship=""/>
+<neighbor dest="6" weight="0" relationship=""/>
+<neighbor dest="7" weight="0" relationship=""/>
+<speak value="[Kamino 1] Kamino's not the best place if you like the sun. Cloudy all year round, with constant torrents of chilling rain."/>
+</Feature>
+<Feature id="13" data="Hoth" state="false">
+<neighbor dest="6" weight="0" relationship=""/>
+<neighbor dest="9" weight="0" relationship=""/>
+<speak value="[Hoth 1] I've seen snowpiles the size of this bar on Hoth, and that was on a light day. Sun always seems to be bright there, though."/>
 </Feature>
 </AIMind>
