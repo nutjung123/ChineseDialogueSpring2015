@@ -34,6 +34,9 @@ namespace Dialogue_Data_Entry
         private bool finite_state_mode;
         //The FSM
         private StateMachine finite_state_machine;
+        
+        //A list of keywords to prioritize
+        private List<string> current_keywords;
 
         //FILTERING:
         //A list of nodes to filter out of mention.
@@ -58,6 +61,7 @@ namespace Dialogue_Data_Entry
             expectedDramaticV = new double[20] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
             //setFiniteStateMachine();
             //setPartialOrderConstraints();
+            current_keywords = new List<string>();
         }
 
         public FeatureSpeaker(FeatureGraph featG, List<TemporalConstraint> myTemporalConstraintList,string prevSpatial,List<string> topicH, StateMachine fsm = null)
@@ -85,6 +89,36 @@ namespace Dialogue_Data_Entry
                 finite_state_mode = false;
             //setFiniteStateMachine();
             //setPartialOrderConstraints();
+            current_keywords = new List<string>();
+        }
+
+        public FeatureSpeaker(FeatureGraph featG, List<TemporalConstraint> myTemporalConstraintList, string prevSpatial, List<string> topicH, StateMachine fsm, List<string> input_keywords)
+        {
+            setFilterNodes();
+            this.temporalConstraintList = new List<TemporalConstraint>();
+            for (int x = 0; x < myTemporalConstraintList.Count(); x++)
+            {
+                this.temporalConstraintList.Add(new TemporalConstraint(myTemporalConstraintList[x].FirstArgument,
+                    myTemporalConstraintList[x].SecondArgument, myTemporalConstraintList[x].ThirdArgument,
+                    myTemporalConstraintList[x].FourthArgument, myTemporalConstraintList[x].FifthArgument));
+            }
+            this.featGraph = featG;
+            previousSpatial = prevSpatial;
+            this.topicHistory = new List<string>(topicH);
+            //define dramaticFunction manually here
+            expectedDramaticV = new double[20] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
+
+            if (fsm != null)
+            {
+                finite_state_mode = true;
+                finite_state_machine = fsm;
+            }//end if
+            else
+                finite_state_mode = false;
+            //setFiniteStateMachine();
+            //setPartialOrderConstraints();
+            current_keywords = new List<string>();
+            current_keywords = input_keywords;
         }
 
         private void setFilterNodes()
@@ -757,7 +791,7 @@ namespace Dialogue_Data_Entry
         }//end method getProximal
 
         //Return the next topic
-        public Feature getNextTopic(Feature oldTopic, string query, int turn)
+        public Feature getNextTopic(Feature oldTopic, string query, int turn, bool state_transition = false)
         {
             //set up the variables
             currentTurn = turn;
@@ -765,9 +799,8 @@ namespace Dialogue_Data_Entry
             {
                 //initial case
                 return oldTopic;
-
             }
-            else if (finite_state_mode)
+            else if (state_transition)
             {
                 //If we're in finite state mode, traverse to the next state and return
                 //its corresponding feature.
@@ -836,6 +869,10 @@ namespace Dialogue_Data_Entry
                         {
                             continue;
                         }//end if*/
+
+                        //If this is a state feature, skip it.
+                        if (listScore[x].Item1.is_state)
+                            continue;
 
                         maxScore = listScore[x].Item2;
                         maxIndex = x;

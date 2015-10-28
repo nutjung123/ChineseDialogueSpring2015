@@ -868,8 +868,11 @@ namespace Dialogue_Data_Entry
         //outOfTopic indicates whether or not we are continuing out-of-topic handling.
         //projectAsTopic true means we use forward projection to choose the next node to traverse to based on
         //  how well the nodes in the n-length path from the current node relate to the current node.
-        public string ParseInput(string input, bool messageToServer = false, bool forLog = false, bool outOfTopic = false, bool projectAsTopic = false)
+        public string ParseInput(string input, bool messageToServer = false, List<string> current_keywords = null)
         {
+            if (current_keywords == null)
+                current_keywords = new List<string>();
+
             string answer = IDK;
             string noveltyInfo = "";
             double currentTopicNovelty = -1;
@@ -910,55 +913,108 @@ namespace Dialogue_Data_Entry
             if (this.topic == null)
                 this.topic = this.graph.Root;
             //Console.WriteLine("Before new feature speaker in parse input");
-            FeatureSpeaker speaker = new FeatureSpeaker(this.graph, temporalConstraintList, prevSpatial, topicHistory, this.finite_state_machine);
+            
+            FeatureSpeaker speaker = new FeatureSpeaker(this.graph, temporalConstraintList, prevSpatial, topicHistory, this.finite_state_machine, current_keywords);
 
-
-            //For state transitions
-            bool state_transition = true;
-            if (state_transition)
+            //Check for specific commands.
+            if (split_input.Length != 0 || messageToServer)
             {
-                //1. Gather keywords from user (if any)
-
-                //2. Transition to the next state.
-                //Treat this as searching for a new topic.
-                Feature nextTopic = this.topic;
-                string[] newBuffer;
-
-                nextTopic = speaker.getNextTopic(nextTopic, input, this.turn);
-                Console.WriteLine("Next Topic from " + this.topic.Data + " is " + nextTopic.Data);
-
-                noveltyInfo = speaker.getNovelty(nextTopic, this.turn, noveltyAmount);
-                currentTopicNovelty = speaker.getCurrentTopicNovelty();
-                noveltyValue = speaker.getCurrentTopicNovelty();
-                //newBuffer = FindStuffToSay(nextTopic);
-                //MessageBox.Show("Explored " + nextTopic.Data + " with " + newBuffer.Length + " speaks.");
-
-                nextTopic.DiscussedAmount += 1;
-                this.graph.setFeatureDiscussedAmount(nextTopic.Data, nextTopic.DiscussedAmount);
-                this.topic = nextTopic;
-                // talk about
-                //this.buffer = newBuffer;
-                //answer = this.buffer[b++];
-
-                //Return the speak value of whatever state we have transitioned into,
-                //as well as a numbered list of the states that follow it.
-                answer = this.topic.getSpeak(this.topic.speak_index);
-                State current_state = finite_state_machine.getCurrentState();
-                List<string> next_state_names = current_state.getNextStateNames();
-
-                answer += "\n " + "Next States: ";
-
-                for (int i = 0; i < next_state_names.Count; i++)
+                //Step-through command.
+                if (split_input[0].Equals("STEP"))
                 {
-                    answer += "\n " + "(" + i + ") - " + next_state_names[i] + ", ";
-                }//end for
+                    //Step through the program with blank inputs a certain number of times, 
+                    //specified by the second argument in the command
+                    //Console.WriteLine("step_count " + split_input[1]);
+                    int step_count = int.Parse(split_input[1]);
 
-                //Update 
-                updateHistory(this.topic);
-                this.turn++;
+                    //Create an answer by calling the ParseInput function step_count times.
+                    answer = "";
+                    for (int s = 0; s < step_count; s++)
+                    {
+                        //Pass the current keywords on with each step
+                        answer += ParseInput("", false, current_keywords);
+                        answer += "\n";
+                    }
+                    //Console.WriteLine("answer " + answer);
+                    //Just return this answer by itself
+                    return answer;
+                }//end if
+                //Input with no command.
+                else
+                {
+                    //For state transitions
+                    bool state_transition = true;
+                    if (state_transition)
+                    {
+                        //1. Gather keywords from user (if any)
+                        List<string> temp_keywords = new List<string>();
+                        //Keywords are entered as a sequence of comma-separated strings.
+                        //Assume input consists of keywords from user.
+                        String[] split_by_comma_input = split_input[0].Split(',');
+                        temp_keywords = split_by_comma_input.ToList<string>();
 
-                return answer;
+                        //Add the keywords we just received to the keyword history list
+                        foreach (string keyword in temp_keywords)
+                        {
+                            keyword_history.Add(keyword);
+                        }//end foreach
+
+                        //2. Perform an 2-step traversal based on the keywords we just received.
+                        //Pass the temp_keywords as the step's current_keywords.
+                        answer += ParseInput("STEP:2", false, temp_keywords);
+
+                        //3. Transition to the next state.
+                        //Treat this as searching for a new topic.
+                        Feature nextTopic = this.topic;
+                        string[] newBuffer;
+
+                        //Get the next topic as a state transition
+                        nextTopic = speaker.getNextTopic(nextTopic, input, this.turn, true);
+                        Console.WriteLine("Next Topic from " + this.topic.Data + " is " + nextTopic.Data);
+
+                        noveltyInfo = speaker.getNovelty(nextTopic, this.turn, noveltyAmount);
+                        currentTopicNovelty = speaker.getCurrentTopicNovelty();
+                        noveltyValue = speaker.getCurrentTopicNovelty();
+                        //newBuffer = FindStuffToSay(nextTopic);
+                        //MessageBox.Show("Explored " + nextTopic.Data + " with " + newBuffer.Length + " speaks.");
+
+                        nextTopic.DiscussedAmount += 1;
+                        this.graph.setFeatureDiscussedAmount(nextTopic.Data, nextTopic.DiscussedAmount);
+                        this.topic = nextTopic;
+                        // talk about
+                        //this.buffer = newBuffer;
+                        //answer = this.buffer[b++];
+
+                        //Return the speak value of whatever state we have transitioned into,
+                        //as well as a numbered list of the states that follow it.
+                        answer = this.topic.getSpeak(this.topic.speak_index);
+                        State current_state = finite_state_machine.getCurrentState();
+                        List<string> next_state_names = current_state.getNextStateNames();
+
+                        answer += "\n " + "Next States: ";
+
+                        for (int i = 0; i < next_state_names.Count; i++)
+                        {
+                            answer += "\n " + "(" + i + ") - " + next_state_names[i] + ", ";
+                        }//end for
+
+                        //Update 
+                        updateHistory(this.topic);
+                        this.turn++;
+
+                        return answer;
+                    }//end if
+                }//end else
             }//end if
+            //If there is no input, just continue to the next feature.
+            if (string.IsNullOrEmpty(input))
+            {
+            }//end if
+
+
+
+
+            //INPUT HANDLING FROM PREVIOUS ITERATIONS OF SYSTEM
 
 
             //Console.WriteLine("after new speaker in parse input");
@@ -972,35 +1028,11 @@ namespace Dialogue_Data_Entry
                     //Console.WriteLine("step_count " + split_input[1]);
                     int step_count = int.Parse(split_input[1]);
 
-                    //TESTING JOINT MENTIONS
-                    //If there are two more colon-separated integers in the command, they are two node IDs that should be mentioned together.
-                    if (split_input.Length > 2)
-                    {
-                        //Since this is just a test, first, clear joint_mention_sets
-                        joint_mention_sets.Clear();
-                        //Get the two indices from the command
-                        int index_1 = int.Parse(split_input[2]);
-                        int index_2 = int.Parse(split_input[3]);
-                        //Add the pair as a list of features to joint_mention_sets.
-                        List<Feature> joint_set = new List<Feature>();
-                        joint_set.Add(this.graph.getFeature(index_1));
-                        joint_set.Add(this.graph.getFeature(index_2));
-                        joint_mention_sets.Add(joint_set);
-                    }//end if
-
                     //Create an answer by calling the ParseInput function step_count times.
                     answer = "";
                     for (int s = 0; s < step_count; s++)
                     {
-                        //Get forServer and forLog responses.
-                        //Treat every 5th node as topic
-                        if (s % 5 == 1)
-                        {
-                            //Last parameter true means the current node is the topic node
-                            answer += ParseInput("", true, true, false, false);
-                        }//end if
-                        else
-                            answer += ParseInput("", true, true, false, false);
+                        //answer += ParseInput("", true, true, false, false);
                         answer += "\n";
                     }
                     //Console.WriteLine("answer " + answer);
@@ -1150,12 +1182,6 @@ namespace Dialogue_Data_Entry
                 }
                 
                 // Can't guarantee it'll actually move on to anything...
-                //If we are not projecting the current node as a topic, pick the next node normally
-                if (!projectAsTopic)
-                {
-                    nextTopic = speaker.getNextTopic(nextTopic, "", this.turn);
-                    Console.WriteLine("Next Topic from " + this.topic.Data + " is " + nextTopic.Data);
-                }//end if
                 //If we are projecting the current node as a topic, pick the next node whose projected
                 //path of nodes relate most to the current node (has the highest score).
                 else
@@ -1256,8 +1282,6 @@ namespace Dialogue_Data_Entry
                 // talk about
                 this.buffer = newBuffer;
                 answer = this.buffer[b++];
-                if (projectAsTopic)
-                    answer = "*****" + answer;
             }
             // CASE: Tell me more / Continue speaking
             else if (input.Contains("more") && input.Contains("tell"))
@@ -1280,7 +1304,7 @@ namespace Dialogue_Data_Entry
                 Query query = BuildQuery(input);
                 if (query == null)
                 {
-                    return ParseInput("", messageToServer, false, true);
+                    return ParseInput("", messageToServer);
                     //answer = "I'm sorry, I'm afraid I don't understand what you are asking. But here's something I do know about. ";
                     //answer = answer + ParseInput("", false, false);
                     //out_of_topic = true;
@@ -1313,13 +1337,7 @@ namespace Dialogue_Data_Entry
                     return MessageToServer(this.topic, answer, noveltyInfo, speaker.getProximal(this.topic, noveltyAmount), forLog, outOfTopic);
                 }
 
-                if (outOfTopic)
-                    answer += ParseInput("", false, false);
-
-                if (forLog)
-                    return answer;
-                else
-                    return answer;// +" <Novelty Info: " + noveltyInfo + " > <Proximal Info: " + speaker.getProximal(this.topic, noveltyAmount) + ">";
+                return answer;// +" <Novelty Info: " + noveltyInfo + " > <Proximal Info: " + speaker.getProximal(this.topic, noveltyAmount) + ">";
             }
         }
 
