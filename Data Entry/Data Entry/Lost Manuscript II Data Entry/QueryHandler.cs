@@ -120,6 +120,9 @@ namespace Dialogue_Data_Entry
         //The state machine
         StateMachine finite_state_machine;
 
+        //A history of keywords from the user
+        private List<string> keyword_history;
+
         /// <summary>
         /// Create a converter for the specified XML file
         /// </summary>
@@ -143,6 +146,8 @@ namespace Dialogue_Data_Entry
 
             this.turn = 1;
             this.topic = null;
+
+            keyword_history = new List<string>();
 
             //Build lists of equivalent relationships
             //is, are, was, is a kind of, is a
@@ -218,19 +223,27 @@ namespace Dialogue_Data_Entry
             //finite_state_mode = true;
 
             //Automatically create states based on the feature graph.
-            //In FSM mode, any neighbor of a feature is a next
-            //state for that feature.
+            //Features with is_state = true are treated as states.
 
-            //First, create states of each feature.
+            //First, create states of each feature marked as a state.
             Dictionary<String, State> features_as_states = new Dictionary<string, State>();
             State temp_state = null;
             State first_state = null;
             foreach (Feature temp_feature in graph.Features)
             {
+                //Check if the feature is a state.
+                //If it is not, continue to the next feature.
+                if (!temp_feature.is_state)
+                    continue;
+
                 //Get a string list of all this feature's neighbors
                 List<String> temp_list = new List<String>();
                 foreach (Tuple<Feature, Double, string> temp_neighbor_entry in temp_feature.Neighbors)
                 {
+                    //If the neighboring feature is not also a state, continue to the next feature.
+                    if (!temp_neighbor_entry.Item1.is_state)
+                        continue;
+
                     temp_list.Add(temp_neighbor_entry.Item1.Data);
                 }//end foreach
 
@@ -901,10 +914,12 @@ namespace Dialogue_Data_Entry
 
 
             //For state transitions
-            bool state_transitions = true;
-            if (state_transitions)
+            bool state_transition = true;
+            if (state_transition)
             {
-                //Input to the state machine.
+                //1. Gather keywords from user (if any)
+
+                //2. Transition to the next state.
                 //Treat this as searching for a new topic.
                 Feature nextTopic = this.topic;
                 string[] newBuffer;

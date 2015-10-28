@@ -1,0 +1,73 @@
+<AIMind>
+<Root id="0"/>
+<Feature id="0" data="Intro" state="true">
+<neighbor dest="1" weight="0" relationship=""/>
+<speak value="[Intro 1] How you doing?"/>
+<speak value="[Intro 2] How's it going?"/>
+<speak value="[Intro 3] Hi."/>
+</Feature>
+<Feature id="1" data="Question1" state="true">
+<neighbor dest="2" weight="0" relationship=""/>
+<speak value="[Question1 1] What's the weather been like?"/>
+<speak value="[Question1 2] How's the weather out there?"/>
+<speak value="[Question1 3] What's it like out there? The weather, I mean."/>
+</Feature>
+<Feature id="2" data="Question2" state="true">
+<neighbor dest="3" weight="0" relationship=""/>
+<speak value="[Question2 1] So what's your favorite type of weather?"/>
+<speak value="[Question2 2] What sort of weather do you like?"/>
+</Feature>
+<Feature id="3" data="Payoff" state="true">
+<neighbor dest="0" weight="0" relationship=""/>
+<neighbor dest="4" weight="0" relationship=""/>
+<neighbor dest="5" weight="0" relationship=""/>
+<neighbor dest="6" weight="0" relationship=""/>
+<neighbor dest="7" weight="0" relationship=""/>
+<neighbor dest="8" weight="0" relationship=""/>
+<neighbor dest="9" weight="0" relationship=""/>
+<speak value="[Payoff 1] Well, let me tell ya something."/>
+<speak value="[Payoff 2] Here's a little somethin'."/>
+</Feature>
+<Feature id="4" data="Rain" state="false">
+<neighbor dest="5" weight="0" relationship=""/>
+<neighbor dest="6" weight="0" relationship=""/>
+<neighbor dest="7" weight="0" relationship=""/>
+<speak value="[Rain 1] As a droid, I'm not too fond of rain."/>
+<speak value="[Rain 2] Rain's alright, as long as my parts aren't showing."/>
+</Feature>
+<Feature id="5" data="Hot" state="false">
+<neighbor dest="4" weight="0" relationship=""/>
+<neighbor dest="7" weight="0" relationship=""/>
+<neighbor dest="8" weight="0" relationship=""/>
+<speak value="[Hot 1] The heat's never good for my circuits."/>
+<speak value="[Hot 2] You ever been to Tatooine? Now that's heat."/>
+</Feature>
+<Feature id="6" data="Cold" state="false">
+<neighbor dest="4" weight="0" relationship=""/>
+<neighbor dest="7" weight="0" relationship=""/>
+<neighbor dest="8" weight="0" relationship=""/>
+<neighbor dest="9" weight="0" relationship=""/>
+<speak value="[Cold 1] Cold don't usually bother me much, so long as my joints can actuate."/>
+<speak value="[Cold 2] If yer talkin' about cold then Hoth's the place for you."/>
+</Feature>
+<Feature id="7" data="Cloudy" state="false">
+<neighbor dest="4" weight="0" relationship=""/>
+<neighbor dest="5" weight="0" relationship=""/>
+<neighbor dest="6" weight="0" relationship=""/>
+<neighbor dest="9" weight="0" relationship=""/>
+<speak value="[Cloudy 1] Cloudy days really do a number on my solar cells."/>
+<speak value="[Cloudy 2] You haven't seen cloudy 'till you've been to Cloud City itself."/>
+</Feature>
+<Feature id="8" data="Sunny" state="false">
+<neighbor dest="5" weight="0" relationship=""/>
+<neighbor dest="6" weight="0" relationship=""/>
+<speak value="[Sunny 1] Sun's good for you. Good for me, too, if I'm needin' a little extra energy."/>
+<speak value="[Sunny 2] Tatooine's twice as sunny as anyplace around here. And by that I mean it literally has two suns."/>
+</Feature>
+<Feature id="9" data="Snow" state="false">
+<neighbor dest="6" weight="0" relationship=""/>
+<neighbor dest="7" weight="0" relationship=""/>
+<speak value="[Snow 1] I personally like snow, but it gets in my locomotors whenever I step out."/>
+<speak value="[Snow 2] I've seen snowpiles the size of this bar on Hoth, and that was on a light day."/>
+</Feature>
+</AIMind>

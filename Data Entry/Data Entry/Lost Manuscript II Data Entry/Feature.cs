@@ -22,6 +22,9 @@ namespace Dialogue_Data_Entry
         //Which speak value should be used to display this feature.
         public int speak_index;
 
+        //Whether or not this feature is directly connected to a state
+        public bool is_state;
+
         public Feature(string data)
         {
             this.speaks = new List<string>();
@@ -34,6 +37,7 @@ namespace Dialogue_Data_Entry
             this.dist = 0;
             this.shortestDistance = new List<double>();
             this.speak_index = 0;
+            this.is_state = false;
         }
 
         // This function is used to get a Feature that is a neighbor of this Feature, it takes a string and preforms a binary search over the list

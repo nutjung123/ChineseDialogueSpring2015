@@ -111,6 +111,17 @@ namespace Dialogue_Data_Entry
                 foreach (XmlNode node in features)
                 {
                     Feature tmp = result.getFeature(node.Attributes["data"].Value);
+                    
+                    //Check whether this feature also encodes a state
+                    if (node.Attributes["state"].Value.Equals("true"))
+                    {
+                        tmp.is_state = true;
+                    }//end if
+                    else
+                    {
+                        tmp.is_state = false;
+                    }//end else
+
                     //Neighbor
                     XmlNodeList neighbors = node.SelectNodes("neighbor");
                     foreach (XmlNode neighborNode in neighbors)
