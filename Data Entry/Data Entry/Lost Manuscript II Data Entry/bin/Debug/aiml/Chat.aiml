@@ -705,4 +705,56 @@
   	<template><srai>SORRY</srai></template>
 </category>
 
+<category>
+  	<pattern>WHAT IS * ABOUT</pattern>
+  	<template><srai>WHAT IS <star/></srai></template>
+</category>
+
+<category>
+  	<pattern>I WANT A BETTER UNDERSTANDING OF *</pattern>
+  	<template><srai>WHAT IS <star/></srai></template>
+</category>
+<category>
+  	<pattern>I WANT A DEEPER UNDERSTANDING OF *</pattern>
+  	<template><srai>WHAT IS <star/></srai></template>
+</category>
+<category>
+  	<pattern>I WOULD LIKE A BETTER UNDERSTANDING OF *</pattern>
+  	<template><srai>WHAT IS <star/></srai></template>
+</category>
+<category>
+  	<pattern>I WOULD LIKE A DEEPER UNDERSTANDING OF *</pattern>
+  	<template><srai>WHAT IS <star/></srai></template>
+</category>
+
+<category>
+  	<pattern>CAN YOU TELL ME SOMETHING ABOUT *</pattern>
+  	<template><srai>WHAT IS <star/></srai></template>
+</category>
+<category>
+  	<pattern>CAN YOU TELL ME SOMETHING ABOUT *</pattern>
+  	<template><srai>WHAT IS <star/></srai></template>
+</category>
+<category>
+  	<pattern>WOULD YOU TELL ME SOMETHING ABOUT *</pattern>
+  	<template><srai>WHAT IS <star/></srai></template>
+</category>
+
+<category>
+  	<pattern>I WANT TO KNOW WHAT IS *</pattern>
+  	<template><srai>WHAT IS <star/></srai></template>
+</category>
+<category>
+  	<pattern>I WOULD LIKE TO KNOW WHAT IS *</pattern>
+  	<template><srai>WHAT IS <star/></srai></template>
+</category>
+<category>
+  	<pattern>I WANT TO KNOW SOMETHING ABOUT *</pattern>
+  	<template><srai>WHAT IS <star/></srai></template>
+</category>
+<category>
+  	<pattern>I WOULD LIKE TO KNOW SOMETHING ABOUT *</pattern>
+  	<template><srai>WHAT IS <star/></srai></template>
+</category>
+
 </aiml>
