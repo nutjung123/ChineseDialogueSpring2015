@@ -1092,6 +1092,9 @@ namespace Dialogue_Data_Entry
                         {
                             //Find the next topic by finding a feature from the ith keyword
                             Feature nextTopic = FindFeature(temp_keywords[i]);
+                            //If the keyword doesn't map to a feature, skip it
+                            if (nextTopic == null)
+                                continue;
                             string[] newBuffer_2;
 
                             Console.WriteLine("Next Topic from " + this.topic.Data + " is " + nextTopic.Data);
@@ -1747,7 +1750,7 @@ namespace Dialogue_Data_Entry
         {
             List<string> stuff = new List<string>();
             string[] speaks = FindSpeak(feature);
-            if (speaks.Length > 0)
+            /*if (speaks.Length > 0)
             {
                 stuff.AddRange(speaks);
             }
@@ -1756,7 +1759,16 @@ namespace Dialogue_Data_Entry
             if (stuff.Count() == 0)
             {
                 stuff.Add(feature.Data);
-            }
+            }*/
+
+            stuff.Add(feature.getSpeak(feature.speak_index));
+            feature.changeSpeak();
+
+            if (stuff.Count() == 0)
+            {
+                stuff.Add(feature.Data);
+            }//end if
+
             return stuff.ToArray();
         }
 

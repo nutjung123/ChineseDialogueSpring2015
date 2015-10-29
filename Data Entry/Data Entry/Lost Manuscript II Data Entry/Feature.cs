@@ -322,6 +322,13 @@ namespace Dialogue_Data_Entry
         {
             this.speaks.RemoveAt(index);
         }
+        public void changeSpeak()
+        {
+            //Change this feature's speak index.
+            speak_index += 1;
+            if (speak_index >= speaks.Count)
+                speak_index = 0;
+        }//end method changeSpeak
 
         // This function will return a tuple that represents a tag that is stored in the topic, it does this by linear search, it will then update the lodations of the tags so that 
         //      the most recently accessed tags are at the top of the list and the ones that are older will begin to percolate down, basically this list is sorted by which tag was
