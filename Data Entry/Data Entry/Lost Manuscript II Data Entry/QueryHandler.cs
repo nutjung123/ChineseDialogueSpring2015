@@ -39,19 +39,22 @@ namespace Dialogue_Data_Entry
         public Question? QuestionType { get; private set; }
         // The direction/relationship asked about.
         public Direction? Direction { get; private set; }
+        public string DirectionWord { get; private set; }
         public bool HasDirection { get { return Direction != null; } }
 
-        public Query(Feature mainTopic, Question? questionType, Direction? directions)
+        public Query(Feature mainTopic, Question? questionType, Direction? directions, string direction_word = "")
         {
             MainTopic = mainTopic;
             QuestionType = questionType;
             Direction = directions;
+            DirectionWord = direction_word;
         }
         public override string ToString()
         {
             string s = "Topic: " + MainTopic.Data;
             s += "\nQuestion type: " + QuestionType ?? "none";
             s += "\nDirection specified: " + Direction ?? "none";
+            s += "\nDirection word: " + DirectionWord ?? "none";
             return s;
         }
     }
@@ -70,6 +73,12 @@ namespace Dialogue_Data_Entry
                                       "hosted", "was_hosted_at", "won"};
         private string[] Directional_Words = { "is southwest of", "is southeast of"
                 , "is northeast of", "is north of", "is west of", "is east of", "is south of", "is northwest of" };
+
+        private string[] locational_words = { "is north of", "is northwest of", "is east of", "is south of"
+                                                , "is in", "is southwest of", "is west of", "is northeast of"
+                                                , "is southeast of", "took place at", "was held by" };
+
+        
         // "is in" -> contains?
         private Bot bot;
         private User user;
@@ -1226,9 +1235,14 @@ namespace Dialogue_Data_Entry
         /// <returns>A Query object that can be passed to ParseQuery for output.</returns>
         public Query BuildQuery(string input)
         {
+            //DEBUG
+            Console.Out.WriteLine("Building query from: " + input);
+            //END DEBUG
+
             string mainTopic;
             Question? questionType = null;
             Direction? directionType = null;
+            string directionWord = "";
 
             // Find the main topic!
             Feature f = FindFeature(input);
@@ -1245,9 +1259,16 @@ namespace Dialogue_Data_Entry
                 return null;
             }
 
+            //DEBUG
+            Console.Out.WriteLine("Topic of query: " + mainTopic);
+            //END DEBUG
+
             // Is the input a question?
             if (input.Contains("where"))
             {
+                //DEBUG
+                Console.Out.WriteLine("Where question");
+                //END DEBUG
                 questionType = Question.WHERE;
                 if (input.Contains("was_hosted_at"))
                 {
@@ -1260,22 +1281,37 @@ namespace Dialogue_Data_Entry
             }
             else if (input.Contains("what") || input.Contains("?"))
             {
+                //DEBUG
+                Console.Out.WriteLine("What question");
+                //END DEBUG
                 questionType = Question.WHAT;
+
+                //DEBUG
+                Console.Out.WriteLine("Question type what");
+                //END DEBUG
+
                 // Check for direction words
-				if (input.Contains("direction"))
-				{
+				//if (input.Contains("direction"))
+				//{
 					foreach (string direction in directionWords)
 					{
 						// Ideally only one direction is specified
 						if (input.Contains(direction))
                     	{
 	                        directionType = (Direction)Enum.Parse(typeof(Direction), direction, true);
+                            directionWord = direction;
 	                        // Don't break. If "northwest" is asked, "north" will match first
 	                        // but then get replaced by "northwest" (and so on).
-	                    }
-					}
-				}
-            }
+	                    }//end if
+					}//end foreach
+
+                    //DEBUG
+                if (directionType != null)
+                    Console.Out.WriteLine("Input contained direction: " + directionType.ToString());
+                    //END DEBUG
+
+				//}//end if
+            }//end else if
             else
             {
                 int t = input.IndexOf("tell"), m = input.IndexOf("me"), a = input.IndexOf("about");
@@ -1285,7 +1321,7 @@ namespace Dialogue_Data_Entry
                     // TODO:  Anything?  Should just talk about the topic, then.
                 }
             }
-            return new Query(this.graph.getFeature(mainTopic), questionType, directionType);
+            return new Query(this.graph.getFeature(mainTopic), questionType, directionType, directionWord);
         }
 
         private string PadPunctuation(string s)
@@ -1360,7 +1396,7 @@ namespace Dialogue_Data_Entry
                         if (query.HasDirection)
                         {
                             // e.g. What is Direction of Topic?
-                            // Find names of features that is DIRECTION of MainTopic
+                            // Find names of features that is DIRECTION of MainTopic`
                             // Get list of <neighbor> tags
                             string dir = query.Direction.ToString().ToLower();
                             if (query.Direction == Direction.WON)
@@ -1388,6 +1424,73 @@ namespace Dialogue_Data_Entry
                                     output.Add(string.Format("{0} won {1}.", query.MainTopic.Data, neighbors.ToList().JoinAnd()));
                                 }
                             }
+
+                            //Directional What is question (e.g., What is south of...?)
+                            else if (query.Direction == Direction.NORTH
+                                || query.Direction == Direction.SOUTH
+                                || query.Direction == Direction.EAST
+                                || query.Direction == Direction.WEST
+                                || query.Direction == Direction.NORTHEAST
+                                || query.Direction == Direction.SOUTHEAST
+                                || query.Direction == Direction.NORTHWEST
+                                || query.Direction == Direction.SOUTHWEST)
+                            {
+                                //Relationships to answer these question have the form "is <direction> of".
+                                //From the topic of the query, look for such a relationship.
+                                Feature query_topic = query.MainTopic;
+
+                                foreach (Tuple<Feature, double, string> temp_neighbor in query_topic.Neighbors)
+                                {
+                                    //The main topic's neighbor
+                                    Feature temp_feature = temp_neighbor.Item1;
+                                    if (temp_feature.getRelationshipNeighbor(query_topic.Data).ToLower().Contains(query.DirectionWord.ToLower()))
+                                    {
+                                        output.Add(string.Format("{0} " + temp_feature.getRelationshipNeighbor(query_topic.Data) + " {1}.", temp_feature.Data, query_topic.Data));
+                                        break;
+                                    }//end if
+                                }//end foreach
+                            }//end else if
+                            /*else if (query.Direction == Direction.NORTH)
+                            {
+                                Console.Out.WriteLine("Direction north");
+                                output.Add("Direction north");
+                            }//end else if
+                            else if (query.Direction == Direction.SOUTH)
+                            {
+                                Console.Out.WriteLine("Direction south");
+                                output.Add("Direction south");
+                            }//end else if
+                            else if (query.Direction == Direction.EAST)
+                            {
+                                Console.Out.WriteLine("Direction east");
+                                output.Add("Direction east");
+                            }//end else if
+                            else if (query.Direction == Direction.WEST)
+                            {
+                                Console.Out.WriteLine("Direction west");
+                                output.Add("Direction west");
+                            }//end else if
+                            else if (query.Direction == Direction.NORTHEAST)
+                            {
+                                Console.Out.WriteLine("Direction northeast");
+                                output.Add("Direction northeast");
+                            }//end else if
+                            else if (query.Direction == Direction.SOUTHEAST)
+                            {
+                                Console.Out.WriteLine("Direction southeast");
+                                output.Add("Direction southeast");
+                            }//end else if
+                            else if (query.Direction == Direction.NORTHWEST)
+                            {
+                                Console.Out.WriteLine("Direction northwest");
+                                output.Add("Direction northwest");
+                            }//end else if
+                            else if (query.Direction == Direction.SOUTHWEST)
+                            {
+                                Console.Out.WriteLine("Direction southwest");
+                                output.Add("Direction north");
+                            }//end else if*/
+
                             else if (query.Direction == Direction.HOSTED)
                             {
                                 string[] neighbors = FindNeighborsByRelationship(query.MainTopic, dir);
@@ -1424,7 +1527,27 @@ namespace Dialogue_Data_Entry
                         {
                             // e.g. Where is Topic?
                             // Get all the neighbors from this feature and the "opposite" directions
-                            output.AddRange((SpeakNeighborRelations(query.MainTopic.Data, FindAllNeighbors(query.MainTopic))));
+                            //output.AddRange((SpeakNeighborRelations(query.MainTopic.Data, FindAllNeighbors(query.MainTopic))));
+                            
+                            //Where is the main topic
+                            Feature query_topic = query.MainTopic;
+                            //locational_words
+                            //Look for one of the locational words in the main topic's relationships
+                            foreach (Tuple<Feature, double, string> temp_neighbor in query_topic.Neighbors)
+                            {
+                                foreach (string locational_word in locational_words)
+                                {
+                                    if (temp_neighbor.Item3.ToLower().Contains(locational_word.ToLower()))
+                                    {
+                                        //DEBUG
+                                        Console.Out.WriteLine("Locational word " + locational_word + " found.");
+                                        //END DEBUG
+                                        output.Add(string.Format("{0} " + temp_neighbor.Item3 + " {1}.", query_topic.Data, temp_neighbor.Item1.Data));
+                                        break;
+                                    }//end if
+                                }//end foreach
+                            }//end foreach
+
                         }
                         break;
                     case Question.WHEN:

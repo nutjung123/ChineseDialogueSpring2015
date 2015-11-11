@@ -60,6 +60,7 @@ namespace Dialogue_Data_Entry
         {
             return neighbors[index].Item1;
         }
+
         // This function will get the respective edge weight along the connection between this feature and the feature with the passed data
         public double getNeighborWeight(string data)
         {

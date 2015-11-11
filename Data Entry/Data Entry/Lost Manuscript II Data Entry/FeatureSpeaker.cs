@@ -13,20 +13,7 @@ namespace Dialogue_Data_Entry
         private bool printCalculation = false;
         private int currentTurn=1;
         private int heightLimit = 999;
-        private string[] spatialKey = new string[8] { "east", "north", "northeast", "northwest", "south", "southeast", "southwest", "west" };
-        /*private string[] hierarchyKey = new string[33] { "is", "was a member of", "are", "won a gold medal in", "is a kind of", "is a member of"
-            , "is southwest of", "won", "is one of", "include", "was", "took place on", "was one of the", "is southeast of", "took place at"
-            , "was one of", "is a", "includes", "included", "is northeast of", "has", "is north of", "is in", "is west of"
-            , "is east of", "is south of", "is northwest of", "had", "includes event", "includes member", "included member"
-            , "include athlete", "" };*/
-
-        /*private string[] hierarchyKey = new string[40] {"has", "partially held", "is southeast of", "include", "is north of", "was one of the",
-                                                        "held", "was participated by", "was included by", "is south of", "wais a member of",
-                                                        "is northwest of", "is", "are", "included", "is southwest of", "won", "includes", "was a member of",
-                                                        "was had by", "is the venue where the gold medal was won by", "is a", "belongs to", "is a kind of",
-                                                        "took place on", "competed in", "is a member of", "was held by", "is one of", "is east of",
-                                                        "took place at", "was one of", "is west of", "is northeast of", "was a gold medal in", "was",
-                                                        "was won by", "is in", "leads to the construction of", "was partially held by"};*/
+        private string[] spatialKey = new string[8] { "is east of##在东方于##", "is north of##在北方于##", "is northeast of##在东北方于##", "is northwest of##在西北方于##", "is south of##在南方于##", "is southeast of##在东南方于##", "is south of##在南方于##", "is west of##在西方于##" };
 
         private string[] hierarchyKey = new string[40] {"has##有##", "partially held##举办了部分##", "is southeast of##在东南方于##", "include##包括##",
                                                     "is north of##在北方于##", "was one of the##是##", "held##举办了##", "was participated by##被参与##"
@@ -47,8 +34,7 @@ namespace Dialogue_Data_Entry
         private double[] currentNovelty;
         private double currentTopicNovelty = -1;
         private List<TemporalConstraint> temporalConstraintList;
-        private string[] Directional_Words = {"north", "east", "west", "south",
-                                      "northeast", "northwest", "southeast", "southwest"};
+        private string[] Directional_Words = {"is east of##在东方于##", "is north of##在北方于##", "is northeast of##在东北方于##", "is northwest of##在西北方于##", "is south of##在南方于##", "is southeast of##在东南方于##", "is south of##在南方于##", "is west of##在西方于##"};
 
         //FILTERING:
         //A list of nodes to filter out of mention.
@@ -428,7 +414,7 @@ namespace Dialogue_Data_Entry
             if (filter_nodes.Contains(current.Data.Split(new string[] { "##" }, StringSplitOptions.None)[0])
                 || current.Data.Equals(oldTopic.Data))
             {
-                Console.WriteLine("Filtering out node " + current.Data);
+                //Console.WriteLine("Filtering out node " + current.Data);
                 score = -1000000;
             }//end if
 
