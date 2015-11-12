@@ -68,15 +68,18 @@ namespace Dialogue_Data_Entry
         private const string IDK = "I'm afraid I don't know anything about that topic." + "##" + "对不起，我不知道。" + "##";
         private string[] punctuation = { ",", ";", ".", "?", "!", "\'", "\"", "(", ")", "-" };
         private string[] questionWords = { "?", "what", "where", "when" };
+
         private string[] directionWords = {"inside", "contain", "north", "east", "west", "south",
                                       "northeast", "northwest", "southeast", "southwest",
                                       "hosted", "was_hosted_at", "won"};
+
         private string[] Directional_Words = { "is southwest of", "is southeast of"
                 , "is northeast of", "is north of", "is west of", "is east of", "is south of", "is northwest of" };
 
         private string[] locational_words = { "is north of", "is northwest of", "is east of", "is south of"
                                                 , "is in", "is southwest of", "is west of", "is northeast of"
-                                                , "is southeast of", "took place at", "was held by" };
+                                                , "is southeast of", "took place at", "was held by"
+                                                , "was partially held by" };
 
         
         // "is in" -> contains?
@@ -1270,10 +1273,10 @@ namespace Dialogue_Data_Entry
                 Console.Out.WriteLine("Where question");
                 //END DEBUG
                 questionType = Question.WHERE;
-                if (input.Contains("was_hosted_at"))
-                {
-                    directionType = Direction.WAS_HOSTED_AT;
-                }
+                //if (input.Contains("was_hosted_at"))
+                //{
+                //    directionType = Direction.WAS_HOSTED_AT;
+                //}
             }
             else if (input.Contains("when"))
             {
@@ -1285,10 +1288,6 @@ namespace Dialogue_Data_Entry
                 Console.Out.WriteLine("What question");
                 //END DEBUG
                 questionType = Question.WHAT;
-
-                //DEBUG
-                Console.Out.WriteLine("Question type what");
-                //END DEBUG
 
                 // Check for direction words
 				//if (input.Contains("direction"))
@@ -1450,53 +1449,67 @@ namespace Dialogue_Data_Entry
                                     }//end if
                                 }//end foreach
                             }//end else if
-                            /*else if (query.Direction == Direction.NORTH)
-                            {
-                                Console.Out.WriteLine("Direction north");
-                                output.Add("Direction north");
-                            }//end else if
-                            else if (query.Direction == Direction.SOUTH)
-                            {
-                                Console.Out.WriteLine("Direction south");
-                                output.Add("Direction south");
-                            }//end else if
-                            else if (query.Direction == Direction.EAST)
-                            {
-                                Console.Out.WriteLine("Direction east");
-                                output.Add("Direction east");
-                            }//end else if
-                            else if (query.Direction == Direction.WEST)
-                            {
-                                Console.Out.WriteLine("Direction west");
-                                output.Add("Direction west");
-                            }//end else if
-                            else if (query.Direction == Direction.NORTHEAST)
-                            {
-                                Console.Out.WriteLine("Direction northeast");
-                                output.Add("Direction northeast");
-                            }//end else if
-                            else if (query.Direction == Direction.SOUTHEAST)
-                            {
-                                Console.Out.WriteLine("Direction southeast");
-                                output.Add("Direction southeast");
-                            }//end else if
-                            else if (query.Direction == Direction.NORTHWEST)
-                            {
-                                Console.Out.WriteLine("Direction northwest");
-                                output.Add("Direction northwest");
-                            }//end else if
-                            else if (query.Direction == Direction.SOUTHWEST)
-                            {
-                                Console.Out.WriteLine("Direction southwest");
-                                output.Add("Direction north");
-                            }//end else if*/
 
+                            //Handles question like "what did x host?"
                             else if (query.Direction == Direction.HOSTED)
                             {
-                                string[] neighbors = FindNeighborsByRelationship(query.MainTopic, dir);
-                                if (neighbors.Length > 0)
-                                    output.Add(string.Format("{0} hosted {1}.", query.MainTopic.Data, neighbors.ToList().JoinAnd()));
-                            }
+                                //string[] neighbors = FindNeighborsByRelationship(query.MainTopic, dir);
+                                //These relationships signal that something was hosted
+                                string[] hosted_words = { "held", "partially held" };
+                                Feature query_topic = query.MainTopic;
+                                string for_output = "";
+                                //if (neighbors.Length > 0)
+                                //    output.Add(string.Format("{0} hosted {1}.", query.MainTopic.Data, neighbors.ToList().JoinAnd()));
+                                
+                                //Check from topic to neighbors
+                                for_output = ConstructQueryOutputByRelationship(query, hosted_words.ToList<string>());
+
+                                if (!for_output.Equals(""))
+                                {
+                                    output.Add(for_output);
+                                }//end if
+                            }//else if
+
+                            //Questions like "What is inside x?"
+                            else if (query.Direction == Direction.INSIDE)
+                            {
+                                //These relationships signal that something was inside something else (e.g., venues inside the olympic green)
+                                string[] inside_words = { "is in" };
+                                Feature query_topic = query.MainTopic;
+                                string for_output = "";
+                                //if (neighbors.Length > 0)
+                                //    output.Add(string.Format("{0} hosted {1}.", query.MainTopic.Data, neighbors.ToList().JoinAnd()));
+
+                                foreach (Tuple<Feature, double, string> temp_neighbor in query_topic.Neighbors)
+                                {
+                                    foreach (string inside_word in inside_words)
+                                    {
+                                        /*if (temp_feature.getRelationshipNeighbor(query_topic.Data).ToLower().Contains(query.DirectionWord.ToLower()))
+                                        {
+                                            output.Add(string.Format("{0} " + temp_feature.getRelationshipNeighbor(query_topic.Data) + " {1}.", temp_feature.Data, query_topic.Data));
+                                            break;
+                                        }//end if*/
+                                        //Checking from Neighbor to Topic
+                                        if (temp_neighbor.Item1.getRelationshipNeighbor(query_topic.Data).ToLower().Contains(query.DirectionWord.ToLower()))
+                                        {
+                                            //DEBUG
+                                            Console.Out.WriteLine("Inside word " + inside_word + " found.");
+                                            //END DEBUG
+                                            if (for_output.Equals(""))
+                                                for_output = string.Format("{0} " + temp_neighbor.Item3 + " {1}", temp_neighbor.Item1.Data, query_topic.Data);
+                                            else
+                                                for_output += string.Format(", {0} " + temp_neighbor.Item3 + " {1}", temp_neighbor.Item1.Data, query_topic.Data);
+                                            //for_output.Add(string.Format("{0} " + temp_neighbor.Item3 + " {1}.", query_topic.Data, temp_neighbor.Item1.Data));
+                                        }//end if
+                                    }//end foreach
+                                }//end foreach
+                                if (!for_output.Equals(""))
+                                {
+                                    for_output += ".";
+                                    output.Add(for_output);
+                                }//end if
+                            }//end else if
+
                             else
                             {
                                 string[] neighbors = FindNeighborsByRelationship(query.MainTopic, dir);
@@ -1515,13 +1528,9 @@ namespace Dialogue_Data_Entry
                         }
                         break;
                     case Question.WHERE:
-                        // e.g. "Where was Topic hosted at?"
-                        if (query.HasDirection && query.Direction == Direction.WAS_HOSTED_AT)
+                        if (false)
                         {
-                            string[] hostedAt = FindNeighborsByRelationship(query.MainTopic, query.Direction.ToString());
-                            // Should only have one host, but treat it as an array
-                            foreach (string host in hostedAt)
-                                output.Add(query.MainTopic + " was hosted at " + host + ".");
+
                         }
                         else
                         {
@@ -1531,23 +1540,16 @@ namespace Dialogue_Data_Entry
                             
                             //Where is the main topic
                             Feature query_topic = query.MainTopic;
-                            //locational_words
-                            //Look for one of the locational words in the main topic's relationships
-                            foreach (Tuple<Feature, double, string> temp_neighbor in query_topic.Neighbors)
-                            {
-                                foreach (string locational_word in locational_words)
-                                {
-                                    if (temp_neighbor.Item3.ToLower().Contains(locational_word.ToLower()))
-                                    {
-                                        //DEBUG
-                                        Console.Out.WriteLine("Locational word " + locational_word + " found.");
-                                        //END DEBUG
-                                        output.Add(string.Format("{0} " + temp_neighbor.Item3 + " {1}.", query_topic.Data, temp_neighbor.Item1.Data));
-                                        break;
-                                    }//end if
-                                }//end foreach
-                            }//end foreach
 
+                            string for_output = "";
+
+                            //Check from topic to neighbors
+                            for_output = ConstructQueryOutputByRelationship(query, locational_words.ToList<string>());
+
+                            if (!for_output.Equals(""))
+                            {
+                                output.Add(for_output);
+                            }//end if
                         }
                         break;
                     case Question.WHEN:
@@ -1565,6 +1567,48 @@ namespace Dialogue_Data_Entry
 
             return output.Count() > 0 ? output.ToArray() : new string[] { IDK };
         }
+        //Constructs an output to a given query by examining the list of words to check against the relationships
+        //that the query's main topic has with its neighbors.
+        //Last optional parameter decides whether we are checking the relationships from the topic to its neighbors or 
+        //the relationships from the neighbors to the topic.
+        private string ConstructQueryOutputByRelationship(Query query, List<string> words_to_check, bool from_topic_to_neighbors = true)
+        {
+            string output_string = "";
+
+            //Where is the main topic
+            Feature query_topic = query.MainTopic;
+
+            if (from_topic_to_neighbors)
+                //Look for one of the locational words in the main topic's relationships
+                foreach (Tuple<Feature, double, string> temp_neighbor in query_topic.Neighbors)
+                {
+                    foreach (string word_to_check in words_to_check)
+                    {
+                        if (temp_neighbor.Item3.ToLower().Contains(word_to_check.ToLower()))
+                        {
+                            //DEBUG
+                            Console.Out.WriteLine("Word to check " + word_to_check + " found.");
+                            //END DEBUG
+                            if (output_string.Equals(""))
+                                output_string = string.Format("{0} " + temp_neighbor.Item3 + " {1}", query_topic.Data, temp_neighbor.Item1.Data);
+                            else
+                                output_string += string.Format(", " + temp_neighbor.Item3 + " {0}", temp_neighbor.Item1.Data);
+                            //for_output.Add(string.Format("{0} " + temp_neighbor.Item3 + " {1}.", query_topic.Data, temp_neighbor.Item1.Data));
+                        }//end if
+                    }//end foreach
+                }//end foreach
+
+            if (!output_string.Equals(""))
+            {
+                //Find the last comma and put an "and" after it
+                if (output_string.LastIndexOf(",") > 0)
+                {
+                    output_string = output_string.Insert(output_string.LastIndexOf(","), " and");
+                }//end if
+                output_string += ".";
+            }//end if
+            return output_string;
+        }//end method ConstructQueryOutputByRelationship
 
         //Parses a bilingual output based on the language_mode passed in
         public string ParseOutput(string to_parse, int language_mode)
