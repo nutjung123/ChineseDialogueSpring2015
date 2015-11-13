@@ -1370,6 +1370,10 @@ namespace Dialogue_Data_Entry
                 }
                 */
             }
+            //If the target is still null, check for 'that' or 'this'
+            if (input.Contains("this") || input.Contains("that"))
+                target = this.topic;
+
             return target;
         }
 
