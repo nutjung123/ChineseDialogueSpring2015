@@ -28,16 +28,7 @@ namespace Dialogue_Data_Entry
                                                         "took place at", "was one of", "is west of", "is northeast of", "was a gold medal in", "was",
                                                         "was won by", "is in", "leads to the construction of", "was partially held by"};*/
 
-        private string[] hierarchyKey = new string[40] {"has##有##", "partially held##举办了部分##", "is southeast of##在东南方于##", "include##包括##",
-                                                    "is north of##在北方于##", "was one of the##是##", "held##举办了##", "was participated by##被参与##"
-                                                    , "was included by##被包括##", "is south of##在南方于##", "wais a member of", "is northwest of##在西北方于##"
-                                                    , "is##是##", "are##是##", "included##曾包括##", "is southwest of##在西南方于##", "won##赢了##", "includes##包括##"
-                                                    , "was a member of##曾隶属于##", "was had by##被有##", "is the venue where the gold medal was won by##是金牌被获得的场地##"
-                                                    , "is a##是##", "belongs to##属于##", "is a kind of##是一种##", "took place on##曾举办于##", "competed in##参赛于##"
-                                                    , "is a member of##隶属于##", "was held by##被举办于##", "is one of##是一个##", "is east of##在东方于##"
-                                                    , "took place at##曾举办于##", "was one of##曾是##", "is west of##在西方于##", "is northeast of##在东北方于##"
-                                                    , "won a gold medal in##曾赢得金牌##", "was##是##", "was won by##被赢##", "is in##在##", "leads to the construction of##领引建设了##"
-                                                    , "was partially held by##部分被举办于##"};
+        private string[] hierarchyKey = new string[1] {""};
 
         private string previousSpatial = "";
         private List<string> topicHistory;
