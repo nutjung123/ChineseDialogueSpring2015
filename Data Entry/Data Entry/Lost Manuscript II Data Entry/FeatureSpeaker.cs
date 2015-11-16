@@ -13,7 +13,10 @@ namespace Dialogue_Data_Entry
         private bool printCalculation = false;
         private int currentTurn=1;
         private int heightLimit = 999;
-        private string[] spatialKey = new string[8] { "is east of##在东方于##", "is north of##在北方于##", "is northeast of##在东北方于##", "is northwest of##在西北方于##", "is south of##在南方于##", "is southeast of##在东南方于##", "is south of##在南方于##", "is west of##在西方于##" };
+        private string[] spatialKey = new string[13] { "is east of##在东方于##", "is north of##在北方于##", "is northeast of##在东北方于##", "is northwest of##在西北方于##"
+                                                    , "is south of##在南方于##", "is southeast of##在东南方于##", "is south of##在南方于##", "is west of##在西方于##"
+                                                    , "took place at##曾举办于##", "was held by##被举办于##", "was partially held by##被举办于##"
+                                                    , "held##举办了##", "partially held##举办了部分##"};
 
         private string[] hierarchyKey = new string[40] {"has##有##", "partially held##举办了部分##", "is southeast of##在东南方于##", "include##包括##",
                                                     "is north of##在北方于##", "was one of the##是##", "held##举办了##", "was participated by##被参与##"
@@ -371,7 +374,7 @@ namespace Dialogue_Data_Entry
             double[] weight_array = featGraph.getWeightArray();
             double discussAmountW = weight_array[Constant.DiscussAmountWeightIndex];
             double noveltyW = weight_array[Constant.NoveltyWeightIndex];
-            double spatialConstraintW = weight_array[Constant.SpatialWeightIndex];
+            double spatialConstraintW = weight_array[Constant.SpatialWeightIndex] * 10;
             double hierachyConstraintW = weight_array[Constant.HierarchyWeightIndex];
             double temporalConstraintW = weight_array[Constant.TemporalWeightIndex];
 
