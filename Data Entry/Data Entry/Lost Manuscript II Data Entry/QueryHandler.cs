@@ -223,7 +223,7 @@ namespace Dialogue_Data_Entry
         //optional parameter for_additional_info, if set true, will avoid any actual leading statements
         //except for relationship mentions. If no relationship mention can be made, then blank string
         //is returned.
-		private string LeadingTopic(Feature last, Feature first, bool for_additional_info = false)
+		private string LeadingTopic(Feature last, Feature first, bool use_relationships = true)
 		{
 			string return_message = "";
             
@@ -281,7 +281,7 @@ namespace Dialogue_Data_Entry
             Random rand = new Random();
 
 			// Check if there is a relationship between two nodes
-			if (last.getNeighbor(first.Data) != null || first.getNeighbor(last.Data) != null)
+			if ((last.getNeighbor(first.Data) != null || first.getNeighbor(last.Data) != null) && use_relationships)
 			{
                 string relationship_neighbor_en = last.getRelationshipNeighbor(first.Data);
                 string relationship_neighbor_cn = last.getRelationshipNeighbor(first.Data);
@@ -323,8 +323,8 @@ namespace Dialogue_Data_Entry
 			// Neither neighbor or parent/child.
             //If this is for additional info, return blank string; the two nodes
             //are not neighbors or have a blank relationship.
-            if (for_additional_info)
-                return "";
+            //if (for_additional_info)
+            //    return "";
 
 			// NEED TO consider novelty value (low)
 			//else if (last.getNeighbor(first.Data) == null || first.getNeighbor(last.Data) == null)
@@ -626,7 +626,7 @@ namespace Dialogue_Data_Entry
             {
                 return_message = " ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + to_speak + ":Novelty:" + noveltyInfo + ":Proximal:" + proximalInfo;
                 //return_message += "##" + tts;
-            }
+            }//end else
                 
 
             //Console.WriteLine("to_speak: " + to_speak);
@@ -635,7 +635,7 @@ namespace Dialogue_Data_Entry
         }
 
         //Returns the speak value passed in with adornments according to the feature passed in, such as topic lead-ins and analogies.
-        public string SpeakWithAdornments(Feature feat, string speak)
+        public string SpeakWithAdornments(Feature feat, string speak, bool use_relationships = true)
         {
             String return_message = "";
 
@@ -768,7 +768,7 @@ namespace Dialogue_Data_Entry
             if (prevCurr.Count > 1 && !analogy_made) // && !CheckAlreadyMentioned(current))// && countFocusNode == 1)
             {
                 Console.WriteLine("creating leading topic for " + last.Data + " to " + first.Data);
-                return_message = LeadingTopic(last, first);
+                return_message = LeadingTopic(last, first, use_relationships);
                 countFocusNode = 0; // Set back to 0
             }
             //Otherwise, this is the first node being mentioned.
@@ -1178,6 +1178,9 @@ namespace Dialogue_Data_Entry
                 // talk about
                 this.buffer = newBuffer;
                 answer = this.buffer[b++];
+                //Adorn the answer
+                answer = SpeakWithAdornments(this.topic, answer);
+
                 if (projectAsTopic)
                     answer = "*****" + answer;
             }
