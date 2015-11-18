@@ -223,6 +223,7 @@ namespace Dialogue_Data_Entry
         //optional parameter for_additional_info, if set true, will avoid any actual leading statements
         //except for relationship mentions. If no relationship mention can be made, then blank string
         //is returned.
+        private int topic_index = 0;
 		private string LeadingTopic(Feature last, Feature first, bool use_relationships = true)
 		{
 			string return_message = "";
@@ -250,7 +251,7 @@ namespace Dialogue_Data_Entry
             //First is the current node (the one that has just been traversed to)
             //A set of possible lead-in statements.
             List<string> lead_in_statements = new List<string>();
-            lead_in_statements.Add("{There's also " + first_data_en + ".} " + "##" + "{还有" + first_data_cn + "呢。} " + "##");
+            lead_in_statements.Add("{So, about " + first_data_en + ".} " + "##" + "{还有" + first_data_cn + "呢。} " + "##");
             lead_in_statements.Add("{But let's talk about " + first_data_en + ".} " + "##" + "{我们来聊聊" + first_data_cn + "吧。} " + "##");
             lead_in_statements.Add("{And have I mentioned " + first_data_en + "?} " + "##" + "{之前我说过" + first_data_cn + "吗？} " + "##");
             lead_in_statements.Add("{Now, about " + first_data_en + ".} " + "##" + "{接下来是" + first_data_cn + "。} " + "##");
@@ -260,7 +261,7 @@ namespace Dialogue_Data_Entry
 
             //A set of lead-in statements for non-novel nodes
             List<string> non_novel_lead_in_statements = new List<string>();
-            non_novel_lead_in_statements.Add("{There's also " + first_data_en + ".} " + "##" + "{还有" + first_data_cn + "呢。} " + "##");
+            non_novel_lead_in_statements.Add("{Have you heard of " + first_data_en + "?} " + "##" + "{还有" + first_data_cn + "呢。} " + "##");
             non_novel_lead_in_statements.Add("{Let's talk about " + first_data_en + ".} " + "##" + "{我们谈谈" + first_data_cn + "吧。} " + "##");
             non_novel_lead_in_statements.Add("{I'll mention " + first_data_en + " real quick.} " + "##" + "{我想简要提提" + first_data_cn + "。} " + "##");
             non_novel_lead_in_statements.Add("{So, about " + first_data_en + ".} " + "##" + "{那么,说说" + first_data_cn + "。} " + "##");
@@ -335,7 +336,11 @@ namespace Dialogue_Data_Entry
             //Otherwise, include a non-novel topic lead-in statement.
             else
             {
-                return_message += non_novel_lead_in_statements[rand.Next(non_novel_lead_in_statements.Count)];
+                //return_message += non_novel_lead_in_statements[rand.Next(non_novel_lead_in_statements.Count)];
+                return_message += non_novel_lead_in_statements[topic_index];
+                topic_index += 1;
+                if (topic_index >= non_novel_lead_in_statements.Count)
+                    topic_index = 0;
             }//end if
 
             //!FindSpeak(first).Contains<string>(first.Data)
@@ -1227,6 +1232,20 @@ namespace Dialogue_Data_Entry
                     this.topic = feature;
 
                     answer = this.buffer[b++];
+                    //The answer, right now, is the result from ParseQuery.
+
+                    //If there is a topic change, make sure to introduce the new topic with its speak value.
+                    if (topic_switch)
+                    {
+                        //Get the current topic's speak value and adorn it
+                        String[] temp_buffer = FindStuffToSay(this.topic);
+                        String topic_speak = temp_buffer[0];
+                        //If there is no topic switch, use relationships during adornment. If there is, don't use relationships.
+                        topic_speak = SpeakWithAdornments(this.topic, topic_speak, !topic_switch);
+
+                        answer = answer + " " + topic_speak;
+                    }//end if
+
                     noveltyInfo = speaker.getNovelty(this.topic, this.turn, noveltyAmount);
                 }
             }
@@ -1241,7 +1260,7 @@ namespace Dialogue_Data_Entry
             }
             else
             {
-                answer = SpeakWithAdornments(this.topic, answer);
+                //answer = SpeakWithAdornments(this.topic, answer);
                 if (messageToServer)
                 {
                     //Return message to Unity front-end with both novel and proximal nodes
@@ -1401,7 +1420,7 @@ namespace Dialogue_Data_Entry
                 */
             }
             //If the target is still null, check for 'that' or 'this'
-            if (input.Contains("this") || input.Contains("that") || input.Contains("something"))
+            if (input.Contains("this") || input.Contains("that") || input.Contains("it") || input.Contains("something"))
                 target = this.topic;
 
             return target;
@@ -1551,14 +1570,20 @@ namespace Dialogue_Data_Entry
                                     output.Add(string.Format("{0} of {1} {2} {3}", dir.ToUpperFirst(), query.MainTopic.Data,
                                         (neighbors.Length > 1) ? "are" : "is", neighbors.ToList().JoinAnd()));
                             }
-                        }
+                        }// end if
+                        //Otherwise, the WHAT question has no direction.
                         else
                         {
                             // e.g. What is Topic?
                             // Get the <speak> attribute, if able
                             string[] speak = FindStuffToSay(query.MainTopic);
                             if (speak.Length > 0)
+                            {
+                                //Addorn the speak value
+                                speak[0] = SpeakWithAdornments(query.MainTopic, speak[0]);
+                                
                                 output.AddRange(speak);
+                            }//end if
                         }
                         break;
                     case Question.WHERE:
@@ -1596,7 +1621,7 @@ namespace Dialogue_Data_Entry
                 // e.g.:
                 // Tell me about Topic.
                 // Topic.
-                output.AddRange(FindStuffToSay(query.MainTopic));
+                output.Add(SpeakWithAdornments(query.MainTopic, FindStuffToSay(query.MainTopic)[0]));
             }
 
             return output.Count() > 0 ? output.ToArray() : new string[] { IDK };
@@ -1656,7 +1681,7 @@ namespace Dialogue_Data_Entry
                 }//end if
 
                 //Whether or not the topic has changed, say something about the main topic at the end.
-                output_string += FindStuffToSay(query.MainTopic)[0];
+                //output_string += FindStuffToSay(query.MainTopic)[0];
             }//end if
             return output_string;
         }//end method ConstructQueryOutputByRelationship
