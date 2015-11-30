@@ -32,26 +32,29 @@ namespace Dialogue_Data_Entry
     class Query
     {
         // The name of the Feature that the user asked about
-        public Feature MainTopic { get; private set; }
+        public Feature MainTopic { get; set; }
         // Whether or not the input was an explicit question
         public bool IsQuestion { get { return QuestionType != null; } }
         // The type of Question
         public Question? QuestionType { get; private set; }
         // The direction/relationship asked about.
         public Direction? Direction { get; private set; }
+        public string DirectionWord { get; private set; }
         public bool HasDirection { get { return Direction != null; } }
 
-        public Query(Feature mainTopic, Question? questionType, Direction? directions)
+        public Query(Feature mainTopic, Question? questionType, Direction? directions, string direction_word = "")
         {
             MainTopic = mainTopic;
             QuestionType = questionType;
             Direction = directions;
+            DirectionWord = direction_word;
         }
         public override string ToString()
         {
             string s = "Topic: " + MainTopic.Data;
             s += "\nQuestion type: " + QuestionType ?? "none";
             s += "\nDirection specified: " + Direction ?? "none";
+            s += "\nDirection word: " + DirectionWord ?? "none";
             return s;
         }
     }
@@ -65,11 +68,21 @@ namespace Dialogue_Data_Entry
         private const string IDK = "I'm afraid I don't know anything about that topic." + "##" + "对不起，我不知道。" + "##";
         private string[] punctuation = { ",", ";", ".", "?", "!", "\'", "\"", "(", ")", "-" };
         private string[] questionWords = { "?", "what", "where", "when" };
+
         private string[] directionWords = {"inside", "contain", "north", "east", "west", "south",
                                       "northeast", "northwest", "southeast", "southwest",
                                       "hosted", "was_hosted_at", "won"};
+
         private string[] Directional_Words = { "is southwest of", "is southeast of"
                 , "is northeast of", "is north of", "is west of", "is east of", "is south of", "is northwest of" };
+
+        //Related to spatial constraint. Relationships that can be used to describe the location of something.
+        private string[] locational_words = { "is north of", "is northwest of", "is east of", "is south of"
+                                                , "is in", "is southwest of", "is west of", "is northeast of"
+                                                , "is southeast of", "took place at", "was held by"
+                                                , "was partially held by" };
+
+        
         // "is in" -> contains?
         private Bot bot;
         private User user;
@@ -210,7 +223,8 @@ namespace Dialogue_Data_Entry
         //optional parameter for_additional_info, if set true, will avoid any actual leading statements
         //except for relationship mentions. If no relationship mention can be made, then blank string
         //is returned.
-		private string LeadingTopic(Feature last, Feature first, bool for_additional_info = false)
+        private int topic_index = 0;
+		private string LeadingTopic(Feature last, Feature first, bool use_relationships = true)
 		{
 			string return_message = "";
             
@@ -237,7 +251,7 @@ namespace Dialogue_Data_Entry
             //First is the current node (the one that has just been traversed to)
             //A set of possible lead-in statements.
             List<string> lead_in_statements = new List<string>();
-            lead_in_statements.Add("{There's also " + first_data_en + ".} " + "##" + "{还有" + first_data_cn + "呢。} " + "##");
+            lead_in_statements.Add("{So, about " + first_data_en + ".} " + "##" + "{还有" + first_data_cn + "呢。} " + "##");
             lead_in_statements.Add("{But let's talk about " + first_data_en + ".} " + "##" + "{我们来聊聊" + first_data_cn + "吧。} " + "##");
             lead_in_statements.Add("{And have I mentioned " + first_data_en + "?} " + "##" + "{之前我说过" + first_data_cn + "吗？} " + "##");
             lead_in_statements.Add("{Now, about " + first_data_en + ".} " + "##" + "{接下来是" + first_data_cn + "。} " + "##");
@@ -247,7 +261,7 @@ namespace Dialogue_Data_Entry
 
             //A set of lead-in statements for non-novel nodes
             List<string> non_novel_lead_in_statements = new List<string>();
-            non_novel_lead_in_statements.Add("{There's also " + first_data_en + ".} " + "##" + "{还有" + first_data_cn + "呢。} " + "##");
+            non_novel_lead_in_statements.Add("{Have you heard of " + first_data_en + "?} " + "##" + "{还有" + first_data_cn + "呢。} " + "##");
             non_novel_lead_in_statements.Add("{Let's talk about " + first_data_en + ".} " + "##" + "{我们谈谈" + first_data_cn + "吧。} " + "##");
             non_novel_lead_in_statements.Add("{I'll mention " + first_data_en + " real quick.} " + "##" + "{我想简要提提" + first_data_cn + "。} " + "##");
             non_novel_lead_in_statements.Add("{So, about " + first_data_en + ".} " + "##" + "{那么,说说" + first_data_cn + "。} " + "##");
@@ -268,7 +282,7 @@ namespace Dialogue_Data_Entry
             Random rand = new Random();
 
 			// Check if there is a relationship between two nodes
-			if (last.getNeighbor(first.Data) != null || first.getNeighbor(last.Data) != null)
+			if ((last.getNeighbor(first.Data) != null || first.getNeighbor(last.Data) != null) && use_relationships)
 			{
                 string relationship_neighbor_en = last.getRelationshipNeighbor(first.Data);
                 string relationship_neighbor_cn = last.getRelationshipNeighbor(first.Data);
@@ -310,8 +324,8 @@ namespace Dialogue_Data_Entry
 			// Neither neighbor or parent/child.
             //If this is for additional info, return blank string; the two nodes
             //are not neighbors or have a blank relationship.
-            if (for_additional_info)
-                return "";
+            //if (for_additional_info)
+            //    return "";
 
 			// NEED TO consider novelty value (low)
 			//else if (last.getNeighbor(first.Data) == null || first.getNeighbor(last.Data) == null)
@@ -322,7 +336,11 @@ namespace Dialogue_Data_Entry
             //Otherwise, include a non-novel topic lead-in statement.
             else
             {
-                return_message += non_novel_lead_in_statements[rand.Next(non_novel_lead_in_statements.Count)];
+                //return_message += non_novel_lead_in_statements[rand.Next(non_novel_lead_in_statements.Count)];
+                return_message += non_novel_lead_in_statements[topic_index];
+                topic_index += 1;
+                if (topic_index >= non_novel_lead_in_statements.Count)
+                    topic_index = 0;
             }//end if
 
             //!FindSpeak(first).Contains<string>(first.Data)
@@ -589,36 +607,73 @@ namespace Dialogue_Data_Entry
         {
             String return_message = "";
 
+            String to_speak = speak; //SpeakWithAdornments(feat, speak);
+
+            //Add adjacent node info to the end of the message.
+            //
+            //to_speak += AdjacentNodeInfo(feat, last);
+
+            if (out_of_topic_response)
+            {
+                //"I'm afraid I don't know anything about ";
+                to_speak = "I'm sorry, I'm afraid I don't understand what you are asking. But here's something I do know about. "
+                   + "##" + "对不起，我不知道您在说什么。但我知道这些。" + "##" + to_speak;
+
+            }//end if
+
+            string tts = ParseOutput(to_speak, language_mode_tts);
+            buffered_tts = tts;
+            to_speak = ParseOutput(to_speak, language_mode_display);
+
+            if (forLog)
+                return_message = to_speak + "\r\n";
+            else
+            {
+                return_message = " ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + to_speak + ":Novelty:" + noveltyInfo + ":Proximal:" + proximalInfo;
+                //return_message += "##" + tts;
+            }//end else
+                
+
+            //Console.WriteLine("to_speak: " + to_speak);
+
+            return return_message;
+        }
+
+        //Returns the speak value passed in with adornments according to the feature passed in, such as topic lead-ins and analogies.
+        public string SpeakWithAdornments(Feature feat, string speak, bool use_relationships = true)
+        {
+            String return_message = "";
+
             prevCurr.AddFirst(feat);
-	    	MetList.AddLast(feat);
-	    	countFocusNode += 1;
+            MetList.AddLast(feat);
+            countFocusNode += 1;
 
             if (prevCurr.Count > 2)
             {
-		        prevCurr.RemoveLast();
-	        }
+                prevCurr.RemoveLast();
+            }
             //Store the last history_size number of nodes
             int history_size = 100;
             if (MetList.Count > history_size)
-			{
-				MetList.RemoveFirst();
-			}
+            {
+                MetList.RemoveFirst();
+            }
 
-			// Previous-Current nodes
+            // Previous-Current nodes
             Feature first = prevCurr.First();   // Current node
             Feature last = prevCurr.Last();     // Previous node
 
-			// Metaphor - 3 nodes
-			Feature old = MetList.First();
+            // Metaphor - 3 nodes
+            Feature old = MetList.First();
             Feature newOld = null;
-			//int countNode = 1;
-			if (MetList.Count () >= 2)
-			{
-				newOld = MetList.ElementAt(1);
-			}
-			Feature current = MetList.Last();
-			// 4th node
-			// NEED TO check all possibilities (17 pairs - linear time)
+            //int countNode = 1;
+            if (MetList.Count() >= 2)
+            {
+                newOld = MetList.ElementAt(1);
+            }
+            Feature current = MetList.Last();
+            // 4th node
+            // NEED TO check all possibilities (17 pairs - linear time)
 
             Feature prevOfCurr = null;
             if (MetList.Count() >= 2)
@@ -627,20 +682,20 @@ namespace Dialogue_Data_Entry
             bool analogy_made = false;
             if (MetList.Count() >= 4)
             {
-				// Analogy
-				if (newOld != null )
-				{
+                // Analogy
+                if (newOld != null)
+                {
 
-				}
+                }
 
-				//while (old.getRelationshipNeighbor(newOld.Data) != prevOfCurr.getRelationshipNeighbor(current.Data))
+                //while (old.getRelationshipNeighbor(newOld.Data) != prevOfCurr.getRelationshipNeighbor(current.Data))
                 //DEBUG
                 if (prevOfCurr.getNeighbor(current.Data) != null)
                 {
                     Console.WriteLine(prevOfCurr.Data + " is neighbors with " + current.Data + ", relationship " + prevOfCurr.getRelationshipNeighbor(current.Data));
                 }//end if
 
-                for (int countNode = 0; countNode < MetList.Count - 1; countNode++ )
+                for (int countNode = 0; countNode < MetList.Count - 1; countNode++)
                 {
                     old = MetList.ElementAt(countNode);
                     newOld = MetList.ElementAt(countNode + 1);
@@ -680,25 +735,25 @@ namespace Dialogue_Data_Entry
                         || try_analogy)
                     {
                         //countNode = 1;
-                        
-                        // Count relationship in the list (<=20 nodes)
-						int count_relationship = 0;
-						int cc = 0;
-						while (cc <= MetList.Count())
-						{
-							if (old.getRelationshipNeighbor (newOld.Data) == prevOfCurr.getRelationshipNeighbor (current.Data))
-							{
-								count_relationship += 1;
-							}
-							cc += 1;
 
-						}
-						// Only display rare
+                        // Count relationship in the list (<=20 nodes)
+                        int count_relationship = 0;
+                        int cc = 0;
+                        while (cc <= MetList.Count())
+                        {
+                            if (old.getRelationshipNeighbor(newOld.Data) == prevOfCurr.getRelationshipNeighbor(current.Data))
+                            {
+                                count_relationship += 1;
+                            }
+                            cc += 1;
+
+                        }
+                        // Only display rare
                         // Not necessary at the moment to check for rareness of analogy
-						if (count_relationship <= 1000)
-						{
+                        if (count_relationship <= 1000)
+                        {
                             int return_message_length = return_message.Length;
-							return_message += RelationshipAnalogy (old, newOld, prevOfCurr, current);
+                            return_message += RelationshipAnalogy(old, newOld, prevOfCurr, current);
                             //If any addition has been made to the return message, then an
                             //analogy has been successfully made.
                             if (return_message.Length > return_message_length)
@@ -706,19 +761,19 @@ namespace Dialogue_Data_Entry
                             //Otherwise, keep trying to find an analogy
                             else
                                 continue;
-						}
-						break;
+                        }
+                        break;
                     }//end if
                 }
             }
 
             Console.WriteLine("analogy made " + analogy_made);
-			// Leading-topic sentence.
+            // Leading-topic sentence.
             // Only place a leading topic sentence if there isn't already an analogy here.
             if (prevCurr.Count > 1 && !analogy_made) // && !CheckAlreadyMentioned(current))// && countFocusNode == 1)
             {
                 Console.WriteLine("creating leading topic for " + last.Data + " to " + first.Data);
-                return_message = LeadingTopic(last, first);
+                return_message = LeadingTopic(last, first, use_relationships);
                 countFocusNode = 0; // Set back to 0
             }
             //Otherwise, this is the first node being mentioned.
@@ -740,35 +795,8 @@ namespace Dialogue_Data_Entry
 
             String to_speak = return_message + speak;
 
-            //Add adjacent node info to the end of the message.
-            //
-            //to_speak += AdjacentNodeInfo(feat, last);
-
-            if (out_of_topic_response)
-            {
-                //"I'm afraid I don't know anything about ";
-                to_speak = "I'm sorry, I'm afraid I don't understand what you are asking. But here's something I do know about. "
-                   + "##" + "对不起，我不知道您在说什么。但我知道这些。" + "##" + to_speak;
-
-            }//end if
-
-            string tts = ParseOutput(to_speak, language_mode_tts);
-            buffered_tts = tts;
-            to_speak = ParseOutput(to_speak, language_mode_display);
-
-            if (forLog)
-                return_message = to_speak + "\r\n";
-            else
-            {
-                return_message = " ID:" + this.graph.getFeatureIndex(feat.Data) + ":Speak:" + to_speak + ":Novelty:" + noveltyInfo + ":Proximal:" + proximalInfo;
-                //return_message += "##" + tts;
-            }
-                
-
-            //Console.WriteLine("to_speak: " + to_speak);
-
-            return return_message;
-        }
+            return to_speak;
+        }//end method AdornMessage
 
         //update various history when the system choose the next topic
         public void updateHistory(Feature nextTopic)
@@ -858,6 +886,7 @@ namespace Dialogue_Data_Entry
             //Console.WriteLine("Before new feature speaker in parse input");
             FeatureSpeaker speaker = new FeatureSpeaker(this.graph, temporalConstraintList, prevSpatial, topicHistory);
             //Console.WriteLine("after new speaker in parse input");
+            //Check first for an explicit command.
             if (split_input.Length != 0 || messageToServer)
             {
                 //Step-through command from Query window.
@@ -1015,6 +1044,9 @@ namespace Dialogue_Data_Entry
                 }//end else if
             }//end else if
 
+            //Whether or not we had to switch topics
+            bool topic_switch = false;
+
             // CASE: Nothing / Move on to next topic
             if (string.IsNullOrEmpty(input))
             {
@@ -1151,6 +1183,9 @@ namespace Dialogue_Data_Entry
                 // talk about
                 this.buffer = newBuffer;
                 answer = this.buffer[b++];
+                //Adorn the answer
+                answer = SpeakWithAdornments(this.topic, answer);
+
                 if (projectAsTopic)
                     answer = "*****" + answer;
             }
@@ -1182,12 +1217,35 @@ namespace Dialogue_Data_Entry
                 }
                 else
                 {
+                    Console.WriteLine("Query main topic before: " + query.MainTopic.Data);
+                    Feature topic_before = query.MainTopic;
+                    this.buffer = ParseQuery(query);
+                    if (!query.MainTopic.Equals(topic_before))
+                    {
+                        topic_switch = true;
+                        Console.WriteLine("Query main topic changed to: " + query.MainTopic.Data);
+                    }//end if
+
                     Feature feature = query.MainTopic;
                     feature.DiscussedAmount += 1;
                     this.graph.setFeatureDiscussedAmount(feature.Data, feature.DiscussedAmount);
                     this.topic = feature;
-                    this.buffer = ParseQuery(query);
+
                     answer = this.buffer[b++];
+                    //The answer, right now, is the result from ParseQuery.
+
+                    //If there is a topic change, make sure to introduce the new topic with its speak value.
+                    if (topic_switch)
+                    {
+                        //Get the current topic's speak value and adorn it
+                        String[] temp_buffer = FindStuffToSay(this.topic);
+                        String topic_speak = temp_buffer[0];
+                        //If there is no topic switch, use relationships during adornment. If there is, don't use relationships.
+                        topic_speak = SpeakWithAdornments(this.topic, topic_speak, !topic_switch);
+
+                        answer = answer + " " + topic_speak;
+                    }//end if
+
                     noveltyInfo = speaker.getNovelty(this.topic, this.turn, noveltyAmount);
                 }
             }
@@ -1202,6 +1260,7 @@ namespace Dialogue_Data_Entry
             }
             else
             {
+                //answer = SpeakWithAdornments(this.topic, answer);
                 if (messageToServer)
                 {
                     //Return message to Unity front-end with both novel and proximal nodes
@@ -1214,9 +1273,11 @@ namespace Dialogue_Data_Entry
                 if (forLog)
                     return answer;
                 else
-                    return answer;// +" <Novelty Info: " + noveltyInfo + " > <Proximal Info: " + speaker.getProximal(this.topic, noveltyAmount) + ">";
-            }
-        }
+                {
+                    return answer;
+                }//end else
+            }//end else
+        }//end if
 
         /// <summary>
         /// Convert a regular string to a Query object,
@@ -1226,9 +1287,14 @@ namespace Dialogue_Data_Entry
         /// <returns>A Query object that can be passed to ParseQuery for output.</returns>
         public Query BuildQuery(string input)
         {
+            //DEBUG
+            Console.Out.WriteLine("Building query from: " + input);
+            //END DEBUG
+
             string mainTopic;
             Question? questionType = null;
             Direction? directionType = null;
+            string directionWord = "";
 
             // Find the main topic!
             Feature f = FindFeature(input);
@@ -1245,14 +1311,21 @@ namespace Dialogue_Data_Entry
                 return null;
             }
 
+            //DEBUG
+            Console.Out.WriteLine("Topic of query: " + mainTopic);
+            //END DEBUG
+
             // Is the input a question?
             if (input.Contains("where"))
             {
+                //DEBUG
+                Console.Out.WriteLine("Where question");
+                //END DEBUG
                 questionType = Question.WHERE;
-                if (input.Contains("was_hosted_at"))
-                {
-                    directionType = Direction.WAS_HOSTED_AT;
-                }
+                //if (input.Contains("was_hosted_at"))
+                //{
+                //    directionType = Direction.WAS_HOSTED_AT;
+                //}
             }
             else if (input.Contains("when"))
             {
@@ -1260,22 +1333,33 @@ namespace Dialogue_Data_Entry
             }
             else if (input.Contains("what") || input.Contains("?"))
             {
+                //DEBUG
+                Console.Out.WriteLine("What question");
+                //END DEBUG
                 questionType = Question.WHAT;
+
                 // Check for direction words
-				if (input.Contains("direction"))
-				{
+				//if (input.Contains("direction"))
+				//{
 					foreach (string direction in directionWords)
 					{
 						// Ideally only one direction is specified
 						if (input.Contains(direction))
                     	{
 	                        directionType = (Direction)Enum.Parse(typeof(Direction), direction, true);
+                            directionWord = direction;
 	                        // Don't break. If "northwest" is asked, "north" will match first
 	                        // but then get replaced by "northwest" (and so on).
-	                    }
-					}
-				}
-            }
+	                    }//end if
+					}//end foreach
+
+                    //DEBUG
+                if (directionType != null)
+                    Console.Out.WriteLine("Input contained direction: " + directionType.ToString());
+                    //END DEBUG
+
+				//}//end if
+            }//end else if
             else
             {
                 int t = input.IndexOf("tell"), m = input.IndexOf("me"), a = input.IndexOf("about");
@@ -1285,7 +1369,7 @@ namespace Dialogue_Data_Entry
                     // TODO:  Anything?  Should just talk about the topic, then.
                 }
             }
-            return new Query(this.graph.getFeature(mainTopic), questionType, directionType);
+            return new Query(this.graph.getFeature(mainTopic), questionType, directionType, directionWord);
         }
 
         private string PadPunctuation(string s)
@@ -1335,6 +1419,10 @@ namespace Dialogue_Data_Entry
                 }
                 */
             }
+            //If the target is still null, check for 'that' or 'this'
+            if (input.Contains("this") || input.Contains("that") || input.Contains("it") || input.Contains("something"))
+                target = this.topic;
+
             return target;
         }
 
@@ -1360,7 +1448,7 @@ namespace Dialogue_Data_Entry
                         if (query.HasDirection)
                         {
                             // e.g. What is Direction of Topic?
-                            // Find names of features that is DIRECTION of MainTopic
+                            // Find names of features that is DIRECTION of MainTopic`
                             // Get list of <neighbor> tags
                             string dir = query.Direction.ToString().ToLower();
                             if (query.Direction == Direction.WON)
@@ -1387,13 +1475,94 @@ namespace Dialogue_Data_Entry
                                 {
                                     output.Add(string.Format("{0} won {1}.", query.MainTopic.Data, neighbors.ToList().JoinAnd()));
                                 }
-                            }
+                            }//end if
+
+                            //Directional What is question (e.g., What is south of...?)
+                            else if (query.Direction == Direction.NORTH
+                                || query.Direction == Direction.SOUTH
+                                || query.Direction == Direction.EAST
+                                || query.Direction == Direction.WEST
+                                || query.Direction == Direction.NORTHEAST
+                                || query.Direction == Direction.SOUTHEAST
+                                || query.Direction == Direction.NORTHWEST
+                                || query.Direction == Direction.SOUTHWEST)
+                            {
+                                //Relationships to answer these question have the form "is <direction> of".
+                                //From the topic of the query, look for such a relationship.
+                                Feature query_topic = query.MainTopic;
+
+                                foreach (Tuple<Feature, double, string> temp_neighbor in query_topic.Neighbors)
+                                {
+                                    //The main topic's neighbor
+                                    Feature temp_feature = temp_neighbor.Item1;
+                                    if (temp_feature.getRelationshipNeighbor(query_topic.Data).ToLower().Contains(query.DirectionWord.ToLower()))
+                                    {
+                                        output.Add(string.Format("{0} " + temp_feature.getRelationshipNeighbor(query_topic.Data) + " {1}.", temp_feature.Data, query_topic.Data));
+                                        break;
+                                    }//end if
+                                }//end foreach
+                            }//end else if
+
+                            //Handles question like "what did x host?"
                             else if (query.Direction == Direction.HOSTED)
                             {
-                                string[] neighbors = FindNeighborsByRelationship(query.MainTopic, dir);
-                                if (neighbors.Length > 0)
-                                    output.Add(string.Format("{0} hosted {1}.", query.MainTopic.Data, neighbors.ToList().JoinAnd()));
-                            }
+                                //string[] neighbors = FindNeighborsByRelationship(query.MainTopic, dir);
+                                //These relationships signal that something was hosted
+                                string[] hosted_words = { "held", "partially held" };
+                                Feature query_topic = query.MainTopic;
+                                string for_output = "";
+                                //if (neighbors.Length > 0)
+                                //    output.Add(string.Format("{0} hosted {1}.", query.MainTopic.Data, neighbors.ToList().JoinAnd()));
+                                
+                                //Check from topic to neighbors
+                                for_output = ConstructQueryOutputByRelationship(query, hosted_words.ToList<string>());
+
+                                if (!for_output.Equals(""))
+                                {
+                                    output.Add(for_output);
+                                }//end if
+                            }//else if
+
+                            //Questions like "What is inside x?"
+                            else if (query.Direction == Direction.INSIDE)
+                            {
+                                //These relationships signal that something was inside something else (e.g., venues inside the olympic green)
+                                string[] inside_words = { "is in" };
+                                Feature query_topic = query.MainTopic;
+                                string for_output = "";
+                                //if (neighbors.Length > 0)
+                                //    output.Add(string.Format("{0} hosted {1}.", query.MainTopic.Data, neighbors.ToList().JoinAnd()));
+
+                                foreach (Tuple<Feature, double, string> temp_neighbor in query_topic.Neighbors)
+                                {
+                                    foreach (string inside_word in inside_words)
+                                    {
+                                        /*if (temp_feature.getRelationshipNeighbor(query_topic.Data).ToLower().Contains(query.DirectionWord.ToLower()))
+                                        {
+                                            output.Add(string.Format("{0} " + temp_feature.getRelationshipNeighbor(query_topic.Data) + " {1}.", temp_feature.Data, query_topic.Data));
+                                            break;
+                                        }//end if*/
+                                        //Checking from Neighbor to Topic
+                                        if (temp_neighbor.Item1.getRelationshipNeighbor(query_topic.Data).ToLower().Contains(query.DirectionWord.ToLower()))
+                                        {
+                                            //DEBUG
+                                            Console.Out.WriteLine("Inside word " + inside_word + " found.");
+                                            //END DEBUG
+                                            if (for_output.Equals(""))
+                                                for_output = string.Format("{0} " + temp_neighbor.Item3 + " {1}", temp_neighbor.Item1.Data, query_topic.Data);
+                                            else
+                                                for_output += string.Format(", {0} " + temp_neighbor.Item3 + " {1}", temp_neighbor.Item1.Data, query_topic.Data);
+                                            //for_output.Add(string.Format("{0} " + temp_neighbor.Item3 + " {1}.", query_topic.Data, temp_neighbor.Item1.Data));
+                                        }//end if
+                                    }//end foreach
+                                }//end foreach
+                                if (!for_output.Equals(""))
+                                {
+                                    for_output += ".";
+                                    output.Add(for_output);
+                                }//end if
+                            }//end else if
+
                             else
                             {
                                 string[] neighbors = FindNeighborsByRelationship(query.MainTopic, dir);
@@ -1401,30 +1570,45 @@ namespace Dialogue_Data_Entry
                                     output.Add(string.Format("{0} of {1} {2} {3}", dir.ToUpperFirst(), query.MainTopic.Data,
                                         (neighbors.Length > 1) ? "are" : "is", neighbors.ToList().JoinAnd()));
                             }
-                        }
+                        }// end if
+                        //Otherwise, the WHAT question has no direction.
                         else
                         {
                             // e.g. What is Topic?
                             // Get the <speak> attribute, if able
                             string[] speak = FindStuffToSay(query.MainTopic);
                             if (speak.Length > 0)
+                            {
+                                //Addorn the speak value
+                                speak[0] = SpeakWithAdornments(query.MainTopic, speak[0]);
+                                
                                 output.AddRange(speak);
+                            }//end if
                         }
                         break;
                     case Question.WHERE:
-                        // e.g. "Where was Topic hosted at?"
-                        if (query.HasDirection && query.Direction == Direction.WAS_HOSTED_AT)
+                        if (false)
                         {
-                            string[] hostedAt = FindNeighborsByRelationship(query.MainTopic, query.Direction.ToString());
-                            // Should only have one host, but treat it as an array
-                            foreach (string host in hostedAt)
-                                output.Add(query.MainTopic + " was hosted at " + host + ".");
+
                         }
                         else
                         {
                             // e.g. Where is Topic?
                             // Get all the neighbors from this feature and the "opposite" directions
-                            output.AddRange((SpeakNeighborRelations(query.MainTopic.Data, FindAllNeighbors(query.MainTopic))));
+                            //output.AddRange((SpeakNeighborRelations(query.MainTopic.Data, FindAllNeighbors(query.MainTopic))));
+                            
+                            //Where is the main topic
+                            Feature query_topic = query.MainTopic;
+
+                            string for_output = "";
+
+                            //Check from topic to neighbors
+                            for_output = ConstructQueryOutputByRelationship(query, locational_words.ToList<string>());
+
+                            if (!for_output.Equals(""))
+                            {
+                                output.Add(for_output);
+                            }//end if
                         }
                         break;
                     case Question.WHEN:
@@ -1437,11 +1621,70 @@ namespace Dialogue_Data_Entry
                 // e.g.:
                 // Tell me about Topic.
                 // Topic.
-                output.AddRange(FindStuffToSay(query.MainTopic));
+                output.Add(SpeakWithAdornments(query.MainTopic, FindStuffToSay(query.MainTopic)[0]));
             }
 
             return output.Count() > 0 ? output.ToArray() : new string[] { IDK };
         }
+        //Constructs an output to a given query by examining the list of words to check against the relationships
+        //that the query's main topic has with its neighbors.
+        //Last optional parameter decides whether we are checking the relationships from the topic to its neighbors or 
+        //the relationships from the neighbors to the topic.
+        private string ConstructQueryOutputByRelationship(Query query, List<string> words_to_check, bool from_topic_to_neighbors = true)
+        {
+            string output_string = "";
+
+            //Where is the main topic
+            Feature query_topic = query.MainTopic;
+            //What topic should we change to
+            Feature topic_change = query.MainTopic;
+
+            if (from_topic_to_neighbors)
+                //Look for one of the locational words in the main topic's relationships
+                foreach (Tuple<Feature, double, string> temp_neighbor in query_topic.Neighbors)
+                {
+                    foreach (string word_to_check in words_to_check)
+                    {
+                        if (temp_neighbor.Item3.ToLower().Contains(word_to_check.ToLower()))
+                        {
+                            //DEBUG
+                            Console.Out.WriteLine("Word to check " + word_to_check + " found.");
+                            //END DEBUG
+                            if (output_string.Equals(""))
+                            {
+                                //For now, just take the first matching feature and (potentially) change the topic to that.
+                                topic_change = temp_neighbor.Item1;
+                                output_string = string.Format("{0} " + temp_neighbor.Item3 + " {1}", query_topic.Data, temp_neighbor.Item1.Data);
+                            }//end if
+                            else
+                                output_string += string.Format(", " + temp_neighbor.Item3 + " {0}", temp_neighbor.Item1.Data);
+                            //for_output.Add(string.Format("{0} " + temp_neighbor.Item3 + " {1}.", query_topic.Data, temp_neighbor.Item1.Data));
+                        }//end if
+                    }//end foreach
+                }//end foreach
+
+            if (!output_string.Equals(""))
+            {
+                //Find the last comma and put an "and" after it
+                if (output_string.LastIndexOf(",") > 0)
+                {
+                    output_string = output_string.Insert(output_string.LastIndexOf(","), " and");
+                }//end if
+                output_string += ". ";
+
+                //If the query topic and the current topic are the same, avoid
+                //repeating the current topic by changing the query topic.
+                if (query_topic.Equals(this.topic))
+                {
+                    //Change the main topic
+                    query.MainTopic = topic_change;
+                }//end if
+
+                //Whether or not the topic has changed, say something about the main topic at the end.
+                //output_string += FindStuffToSay(query.MainTopic)[0];
+            }//end if
+            return output_string;
+        }//end method ConstructQueryOutputByRelationship
 
         //Parses a bilingual output based on the language_mode passed in
         public string ParseOutput(string to_parse, int language_mode)
