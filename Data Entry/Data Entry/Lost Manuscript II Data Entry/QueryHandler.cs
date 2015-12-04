@@ -24,11 +24,7 @@ namespace Dialogue_Data_Entry
     }
     enum Question : int
     {
-        WHAT = 0, WHERE = 1, WHEN = 2, COUNT = 3
-    }
-    enum Countable : int
-    {
-        GOLD = 0
+        WHAT = 0, WHERE = 1, WHEN = 2, COUNT_GOLDS = 3, EVENTS_HELD = 4
     }
 
     /// <summary>
@@ -1300,7 +1296,6 @@ namespace Dialogue_Data_Entry
             Question? questionType = null;
             Direction? directionType = null;
             string directionWord = "";
-            Countable? countType = null;
 
 
             // Find the main topic!
@@ -1339,14 +1334,13 @@ namespace Dialogue_Data_Entry
             {
                 questionType = Question.WHEN;
             }
-            else if (input.Contains("count"))
+            else if (input.Contains("count_golds"))
             {
-                questionType = Question.COUNT;
-                if (input.Contains("gold"))
-                {
-                    countType = Countable.GOLD;
-                }
-
+                questionType = Question.COUNT_GOLDS;
+            }
+            else if (input.Contains("events_held"))
+            {
+                questionType = Question.EVENTS_HELD;
             }
             else if (input.Contains("what") || input.Contains("?"))
             {
@@ -1631,9 +1625,13 @@ namespace Dialogue_Data_Entry
                     case Question.WHEN:
                         // e.g. When was Topic made/built/etc.?
                         break;
-                    case Question.COUNT:
+                    case Question.COUNT_GOLDS:
                         string[] gold_sports = FindNeighborsByRelationship(query.MainTopic, "won_a_gold_medal_in");
                         output.Add(gold_sports.Length.ToString());
+                        break;
+                    case Question.EVENTS_HELD:
+                        string[] events_held = FindNeighborsByRelationship(query.MainTopic, "held");
+                        output.Add(events_held.Length.ToString());
                         break;
                 }
             }

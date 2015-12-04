@@ -759,7 +759,7 @@
 
 <category>
 	<pattern>GOLD MEDALS WON BY *</pattern>
-	<template><think><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think>FORMAT:COUNT <star/> GOLD</template>
+	<template><think><set name="it"><set name="that"><set name="this"><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></set></set></set></think>FORMAT:COUNT_GOLDS <star/></template>
 </category>
 <category>
   	<pattern>HOW MANY GOLD MEDALS DID * WIN</pattern>
@@ -768,6 +768,19 @@
 <category>
   	<pattern>* WON HOW MANY GOLD MEDALS</pattern>
   	<template><srai>GOLD MEDALS WON BY <star/></srai></template>
+</category>
+
+<category>
+	<pattern>EVENTS HELD IN *</pattern>
+	<template><think><set name="it"><set name="that"><set name="this"><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></set></set></set></think>FORMAT:EVENTS_HELD <star/></template>
+</category>
+<category>
+  	<pattern>HOW MANY EVENTS WERE HELD IN *</pattern>
+  	<template><srai>EVENTS HELD IN <star/></srai></template>
+</category>
+<category>
+  	<pattern>HOW MANY EVENTS WERE HELD IN THE *</pattern>
+  	<template><srai>EVENTS HELD IN <star/></srai></template>
 </category>
 
 
