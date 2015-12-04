@@ -8,6 +8,7 @@ using Dialogue_Data_Entry;
 using AIMLbot;
 using System.Collections;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace Dialogue_Data_Entry
 {
@@ -23,7 +24,11 @@ namespace Dialogue_Data_Entry
     }
     enum Question : int
     {
-        WHAT = 0, WHERE = 1, WHEN = 2
+        WHAT = 0, WHERE = 1, WHEN = 2, COUNT = 3
+    }
+    enum Countable : int
+    {
+        GOLD = 0
     }
 
     /// <summary>
@@ -1295,6 +1300,8 @@ namespace Dialogue_Data_Entry
             Question? questionType = null;
             Direction? directionType = null;
             string directionWord = "";
+            Countable? countType = null;
+
 
             // Find the main topic!
             Feature f = FindFeature(input);
@@ -1310,6 +1317,7 @@ namespace Dialogue_Data_Entry
                 //MessageBox.Show("mainTopic IsNullOrEmpty");
                 return null;
             }
+
 
             //DEBUG
             Console.Out.WriteLine("Topic of query: " + mainTopic);
@@ -1330,6 +1338,15 @@ namespace Dialogue_Data_Entry
             else if (input.Contains("when"))
             {
                 questionType = Question.WHEN;
+            }
+            else if (input.Contains("count"))
+            {
+                questionType = Question.COUNT;
+                if (input.Contains("gold"))
+                {
+                    countType = Countable.GOLD;
+                }
+
             }
             else if (input.Contains("what") || input.Contains("?"))
             {
@@ -1614,6 +1631,10 @@ namespace Dialogue_Data_Entry
                     case Question.WHEN:
                         // e.g. When was Topic made/built/etc.?
                         break;
+                    case Question.COUNT:
+                        string[] gold_sports = FindNeighborsByRelationship(query.MainTopic, "won_a_gold_medal_in");
+                        output.Add(gold_sports.Length.ToString());
+                        break;
                 }
             }
             else
@@ -1737,6 +1758,7 @@ namespace Dialogue_Data_Entry
                 var triple = neighbors[i];
                 Feature neighbor = triple.Item1;
                 string relation = triple.Item3;
+                relation = Regex.Replace(relation, "[^a-zA-Z0-9 :]", "");
                 if (relation.ToLower().Replace(' ', '_') == relationship.ToLower())
                     neighborNames.Add(neighbor.Data);
             }
