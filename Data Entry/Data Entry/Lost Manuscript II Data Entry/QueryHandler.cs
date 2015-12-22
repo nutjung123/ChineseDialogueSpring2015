@@ -99,7 +99,12 @@ namespace Dialogue_Data_Entry
         private string prevSpatial;
 
         public LinkedList<Feature> prevCurr = new LinkedList<Feature>();
-		public LinkedList<Feature> MetList = new LinkedList<Feature>();
+
+        //A list of all the features that have been chosen as main topics
+        public LinkedList<Feature> feature_history = new LinkedList<Feature>();
+        //The topic before the current one
+        public Feature previous_topic;
+
 		public int countFocusNode = 0;
 		public double noveltyValue = 0.0;
 
@@ -346,199 +351,7 @@ namespace Dialogue_Data_Entry
             //!FindSpeak(first).Contains<string>(first.Data)
 
 			return return_message;
-		}
-
-		private string RelationshipAnalogy(Feature old, Feature newOld, Feature prevOfCurr, Feature current)
-		{
-			string return_message = "";
-			/*Console.WriteLine("old: " + old.Data);
-			Console.WriteLine("new: " + newOld.Data);
-            Console.WriteLine("relationship: " + old.getRelationshipNeighbor(newOld.Data));
-			Console.WriteLine("previous of current: " + prevOfCurr.Data);
-			Console.WriteLine("current: " + current.Data);
-            Console.WriteLine("relationship: " + prevOfCurr.getRelationshipNeighbor(current.Data));
-            */
-
-			// Senten Patterns list - for 3 nodes
-			List<string> sentencePatterns = new List<string>();
-
-			Random rnd = new Random();
-
-            //Define A1, B1, A2, B2, R1,and R2.
-            //  Node A1 has relationship R1 with node B1.
-            //  Node A2 has relaitonship R2 with node B2.
-			//  AND R1 and R2 are in the same list inside equivalent_relationship list.
-            string a1 = "";
-            string b1 = "";
-            string a2 = "";
-            string b2 = "";
-            string r1 = "";
-			string r2 = "";
-
-			//Check equivalent and similarity
-			bool found = false;
-            bool directional = false;
-            //Check if the relationship is a directional word.
-            if (Directional_Words.Contains(old.getRelationshipNeighbor(newOld.Data))
-                || Directional_Words.Contains(newOld.getRelationshipNeighbor(old.Data)))
-            {
-                directional = true;
-            }//end if
-            
-
-			foreach (List<string> list in equivalent_relationships)
-			{
-				if (found == true) break;
-				if ((list.Contains(old.getRelationshipNeighbor(newOld.Data)) && list.Contains(prevOfCurr.getRelationshipNeighbor(current.Data)))
-					|| old.getRelationshipNeighbor(newOld.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data)))
-				{
-					a1 = old.Data;
-					b1 = newOld.Data;
-					a2 = prevOfCurr.Data;
-					b2 = current.Data;
-					r1 = old.getRelationshipNeighbor(newOld.Data);
-					r2 = prevOfCurr.getRelationshipNeighbor(current.Data);
-					found = true;
-				}
-				else if ((list.Contains(newOld.getRelationshipNeighbor(old.Data)) && list.Contains(current.getRelationshipNeighbor(prevOfCurr.Data)))
-					|| newOld.getRelationshipNeighbor(old.Data).Equals(current.getRelationshipNeighbor(prevOfCurr.Data)))
-				{
-					a1 = newOld.Data;
-					b1 = old.Data;
-					a2 = current.Data;
-					b2 = prevOfCurr.Data;
-					r1 = newOld.getRelationshipNeighbor(old.Data);
-					r2 = current.getRelationshipNeighbor(prevOfCurr.Data);
-					found = true;
-				}
-				else if ((list.Contains(newOld.getRelationshipNeighbor(old.Data)) && list.Contains(prevOfCurr.getRelationshipNeighbor(current.Data)))
-					|| newOld.getRelationshipNeighbor(old.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data)))
-				{
-					a1 = newOld.Data;
-					b1 = old.Data;
-					a2 = prevOfCurr.Data;
-					b2 = current.Data;
-					r1 = newOld.getRelationshipNeighbor(old.Data);
-					r2 = prevOfCurr.getRelationshipNeighbor(current.Data);
-					found = true;
-				}
-				else if ((list.Contains(old.getRelationshipNeighbor(newOld.Data)) && list.Contains(current.getRelationshipNeighbor(prevOfCurr.Data)))
-					|| old.getRelationshipNeighbor(newOld.Data).Equals(current.getRelationshipNeighbor(prevOfCurr.Data)))
-				{
-					a1 = old.Data;
-					b1 = newOld.Data;
-					a2 = current.Data;
-					b2 = prevOfCurr.Data;
-					r1 = old.getRelationshipNeighbor(newOld.Data);
-					r2 = current.getRelationshipNeighbor (prevOfCurr.Data);
-					found = true;
-				}
-			}
-
-            //If there is a blank relationship, no analogy may be made.
-			if (r1.Equals("") || r2.Equals(""))
-                return "";
-            //if a1 equals a2 and b1 equals b2, no analogy may be made.
-            if (a1.Equals(a2) && b1.Equals(b2))
-                return "";
-            //If the relationship is directional and b1 does NOT equal b2, then
-            //no analogy may be made.
-            if (directional && !(b1.Equals(b2)))
-            {
-                return "";
-            }//end if
-
-            //if (old.getRelationshipNeighbor(newOld.Data).Equals(prevOfCurr.getRelationshipNeighbor(current.Data)) &&
-            //	old.getRelationshipNeighbor(newOld.Data) != "" && prevOfCurr.getRelationshipNeighbor(current.Data) != "")
-            //{
-            //string relationship = old.getRelationshipNeighbor(newOld.Data);
-
-            // enable bilingual mode
-
-            string a1_en = a1;
-            string a1_cn = a1;
-            if (a1.Contains("##"))
-            {
-                a1_en = a1.Split(new string[] { "##" }, StringSplitOptions.None)[0];
-                a1_cn = a1.Split(new string[] { "##" }, StringSplitOptions.None)[1];
-            }
-
-            string b1_en = b1;
-            string b1_cn = b1;
-            if (b1.Contains("##"))
-            {
-                b1_en = b1.Split(new string[] { "##" }, StringSplitOptions.None)[0];
-                b1_cn = b1.Split(new string[] { "##" }, StringSplitOptions.None)[1];
-            }
-
-            string r1_en = r1;
-            string r1_cn = r1;
-            if (r1.Contains("##"))
-            {
-                r1_en = r1.Split(new string[] { "##" }, StringSplitOptions.None)[0];
-                r1_cn = r1.Split(new string[] { "##" }, StringSplitOptions.None)[1];
-            }
-
-            string a2_en = a2;
-            string a2_cn = a2;
-            if (a2.Contains("##"))
-            {
-                a2_en = a2.Split(new string[] { "##" }, StringSplitOptions.None)[0];
-                a2_cn = a2.Split(new string[] { "##" }, StringSplitOptions.None)[1];
-            }
-
-            string b2_en = b2;
-            string b2_cn = b2;
-            if (b2.Contains("##"))
-            {
-                b2_en = b2.Split(new string[] { "##" }, StringSplitOptions.None)[0];
-                b2_cn = b2.Split(new string[] { "##" }, StringSplitOptions.None)[1];
-            }
-
-            string r2_en = r2;
-            string r2_cn = r2;
-            if (r2.Contains("##"))
-            {
-                r2_en = r2.Split(new string[] { "##" }, StringSplitOptions.None)[0];
-                r2_cn = r2.Split(new string[] { "##" }, StringSplitOptions.None)[1];
-            }
-
-            // 4 nodes
-            sentencePatterns.Add("[Just as " + a1_en + " " + r1_en + " " + b1_en
-                + ", so too " + a2_en + " " + r2_en + " " + b2_en + ".] " + "##"
-                + "[正像" + a1_cn + r1_cn + b1_cn + "一样," + a2_cn + r2_cn + b2_cn + "。] " + "##");
-
-            sentencePatterns.Add("[" + a2_en + " " + r2_en + " " + b2_en
-                + ", much like " + a1_en + " " + r1_en + " " + b1_en + ".] " + "##"
-                + "[" + a2_cn + r2_cn + b2_cn + "," + "就像" + a1_cn + r1_cn + b1_cn + "。] " + "##");
-
-            sentencePatterns.Add("[Like " + a1_en + " " + r1_en + " " + b1_en + ", "
-                + a2_en + " also " + r2_en + " " + b2_en + ".] " + "##"
-                + "[像" + a1_cn + r1_cn + b1_cn + "一样," + a2_cn + "也" + r2_cn + b2_cn + "。] " + "##");
-
-            sentencePatterns.Add("[The same way that " + a1_en + " " + r1_en + " " + b1_en
-                + ", " + a2_en + " " + r2_en + " " + b2_en + ".] " + "##"
-                + "[如同" + a1_cn + r1_cn + b1_cn + "一般," + a2_cn + r2_cn + b2_cn + "。] " + "##");
-
-            sentencePatterns.Add("[Remember how " + a1_en + " " + r1_en + " " + b1_en
-                + "? Well, in the same way, " + a2_en + " also " + r2_en + " " + b2_en + ".] " + "##"
-                + "[就像" + a1_cn + r1_cn + b1_cn + "一样," + a2_cn + "也" + r2_cn + b2_cn + "。] " + "##");
-
-            sentencePatterns.Add("[" + a2_en + " also " + r2_en + " " + b2_en
-                + ", similar to how " + a1_en + " " + r1_en + " " + b1_en + ".] " + "##"
-                + "[" + a2_cn + r2_cn + b2_cn + "," + "正像" + a1_cn + r1_cn + b1_cn + "。] " + "##");
-
-
-			int random_int = rnd.Next(sentencePatterns.Count);
-
-            return_message += sentencePatterns[random_int];
-			//}
-
-            //DEBUG
-            Console.WriteLine("return_message: " + return_message);
-
-			return return_message;
-		}
+		} //end function LeadingTopic
 
         //Return information about the given node's neighbors
         private string AdjacentNodeInfo(Feature current, Feature last)
@@ -637,50 +450,62 @@ namespace Dialogue_Data_Entry
             //Console.WriteLine("to_speak: " + to_speak);
 
             return return_message;
-        }
+        }//end function MessageToServer
 
         //Returns the speak value passed in with adornments according to the feature passed in, such as topic lead-ins and analogies.
         public string SpeakWithAdornments(Feature feat, string speak, bool use_relationships = true)
         {
-            String return_message = "";
-
-            prevCurr.AddFirst(feat);
-            MetList.AddLast(feat);
+            //Update the feature history list
+            feature_history.AddLast(feat);
             countFocusNode += 1;
-
-            if (prevCurr.Count > 2)
-            {
-                prevCurr.RemoveLast();
-            }
             //Store the last history_size number of nodes
             int history_size = 100;
-            if (MetList.Count > history_size)
+            if (feature_history.Count > history_size)
             {
-                MetList.RemoveFirst();
-            }
+                feature_history.RemoveFirst();
+            }//end if
+
+            //Treat the feature passed in as the current topic
+            Feature current_topic = feat;
+
+            //Create the speak transform object, initialized with history list and the previous topic
+            SpeakTransform transform = new SpeakTransform(feature_history, previous_topic);
+
+            //Pass in the given feature and speak value to be transformed.
+            String to_speak = transform.TransformSpeak(feat, speak);
+
+            //The current topic has been used, and is now the previous topic.
+            previous_topic = current_topic;
+
+            return to_speak;
+        }//end method AdornMessage
+
+        /*public String SpeakWithAdornments(Feature feat, string speak)
+        {
+            String return_message = "";
 
             // Previous-Current nodes
             Feature first = prevCurr.First();   // Current node
             Feature last = prevCurr.Last();     // Previous node
 
             // Metaphor - 3 nodes
-            Feature old = MetList.First();
+            Feature old = feature_history.First();
             Feature newOld = null;
             //int countNode = 1;
-            if (MetList.Count() >= 2)
+            if (feature_history.Count() >= 2)
             {
-                newOld = MetList.ElementAt(1);
+                newOld = feature_history.ElementAt(1);
             }
-            Feature current = MetList.Last();
+            Feature current = feature_history.Last();
             // 4th node
             // NEED TO check all possibilities (17 pairs - linear time)
 
             Feature prevOfCurr = null;
-            if (MetList.Count() >= 2)
-                prevOfCurr = MetList.ElementAt(MetList.Count - 2);
+            if (feature_history.Count() >= 2)
+                prevOfCurr = feature_history.ElementAt(feature_history.Count - 2);
 
             bool analogy_made = false;
-            if (MetList.Count() >= 4)
+            if (feature_history.Count() >= 4)
             {
                 // Analogy
                 if (newOld != null)
@@ -695,10 +520,10 @@ namespace Dialogue_Data_Entry
                     Console.WriteLine(prevOfCurr.Data + " is neighbors with " + current.Data + ", relationship " + prevOfCurr.getRelationshipNeighbor(current.Data));
                 }//end if
 
-                for (int countNode = 0; countNode < MetList.Count - 1; countNode++)
+                for (int countNode = 0; countNode < feature_history.Count - 1; countNode++)
                 {
-                    old = MetList.ElementAt(countNode);
-                    newOld = MetList.ElementAt(countNode + 1);
+                    old = feature_history.ElementAt(countNode);
+                    newOld = feature_history.ElementAt(countNode + 1);
                     //countNode += 1;
                     if (old.Data.Equals(prevOfCurr.Data) && newOld.Data.Equals(current.Data))
                     {
@@ -739,7 +564,7 @@ namespace Dialogue_Data_Entry
                         // Count relationship in the list (<=20 nodes)
                         int count_relationship = 0;
                         int cc = 0;
-                        while (cc <= MetList.Count())
+                        while (cc <= feature_history.Count())
                         {
                             if (old.getRelationshipNeighbor(newOld.Data) == prevOfCurr.getRelationshipNeighbor(current.Data))
                             {
@@ -796,8 +621,9 @@ namespace Dialogue_Data_Entry
             String to_speak = return_message + speak;
 
             return to_speak;
-        }//end method AdornMessage
-
+        }//end method SpeakWithAdornments
+        */
+       
         //update various history when the system choose the next topic
         public void updateHistory(Feature nextTopic)
         {
