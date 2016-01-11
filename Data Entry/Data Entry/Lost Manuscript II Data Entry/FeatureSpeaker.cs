@@ -334,7 +334,7 @@ namespace Dialogue_Data_Entry
             return sumNotTalk / (sumTalk + sumNotTalk);
         }
 
-        //calculate the novelty of the giving current feature
+        //calculate the novelty of the given current feature
         private double calculateNovelty(Feature current, Feature oldTopic)
         {
             double noveltyValue = 0;
@@ -648,6 +648,7 @@ namespace Dialogue_Data_Entry
             }
         }
 
+        //Gets the id and novelty value 
         public string getNovelty(Feature currentTopic, int turn, int amount = 5)
         {
             string answer = "";
@@ -657,8 +658,13 @@ namespace Dialogue_Data_Entry
             bool[] checkEntry = new bool[featGraph.Count];
             List<Tuple<Feature, double>> listScore = new List<Tuple<Feature, double>>();
             this.travelGraph(featGraph.Root, currentTopic, 0, false, checkEntry, ref listScore);
+            //After calling travelGraph, listScore now contains a list of the score of each node
+            //calculated against the currentTopic node passed in.
+            //The following sort will sort them in descending order of calculated score.
+            //This will place the "most novel" nodes
             listScore.Sort((x,y) => y.Item2.CompareTo(x.Item2));
             
+            //The string returned will consist of the ID and calculated score of the first amount nodes
             for (int x = 0; x < amount; x++)
             {
                 answer += featGraph.getFeatureIndex(listScore[x].Item1.Data)+" "+ listScore[x].Item2 +" ";
@@ -667,7 +673,7 @@ namespace Dialogue_Data_Entry
             printCalculation = oldPrintFlag;
 
             return answer;
-        }
+        }// end getNovelty
 
         //Opposite of get novelty, get the ids of the features that, according to the calculation,
         //are most likely to be chosen as the next topic.

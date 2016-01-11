@@ -367,7 +367,7 @@ namespace Dialogue_Data_Entry
                 return "{First, let's talk about " + first_data_en + ".} " + "##" + "{首先，让我们谈谈 " + first_data_cn + "。} " + "##";
 
 
-            Console.WriteLine("In LeadingTopic, first_data_en " + first_data_en + " first_data_cn " + first_data_cn);
+            Console.WriteLine("In LeadInTopic, first_data_en " + first_data_en + " first_data_cn " + first_data_cn);
 
             string last_data_en = last.Data;
             string last_data_cn = last.Data;
@@ -377,7 +377,7 @@ namespace Dialogue_Data_Entry
                 last_data_cn = last.Data.Split(new string[] { "##" }, StringSplitOptions.None)[1];
             }
 
-            Console.WriteLine("In LeadingTopic, last_data_en " + last_data_en + " last_data_cn " + last_data_cn);
+            Console.WriteLine("In LeadInTopic, last_data_en " + last_data_en + " last_data_cn " + last_data_cn);
 
             //First is the current node (the one that has just been traversed to)
             //A set of possible lead-in statements.
@@ -420,7 +420,7 @@ namespace Dialogue_Data_Entry
                 string relationship_parent_en = last.getRelationshipParent(first.Data);
                 string relationship_parent_cn = last.getRelationshipParent(first.Data);
 
-                Console.WriteLine("In LeadingTopic, relationship_neighbor_en " + relationship_neighbor_en + " relationship_neighbor_cn " + relationship_neighbor_cn);
+                Console.WriteLine("In LeadInTopic, relationship_neighbor_en " + relationship_neighbor_en + " relationship_neighbor_cn " + relationship_neighbor_cn);
 
                 if (relationship_neighbor_en.Contains("##"))
                 {
