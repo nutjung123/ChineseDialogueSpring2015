@@ -363,7 +363,7 @@ namespace Dialogue_Data_Entry
         {
             toRefresh.Items.Clear();
             if (selectedIndex == -1) { toRefresh.Refresh(); return; }
-            List<string> tmp = featGraph.Features[selectedIndex].getTagKeys();
+            List<string> tmp = featGraph.getFeature(selectedIndex).getTagKeys();
             for (int x = tmp.Count-1; x >= 0; x--)
             {
                 toRefresh.Items.AddRange(new object[] { tmp[x] });
@@ -374,7 +374,7 @@ namespace Dialogue_Data_Entry
         {
             toRefresh.Items.Clear();
             if (selectedIndex==-1) { toRefresh.Refresh(); return; }
-            List<string> tmp = featGraph.Features[selectedIndex].Speaks;
+            List<string> tmp = featGraph.getFeature(selectedIndex).Speaks;
             for (int x = tmp.Count - 1; x >= 0; x--)
             {
                 toRefresh.Items.AddRange(new object[] { tmp[x] });
@@ -405,24 +405,24 @@ namespace Dialogue_Data_Entry
         public void clearAllTextBoxes()
         {
             textBox1.Clear();
-            editFeatureDataTextBox.Clear();
+            editFeatureNameTextBox.Clear();
             textBox7.Clear();
             maskedTextBox1.Clear();
             tagValueTextBox.Clear();
             tagKeyTextBox.Clear();
         }
         //open feature from search function
-        public void openFeature(string featureData, string tagData = "")
+        public void openFeature(string featureId, string tagData = "")
         {
             refreshListBoxes();
             tabControl1.SelectedIndex = 1;
             tabControl1.Refresh();
-            toChange = featGraph.getFeature(featureData);
+            toChange = featGraph.getFeature(featureId);
             if (toChange != null)
             {
                 initEditor(toChange);
-                featureEditorListBox.SelectedIndex = (indexOfIn(featureData, featureEditorListBox));
-                selectedIndex = featGraph.getFeatureIndex(featureEditorListBox.SelectedItem.ToString());
+                featureEditorListBox.SelectedIndex = (indexOfIn(featureId, featureEditorListBox));
+                selectedIndex = featGraph.getFeature(featureEditorListBox.SelectedItem.ToString()).Id;
             }
             if (tagData != "")
             {
@@ -455,19 +455,20 @@ namespace Dialogue_Data_Entry
                 MessageBox.Show("You cannot create a feature with no name", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            string data = textBox1.Lines[0];
-            if (featGraph.hasNodeData(data))
+            string name = textBox1.Lines[0];
+            if (featGraph.hasNode(name))
             {
                 MessageBox.Show("You cannot create two features with the same name", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            if (hasBadChar(data))
+            if (hasBadChar(name))
             {
                 MessageBox.Show("The values you have entered contain characters that are not allowed\nThe characters that you cannot use are " + BAD_CHARS, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
             textBox1.Clear();
-            Feature toAdd = new Feature(data);
+            //Create a new feature and set its id to the next available id
+            Feature toAdd = new Feature(name, featGraph.Features.Count);
             for (int x = 0; x < featureCreatorCheckedListBox.CheckedItems.Count; x++)
             {
                 toAdd.addNeighbor(featGraph.getFeature(featureCreatorCheckedListBox.CheckedItems[x].ToString()));
@@ -497,19 +498,19 @@ namespace Dialogue_Data_Entry
                 MessageBox.Show("You haven't selected anything to edit yet", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            if (editFeatureDataTextBox.Lines.Length == 0 || editFeatureDataTextBox.Text == "")
+            if (editFeatureNameTextBox.Lines.Length == 0 || editFeatureNameTextBox.Text == "")
             {
                 MessageBox.Show("You cannot set a feature with no name", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            if (featGraph.hasNodeData(editFeatureDataTextBox.Text) && editorFeatureSelected != editFeatureDataTextBox.Text)
+            if (featGraph.hasNode(editFeatureNameTextBox.Text) && editorFeatureSelected != editFeatureNameTextBox.Text)
             {
                 MessageBox.Show("You cannot create two features with the same name", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
             if (editorFeatureSelected != "")
             {
-                featGraph.Features[selectedIndex].Data = editFeatureDataTextBox.Text;
+                featGraph.getFeature(selectedIndex).Name = editFeatureNameTextBox.Text;
                 if (checkBox1.Checked)
                 {
                     featGraph.Root = featGraph.getFeature(selectedIndex);
@@ -533,10 +534,10 @@ namespace Dialogue_Data_Entry
                 MessageBox.Show("You haven't selected anything to edit yet", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            selectedIndex = featGraph.getFeatureIndex(featureEditorListBox.SelectedItem.ToString());
+            selectedIndex = featGraph.getFeature(featureEditorListBox.SelectedItem.ToString()).Id;
             //toChange = featGraph.getFeature(listBox1.SelectedItem.ToString()).deepCopy();
             
-            initEditor(featGraph.Features[selectedIndex]);
+            initEditor(featGraph.getFeature(selectedIndex));
         }
 
         private void initEditor(Feature toEdit)
@@ -547,9 +548,9 @@ namespace Dialogue_Data_Entry
                 clearAllTextBoxes();
                 tagTypeComboBox.Text = "";
                 maskedTextBox1.Text = toEdit.DiscussedThreshold.ToString();
-                editFeatureDataTextBox.Text = toEdit.Data;
-                editorFeatureSelected = toEdit.Data;
-                refreshFeatureListBox(childrenCheckedListBox, toEdit.Data);
+                editFeatureNameTextBox.Text = toEdit.Name;
+                editorFeatureSelected = toEdit.Name;
+                refreshFeatureListBox(childrenCheckedListBox, toEdit.Name);
 
                 refreshFeatureSpeaksListBox(listBox3);
                 refreshFeatureTagListBox(tagListBox);
@@ -559,7 +560,7 @@ namespace Dialogue_Data_Entry
                 {
                     for (int y = 0; y < childrenCheckedListBox.Items.Count; y++)
                     {
-                        if (childrenCheckedListBox.Items[y].ToString() == toEdit.Neighbors[x].Item1.Data)
+                        if (childrenCheckedListBox.Items[y].ToString() == toEdit.Neighbors[x].Item1.Name)
                         {
                             childrenCheckedListBox.SetItemChecked(y, true);
                         }
@@ -569,7 +570,7 @@ namespace Dialogue_Data_Entry
                 shouldIgnoreCheckEvent = false;
                 childrenCheckedListBox.Refresh();
 
-                if (featGraph.Root != null && toEdit.Data == featGraph.Root.Data)
+                if (featGraph.Root != null && toEdit.Id == featGraph.Root.Id)
                 {
                     checkBox1.Checked = true;
                 }
@@ -594,8 +595,8 @@ namespace Dialogue_Data_Entry
             {
                 //setup the edit tag field
                 string featureKey = tagListBox.Items[tagListBox.SelectedIndex].ToString();
-                string keyValue = featGraph.Features[selectedIndex].getTag(featureKey).Item2;
-                string type = featGraph.Features[selectedIndex].getTag(featureKey).Item3;
+                string keyValue = featGraph.getFeature(selectedIndex).getTag(featureKey).Item2;
+                string type = featGraph.getFeature(selectedIndex).getTag(featureKey).Item3;
                 tagKeyTextBox.Text = featureKey;
                 tagValueTextBox.Text = keyValue;
                 tagTypeComboBox.Text = type;
@@ -616,7 +617,7 @@ namespace Dialogue_Data_Entry
                 MessageBox.Show("You cannot create a tag with an empty key or value", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            else if (featGraph.Features[selectedIndex].hasTagWithKey(tagKeyTextBox.Text))
+            else if (featGraph.getFeature(selectedIndex).hasTagWithKey(tagKeyTextBox.Text))
             {
                 MessageBox.Show("There is already a tag with that key in this feature\nPlease choose another key", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -633,7 +634,7 @@ namespace Dialogue_Data_Entry
             }
             else
             {
-                featGraph.Features[selectedIndex].addTag(tagKeyTextBox.Text, tagValueTextBox.Text, tagTypeComboBox.Text);
+                featGraph.getFeature(selectedIndex).addTag(tagKeyTextBox.Text, tagValueTextBox.Text, tagTypeComboBox.Text);
                 updateFlag = true;
                 tagKeyTextBox.Text = "";
                 tagTypeComboBox.Text = "";
@@ -655,7 +656,7 @@ namespace Dialogue_Data_Entry
                 MessageBox.Show("You cannot create a tag with an empty key or value", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            if (featGraph.Features[selectedIndex].hasTagWithKey(tagKeyTextBox.Text) && editorKeySelected != tagKeyTextBox.Text)
+            if (featGraph.getFeature(selectedIndex).hasTagWithKey(tagKeyTextBox.Text) && editorKeySelected != tagKeyTextBox.Text)
             {
                 MessageBox.Show("There is already a tag with that key in this feature\nPlease choose another key", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -672,8 +673,8 @@ namespace Dialogue_Data_Entry
             }
             else
             {
-                featGraph.Features[selectedIndex].removeTag(editorKeySelected);
-                featGraph.Features[selectedIndex].addTag(tagKeyTextBox.Text, tagValueTextBox.Text, tagTypeComboBox.Text);
+                featGraph.getFeature(selectedIndex).removeTag(editorKeySelected);
+                featGraph.getFeature(selectedIndex).addTag(tagKeyTextBox.Text, tagValueTextBox.Text, tagTypeComboBox.Text);
                 tagKeyTextBox.Text = "";
                 tagTypeComboBox.Text = "";
                 tagValueTextBox.Text = "";
@@ -686,7 +687,7 @@ namespace Dialogue_Data_Entry
         private void button3_Click(object sender, EventArgs e)
         {
             if(editorKeySelected!=""&&selectedIndex!=-1){
-                featGraph.Features[selectedIndex].removeTag(editorKeySelected);
+                featGraph.getFeature(selectedIndex).removeTag(editorKeySelected);
                 editorKeySelected = "";
                 refreshFeatureTagListBox(tagListBox);
                 updateFlag = true;
@@ -724,7 +725,7 @@ namespace Dialogue_Data_Entry
                 //check for relationship
                 if (childrenCheckedListBox.GetItemCheckState(tIndex) == CheckState.Checked)
                 {
-                    showText = showText + "\nR: " + featGraph.Features[selectedIndex].getRelationshipNeighbor(showText);
+                    showText = showText + "\nR: " + featGraph.getFeature(selectedIndex).getRelationshipNeighbor(showText);
                 }
                 toolTip1.SetToolTip(childrenCheckedListBox, showText);
             }
@@ -825,7 +826,7 @@ namespace Dialogue_Data_Entry
             if (this.textBox7.Text != "")
             {
                 //toChange.addSpeak(this.textBox7.Text);
-                featGraph.Features[selectedIndex].Speaks.Add(this.textBox7.Text);
+                featGraph.getFeature(selectedIndex).Speaks.Add(this.textBox7.Text);
                 updateFlag = true;
             }
             refreshFeatureSpeaksListBox(listBox3);
@@ -847,8 +848,8 @@ namespace Dialogue_Data_Entry
             if (this.textBox7.Text != "")
             {
                 //toChange.editSpeak(index, this.textBox7.Text);
-                int editIndex = featGraph.Features[selectedIndex].Speaks.Count - listBox3.SelectedIndex - 1;
-                featGraph.Features[selectedIndex].editSpeak(editIndex,this.textBox7.Text);
+                int editIndex = featGraph.getFeature(selectedIndex).Speaks.Count - listBox3.SelectedIndex - 1;
+                featGraph.getFeature(selectedIndex).editSpeak(editIndex,this.textBox7.Text);
                 updateFlag = true;
             }
             refreshFeatureSpeaksListBox(listBox3);
@@ -865,8 +866,8 @@ namespace Dialogue_Data_Entry
             if (listBox3.SelectedIndex != -1)
             {
                 //toChange.removeSpeak(toChange.Speaks.Count - listBox3.SelectedIndex - 1);
-                int removedIndex = featGraph.Features[selectedIndex].Speaks.Count - listBox3.SelectedIndex - 1;
-                featGraph.Features[selectedIndex].removeSpeak(removedIndex);
+                int removedIndex = featGraph.getFeature(selectedIndex).Speaks.Count - listBox3.SelectedIndex - 1;
+                featGraph.getFeature(selectedIndex).removeSpeak(removedIndex);
                 refreshFeatureSpeaksListBox(listBox3);
                 updateFlag = true;
             }
@@ -923,19 +924,19 @@ namespace Dialogue_Data_Entry
                 if (e.NewValue == CheckState.Checked && e.CurrentValue == CheckState.Unchecked)
                 {
                     //if check insert the new neighbor 
-                    int neighborIndex = featGraph.getFeatureIndex(childrenCheckedListBox.Items[e.Index].ToString());
-                    featGraph.Features[selectedIndex].addNeighbor(featGraph.Features[neighborIndex]);
-                    featGraph.Features[neighborIndex].addParent(featGraph.Features[selectedIndex]);
-                    //featGraph.Features[neighborIndex].addNeighbor(featGraph.Features[selectedIndex]);
+                    int neighborIndex = featGraph.getFeature(childrenCheckedListBox.Items[e.Index].ToString()).Id;
+                    featGraph.getFeature(selectedIndex).addNeighbor(featGraph.getFeature(neighborIndex));
+                    featGraph.getFeature(neighborIndex).addParent(featGraph.getFeature(selectedIndex));
+                    //featGraph.Features[neighborIndex].addNeighbor(featGraph.getFeature(selectedIndex));
                     updateFlag = true;
                 }
                 else if (e.NewValue == CheckState.Unchecked && e.CurrentValue == CheckState.Checked)
                 {
                     //if uncheck remove the neighbor
-                    int neighborIndex = featGraph.getFeatureIndex(childrenCheckedListBox.Items[e.Index].ToString());
-                    featGraph.Features[selectedIndex].removeNeighbor(featGraph.Features[neighborIndex].Data);
-                    featGraph.Features[neighborIndex].removeParent(featGraph.Features[selectedIndex].Data);
-                    //featGraph.Features[neighborIndex].removeNeighbor(featGraph.Features[selectedIndex].Data);
+                    int neighborIndex = featGraph.getFeature(childrenCheckedListBox.Items[e.Index].ToString()).Id;
+                    featGraph.getFeature(selectedIndex).removeNeighbor(featGraph.getFeature(neighborIndex).Id);
+                    featGraph.getFeature(neighborIndex).removeParent(featGraph.getFeature(selectedIndex).Id);
+                    //featGraph.Features[neighborIndex].removeNeighbor(featGraph.getFeature(selectedIndex).Data);
                     updateFlag = true;
                 }
             }
@@ -952,10 +953,10 @@ namespace Dialogue_Data_Entry
             if (e.Button == MouseButtons.Right 
                 && childrenCheckedListBox.GetItemCheckState(childrenCheckedListBox.SelectedIndex) == CheckState.Checked )
             {
-                string OldRelationshipN = featGraph.Features[selectedIndex].getRelationshipNeighbor(selectedName);
-                string OldRelationshipP = featGraph.getFeature(selectedName).getRelationshipParent(featGraph.Features[selectedIndex].Data);
-                string OldWeight = featGraph.Features[selectedIndex].getWeight(selectedName);
-                Form3 relationshipDialog = new Form3(featGraph.Features[selectedIndex].Data, selectedName, OldRelationshipN, OldRelationshipP, OldWeight);
+                string OldRelationshipN = featGraph.getFeature(selectedIndex).getRelationshipNeighbor(selectedName);
+                string OldRelationshipP = featGraph.getFeature(selectedName).getRelationshipParent(featGraph.getFeature(selectedIndex).Id);
+                string OldWeight = featGraph.getFeature(selectedIndex).getWeight(selectedName);
+                Form3 relationshipDialog = new Form3(featGraph.getFeature(selectedIndex).Name, selectedName, OldRelationshipN, OldRelationshipP, OldWeight);
                 relationshipDialog.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
                 string textNResult = "";
                 string textPResult = "";
@@ -973,11 +974,11 @@ namespace Dialogue_Data_Entry
                     }
 
                     //add relationship
-                    featGraph.Features[selectedIndex].setNeighbor(featGraph.getFeature(selectedName), weightResult, textNResult);
-                    bool checkExistParent = featGraph.getFeature(selectedName).setParent(featGraph.getFeature(featGraph.Features[selectedIndex].Data), weightResult, textPResult);
+                    featGraph.getFeature(selectedIndex).setNeighbor(featGraph.getFeature(selectedName), weightResult, textNResult);
+                    bool checkExistParent = featGraph.getFeature(selectedName).setParent(featGraph.getFeature(featGraph.getFeature(selectedIndex).Id), weightResult, textPResult);
                     if (!checkExistParent)
                     {
-                        featGraph.getFeature(selectedName).addParent(featGraph.getFeature(featGraph.Features[selectedIndex].Data), weightResult, textPResult);
+                        featGraph.getFeature(selectedName).addParent(featGraph.getFeature(featGraph.getFeature(selectedIndex).Id), weightResult, textPResult);
                     }
                     if (OldRelationshipN != textNResult)
                     {
@@ -1003,8 +1004,8 @@ namespace Dialogue_Data_Entry
             refreshFeatureListBox(featureEditorListBox);
             if (selectedIndex != -1)
             {
-                featureEditorListBox.SelectedItem = featGraph.Features[selectedIndex].Data;
-                //initEditor(featGraph.Features[selectedIndex]);
+                featureEditorListBox.SelectedItem = featGraph.getFeature(selectedIndex).Id;
+                //initEditor(featGraph.getFeature(selectedIndex));
             }
         }
 
@@ -1021,14 +1022,14 @@ namespace Dialogue_Data_Entry
             }
             if (selectedIndex != -1)
             {
-                refreshFeatureListBox(childrenCheckedListBox,featGraph.Features[selectedIndex].Data);
+                refreshFeatureListBox(childrenCheckedListBox, featGraph.getFeature(selectedIndex).Name);
                 //update the check state of childrenCheckedListBox 
                 shouldIgnoreCheckEvent = true;
-                for (int x = 0; x < featGraph.Features[selectedIndex].Neighbors.Count; x++)
+                for (int x = 0; x < featGraph.getFeature(selectedIndex).Neighbors.Count; x++)
                 {
                     for (int y = 0; y < childrenCheckedListBox.Items.Count; y++)
                     {
-                        if (childrenCheckedListBox.Items[y].ToString() == featGraph.Features[selectedIndex].Neighbors[x].Item1.Data)
+                        if (childrenCheckedListBox.Items[y].ToString() == featGraph.getFeature(selectedIndex).Neighbors[x].Item1.Name)
                         {
                             childrenCheckedListBox.SetItemChecked(y, true);
                         }
@@ -1082,7 +1083,7 @@ namespace Dialogue_Data_Entry
         private void addConstraintButton_Click(object sender, EventArgs e)
         {
             //check all the three necessary fields
-            if(firstArgumentTextBox.Text == "" || featGraph.getFeatureIndex(firstArgumentTextBox.Text)== -1)
+            if(firstArgumentTextBox.Text == "" || featGraph.getFeature(firstArgumentTextBox.Text) == null)
             {
                 MessageBox.Show("First argument box is invalid", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -1101,7 +1102,8 @@ namespace Dialogue_Data_Entry
             {
                 try
                 {
-                    int result = Convert.ToInt32(thirdArgumentTextBox.Text);
+                    int result = 0;
+                    Int32.TryParse(thirdArgumentTextBox.Text, out result);
                     if (result <= 0)
                     {
                         MessageBox.Show("Third argument box is invalid", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -1110,7 +1112,7 @@ namespace Dialogue_Data_Entry
                 }
                 catch (FormatException)
                 {
-                    if (featGraph.getFeatureIndex(thirdArgumentTextBox.Text) == -1)
+                    if (featGraph.getFeature(thirdArgumentTextBox.Text) == null)
                     {
                         MessageBox.Show("Third argument box is invalid", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         return;
@@ -1119,7 +1121,8 @@ namespace Dialogue_Data_Entry
             }
             string firstArgument = firstArgumentTextBox.Text;
             string secondArgument = secondArgumentComboBox.Text;
-            string thirdArgument = thirdArgumentTextBox.Text;
+            int thirdArgument = 0;
+            Int32.TryParse(thirdArgumentTextBox.Text, out thirdArgument);
             string fourthArgument = fourthArgumentComboBox.Text;
             string fifthArgument = fifthArgumentTextBox.Text;
             if (temporalConstraintList==null)
@@ -1137,7 +1140,7 @@ namespace Dialogue_Data_Entry
                 firstArgumentTextBox.Text = temporalConstraintList[showConstraintListBox.SelectedIndex].FirstArgument;
                 constriantTypeComboBox.Text = temporalConstraintList[showConstraintListBox.SelectedIndex].getThirdArgumentType();
                 secondArgumentComboBox.Text = temporalConstraintList[showConstraintListBox.SelectedIndex].SecondArgument;
-                thirdArgumentTextBox.Text = temporalConstraintList[showConstraintListBox.SelectedIndex].ThirdArgument;
+                thirdArgumentTextBox.Text = temporalConstraintList[showConstraintListBox.SelectedIndex].ThirdArgument.ToString();
                 fourthArgumentComboBox.Text = temporalConstraintList[showConstraintListBox.SelectedIndex].FourthArgument;
                 fifthArgumentTextBox.Text = temporalConstraintList[showConstraintListBox.SelectedIndex].FifthArgument;
 
@@ -1166,7 +1169,7 @@ namespace Dialogue_Data_Entry
                 MessageBox.Show("You have not select one of the constraint.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            else if (firstArgumentTextBox.Text == "" || featGraph.getFeatureIndex(firstArgumentTextBox.Text) == -1)
+            else if (firstArgumentTextBox.Text == "" || featGraph.getFeature(firstArgumentTextBox.Text) == null)
             {
                 MessageBox.Show("First argument box is invalid", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -1185,7 +1188,8 @@ namespace Dialogue_Data_Entry
             {
                 try
                 {
-                    int result = Convert.ToInt32(thirdArgumentTextBox.Text);
+                    int result = 0;
+                    Int32.TryParse(thirdArgumentTextBox.Text, out result);
                     if (result <= 0)
                     {
                         MessageBox.Show("Third argument box is invalid", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -1194,7 +1198,7 @@ namespace Dialogue_Data_Entry
                 }
                 catch (FormatException)
                 {
-                    if (featGraph.getFeatureIndex(thirdArgumentTextBox.Text) == -1)
+                    if (featGraph.getFeature(thirdArgumentTextBox.Text) == null)
                     {
                         MessageBox.Show("Third argument box is invalid", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         return;
@@ -1203,7 +1207,8 @@ namespace Dialogue_Data_Entry
             }
             string firstArgument = firstArgumentTextBox.Text;
             string secondArgument = secondArgumentComboBox.Text;
-            string thirdArgument = thirdArgumentTextBox.Text;
+            int thirdArgument = 0;
+            Int32.TryParse(thirdArgumentTextBox.Text, out thirdArgument);
             string fourthArgument = fourthArgumentComboBox.Text;
             string fifthArgument = fifthArgumentTextBox.Text;
             temporalConstraintList.RemoveAt(showConstraintListBox.SelectedIndex);
@@ -1278,7 +1283,8 @@ namespace Dialogue_Data_Entry
             currentConstraintFileName = fileName;
             string[] lines = System.IO.File.ReadAllLines(currentConstraintFileName);
             temporalConstraintList = new List<TemporalConstraint>();
-            string firstArgument = "", secondArgument = "", thirdArgument = "", fourthArgument ="", fifthArgument = "";
+            string firstArgument = "", secondArgument = "", fourthArgument ="", fifthArgument = "";
+            int thirdArgument = 0;
             for (int x = 0; x < lines.Count(); x++)
             {
                 if (x % 5 == 0)
@@ -1291,7 +1297,7 @@ namespace Dialogue_Data_Entry
                 }
                 else if (x % 5 == 2)
                 {
-                    thirdArgument = lines[x];
+                    Int32.TryParse(lines[x], out thirdArgument);
                 }
                 else if (x % 5 == 3)
                 {

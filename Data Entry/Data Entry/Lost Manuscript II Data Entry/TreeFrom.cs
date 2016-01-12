@@ -42,7 +42,7 @@ namespace Dialogue_Data_Entry
                     return;
                 }
                 bool[] checkEntry = new bool[featGraph.Count];
-                treeDrillFillHelper(treeView1.Nodes.Add(featGraph.Root.Data), featGraph.Root,checkEntry);
+                treeDrillFillHelper(treeView1.Nodes.Add(featGraph.Root.Name), featGraph.Root, checkEntry);
             }
             treeView1.Refresh();
         }
@@ -57,12 +57,12 @@ namespace Dialogue_Data_Entry
             for (int x = 0; x < toFill.Count; x++)
             {
                 bool[] checkEntry = new bool[featGraph.Count];
-                treeDrillFillHelper(toRefresh.Nodes.Add(toFill[x].Data), toFill[x],checkEntry);
+                treeDrillFillHelper(toRefresh.Nodes.Add(toFill[x].Name), toFill[x], checkEntry);
             }
         }
         private void treeDrillFillHelper(TreeNode toRefresh, Feature toFill, bool[] checkEntry)
         {
-            int index = featGraph.getFeatureIndex(toFill.Data);
+            int index = featGraph.getFeatureIndex(toFill.Id);
             if (checkEntry[index])
             {
                 return;
@@ -70,22 +70,22 @@ namespace Dialogue_Data_Entry
             checkEntry[index] = true;
             for (int x = 0; x < toFill.Neighbors.Count; x++)
             {
-                if (toRefresh.Parent == null || toRefresh.Parent.Text != toFill.Neighbors[x].Item1.Data)
+                if (toRefresh.Parent == null || toRefresh.Parent.Text != toFill.Neighbors[x].Item1.Name)
                 {
-                    treeDrillFillHelper(toRefresh.Nodes.Add(toFill.Neighbors[x].Item1.Data), toFill.Neighbors[x].Item1,checkEntry);
+                    treeDrillFillHelper(toRefresh.Nodes.Add(toFill.Neighbors[x].Item1.Name), toFill.Neighbors[x].Item1, checkEntry);
                 }
                 else
                 {
-                    toRefresh.Nodes.Add(toFill.Neighbors[x].Item1.Data + "... (Infinite Relation)");
+                    toRefresh.Nodes.Add(toFill.Neighbors[x].Item1.Id + "... (Infinite Relation)");
                 }
             }
             return;
         }
-        private TreeNode getTreeNode(TreeView toSearch, string data)
+        private TreeNode getTreeNode(TreeView toSearch, string Id)
         {
             for (int x = 0; x < toSearch.Nodes.Count; x++)
             {
-                if (toSearch.Nodes[x].Text == data) { return toSearch.Nodes[x]; }
+                if (toSearch.Nodes[x].Text == Id) { return toSearch.Nodes[x]; }
             }
             return null;
         }

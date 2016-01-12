@@ -30,7 +30,7 @@ namespace Dialogue_Data_Entry
                                                     , "was partially held by##部分被举办于##"};
 
         private string previousSpatial = "";
-        private List<string> topicHistory;
+        private List<int> topicHistory;
         private const string SPATIAL = "spatial";
         private const string HIERACHY = "hierachy";
         private const string FUN_FACT = "Fun Fact";
@@ -62,7 +62,7 @@ namespace Dialogue_Data_Entry
             expectedDramaticV = new double[20] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
         }
 
-        public FeatureSpeaker(FeatureGraph featG, List<TemporalConstraint> myTemporalConstraintList,string prevSpatial,List<string> topicH)
+        public FeatureSpeaker(FeatureGraph featG, List<TemporalConstraint> myTemporalConstraintList,string prevSpatial,List<int> topicH)
         {
             setFilterNodes();
             this.temporalConstraintList = new List<TemporalConstraint>();
@@ -74,7 +74,7 @@ namespace Dialogue_Data_Entry
             }
             this.featGraph = featG;
             previousSpatial = prevSpatial;
-            this.topicHistory = new List<string>(topicH);
+            this.topicHistory = new List<int>(topicH);
             //define dramaticFunction manually here
             expectedDramaticV = new double[20] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
         }
@@ -123,7 +123,7 @@ namespace Dialogue_Data_Entry
             {
                 return;
             }
-            int index = featGraph.getFeatureIndex(current.Data);
+            int index = featGraph.getFeatureIndex(current.Id);
             if (checkEntry[index])
             {
                 return;
@@ -136,12 +136,12 @@ namespace Dialogue_Data_Entry
         }
         //Input: the current topic, the current turn and the whole history
         //Return: a list of temporal constraint that this topic can satisfy that are not satisfied yet.
-        public List<int> temporalConstraint(Feature current,int turn, List<string> topicH)
+        public List<int> temporalConstraint(Feature current,int turn, List<int> topicH)
         {
             List<int> indexList = new List<int>();
             for (int x = 0; x < temporalConstraintList.Count(); x++)
             {
-                if (temporalConstraintList[x].FirstArgument == current.Data && !temporalConstraintList[x].Satisfied)
+                if (temporalConstraintList[x].FirstArgument == current.Name && !temporalConstraintList[x].Satisfied)
                 {
                     //Third argument is turn case 
                     if (temporalConstraintList[x].getThirdArgumentType() == "turn")
@@ -204,13 +204,13 @@ namespace Dialogue_Data_Entry
                 }
             }
             return indexList;
-        }
+        }//end function temporalConstraint
 
         private bool hierachyConstraint(Feature current, Feature oldTopic)
         {
             for (int x = 0; x < current.Neighbors.Count; x++)
             {
-                if (current.Neighbors[x].Item1.Data == oldTopic.Data)
+                if (current.Neighbors[x].Item1.Id == oldTopic.Id)
                 {
                     for (int y = 0; y < hierarchyKey.Length; y++)
                     {
@@ -223,7 +223,7 @@ namespace Dialogue_Data_Entry
             }
             for (int x = 0; x < current.Parents.Count; x++)
             {
-                if (current.Parents[x].Item1.Data == oldTopic.Data)
+                if (current.Parents[x].Item1.Id == oldTopic.Id)
                 {
                     for (int y = 0; y < hierarchyKey.Length; y++)
                     {
@@ -235,7 +235,7 @@ namespace Dialogue_Data_Entry
                 }
             }
             return false;
-        }
+        }//end function hierarchyConstraint
 
         private bool spatialConstraint(Feature current, Feature oldTopic)
         {
@@ -244,7 +244,7 @@ namespace Dialogue_Data_Entry
 
                 for (int x = 0; x < current.Neighbors.Count; x++)
                 {
-                    if (current.Neighbors[x].Item1.Data == oldTopic.Data)
+                    if (current.Neighbors[x].Item1.Id == oldTopic.Id)
                     {
                         for (int y = 0; y < spatialKey.Length; y++)
                         {
@@ -257,7 +257,7 @@ namespace Dialogue_Data_Entry
                 }
                 for (int x = 0; x < current.Parents.Count; x++)
                 {
-                    if (current.Parents[x].Item1.Data == oldTopic.Data)
+                    if (current.Parents[x].Item1.Id == oldTopic.Id)
                     {
                         for (int y = 0; y < spatialKey.Length; y++)
                         {
@@ -273,7 +273,7 @@ namespace Dialogue_Data_Entry
             {
                 for (int x = 0; x < current.Neighbors.Count; x++)
                 {
-                    if (current.Neighbors[x].Item1.Data == oldTopic.Data)
+                    if (current.Neighbors[x].Item1.Id == oldTopic.Id)
                     {
                         if (previousSpatial == current.Neighbors[x].Item3)
                         {
@@ -281,19 +281,9 @@ namespace Dialogue_Data_Entry
                         }
                     }
                 }
-                /*for (int x = 0; x < current.Parents.Count; x++)
-                {
-                    if (current.Parents[x].Item1.Data == oldTopic.Data)
-                    {
-                        if (previousSpatial == current.Parents[x].Item3)
-                        {
-                            return true;
-                        }
-                    }
-                }*/
             }
             return false;
-        }
+        }//end function spatialConstraint
 
         private double getNeighborDiscussAmount(Feature target)
         {
@@ -305,7 +295,7 @@ namespace Dialogue_Data_Entry
                 for (int y = 0; y < neighbors.Count; y++)
                 {
                     //check all other nodes except itself
-                    if (neighbors[y].Item1.Data != target.Data)
+                    if (neighbors[y].Item1.Id != target.Id)
                     {
                         if (neighbors[y].Item1.DiscussedAmount >= 1)
                         {
@@ -340,7 +330,7 @@ namespace Dialogue_Data_Entry
             double noveltyValue = 0;
 
             // distance
-            double dist = oldTopic.ShortestDistance[featGraph.getFeatureIndex(current.Data)] / featGraph.MaxDistance;
+            double dist = oldTopic.ShortestDistance[featGraph.getFeatureIndex(current.Id)] / featGraph.MaxDistance;
 
             // previous talk
             double previousTalkPercentage = this.getNeighborDiscussAmount(current);
@@ -367,7 +357,7 @@ namespace Dialogue_Data_Entry
         public double calculateScore(Feature current, Feature oldTopic)
         {
             double score = 0;
-            int currentIndex = featGraph.getFeatureIndex(current.Data);
+            int currentIndex = featGraph.getFeatureIndex(current.Id);
 
             //set of Weight (W == Weight)
             //Get the weights from the graph.
@@ -414,15 +404,15 @@ namespace Dialogue_Data_Entry
             score += (temporalConstraintValue * temporalConstraintW);
 
             //If this is a filter node, or the same node as the focus node, artificially set its score low
-            if (filter_nodes.Contains(current.Data.Split(new string[] { "##" }, StringSplitOptions.None)[0])
-                || current.Data.Equals(oldTopic.Data))
+            if (filter_nodes.Contains(current.Name.Split(new string[] { "##" }, StringSplitOptions.None)[0])
+                || current.Id.Equals(oldTopic.Id))
             {
-                //Console.WriteLine("Filtering out node " + current.Data);
+                //Console.WriteLine("Filtering out node " + current.Id);
                 score = -1000000;
             }//end if
 
             //if (hierachyConstraintValue > 0)
-            //  Console.WriteLine("hierarchy constraint for " + current.Data + " from " + oldTopic.Data + ": " + hierachyConstraintValue);
+            //  Console.WriteLine("hierarchy constraint for " + current.Id + " from " + oldTopic.Id + ": " + hierachyConstraintValue);
 
             if (printCalculation)
             //if (true)
@@ -447,7 +437,7 @@ namespace Dialogue_Data_Entry
         public double[] calculateScoreComponents(Feature current, Feature oldTopic)
         {
             double score = 0;
-            int currentIndex = featGraph.getFeatureIndex(current.Data);
+            int currentIndex = featGraph.getFeatureIndex(current.Id);
 
             //set of Weight (W == Weight)
             //Get the weights from the graph.
@@ -528,81 +518,6 @@ namespace Dialogue_Data_Entry
             return_array[Constant.ScoreArrayHierarchyIndex] = hierachyConstraintValue;
 
             return return_array;
-
-            /*double score = 0;
-            int currentIndex = featGraph.getFeatureIndex(current.Data);
-
-            //Get the weights from the graph.
-            double[] weight_array = featGraph.getWeightArray();
-            double discussAmountW = weight_array[0];
-            double noveltyW = weight_array[1];
-            double spatialConstraintW = weight_array[2];
-            double hierachyConstraintW = weight_array[3];
-
-            // novelty
-
-            double noveltyValue = calculateNovelty(current, oldTopic);
-
-            //getting novelty information
-            if (currentNovelty != null)
-            {
-                currentNovelty[currentIndex] = noveltyValue;
-            }
-
-            //spatial Constraint
-            double spatialConstraintValue = 0.0;
-            if (spatialConstraint(current, oldTopic))
-            {
-                spatialConstraintValue = 1.0;
-            }
-            //hierachy Constraint
-            double hierachyConstraintValue = 0.0;
-            if (hierachyConstraint(current, oldTopic))
-            {
-                hierachyConstraintValue = 1.0;
-            }
-
-            //check mentionCount
-            float DiscussedAmount = current.DiscussedAmount;
-
-            score += (DiscussedAmount * discussAmountW);
-            score += (Math.Abs(expectedDramaticV[currentTurn % expectedDramaticV.Count()] - noveltyValue) * noveltyW);
-            score += spatialConstraintValue * spatialConstraintW;
-            score += hierachyConstraintValue * hierachyConstraintW;
-
-            if (printCalculation)
-            {
-                System.Console.WriteLine("Have been addressed before: " + DiscussedAmount);
-                System.Console.WriteLine("Spatial Constraint Satisfied: " + spatialConstraintValue);
-                System.Console.WriteLine("Hierachy Constraint Satisfied: " + hierachyConstraintValue);
-
-                string scoreFormula = "";
-                scoreFormula += "score = Have Been Addressed * " + discussAmountW + " + abs(expectedDramaticV[" + currentTurn + "] - dramaticValue)*" + noveltyW;
-                scoreFormula += " + spatialConstraint*" + spatialConstraintW;
-                scoreFormula += " + hierachyConstraint*" + hierachyConstraintW;
-                scoreFormula += " = " + score;
-                System.Console.WriteLine(scoreFormula);
-            }
-
-            //Store score components, and score, in return array.
-            //Indices are as follows:
-            //0 = score
-            //1 = novelty
-            //2 = discussed amount
-            //3 = expected dramatic value
-            //4 = spatial constraint value
-            //5 = hierarchy constraint value
-            double[] return_array = new double[Constant.ScoreArraySize];
-
-            //NOTE: Weights are NOT included.
-            return_array[Constant.ScoreArrayScoreIndex] = score;
-            return_array[Constant.ScoreArrayNoveltyIndex] = noveltyValue;
-            return_array[Constant.ScoreArrayDiscussedAmountIndex] = DiscussedAmount;
-            return_array[Constant.ScoreArrayExpectedDramaticIndex] = expectedDramaticV[currentTurn % expectedDramaticV.Count()];
-            return_array[Constant.ScoreArraySpatialIndex] = spatialConstraintValue;
-            return_array[Constant.ScoreArrayHierarchyIndex] = hierachyConstraintValue;
-
-            return return_array;*/
         }//End method calculateScoreComponents
 
         //BFS to travel the whole graph
@@ -615,7 +530,7 @@ namespace Dialogue_Data_Entry
             {
                 return;
             }
-            int index = featGraph.getFeatureIndex(current.Data);
+            int index = featGraph.getFeatureIndex(current.Id);
             if (checkEntry[index])
             {
                 return;
@@ -624,7 +539,7 @@ namespace Dialogue_Data_Entry
 
             if (printCalculation)
             {
-                System.Console.WriteLine("\nNode: " + current.Data);
+                System.Console.WriteLine("\nNode: " + current.Id);
             }
 
             //Calculate score of choice and add to list
@@ -667,7 +582,7 @@ namespace Dialogue_Data_Entry
             //The string returned will consist of the ID and calculated score of the first amount nodes
             for (int x = 0; x < amount; x++)
             {
-                answer += featGraph.getFeatureIndex(listScore[x].Item1.Data)+" "+ listScore[x].Item2 +" ";
+                answer += featGraph.getFeatureIndex(listScore[x].Item1.Id)+" "+ listScore[x].Item2 +" ";
             }
 
             printCalculation = oldPrintFlag;
@@ -696,7 +611,7 @@ namespace Dialogue_Data_Entry
             for (int x = 0; x < amount; x++)
             {
                 //answer += closetTopicIndex[x] + " " + closestTopic[closetTopicIndex[x]]+" ";
-                answer += featGraph.getFeatureIndex(listScore[x].Item1.Data) + " " + listScore[x].Item2 + " ";
+                answer += featGraph.getFeatureIndex(listScore[x].Item1.Id) + " " + listScore[x].Item2 + " ";
             }
             printCalculation = oldPrintCalculation;
             return answer;
@@ -745,10 +660,10 @@ namespace Dialogue_Data_Entry
                         //If the item in this list is one of the filter nodes,
                         //do not include it in max score determination.
                         //Check for filter nodes.
-                        if (filter_nodes.Contains(listScore[x].Item1.Data))
+                        if (filter_nodes.Contains(listScore[x].Item1.Name))
                         {
                             //If it is a filter node, take another step.
-                            Console.WriteLine("Filtering out " + listScore[x].Item1.Data);
+                            Console.WriteLine("Filtering out " + listScore[x].Item1.Id);
                             continue;
                         }//end if
 
@@ -757,13 +672,13 @@ namespace Dialogue_Data_Entry
                     }
                 }
 
-                currentTopicNovelty = currentNovelty[featGraph.getFeatureIndex(listScore[maxIndex].Item1.Data)];
+                currentTopicNovelty = currentNovelty[featGraph.getFeatureIndex(listScore[maxIndex].Item1.Id)];
                 //if (printCalculation)
                 if (false)
                 {
                     System.Console.WriteLine("\n\nMax score: " + maxScore);
                     System.Console.WriteLine("Novelty: "+ currentTopicNovelty);
-                    System.Console.WriteLine("Node: " + listScore[maxIndex].Item1.Data);
+                    System.Console.WriteLine("Node: " + listScore[maxIndex].Item1.Id);
                     System.Console.WriteLine("==========================================");
                 }
                 return listScore[maxIndex].Item1;
@@ -793,11 +708,11 @@ namespace Dialogue_Data_Entry
             if (topicHistory.Count() > 0)
             {
                 Feature prevTopic = this.featGraph.getFeature(topicHistory[topicHistory.Count() - 1]);
-                if (prevTopic.getNeighbor(nextTopic.Data) != null)
+                if (prevTopic.getNeighbor(nextTopic.Id) != null)
                 {
                     foreach(string str in Directional_Words)
                     {
-                        if (str == prevTopic.getRelationshipNeighbor(nextTopic.Data))
+                        if (str == prevTopic.getRelationshipNeighbor(nextTopic.Id))
                         {
                             previousSpatial = str;
                             spatialExist = true;
@@ -819,14 +734,14 @@ namespace Dialogue_Data_Entry
                 temporalConstraintList[temporalIndex[x]].Satisfied = true;
             }
             //update topic's history
-            topicHistory.Add(nextTopic.Data);
+            topicHistory.Add(nextTopic.Id);
         }
 
         public List<Feature> forwardProjection(Feature currentTopic, int forwardTurn)
         {
             //remember internal variables for forward projection
             string internalPreviousSpatial = this.previousSpatial;
-            List<string> internalTopicHistory = new List<string>(this.topicHistory);
+            List<int> internalTopicHistory = new List<int>(this.topicHistory);
             int internalTurn = this.currentTurn;
             Feature tempCurrentTopic = currentTopic;
             bool oldPrintCalculation = printCalculation;

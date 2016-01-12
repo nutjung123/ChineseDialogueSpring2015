@@ -121,7 +121,7 @@ namespace Dialogue_Data_Entry
 
             //If the relationship between the previous topic and the current topic is on the no_analogy list,
             //then an analogy should not be made with them.
-            if (no_analogy_relationships.Contains(previous_topic.getRelationshipNeighbor(feat.Data).Split(new string[] { "##" }, StringSplitOptions.None)[0]))
+            if (no_analogy_relationships.Contains(previous_topic.getRelationshipNeighbor(feat.Id).Split(new string[] { "##" }, StringSplitOptions.None)[0]))
             {
                 return "";
             }//end if
@@ -135,7 +135,7 @@ namespace Dialogue_Data_Entry
 
                 //If the current and next nodes are the previous topic and the current feature,
                 //then we have found an exact match. Do not make an analogy of it.
-                if (current_node.Data.Equals(previous_topic.Data) && next_node.Data.Equals(feat.Data))
+                if (current_node.Id.Equals(previous_topic.Id) && next_node.Id.Equals(feat.Id))
                 {
                     continue;
                 }//end if
@@ -184,8 +184,8 @@ namespace Dialogue_Data_Entry
             bool found = false;
             bool directional = false;
             //Check if the relationship is a directional word.
-            /*if (Directional_Words.Contains(current_node.getRelationshipNeighbor(next_node.Data))
-                || Directional_Words.Contains(next_node.getRelationshipNeighbor(current_node.Data)))
+            /*if (Directional_Words.Contains(current_node.getRelationshipNeighbor(next_node.Id))
+                || Directional_Words.Contains(next_node.getRelationshipNeighbor(current_node.Id)))
             {
                 directional = true;
             }//end if*/
@@ -193,48 +193,48 @@ namespace Dialogue_Data_Entry
             foreach (List<string> list in equivalent_relationships)
             {
                 if (found == true) break;
-                if ((list.Contains(current_node.getRelationshipNeighbor(next_node.Data)) && list.Contains(previous_topic.getRelationshipNeighbor(current_topic.Data)))
-                    || current_node.getRelationshipNeighbor(next_node.Data).Equals(previous_topic.getRelationshipNeighbor(current_topic.Data)))
+                if ((list.Contains(current_node.getRelationshipNeighbor(next_node.Id)) && list.Contains(previous_topic.getRelationshipNeighbor(current_topic.Id)))
+                    || current_node.getRelationshipNeighbor(next_node.Id).Equals(previous_topic.getRelationshipNeighbor(current_topic.Id)))
                 {
-                    a1 = current_node.Data;
-                    b1 = next_node.Data;
-                    a2 = previous_topic.Data;
-                    b2 = current_topic.Data;
-                    r1 = current_node.getRelationshipNeighbor(next_node.Data);
-                    r2 = previous_topic.getRelationshipNeighbor(current_topic.Data);
+                    a1 = current_node.Name;
+                    b1 = next_node.Name;
+                    a2 = previous_topic.Name;
+                    b2 = current_topic.Name;
+                    r1 = current_node.getRelationshipNeighbor(next_node.Id);
+                    r2 = previous_topic.getRelationshipNeighbor(current_topic.Id);
                     found = true;
                 }
-                else if ((list.Contains(next_node.getRelationshipNeighbor(current_node.Data)) && list.Contains(current_topic.getRelationshipNeighbor(previous_topic.Data)))
-                    || next_node.getRelationshipNeighbor(current_node.Data).Equals(current_topic.getRelationshipNeighbor(previous_topic.Data)))
+                else if ((list.Contains(next_node.getRelationshipNeighbor(current_node.Id)) && list.Contains(current_topic.getRelationshipNeighbor(previous_topic.Id)))
+                    || next_node.getRelationshipNeighbor(current_node.Id).Equals(current_topic.getRelationshipNeighbor(previous_topic.Id)))
                 {
-                    a1 = next_node.Data;
-                    b1 = current_node.Data;
-                    a2 = current_topic.Data;
-                    b2 = previous_topic.Data;
-                    r1 = next_node.getRelationshipNeighbor(current_node.Data);
-                    r2 = current_topic.getRelationshipNeighbor(previous_topic.Data);
+                    a1 = next_node.Name;
+                    b1 = current_node.Name;
+                    a2 = current_topic.Name;
+                    b2 = previous_topic.Name;
+                    r1 = next_node.getRelationshipNeighbor(current_node.Id);
+                    r2 = current_topic.getRelationshipNeighbor(previous_topic.Id);
                     found = true;
                 }
-                else if ((list.Contains(next_node.getRelationshipNeighbor(current_node.Data)) && list.Contains(previous_topic.getRelationshipNeighbor(current_topic.Data)))
-                    || next_node.getRelationshipNeighbor(current_node.Data).Equals(previous_topic.getRelationshipNeighbor(current_topic.Data)))
+                else if ((list.Contains(next_node.getRelationshipNeighbor(current_node.Id)) && list.Contains(previous_topic.getRelationshipNeighbor(current_topic.Id)))
+                    || next_node.getRelationshipNeighbor(current_node.Id).Equals(previous_topic.getRelationshipNeighbor(current_topic.Id)))
                 {
-                    a1 = next_node.Data;
-                    b1 = current_node.Data;
-                    a2 = previous_topic.Data;
-                    b2 = current_topic.Data;
-                    r1 = next_node.getRelationshipNeighbor(current_node.Data);
-                    r2 = previous_topic.getRelationshipNeighbor(current_topic.Data);
+                    a1 = next_node.Name;
+                    b1 = current_node.Name;
+                    a2 = previous_topic.Name;
+                    b2 = current_topic.Name;
+                    r1 = next_node.getRelationshipNeighbor(current_node.Id);
+                    r2 = previous_topic.getRelationshipNeighbor(current_topic.Id);
                     found = true;
                 }
-                else if ((list.Contains(current_node.getRelationshipNeighbor(next_node.Data)) && list.Contains(current_topic.getRelationshipNeighbor(previous_topic.Data)))
-                    || current_node.getRelationshipNeighbor(next_node.Data).Equals(current_topic.getRelationshipNeighbor(previous_topic.Data)))
+                else if ((list.Contains(current_node.getRelationshipNeighbor(next_node.Id)) && list.Contains(current_topic.getRelationshipNeighbor(previous_topic.Id)))
+                    || current_node.getRelationshipNeighbor(next_node.Id).Equals(current_topic.getRelationshipNeighbor(previous_topic.Id)))
                 {
-                    a1 = current_node.Data;
-                    b1 = next_node.Data;
-                    a2 = current_topic.Data;
-                    b2 = previous_topic.Data;
-                    r1 = current_node.getRelationshipNeighbor(next_node.Data);
-                    r2 = current_topic.getRelationshipNeighbor(previous_topic.Data);
+                    a1 = current_node.Name;
+                    b1 = next_node.Name;
+                    a2 = current_topic.Name;
+                    b2 = previous_topic.Name;
+                    r1 = current_node.getRelationshipNeighbor(next_node.Id);
+                    r2 = current_topic.getRelationshipNeighbor(previous_topic.Id);
                     found = true;
                 }
             } //end foreach
@@ -255,10 +255,10 @@ namespace Dialogue_Data_Entry
                 return "";
             }//end if
 
-            //if (current_node.getRelationshipNeighbor(next_node.Data).Equals(previous_topic.getRelationshipNeighbor(current.Data)) &&
-            //	current_node.getRelationshipNeighbor(next_node.Data) != "" && previous_topic.getRelationshipNeighbor(current.Data) != "")
+            //if (current_node.getRelationshipNeighbor(next_node.Id).Equals(previous_topic.getRelationshipNeighbor(current.Id)) &&
+            //	current_node.getRelationshipNeighbor(next_node.Id) != "" && previous_topic.getRelationshipNeighbor(current.Id) != "")
             //{
-            //string relationship = current_node.getRelationshipNeighbor(next_node.Data);
+            //string relationship = current_node.getRelationshipNeighbor(next_node.Id);
 
             // enable bilingual mode
 
@@ -354,54 +354,54 @@ namespace Dialogue_Data_Entry
         {
             string return_message = "";
 
-            string first_data_en = first.Data;
-            string first_data_cn = first.Data;
-            if (first.Data.Contains("##"))
+            string first_name_en = first.Name;
+            string first_name_cn = first.Name;
+            if (first.Name.Contains("##"))
             {
-                first_data_en = first.Data.Split(new string[] { "##" }, StringSplitOptions.None)[0];
-                first_data_cn = first.Data.Split(new string[] { "##" }, StringSplitOptions.None)[1];
+                first_name_en = first.Name.Split(new string[] { "##" }, StringSplitOptions.None)[0];
+                first_name_cn = first.Name.Split(new string[] { "##" }, StringSplitOptions.None)[1];
             }
 
             //First, check if "last", the previous topic, is null. If so, use an introduction.
             if (last == null)
-                return "{First, let's talk about " + first_data_en + ".} " + "##" + "{首先，让我们谈谈 " + first_data_cn + "。} " + "##";
+                return "{First, let's talk about " + first_name_en + ".} " + "##" + "{首先，让我们谈谈 " + first_name_cn + "。} " + "##";
 
 
-            Console.WriteLine("In LeadInTopic, first_data_en " + first_data_en + " first_data_cn " + first_data_cn);
+            Console.WriteLine("In LeadInTopic, first_name_en " + first_name_en + " first_name_cn " + first_name_cn);
 
-            string last_data_en = last.Data;
-            string last_data_cn = last.Data;
-            if (last.Data.Contains("##"))
+            string last_name_en = last.Name;
+            string last_name_cn = last.Name;
+            if (last.Name.Contains("##"))
             {
-                last_data_en = last.Data.Split(new string[] { "##" }, StringSplitOptions.None)[0];
-                last_data_cn = last.Data.Split(new string[] { "##" }, StringSplitOptions.None)[1];
+                last_name_en = last.Name.Split(new string[] { "##" }, StringSplitOptions.None)[0];
+                last_name_cn = last.Name.Split(new string[] { "##" }, StringSplitOptions.None)[1];
             }
 
-            Console.WriteLine("In LeadInTopic, last_data_en " + last_data_en + " last_data_cn " + last_data_cn);
+            Console.WriteLine("In LeadInTopic, last_name_en " + last_name_en + " last_name_cn " + last_name_cn);
 
             //First is the current node (the one that has just been traversed to)
             //A set of possible lead-in statements.
             List<string> lead_in_statements = new List<string>();
-            lead_in_statements.Add("{So, about " + first_data_en + ".} " + "##" + "{还有" + first_data_cn + "呢。} " + "##");
-            lead_in_statements.Add("{But let's talk about " + first_data_en + ".} " + "##" + "{我们来聊聊" + first_data_cn + "吧。} " + "##");
-            lead_in_statements.Add("{And have I mentioned " + first_data_en + "?} " + "##" + "{之前我说过" + first_data_cn + "吗？} " + "##");
-            lead_in_statements.Add("{Now, about " + first_data_en + ".} " + "##" + "{接下来是" + first_data_cn + "。} " + "##");
-            lead_in_statements.Add("{Now, let's talk about " + first_data_en + ".} " + "##" + "{接着我们说说" + first_data_cn + "吧。} " + "##");
-            lead_in_statements.Add("{I should touch on " + first_data_en + ".} " + "##" + "{我要谈谈关于" + first_data_cn + "。} " + "##");
-            lead_in_statements.Add("{Have you heard of " + first_data_en + "?} " + "##" + "{你听说过" + first_data_cn + "吗？} " + "##");
+            lead_in_statements.Add("{So, about " + first_name_en + ".} " + "##" + "{还有" + first_name_cn + "呢。} " + "##");
+            lead_in_statements.Add("{But let's talk about " + first_name_en + ".} " + "##" + "{我们来聊聊" + first_name_cn + "吧。} " + "##");
+            lead_in_statements.Add("{And have I mentioned " + first_name_en + "?} " + "##" + "{之前我说过" + first_name_cn + "吗？} " + "##");
+            lead_in_statements.Add("{Now, about " + first_name_en + ".} " + "##" + "{接下来是" + first_name_cn + "。} " + "##");
+            lead_in_statements.Add("{Now, let's talk about " + first_name_en + ".} " + "##" + "{接着我们说说" + first_name_cn + "吧。} " + "##");
+            lead_in_statements.Add("{I should touch on " + first_name_en + ".} " + "##" + "{我要谈谈关于" + first_name_cn + "。} " + "##");
+            lead_in_statements.Add("{Have you heard of " + first_name_en + "?} " + "##" + "{你听说过" + first_name_cn + "吗？} " + "##");
 
             //A set of lead-in statements for non-novel nodes
             List<string> non_novel_lead_in_statements = new List<string>();
-            non_novel_lead_in_statements.Add("{Have you heard of " + first_data_en + "?} " + "##" + "{还有" + first_data_cn + "呢。} " + "##");
-            non_novel_lead_in_statements.Add("{Let's talk about " + first_data_en + ".} " + "##" + "{我们谈谈" + first_data_cn + "吧。} " + "##");
-            non_novel_lead_in_statements.Add("{I'll mention " + first_data_en + " real quick.} " + "##" + "{我想简要提提" + first_data_cn + "。} " + "##");
-            non_novel_lead_in_statements.Add("{So, about " + first_data_en + ".} " + "##" + "{那么,说说" + first_data_cn + "。} " + "##");
-            non_novel_lead_in_statements.Add("{Now then, about " + first_data_en + ".} " + "##" + "{现在谈谈" + first_data_cn + "吧。} " + "##");
-            non_novel_lead_in_statements.Add("{Let's talk about " + first_data_en + " for a moment.} " + "##" + "{我们聊一会儿" + first_data_cn + " 吧。} " + "##");
-            non_novel_lead_in_statements.Add("{Have I mentioned " + first_data_en + "?} " + "##" + "{之前我说过" + first_data_cn + "吗？} " + "##");
-            non_novel_lead_in_statements.Add("{Now, about " + first_data_en + ".} " + "##" + "{接着是" + first_data_cn + "。} " + "##");
-            non_novel_lead_in_statements.Add("{Now, let's talk about " + first_data_en + ".} " + "##" + "{现在我们谈谈" + first_data_cn + "吧。} " + "##");
-            non_novel_lead_in_statements.Add("{I should touch on " + first_data_en + ".} " + "##" + "{我要说说" + first_data_cn + "。} " + "##");
+            non_novel_lead_in_statements.Add("{Have you heard of " + first_name_en + "?} " + "##" + "{还有" + first_name_cn + "呢。} " + "##");
+            non_novel_lead_in_statements.Add("{Let's talk about " + first_name_en + ".} " + "##" + "{我们谈谈" + first_name_cn + "吧。} " + "##");
+            non_novel_lead_in_statements.Add("{I'll mention " + first_name_en + " real quick.} " + "##" + "{我想简要提提" + first_name_cn + "。} " + "##");
+            non_novel_lead_in_statements.Add("{So, about " + first_name_en + ".} " + "##" + "{那么,说说" + first_name_cn + "。} " + "##");
+            non_novel_lead_in_statements.Add("{Now then, about " + first_name_en + ".} " + "##" + "{现在谈谈" + first_name_cn + "吧。} " + "##");
+            non_novel_lead_in_statements.Add("{Let's talk about " + first_name_en + " for a moment.} " + "##" + "{我们聊一会儿" + first_name_cn + " 吧。} " + "##");
+            non_novel_lead_in_statements.Add("{Have I mentioned " + first_name_en + "?} " + "##" + "{之前我说过" + first_name_cn + "吗？} " + "##");
+            non_novel_lead_in_statements.Add("{Now, about " + first_name_en + ".} " + "##" + "{接着是" + first_name_cn + "。} " + "##");
+            non_novel_lead_in_statements.Add("{Now, let's talk about " + first_name_en + ".} " + "##" + "{现在我们谈谈" + first_name_cn + "吧。} " + "##");
+            non_novel_lead_in_statements.Add("{I should touch on " + first_name_en + ".} " + "##" + "{我要说说" + first_name_cn + "。} " + "##");
 
             //A set of lead-in statements for novel nodes
             //TODO: Author these again; things like let's talk about something different now.
@@ -413,12 +413,12 @@ namespace Dialogue_Data_Entry
             Random rand = new Random();
 
             // Check if there is a relationship between two nodes
-            if ((last.getNeighbor(first.Data) != null || first.getNeighbor(last.Data) != null) && use_relationships)
+            if ((last.getNeighbor(first.Id) != null || first.getNeighbor(last.Id) != null) && use_relationships)
             {
-                string relationship_neighbor_en = last.getRelationshipNeighbor(first.Data);
-                string relationship_neighbor_cn = last.getRelationshipNeighbor(first.Data);
-                string relationship_parent_en = last.getRelationshipParent(first.Data);
-                string relationship_parent_cn = last.getRelationshipParent(first.Data);
+                string relationship_neighbor_en = last.getRelationshipNeighbor(first.Id);
+                string relationship_neighbor_cn = last.getRelationshipNeighbor(first.Id);
+                string relationship_parent_en = last.getRelationshipParent(first.Id);
+                string relationship_parent_cn = last.getRelationshipParent(first.Id);
 
                 Console.WriteLine("In LeadInTopic, relationship_neighbor_en " + relationship_neighbor_en + " relationship_neighbor_cn " + relationship_neighbor_cn);
 
@@ -434,21 +434,21 @@ namespace Dialogue_Data_Entry
                 }//end if
 
                 // Check if last has first as its neighbor
-                if (!last.getRelationshipNeighbor(first.Data).Equals("")
-                    && !(last.getRelationshipNeighbor(first.Data) == null))
+                if (!last.getRelationshipNeighbor(first.Id).Equals("")
+                    && !(last.getRelationshipNeighbor(first.Id) == null))
                 {
-                    return_message = "{" + last_data_en + " " + relationship_neighbor_en + " "
-                        + first_data_en + ".} " + "##" + "{" + last_data_cn + " " + relationship_neighbor_cn + " "
-                        + first_data_cn + ".} " + "##";
+                    return_message = "{" + last_name_en + " " + relationship_neighbor_en + " "
+                        + first_name_en + ".} " + "##" + "{" + last_name_cn + " " + relationship_neighbor_cn + " "
+                        + first_name_cn + ".} " + "##";
                     return return_message;
                 }//end if
                 // If last is a child node of first (first is a parent of last)
-                else if (!last.getRelationshipParent(first.Data).Equals("")
-                            && !(last.getRelationshipParent(first.Data) == null))
+                else if (!last.getRelationshipParent(first.Id).Equals("")
+                            && !(last.getRelationshipParent(first.Id) == null))
                 {
-                    return_message = "{" + last_data_en + " " + relationship_parent_en + " "
-                        + first_data_en + ".} " + "##" + "{" + last_data_cn + " " + relationship_parent_cn + " "
-                        + first_data_cn + ".} " + "##";
+                    return_message = "{" + last_name_en + " " + relationship_parent_en + " "
+                        + first_name_en + ".} " + "##" + "{" + last_name_cn + " " + relationship_parent_cn + " "
+                        + first_name_cn + ".} " + "##";
                     return return_message;
                 }//end else if
             }//end if
@@ -459,7 +459,7 @@ namespace Dialogue_Data_Entry
             //    return "";
 
             // NEED TO consider novelty value (low)
-            //else if (last.getNeighbor(first.Data) == null || first.getNeighbor(last.Data) == null)
+            //else if (last.getNeighbor(first.Id) == null || first.getNeighbor(last.Id) == null)
 
             //If the novelty is high enough, always include a novel topic lead-in statement.
             //if (noveltyValue >= 0.6)
@@ -475,7 +475,7 @@ namespace Dialogue_Data_Entry
                 //    topic_index = 0;
             }//end if
 
-            //!FindSpeak(first).Contains<string>(first.Data)
+            //!FindSpeak(first).Contains<string>(first.Id)
 
             return return_message;
         }//end function LeadInTopic

@@ -53,7 +53,7 @@ namespace Dialogue_Data_Entry
                 }
             }
             
-            int index = this.getFeatureIndex(current.Data);
+            int index = this.getFeatureIndex(current.Id);
             if (checkEntry[index])
             {
                 return;
@@ -80,7 +80,7 @@ namespace Dialogue_Data_Entry
                 {
                     maxDepth = current.Level;
                 }
-                int ind = this.getFeatureIndex(current.Data);
+                int ind = this.getFeatureIndex(current.Id);
                 if (!checkEntry[ind])
                 {
                     checkEntry[ind] = true;
@@ -122,7 +122,7 @@ namespace Dialogue_Data_Entry
                 {
                     maxDistance = current.Dist;
                 }
-                int ind = this.getFeatureIndex(current.Data);
+                int ind = this.getFeatureIndex(current.Id);
                 if (!checkEntry[ind])
                 {
                     checkEntry[ind] = true;
@@ -177,7 +177,7 @@ namespace Dialogue_Data_Entry
                 //Children edge
                 for (int y = 0; y < this.Features[x].Neighbors.Count; y++)
                 {
-                    int ind = this.getFeatureIndex(this.Features[x].Neighbors[y].Item1.Data);
+                    int ind = this.getFeatureIndex(this.Features[x].Neighbors[y].Item1.Id);
                     double dist = this.Features[x].Neighbors[y].Item2;
                     //if dist = 0, set it to 1. This is because the default weight of edge used to be 0.
                     if (dist == 0)
@@ -189,7 +189,7 @@ namespace Dialogue_Data_Entry
                 //Parent edge
                 for (int y = 0; y < this.Features[x].Parents.Count;y++)
                 {
-                    int ind = this.getFeatureIndex(this.Features[x].Parents[y].Item1.Data);
+                    int ind = this.getFeatureIndex(this.Features[x].Parents[y].Item1.Id);
                     double dist = this.Features[x].Parents[y].Item2;
                     this.Features[x].ShortestDistance[ind] = dist;
                 }
@@ -291,12 +291,12 @@ namespace Dialogue_Data_Entry
             features.Add(toAdd);
             return true;
         }
-        public bool setFeature(string data, Feature change)
+        public bool setFeature(int id, Feature change)
         {
-            int i = getFeatureIndex(data);
+            int i = getFeatureIndex(id);
             if (i != -1)
             {
-                features[i].Data = change.Data;
+                features[i].Id = change.Id;
                 features[i].Neighbors = change.Neighbors;
                 features[i].Tags = change.Tags;
                 features[i].DiscussedAmount = change.DiscussedAmount;
@@ -308,9 +308,9 @@ namespace Dialogue_Data_Entry
             return false;
         }
 
-        public bool setFeatureDiscussedAmount(string data, float amount)
+        public bool setFeatureDiscussedAmount(int id, float amount)
         {
-            int i = getFeatureIndex(data);
+            int i = getFeatureIndex(id);
             if (i != -1)
             {
                 features[i].DiscussedAmount = amount;
@@ -319,15 +319,25 @@ namespace Dialogue_Data_Entry
             return false;
         }
 
-        public bool setFeatureData(int index, string newName)
+        public bool setFeatureId(int index, int new_id)
         {
             if (index >= 0 && index < features.Count)
             {
-                features[index].Data = newName;
+                features[index].Id = new_id;
                 return true;
             }
             return false;
-        }
+        }//end function setFeatureId
+        public bool setFeatureId(int index, string name)
+        {
+            if (index >= 0 && index < features.Count)
+            {
+                features[index].Name = name;
+                return true;
+            }
+            return false;
+        }//end function setFeatureName
+
         public bool setFeatureNeighbors(int index, List<Tuple<Feature, double,string>> newNeighbors)
         {
             if (index >= 0 && index < features.Count)
@@ -347,40 +357,57 @@ namespace Dialogue_Data_Entry
             return false;
         }
 
-
-
-        public Feature getFeature(string data)
+        public Feature getFeature(string name)
         {
             for (int x = 0; x < features.Count; x++)
             {
-                if (features[x].Data == data) { return features[x]; }
+                if (features[x].Name.Equals(name)) { return features[x]; }
             }
             return null;
-        }
-        public Feature getFeature(int index)
-        {
-            return features[index];
-        }
-        public int getFeatureIndex(string data)
+        }//end function getFeature
+        public Feature getFeature(int id)
         {
             for (int x = 0; x < features.Count; x++)
             {
-                if (features[x].Data == data)
+                if (features[x].Id == id) { return features[x]; }
+            }
+            return null;
+        }//end function getFeature
+
+        /*public Feature getFeature(int index)
+        {
+            return features[index];
+        }*/
+        public int getFeatureIndex(int id)
+        {
+            for (int x = 0; x < features.Count; x++)
+            {
+                if (features[x].Id == id)
                 {
                     return x;
                 }
             }
             return -1;
             throw new Exception("If you see this msg when you save the file. Please report and don't close your program.");
-        }
-        public bool hasNodeData(string data)
+        }//end function getFeatureIndex
+
+        public bool hasNode(int id)
         {
             for (int x = 0; x < features.Count; x++)
             {
-                if(features[x].Data == data){return true;}
+                if (features[x].Id == id) { return true; }
             }
             return false;
-        }
+        }//whether or not the feature graph has this node
+        public bool hasNode(string name)
+        {
+            for (int x = 0; x < features.Count; x++)
+            {
+                if (features[x].Name == name) { return true; }
+            }
+            return false;
+        }//whether or not the feature graph has this node
+
         public bool connect(string A, string B, double weight = 1.0)
         {
             if (A == null || B == null) { throw new Exception("You cannot create a connection between two features if one is null"); }
@@ -411,35 +438,52 @@ namespace Dialogue_Data_Entry
             List<string> names = new List<string>();
             for (int x = 0; x < features.Count; x++)
             {
-                names.Add(features[x].Data);
+                names.Add(features[x].Name);
             }
             return names;
         }
-        public bool removeFeature(string data)
+
+        public bool removeFeature(string name)
         {
             for (int x = 0; x < features.Count; x++)
             {
-                features[x].removeNeighbor(data);
+                features[x].removeNeighbor(name);
             }
             for (int x = 0; x < features.Count; x++)
             {
-                if (features[x].Data == data)
+                if (features[x].Name == name)
                 {
                     features.RemoveAt(x);
                     return true;
                 }
             }
             return false;
-        }
+        }//end function removeFeature
+        public bool removeFeature(int id)
+        {
+            for (int x = 0; x < features.Count; x++)
+            {
+                features[x].removeNeighbor(id);
+            }
+            for (int x = 0; x < features.Count; x++)
+            {
+                if (features[x].Id == id)
+                {
+                    features.RemoveAt(x);
+                    return true;
+                }
+            }
+            return false;
+        }//end function removeFeature
 
-        public bool removeDouble(string data)
+        public bool removeDouble(int id)
         {
 
             bool xyz = false;
             for (int x = 0; x < features.Count; x++)
             {
 
-                if (features[x].Data == data && xyz == false)
+                if (features[x].Id == id && xyz == false)
                 {
                     xyz = true;
                     features.RemoveAt(x);

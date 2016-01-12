@@ -47,22 +47,22 @@ namespace Dialogue_Data_Entry
                 writer.WriteLine("<AIMind>");
                 if (toWrite.Root != null)
                 {
-                    writer.WriteLine("<Root id=\"" + toWrite.getFeatureIndex(toWrite.Root.Data) + "\"/>");
+                    writer.WriteLine("<Root id=\"" + toWrite.Root.Id + "\"/>");
                 }
                 for (int x = 0; x < toWrite.Features.Count; x++)
                 {
                     Feature tmp = toWrite.Features[x];
-                    writer.WriteLine("<Feature id=\"" + x + "\" data=\"" + escapeInvalidXML(tmp.Data) + "\">");
+                    writer.WriteLine("<Feature id=\"" + tmp.Id + "\" data=\"" + escapeInvalidXML(tmp.Name) + "\">");
                     //Neighbor
                     for (int y = 0; y < tmp.Neighbors.Count; y++)
                     {
-                        int id = toWrite.getFeatureIndex(tmp.Neighbors[y].Item1.Data);
+                        int id = toWrite.getFeatureIndex(tmp.Neighbors[y].Item1.Id);
                         writer.WriteLine("<neighbor dest=\"" + id + "\" weight=\"" + tmp.Neighbors[y].Item2 + "\" relationship=\"" + escapeInvalidXML(tmp.Neighbors[y].Item3) + "\"/>");
                     }
                     //Parent 
                     for (int y = 0; y < tmp.Parents.Count; y++)
                     {
-                        int id = toWrite.getFeatureIndex(tmp.Parents[y].Item1.Data);
+                        int id = toWrite.getFeatureIndex(tmp.Parents[y].Item1.Id);
                         writer.WriteLine("<parent dest=\"" + id + "\" weight=\"" + tmp.Parents[y].Item2 + "\" relationship=\"" + escapeInvalidXML(tmp.Parents[y].Item3) + "\"/>");
                     }
                     //Tag
@@ -93,63 +93,72 @@ namespace Dialogue_Data_Entry
             }
         }
 
+        //Reads an XML file at the given file path and creates a feature graph from it.
         public static FeatureGraph readFeatureGraph(string toReadPath)
         {
             try
             {
-                FeatureGraph result = new FeatureGraph();
+                FeatureGraph result_graph = new FeatureGraph();
                 XmlDocument doc = new XmlDocument();
                 doc.Load(toReadPath);
                 docOld = doc;
                 XmlNodeList features = doc.SelectNodes("AIMind");
                 features = features[0].SelectNodes("Feature");
+                //Get each feature's name ("data" field) and each feature's id. Create a new feature
+                //in the backend using the name and id.
+                //Each feature must be created with a name and id first for neighbor and
+                //parent relationships to be properly made.
                 foreach (XmlNode node in features)
                 {
-                    string data = unEscapeInvalidXML(node.Attributes["data"].Value);
-                    result.addFeature(new Feature(data));
-                }
+                    string name = unEscapeInvalidXML(node.Attributes["data"].Value);
+                    int id = Convert.ToInt32(node.Attributes["id"].Value);
+                    result_graph.addFeature(new Feature(name, id));
+                }//end foreach
                 foreach (XmlNode node in features)
                 {
-                    Feature tmp = result.getFeature(node.Attributes["data"].Value);
+                    //Find the current feature in the feature graph by its id.
+                    Feature tmp = result_graph.getFeature(Convert.ToInt32(node.Attributes["id"].Value));
                     //Neighbor
                     XmlNodeList neighbors = node.SelectNodes("neighbor");
                     foreach (XmlNode neighborNode in neighbors)
                     {
-                        int id = Convert.ToInt32(neighborNode.Attributes["dest"].Value);
+                        int neighbor_id = Convert.ToInt32(neighborNode.Attributes["dest"].Value);
                         double weight = Convert.ToDouble(neighborNode.Attributes["weight"].Value);
                         string relationship = "";
                         if (neighborNode.Attributes["relationship"] != null)
                         {
                             relationship = unEscapeInvalidXML(Convert.ToString(neighborNode.Attributes["relationship"].Value));
-                        }
-                        tmp.addNeighbor(result.Features[id], weight,relationship);
+                        }//end if
+                        //Add the neighbor feature according to its id
+                        tmp.addNeighbor(result_graph.getFeature(neighbor_id), weight, relationship);
 
                         //pre-process in case no parent exist
                         foreach (XmlNode tempNode in features)
                         {
-                            if (tempNode.Attributes["data"].Value == result.Features[id].Data)
+                            if (tempNode.Attributes["data"].Value == result_graph.Features[neighbor_id].Name)
                             {
                                 XmlNodeList tempParents = tempNode.SelectNodes("parent");
                                 if (tempParents.Count == 0)
                                 {
-                                    result.Features[id].addParent(tmp);
+                                    //ZEV: Check that this works!
+                                    result_graph.getFeature(neighbor_id).addParent(tmp);
                                 }
                             }
                         }
                         //result.Features[id].addNeighbor(tmp,weight);
-                    }
+                    }//end foreach
                     //Parent
                     XmlNodeList parents = node.SelectNodes("parent");
                     foreach (XmlNode parentNode in parents)
                     {
-                        int id = Convert.ToInt32(parentNode.Attributes["dest"].Value);
+                        int parent_id = Convert.ToInt32(parentNode.Attributes["dest"].Value);
                         double weight = Convert.ToDouble(parentNode.Attributes["weight"].Value);
                         string relationship = "";
                         if (parentNode.Attributes["relationship"] != null)
                         {
                             relationship = unEscapeInvalidXML(Convert.ToString(parentNode.Attributes["relationship"].Value));
                         }
-                        tmp.addParent(result.Features[id], weight, relationship);
+                        tmp.addParent(result_graph.getFeature(parent_id), weight, relationship);
                     }
                     //Tag
                     XmlNodeList tags = node.SelectNodes("tag");
@@ -174,8 +183,8 @@ namespace Dialogue_Data_Entry
                     rootId = Convert.ToInt32(features[0].SelectNodes("Root")[0].Attributes["id"].Value);
                 }
                 catch (Exception) { }
-                if (rootId != -1) { result.Root = result.getFeature(rootId); }
-                return result;
+                if (rootId != -1) { result_graph.Root = result_graph.getFeature(rootId); }
+                return result_graph;
             }
             catch (Exception e)
             {
@@ -207,32 +216,32 @@ namespace Dialogue_Data_Entry
                     features2 = features2[0].SelectNodes("Feature");///this is put here because it would cause a crash outside if there were no features
                     foreach (XmlNode node in features2)
                     {
-                        string data = node.Attributes["data"].Value;
-                        result.addFeature(new Feature(data));
+                        string id = node.Attributes["data"].Value;
+                        result.addFeature(new Feature(id));
                         countD++;
                     }
                 }
                 foreach (XmlNode node in features){
                         bool checkifDuplicatesExist = false;
                         foreach (XmlNode nodePrime in features2){                      
-                            string dataa = node.Attributes["data"].Value;                      
+                            string data1 = node.Attributes["data"].Value;                      
                             string data2 = nodePrime.Attributes["data"].Value;                       
-                            if (dataa == data2)                    //if there are two datas with the same name, merge them
+                            if (data1 == data2)                    //if there are two datas with the same name, merge them
                             {                         
                                 checkifDuplicatesExist = true;                       
                             }                   
                         }
                     if (checkifDuplicatesExist == false){//if there doesn't exist a version of the feature, add one
                         countUp++;
-                        string data = node.Attributes["data"].Value;
-                        result.addFeature(new Feature(data));
+                        string id = node.Attributes["data"].Value;
+                        result.addFeature(new Feature(id));
                         Feature tmp = result.getFeature(node.Attributes["data"].Value);
                          XmlNodeList neighbors = node.SelectNodes("neighbor");
                         foreach (XmlNode neighborNode in neighbors){
-                                int id = Convert.ToInt32(neighborNode.Attributes["dest"].Value);// +countUp;// + countUp);
+                                int dest_number = Convert.ToInt32(neighborNode.Attributes["dest"].Value);// +countUp;// + countUp);
                                 double weight = Convert.ToDouble(neighborNode.Attributes["weight"].Value);
-                                tmp.addNeighbor(result.Features[id], weight);
-                                result.Features[id].addParent(tmp);
+                                tmp.addNeighbor(result.Features[dest_number], weight);
+                                result.Features[dest_number].addParent(tmp);
                                 //result.Features[id].addNeighbor(tmp, weight);
                         }
                         XmlNodeList tags = node.SelectNodes("tag");
@@ -341,165 +350,6 @@ namespace Dialogue_Data_Entry
                 {
           
                 }
-
-             /*   foreach (XmlNode node in features)
-                {
-                    foreach (XmlNode node2 in features2)
-                    {
-                        if (node.Attributes["data"] != null && node2.Attributes["data"] != null)
-                        {
-                            string data = node.Attributes["data"].Value;
-                            string data2 = node2.Attributes["data"].Value;
-
-                            if (data == data2)
-                            {
-                                XmlNode nodea = node.CloneNode(true);
-                                string dataa = nodea.Attributes["data"].Value;
-                                Feature tmp = result.getFeature(nodea.Attributes["data"].Value);  
-                                result.addFeature(new Feature(dataa));
-
-                                node.RemoveAll();
-                                node2.RemoveAll();
-                                result.removeDouble(data);
-                                result.removeDouble(data2);
-                                XmlNodeList neighbors = nodea.SelectNodes("neighbor");
-                                foreach (XmlNode neighborNode in neighbors){
-                                    int id = Convert.ToInt32(neighborNode.Attributes["dest"].Value);// +countUp;// + countUp);
-                                    double weight = Convert.ToDouble(neighborNode.Attributes["weight"].Value);
-                                    tmp.addNeighbor(result.Features[id], weight);
-                                    result.Features[id].Parents.Add(tmp);
-                                }
-                                XmlNodeList tags = nodea.SelectNodes("tag");
-                                foreach (XmlNode tag in tags){
-                                    string key = tag.Attributes["key"].Value;
-                                    string val = tag.Attributes["value"].Value;
-                                    string type = "0";
-                                    type = tag.Attributes["type"].Value;
-                                    tmp.removeTag(key);
-                                    tmp.addTag(key, val, type);
-                                } 
-
-                            }
-                        }
-                    }
-                }
-                /*
-                bool doneWithMerge = false;
-                foreach (XmlNode node in features){
-                    foreach (XmlNode node2 in features2){
-                        if (node.Attributes["data"] != null && node2.Attributes["data"] != null){
-                        string data = node.Attributes["data"].Value;
-                        string data2 = node2.Attributes["data"].Value;
-
-                        if (data == data2 && doneWithMerge == false)
-                        {//if the node is found in both 
-
-                            int idb = 0;
-                            int idb2 = 0;
-                            idb = Convert.ToInt32(node.Attributes["id"].Value);
-                            idb2 = Convert.ToInt32(node2.Attributes["id"].Value);
-                            string[] keys1a = new string[100];
-                            string[] vals1a = new string[100];
-                            string[] types1a = new string[100];
-                            int countTheTag = 0;
-                            string da = " ";
-                            Feature tmp = new Feature(da);/// = result.getFeature(node.Attributes["data"].Value);                              
-                          /*  XmlNodeList neighbors = node.SelectNodes("neighbor");
-                            foreach (XmlNode neighborNode in neighbors)
-                            {
-                                int id = Convert.ToInt32(neighborNode.Attributes["dest"].Value);// +countUp;// + countUp)      
-                                double weight = Convert.ToDouble(neighborNode.Attributes["weight"].Value);
-                                tmp.addNeighbor(result.Features[id], weight);
-                                result.Features[id].Parents.Add(tmp);
-                            }
-                            neighbors = node2.SelectNodes("neighbor");
-                            foreach (XmlNode neighborNode in neighbors)
-                            {
-                                int id = Convert.ToInt32(neighborNode.Attributes["dest"].Value);// +countUp;// + countUp);
-                                double weight = Convert.ToDouble(neighborNode.Attributes["weight"].Value);
-                                tmp.addNeighbor(result.Features[id], weight);
-                                result.Features[id].Parents.Add(tmp);
-                            }
-                              XmlNodeList tags = node.SelectNodes("tag");
-                                      foreach (XmlNode tag in tags)
-                                      {
-                                          string key = tag.Attributes["key"].Value;
-                                          string val = tag.Attributes["value"].Value;
-                                          string type = "0";
-                                          if (tag.Attributes["type"].Value == null)
-                                          {
-                                              type = "0";
-                                          }
-                                          else
-                                          {
-                                              type = tag.Attributes["type"].Value;
-                                          }
-                                          ///tmp.editExistingTag(key, val, type, false);
-                                         // tmp.addTag(key, val, type);
-                                          keys1a[countTheTag] = key;
-                                          vals1a[countTheTag] = val;
-                                          types1a[countTheTag] = type;
-                                          countTheTag++;
-                                      }
-                                      XmlNodeList tags2 = node2.SelectNodes("tag");
-                                      foreach (XmlNode tag2 in tags2)
-                                      {
-                                          string key = tag2.Attributes["key"].Value;
-                                          string val = tag2.Attributes["value"].Value;
-                                          string type = "0";
-                                          if (tag2.Attributes["type"].Value == null)
-                                          {
-                                              type = "0";
-                                          }
-                                          else
-                                          {
-                                              type = tag2.Attributes["type"].Value;
-                                          }
-                                         /// tmp.editExistingTag(key, val, type, false);
-                                          ///tmp.addTag(key, val, type);
-                                          keys1a[countTheTag] = key;
-                                          vals1a[countTheTag] = val;
-                                          types1a[countTheTag] = type;
-                                          countTheTag++;
-                                      }
-
-                            XmlNodeList speaks = node.SelectNodes("speak");
-                            foreach (XmlNode speak in speaks)
-                            {
-                                tmp.addSpeak(speak.Attributes["value"].Value);
-                            }
-                            speaks = node2.SelectNodes("speak");
-                            foreach (XmlNode speak in speaks)
-                            {
-                                tmp.addSpeak(speak.Attributes["value"].Value);
-                            }
-
-
-
-                            //     result.removeDouble(data);
-                            //   result.removeDouble(data2);
-                            string da2 = " ";
-                            Feature tmp2 = new Feature(da2);
-
-                            for (int i = 0; i < countTheTag; i++)
-                            {
-                                // tmp2.addTag(keys1a[i], vals1a[i], types1a[i]);
-
-                            }
-                            node.Attributes["data"].Value = null;
-                            node.Attributes["id"].Value = null;
-                            //  result.removeDouble(data);
-                            node.RemoveAll();
-                            node2.RemoveAll();
-                        }
-                        }
-                    }
-                }
-
-                 */
-
-
-
 
                 int rootId = -1;
                 try

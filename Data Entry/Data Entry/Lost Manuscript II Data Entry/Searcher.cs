@@ -77,9 +77,9 @@ namespace Dialogue_Data_Entry
             //result.Add("========== Features ==========");
             for (int x = 0; x < featGraph.Features.Count; x++)
             {
-                if(featGraph.Features[x].Data.ToLower().Contains(query.ToLower()))
+                if(featGraph.Features[x].Name.ToLower().Contains(query.ToLower()))
                 {
-                    result.Add("Feature: (" + featGraph.Features[x].Data + ")");
+                    result.Add("Feature: (" + featGraph.Features[x].Id + ")");
                 }
             }
             return result;
@@ -94,7 +94,7 @@ namespace Dialogue_Data_Entry
                 {
                     if (featGraph.Features[x].Tags[y].Item1.ToLower().Contains(query.ToLower()))
                     {
-                        result.Add("Feature: (" + featGraph.Features[x].Data + ") \tTag Key: <" + featGraph.Features[x].Tags[y].Item1 + ", " + featGraph.Features[x].Tags[y].Item2 + ">");
+                        result.Add("Feature: (" + featGraph.Features[x].Id + ") \tTag Key: <" + featGraph.Features[x].Tags[y].Item1 + ", " + featGraph.Features[x].Tags[y].Item2 + ">");
                     }
                 }
             }
@@ -110,7 +110,7 @@ namespace Dialogue_Data_Entry
                 {
                     if (featGraph.Features[x].Tags[y].Item2.ToLower().Contains(query.ToLower()))
                     {
-                        result.Add("Feature: (" + featGraph.Features[x].Data + ") \tTag Value: <" + featGraph.Features[x].Tags[y].Item1 + ", " + featGraph.Features[x].Tags[y].Item2 + ">");
+                        result.Add("Feature: (" + featGraph.Features[x].Id + ") \tTag Value: <" + featGraph.Features[x].Tags[y].Item1 + ", " + featGraph.Features[x].Tags[y].Item2 + ">");
                     }
                 }
             }
@@ -132,13 +132,13 @@ namespace Dialogue_Data_Entry
             }
             else
             {
-                string featData = "";
+                string featId = "";
                 string tagData = "";
-                try { featData = listBox1.SelectedItem.ToString().Split('(')[1].Split(')')[0]; }
+                try { featId = listBox1.SelectedItem.ToString().Split('(')[1].Split(')')[0]; }
                 catch (Exception) { }
                 try { tagData = listBox1.SelectedItem.ToString().Split('<')[1].Split(',')[0]; }
                 catch (Exception) { }
-                myParent.openFeature(featData, tagData);
+                myParent.openFeature(featId, tagData);
                 this.Close();
             }
         }
