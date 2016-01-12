@@ -309,11 +309,11 @@ namespace Dialogue_Data_Entry
                         }
                     }
                 }
-            }
+            }//end if
             if (!spatialExist)
             {
                 prevSpatial = "";
-            }
+            }//end if
 
             //update temporal constraint information
             FeatureSpeaker temp = new FeatureSpeaker(this.graph, temporalConstraintList);
@@ -337,7 +337,6 @@ namespace Dialogue_Data_Entry
         {
             string answer = IDK;
             string noveltyInfo = "";
-            double currentTopicNovelty = -1;
             // Pre-processing
 
             //Console.WriteLine("parse input " + input);
@@ -350,9 +349,26 @@ namespace Dialogue_Data_Entry
             input = input.Trim().ToLower();
             //Console.WriteLine("trimmed lowered input " + input);
 
+            // If there is no topic node, start at the graph's root node
+            if (this.topic == null)
+                this.topic = this.graph.Root;
+
+            // Create a new feature speaker to speak about this input
+            FeatureSpeaker speaker = new FeatureSpeaker(this.graph, temporalConstraintList, prevSpatial, topicHistory);
+
+            //Check for an explicit command in the input.
+            if (split_input.Length != 0 || messageToServer)
+            {
+                string command_result = CommandResponse(split_input, speaker);
+                //Only stop and return the result of a command here if there
+                //is a command result to return.
+                if (!command_result.Equals(""))
+                    return command_result;
+            }//end else if
+
+            // Check to see if the AIML Bot has anything to say.
             if (!string.IsNullOrEmpty(input))
             {
-                // Check to see if the AIML Bot has anything to say.
                 Request request = new Request(input, this.user, this.bot);
                 //Call the AIML Chat Bot and give it the input ParseInput was given.
                 Result result = bot.Chat(request);
@@ -368,159 +384,68 @@ namespace Dialogue_Data_Entry
                         return output;
                     
                     //MessageBox.Show("Converted output reads: " + output);
+                    //Otherwise, remove the word FORMAT and continue with
+                    //the chatbot's output as the new input.
                     input = output.Replace(FORMAT, "").ToLower();
                 }//end if
             }//end if
 
             // Remove punctuation
             input = RemovePunctuation(input);
-            
-            // If there is no topic node, start at the graph's root node
-            if (this.topic == null)
-                this.topic = this.graph.Root;
-
-            // Create a new feature speaker to speak about this input
-            FeatureSpeaker speaker = new FeatureSpeaker(this.graph, temporalConstraintList, prevSpatial, topicHistory);
-
-            //Check for an explicit command in the input.
-            if (split_input.Length != 0 || messageToServer)
-            {
-                string command_result = HandleInputCommand(split_input, speaker);
-                //Only stop and return the result of a command here if there
-                //is a command result to return.
-                if (!command_result.Equals(""))
-                    return command_result;
-            }//end else if
-
-            //Whether or not we had to switch topics
-            bool topic_switch = false;
 
             // CASE: Nothing / Move on to next topic
             if (string.IsNullOrEmpty(input))
             {
-
-                Feature nextTopic = this.topic;
-                string[] newBuffer;
-                
-                // Can't guarantee it'll actually move on to anything...
-
-                //Have the feature speaker decide on the next topic.
-                nextTopic = speaker.getNextTopic(nextTopic, "", this.turn);
-                //Console.WriteLine("Next Topic from " + this.topic.Data + " is " + nextTopic.Data);
-                //Gets the first noveltyAmount number of nodes with the highest novelty.
-                //Which nodes are most novel is decided by the getNovelty function in FeatureSpeaker.
-                noveltyInfo = speaker.getNovelty(nextTopic, this.turn, noveltyAmount);
-                //FeatureSpeaker maintains a list of novelty values. This gets the novelty of the
-                //current topic calculated from the previous topic.
-                currentTopicNovelty = speaker.getCurrentTopicNovelty();
-                //Update the novelty value stored in QueryHandler (ZEV: do we need this?)
-				noveltyValue = speaker.getCurrentTopicNovelty();
-                //Gets a list of things to say about the topic (speak values or neighbor relations)
-                newBuffer = FindStuffToSay(nextTopic);
-                //MessageBox.Show("Explored " + nextTopic.Data + " with " + newBuffer.Length + " speaks.");
-                //Increment how many times we've talked about the topic feature.
-                nextTopic.DiscussedAmount += 1;
-                //Sets the feature graph's internal count of how many times we've talked about this feature.
-                //ZEV: Redundant with above? Should discuss amount setting in feature be included in setFeaturedDiscussedAmount?
-                this.graph.setFeatureDiscussedAmount(nextTopic.Data, nextTopic.DiscussedAmount);
-                //Set the current topic to the next topic the FeatureSpeaker has decided on.
-                this.topic = nextTopic;
-                //The buffer index, b, is set to 0 each time buffer's value is reset.
-                this.buffer = newBuffer;
-                // Set the answer to the first place in the buffer. The buffer index has now increased.
-                answer = this.buffer[b++];
-                //Adorn the answer, which sends it through speak transforms.
-                //The answer will be used later on in the function.
-                answer = SpeakWithAdornments(this.topic, answer);
-
+                answer = DefaultNextTopicResponse(speaker);
             }//end if
             // CASE: Tell me more / Continue speaking
-            //NOTE: Saying something like "tell me more about (different topic)" will not work
-            //because we're just looking for the words tell and more...
             else if (input.Contains("more") && input.Contains("tell"))
             {
                 //ZEV: Again, redundant discuss amount incrementing. Put function in FeatureGraph
                 //to increment the discuss amount of a feature.
-                this.topic.DiscussedAmount += 1;
-                this.graph.setFeatureDiscussedAmount(this.topic.Data, this.topic.DiscussedAmount);
+                //The "next" topic is the current topic.
+                SetNextTopic(this.topic);
 
                 // "Tell me more" implies the user wants to hear more about the current topic.
                 // Since the buffer was filled with things to say about the current topic in previous
                 // calls to ParseInput, we talk about the next item in the buffer.
-                if (b < this.buffer.Length)
-                    answer = this.buffer[b++];
-                else
-                {
-                    answer = "I've said all I can about that topic!" + "##" + "我已经把我知道的都说完了。" + "##";
-                }//end else
-                
-                //Update the novelty info
-                noveltyInfo = speaker.getNovelty(this.topic, this.turn, noveltyAmount);
-            }
+                answer = PullOutputFromBuffer();
+            }//end else if
             // CASE: New topic/question
             //If the input was neither the empty string nor "Tell me more," assume it
-            //is an entirely new question that requires interaction with the chat bot.
+            //is an entirely new topic/question that requires a Query
             else
             {
-                Query query = BuildQuery(input);
-                if (query == null)
-                {
-                    return ParseInput("", messageToServer, false, true);
-                    //answer = "I'm sorry, I'm afraid I don't understand what you are asking. But here's something I do know about. ";
-                    //answer = answer + ParseInput("", false, false);
-                    //out_of_topic = true;
-                }
-                else
-                {
-                    Console.WriteLine("Query main topic before: " + query.MainTopic.Data);
-                    Feature topic_before = query.MainTopic;
-                    this.buffer = ParseQuery(query);
-                    if (!query.MainTopic.Equals(topic_before))
-                    {
-                        topic_switch = true;
-                        Console.WriteLine("Query main topic changed to: " + query.MainTopic.Data);
-                    }//end if
-
-                    Feature feature = query.MainTopic;
-                    feature.DiscussedAmount += 1;
-                    this.graph.setFeatureDiscussedAmount(feature.Data, feature.DiscussedAmount);
-                    this.topic = feature;
-
-                    answer = this.buffer[b++];
-                    //The answer, right now, is the result from ParseQuery.
-
-                    //If there is a topic change, make sure to introduce the new topic with its speak value.
-                    if (topic_switch)
-                    {
-                        //Get the current topic's speak value and adorn it
-                        String[] temp_buffer = FindStuffToSay(this.topic);
-                        String topic_speak = temp_buffer[0];
-                        //If there is no topic switch, use relationships during adornment. If there is, don't use relationships.
-                        topic_speak = SpeakWithAdornments(this.topic, topic_speak, !topic_switch);
-
-                        answer = answer + " " + topic_speak;
-                    }//end if
-
-                    noveltyInfo = speaker.getNovelty(this.topic, this.turn, noveltyAmount);
-                }
+                answer = QueryResponse(input);
             }//end else
 
-            //Update 
+            //Gets the first noveltyAmount number of nodes with the highest novelty.
+            //Which nodes are most novel is decided by the getNovelty function in FeatureSpeaker.
+            noveltyInfo = speaker.getNovelty(this.topic, this.turn, noveltyAmount);
+            //Update history
             updateHistory(this.topic);
+            //Increment conversation turn
             this.turn++;
 
+            //At this point, we have either automatically moved on (blank input),
+            //talked more about the current topic ("tell me more"),
+            //or built and parsed a query out of the input.
+            //answer holds the result of one of these three.
+
+            //If there is no answer, then return the I Don't Know response
             if (answer.Length == 0)
             {
                 return IDK;
-            }
+            }//end if
             else
             {
-                //answer = SpeakWithAdornments(this.topic, answer);
+                //If this was a message from the front-end to the back-end, send the
+                //answer through additional formatting before returning it to the front-end.
                 if (messageToServer)
                 {
                     //Return message to Unity front-end with both novel and proximal nodes
                     return MessageToServer(this.topic, answer, noveltyInfo, speaker.getProximal(this.topic, noveltyAmount), forLog, outOfTopic);
-                }
+                }//end if
 
                 if (outOfTopic)
                     answer += ParseInput("", false, false);
@@ -536,10 +461,13 @@ namespace Dialogue_Data_Entry
 
         //PARSE INPUT UTILITY FUNCTIONS
 
-        //Takes an input, split by the character ":", and a feature speaker
-        //Returns the result of the command of any valid command is found.
-        //If no valid command is found, returns the empty string.
-        private string HandleInputCommand(string[] split_input, FeatureSpeaker speaker)
+        /// <summary>
+        /// ParseInput utility function. Looks for an explicit command word in the given input and tries to carry
+        /// out the command. Returns the result of the command if any valid command is found.
+        /// </summary>
+        /// <param name="split_input">A string of input split into an array by the character ":"</param>
+        /// <param name="speaker">The FeatureSpeaker object being used to talk about this input. </param>
+        private string CommandResponse(string[] split_input, FeatureSpeaker speaker)
         {
             string return_string = "";
 
@@ -677,7 +605,142 @@ namespace Dialogue_Data_Entry
                 }//end else if
 
             return return_string;
-        }//end method HandleInputCommand
+        }//end function CommandResponse
+
+        /// <summary>
+        /// ParseInput utility function. Uses the feature speaker to decide on the next topic automatically.
+        /// Returns something to say about the next topic, with the addition of speak adornments (metaphor, lead-in statements, etc.)
+        /// </summary>
+        /// <param name="speaker">The FeatureSpeaker object being used to talk about this input. </param>
+        private string DefaultNextTopicResponse(FeatureSpeaker speaker)
+        {
+            Feature nextTopic = this.topic;
+            string[] newBuffer;
+            string return_string = "";
+            // Can't guarantee it'll actually move on to anything...
+
+            //Have the feature speaker decide on the next topic.
+            nextTopic = speaker.getNextTopic(nextTopic, "", this.turn);
+            //Gets a list of things to say about the topic (speak values or neighbor relations)
+            newBuffer = FindStuffToSay(nextTopic);
+
+            //Set the next topic and reset the buffer to the list
+            //of output strings from function FindStuffToSay
+            SetNextTopic(nextTopic, newBuffer);
+
+            //Get an output string from the buffer.
+            return_string = PullOutputFromBuffer();
+
+            //Adorn the answer, which sends it through speak transforms.
+            //The answer will be used later on in the function.
+            return_string = SpeakWithAdornments(this.topic, return_string);
+
+            return return_string;
+        }//end function DefaultNextTopic
+
+        /// <summary>
+        /// ParseInput utility function. Creates a query from the given input and finds the next topic
+        /// feature from the query. Returns a string talking about the next topic if one is found, or
+        /// the empty string if no query is found.
+        /// </summary>
+        /// <param name="input">The input string to build a query from.</param>
+        private string QueryResponse(string input)
+        {
+            string return_string = "";
+
+            //Construct a query using the input.
+            Query query = BuildQuery(input);
+            if (query == null)
+            {
+                //If a query could not be made from this input, return a default response from ParseInput.
+                //return ParseInput("", messageToServer, false, true);
+                return "";
+                //answer = "I'm sorry, I'm afraid I don't understand what you are asking. But here's something I do know about. ";
+                //answer = answer + ParseInput("", false, false);
+                //out_of_topic = true;
+            }//end if
+            else
+            {
+                bool topic_switch = false;
+                Console.WriteLine("Query main topic before: " + query.MainTopic.Data);
+                Feature topic_before = query.MainTopic;
+                Feature next_topic;
+                string[] new_buffer;
+
+                //The next topic is the topic identified by the query.
+                next_topic = query.MainTopic;
+                //The buffer should be filled with the output strings from ParseQuery
+                new_buffer = ParseQuery(query);
+
+                //Detect a topic switch
+                if (!next_topic.Equals(topic_before))
+                {
+                    topic_switch = true;
+                    Console.WriteLine("Query main topic changed to: " + query.MainTopic.Data);
+                }//end if
+
+                //Set the next topic and refill the buffer.
+                SetNextTopic(next_topic, new_buffer);
+                //The output string will be from the new buffer.
+                return_string = PullOutputFromBuffer();
+
+                //The answer, right now, is the result from ParseQuery.
+
+                //If there is a topic change, make sure to introduce the new topic with its speak value.
+                if (topic_switch)
+                {
+                    //Get the current topic's speak value and adorn it
+                    String[] temp_buffer = FindStuffToSay(this.topic);
+                    String topic_speak = temp_buffer[0];
+                    //If there is no topic switch, use relationships during adornment. If there is, don't use relationships.
+                    topic_speak = SpeakWithAdornments(this.topic, topic_speak, !topic_switch);
+
+                    return_string = return_string + " " + topic_speak;
+                }//end if
+
+            }//end else
+
+            return return_string;
+        }//end function QueryResponse
+
+        /// <summary>
+        /// Sets the current topic feature to the given topic feature, incrementing the next topic's
+        /// discussed amount. Does not reset the output buffer.
+        /// </summary>
+        /// <param name="next_topic">The next topic feature, which will become the current topic.</param>
+        private void SetNextTopic(Feature next_topic)
+        {
+            next_topic.DiscussedAmount += 1;
+            this.graph.setFeatureDiscussedAmount(next_topic.Data, next_topic.DiscussedAmount);
+            this.topic = next_topic;
+        }//end method ChangeTopic
+        /// <summary>
+        /// Sets the current topic feature to the given topic feature, incrementing the next topic's
+        /// discussed amount. Also resets the output string buffer to the given array. 
+        /// Reseting the buffer resets the buffer index, b, to 0.
+        /// </summary>
+        /// <param name="next_topic">The next topic feature, which will become the current topic.</param>
+        /// <param name="new_buffer">The string array that the output buffer will be set to.</param>
+        private void SetNextTopic(Feature next_topic, string[] new_buffer)
+        {
+            next_topic.DiscussedAmount += 1;
+            this.graph.setFeatureDiscussedAmount(next_topic.Data, next_topic.DiscussedAmount);
+            this.topic = next_topic;
+            this.buffer = new_buffer;
+        }//end method ChangeTopic
+
+        /// <summary>
+        /// Pulls an output string from the buffer according to the buffer index.
+        /// Increments the buffer index, so the next pull will be from the next item in the buffer.
+        /// Getting to the end of the buffer will result in an out of topics reply.
+        /// </summary>
+        private string PullOutputFromBuffer()
+        {
+            if (b > this.buffer.Length - 1)
+                return "I've said all I can about that topic!" + "##" + "我已经把我知道的都说完了。" + "##";
+            else
+                return this.buffer[b++];
+        }//end function PullOutputFromBuffer
 
         //END OF PARSE INPUT UTILITY FUNCTIONS
 
@@ -772,7 +835,7 @@ namespace Dialogue_Data_Entry
                 }
             }
             return new Query(this.graph.getFeature(mainTopic), questionType, directionType, directionWord);
-        }
+        }//end function BuildQuery
 
         private string PadPunctuation(string s)
         {
@@ -781,7 +844,7 @@ namespace Dialogue_Data_Entry
                 s = s.Replace(p, " " + p);
             }
             return s;
-        }
+        }//end function PadPunctuation
         private string RemovePunctuation(string s)
         {
             foreach (string p in punctuation)
@@ -790,7 +853,7 @@ namespace Dialogue_Data_Entry
             }
             string[] s0 = s.Split(' ');
             return string.Join(" ", s0);
-        }
+        }//end function RemovePunctuation
 
         private Feature FindFeature(string input)
         {
@@ -826,7 +889,7 @@ namespace Dialogue_Data_Entry
                 target = this.topic;
 
             return target;
-        }
+        }//end function FindFeature
 
         /// <summary>
         /// Takes a Query object and builds a list of output strings
@@ -869,14 +932,14 @@ namespace Dialogue_Data_Entry
                                         {
                                             if (triple.Item1.Data == query.MainTopic.Data && triple.Item3 == "won")
                                                 output.Add(string.Format("{0} won {1}.", neighbor, query.MainTopic.Data));
-                                        }
-                                    }
-                                }
+                                        }// end foreach
+                                    }// end foreach
+                                }// end if
                                 // Otherwise it is the winner
                                 else
                                 {
                                     output.Add(string.Format("{0} won {1}.", query.MainTopic.Data, neighbors.ToList().JoinAnd()));
-                                }
+                                }// end else
                             }//end if
 
                             //Directional What is question (e.g., What is south of...?)
@@ -1027,7 +1090,7 @@ namespace Dialogue_Data_Entry
             }
 
             return output.Count() > 0 ? output.ToArray() : new string[] { IDK };
-        }
+        }// end function ParseQuery
         //Constructs an output to a given query by examining the list of words to check against the relationships
         //that the query's main topic has with its neighbors.
         //Last optional parameter decides whether we are checking the relationships from the topic to its neighbors or 
