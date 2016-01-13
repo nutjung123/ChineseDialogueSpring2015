@@ -7,7 +7,7 @@ namespace Dialogue_Data_Entry
 {
     class SpeakTransform
     {
-        private LinkedList<Feature> history_list;
+        private List<Feature> history_list;
         private Feature previous_topic;
 
         //A list of sets of relationships that should be considered the same
@@ -18,7 +18,7 @@ namespace Dialogue_Data_Entry
 
         //Instantiate the SpeakTransform with both a history list and the previous topic.
         //The history list includes, at its last element, the current feature.
-        public SpeakTransform(LinkedList<Feature> history_in, Feature previous_topic_in)
+        public SpeakTransform(List<Feature> history_in, Feature previous_topic_in)
         {
             history_list = history_in;
             if (previous_topic_in != null)

@@ -87,16 +87,15 @@ namespace Dialogue_Data_Entry
         private Bot bot;
         private User user;
         private FeatureGraph graph;
-        private Feature topic;
+
         private List<string> features;
-        private string[] _buffer;
-        private string[] buffer { get { return _buffer; } set { _buffer = value; b = 0; } }
-        private int b;  // buffer index gets reset when buffer does
-        private int turn;
+
         private int noveltyAmount = 5;
         private List<TemporalConstraint> temporalConstraintList;
-        private List<int> topicHistory = new List<int>();
+        //private List<int> topicHistory = new List<int>();
         private string prevSpatial;
+
+        private NarrationManager narration_manager;
 
         public LinkedList<Feature> prevCurr = new LinkedList<Feature>();
 
@@ -156,8 +155,8 @@ namespace Dialogue_Data_Entry
             // Feature Names, with which to index the graph
             this.features = graph.getFeatureNames();
 
-            this.turn = 1;
-            this.topic = null;
+            //Initialize the dialogue manager
+            narration_manager = new NarrationManager(this.graph, myTemporalConstraintList);
 
             //Build lists of equivalent relationships
             //is, are, was, is a kind of, is a
@@ -223,7 +222,7 @@ namespace Dialogue_Data_Entry
             no_analogy_relationships.Add("included");
             no_analogy_relationships.Add("has");
             no_analogy_relationships.Add("had");
-        }
+        }//end constructor QueryHandler
 			
 	    private string MessageToServer(Feature feat, string speak, string noveltyInfo, string proximalInfo = "", bool forLog = false, bool out_of_topic_response = false)
         {
@@ -240,7 +239,6 @@ namespace Dialogue_Data_Entry
                 //"I'm afraid I don't know anything about ";
                 to_speak = "I'm sorry, I'm afraid I don't understand what you are asking. But here's something I do know about. "
                    + "##" + "对不起，我不知道您在说什么。但我知道这些。" + "##" + to_speak;
-
             }//end if
 
             string tts = ParseOutput(to_speak, language_mode_tts);
@@ -260,71 +258,6 @@ namespace Dialogue_Data_Entry
 
             return return_message;
         }//end function MessageToServer
-
-        //Returns the speak value passed in with adornments according to the feature passed in, such as topic lead-ins and analogies.
-        public string SpeakWithAdornments(Feature feat, string speak, bool use_relationships = true)
-        {
-            //Update the feature history list
-            feature_history.AddLast(feat);
-            countFocusNode += 1;
-            //Store the last history_size number of nodes
-            int history_size = 100;
-            if (feature_history.Count > history_size)
-            {
-                feature_history.RemoveFirst();
-            }//end if
-
-            //Treat the feature passed in as the current topic
-            Feature current_topic = feat;
-
-            //Create the speak transform object, initialized with history list and the previous topic
-            SpeakTransform transform = new SpeakTransform(feature_history, previous_topic);
-
-            //Pass in the given feature and speak value to be transformed.
-            String to_speak = transform.TransformSpeak(feat, speak);
-
-            //The current topic has been used, and is now the previous topic.
-            previous_topic = current_topic;
-
-            return to_speak;
-        }//end method AdornMessage
-       
-        //update various history when the system choose the next topic
-        public void updateHistory(Feature nextTopic)
-        {
-            //update spatial constraint information
-            bool spatialExist = false;
-            if (topicHistory.Count() > 0)
-            {
-                Feature prevTopic = graph.getFeature(topicHistory[topicHistory.Count() - 1]);
-                if (prevTopic.getNeighbor(nextTopic.Id) != null)
-                {
-                    foreach(string str in Directional_Words)
-                    {
-                        if (str == prevTopic.getRelationshipNeighbor(nextTopic.Id))
-                        {
-                            prevSpatial = str;
-                            spatialExist = true;
-                            break;
-                        }
-                    }
-                }
-            }//end if
-            if (!spatialExist)
-            {
-                prevSpatial = "";
-            }//end if
-
-            //update temporal constraint information
-            FeatureSpeaker temp = new FeatureSpeaker(this.graph, temporalConstraintList);
-            List<int> temporalIndex = temp.temporalConstraint(nextTopic,turn,topicHistory);
-            for (int x = 0; x < temporalIndex.Count(); x++)
-            {
-                temporalConstraintList[temporalIndex[x]].Satisfied = true;
-            }
-            //update topic's history
-            topicHistory.Add(nextTopic.Id);
-        }//end method updateHistory
 
         //Form2 calls this function
         //input is the input to be parsed.
@@ -349,17 +282,10 @@ namespace Dialogue_Data_Entry
             input = input.Trim().ToLower();
             //Console.WriteLine("trimmed lowered input " + input);
 
-            // If there is no topic node, start at the graph's root node
-            if (this.topic == null)
-                this.topic = this.graph.Root;
-
-            // Create a new feature speaker to speak about this input
-            FeatureSpeaker speaker = new FeatureSpeaker(this.graph, temporalConstraintList, prevSpatial, topicHistory);
-
             //Check for an explicit command in the input.
             if (split_input.Length != 0 || messageToServer)
             {
-                string command_result = CommandResponse(split_input, speaker);
+                string command_result = CommandResponse(split_input);
                 //Only stop and return the result of a command here if there
                 //is a command result to return.
                 if (!command_result.Equals(""))
@@ -396,36 +322,30 @@ namespace Dialogue_Data_Entry
             // CASE: Nothing / Move on to next topic
             if (string.IsNullOrEmpty(input))
             {
-                answer = DefaultNextTopicResponse(speaker);
+                answer = narration_manager.DefaultNextTopicResponse();
             }//end if
             // CASE: Tell me more / Continue speaking
             else if (input.Contains("more") && input.Contains("tell"))
             {
-                //ZEV: Again, redundant discuss amount incrementing. Put function in FeatureGraph
-                //to increment the discuss amount of a feature.
-                //The "next" topic is the current topic.
-                SetNextTopic(this.topic);
-
-                // "Tell me more" implies the user wants to hear more about the current topic.
-                // Since the buffer was filled with things to say about the current topic in previous
-                // calls to ParseInput, we talk about the next item in the buffer.
-                answer = PullOutputFromBuffer();
+                answer = narration_manager.TalkMoreAboutTopic();
             }//end else if
             // CASE: New topic/question
             //If the input was neither the empty string nor "Tell me more," assume it
             //is an entirely new topic/question that requires a Query
             else
             {
-                answer = QueryResponse(input);
+                //Construct a query using the input.
+                Query query = BuildQuery(input);
+                //Find what to say with it.
+                answer = narration_manager.TalkFromQuery(query);
             }//end else
 
             //Gets the first noveltyAmount number of nodes with the highest novelty.
-            //Which nodes are most novel is decided by the getNovelty function in FeatureSpeaker.
-            noveltyInfo = speaker.getNovelty(this.topic, this.turn, noveltyAmount);
-            //Update history
-            updateHistory(this.topic);
+            noveltyInfo = narration_manager.ListMostNovelFeatures(narration_manager.Topic, noveltyAmount);
+            //Gets the first noveltyAmount number of nodes with the highest score.
+            string proximal_info = narration_manager.ListMostProximalFeatures(narration_manager.Topic, noveltyAmount);
             //Increment conversation turn
-            this.turn++;
+            narration_manager.Turn += 1;
 
             //At this point, we have either automatically moved on (blank input),
             //talked more about the current topic ("tell me more"),
@@ -444,7 +364,7 @@ namespace Dialogue_Data_Entry
                 if (messageToServer)
                 {
                     //Return message to Unity front-end with both novel and proximal nodes
-                    return MessageToServer(this.topic, answer, noveltyInfo, speaker.getProximal(this.topic, noveltyAmount), forLog, outOfTopic);
+                    return MessageToServer(narration_manager.Topic, answer, noveltyInfo, proximal_info, forLog, outOfTopic);
                 }//end if
 
                 if (outOfTopic)
@@ -466,8 +386,7 @@ namespace Dialogue_Data_Entry
         /// out the command. Returns the result of the command if any valid command is found.
         /// </summary>
         /// <param name="split_input">A string of input split into an array by the character ":"</param>
-        /// <param name="speaker">The FeatureSpeaker object being used to talk about this input. </param>
-        private string CommandResponse(string[] split_input, FeatureSpeaker speaker)
+        private string CommandResponse(string[] split_input)
         {
             string return_string = "";
 
@@ -489,8 +408,8 @@ namespace Dialogue_Data_Entry
                     }//end for
                 }//end if
                 // GET_NODE_VALUES command from Unity front-end
-                // Uses FeatureSpeaker to calculate the score between two nodes, specified
-                // in the input array. Returns individual components of that score.
+                // Uses NarrationCalculator to calculate the score between two nodes, specified
+                // by the input. Returns individual components of that score.
                 else if (split_input[0].Equals("GET_NODE_VALUES"))
                 {
                     Console.WriteLine("In get node values");
@@ -507,7 +426,7 @@ namespace Dialogue_Data_Entry
                     //If EITHER feature is null, return an error message.
                     if (current_feature == null || old_feature == null)
                         return "no feature found";
-                    double[] return_node_values = speaker.calculateScoreComponents(current_feature, old_feature);
+                    double[] return_node_values = narration_manager.GetScoreComponents(current_feature, old_feature);
                     //Turn them into a colon-separated string, headed by
                     //the key-phrase "RETURN_NODE_VALUES"
                     return_string = return_node_values[Constant.ScoreArrayScoreIndex] + ":"
@@ -559,8 +478,9 @@ namespace Dialogue_Data_Entry
                 else if (split_input[0].Equals("GET_RELATED"))
                 {
                     //GET_RELATED only gets related nodes for the current topic.
-                    string noveltyInfo = speaker.getNovelty(this.topic, this.turn, noveltyAmount);
-                    return_string = "Novelty:" + noveltyInfo + ":Proximal:" + speaker.getProximal(this.topic, noveltyAmount);
+                    string noveltyInfo = narration_manager.ListMostNovelFeatures(narration_manager.Topic, noveltyAmount);
+                    string proximalInfo = narration_manager.ListMostProximalFeatures(narration_manager.Topic, noveltyAmount);
+                    return_string = "Novelty:" + noveltyInfo + ":Proximal:" + proximalInfo;
                 }//end else if
                 //SET_LANGUAGE command from Unity front-end.
                 //Sets which language text and TTS will be in, according to values
@@ -607,142 +527,7 @@ namespace Dialogue_Data_Entry
             return return_string;
         }//end function CommandResponse
 
-        /// <summary>
-        /// ParseInput utility function. Uses the feature speaker to decide on the next topic automatically.
-        /// Returns something to say about the next topic, with the addition of speak adornments (metaphor, lead-in statements, etc.)
-        /// </summary>
-        /// <param name="speaker">The FeatureSpeaker object being used to talk about this input. </param>
-        private string DefaultNextTopicResponse(FeatureSpeaker speaker)
-        {
-            Feature nextTopic = this.topic;
-            string[] newBuffer;
-            string return_string = "";
-            // Can't guarantee it'll actually move on to anything...
-
-            //Have the feature speaker decide on the next topic.
-            nextTopic = speaker.getNextTopic(nextTopic, "", this.turn);
-            //Gets a list of things to say about the topic (speak values or neighbor relations)
-            newBuffer = FindStuffToSay(nextTopic);
-
-            //Set the next topic and reset the buffer to the list
-            //of output strings from function FindStuffToSay
-            SetNextTopic(nextTopic, newBuffer);
-
-            //Get an output string from the buffer.
-            return_string = PullOutputFromBuffer();
-
-            //Adorn the answer, which sends it through speak transforms.
-            //The answer will be used later on in the function.
-            return_string = SpeakWithAdornments(this.topic, return_string);
-
-            return return_string;
-        }//end function DefaultNextTopic
-
-        /// <summary>
-        /// ParseInput utility function. Creates a query from the given input and finds the next topic
-        /// feature from the query. Returns a string talking about the next topic if one is found, or
-        /// the empty string if no query is found.
-        /// </summary>
-        /// <param name="input">The input string to build a query from.</param>
-        private string QueryResponse(string input)
-        {
-            string return_string = "";
-
-            //Construct a query using the input.
-            Query query = BuildQuery(input);
-            if (query == null)
-            {
-                //If a query could not be made from this input, return a default response from ParseInput.
-                //return ParseInput("", messageToServer, false, true);
-                return "";
-                //answer = "I'm sorry, I'm afraid I don't understand what you are asking. But here's something I do know about. ";
-                //answer = answer + ParseInput("", false, false);
-                //out_of_topic = true;
-            }//end if
-            else
-            {
-                bool topic_switch = false;
-                Console.WriteLine("Query main topic before: " + query.MainTopic.Id);
-                Feature topic_before = query.MainTopic;
-                Feature next_topic;
-                string[] new_buffer;
-
-                //The next topic is the topic identified by the query.
-                next_topic = query.MainTopic;
-                //The buffer should be filled with the output strings from ParseQuery
-                new_buffer = ParseQuery(query);
-
-                //Detect a topic switch
-                if (!next_topic.Equals(topic_before))
-                {
-                    topic_switch = true;
-                    Console.WriteLine("Query main topic changed to: " + query.MainTopic.Id);
-                }//end if
-
-                //Set the next topic and refill the buffer.
-                SetNextTopic(next_topic, new_buffer);
-                //The output string will be from the new buffer.
-                return_string = PullOutputFromBuffer();
-
-                //The answer, right now, is the result from ParseQuery.
-
-                //If there is a topic change, make sure to introduce the new topic with its speak value.
-                if (topic_switch)
-                {
-                    //Get the current topic's speak value and adorn it
-                    String[] temp_buffer = FindStuffToSay(this.topic);
-                    String topic_speak = temp_buffer[0];
-                    //If there is no topic switch, use relationships during adornment. If there is, don't use relationships.
-                    topic_speak = SpeakWithAdornments(this.topic, topic_speak, !topic_switch);
-
-                    return_string = return_string + " " + topic_speak;
-                }//end if
-
-            }//end else
-
-            return return_string;
-        }//end function QueryResponse
-
         //END OF PARSE INPUT UTILITY FUNCTIONS
-
-        /// <summary>
-        /// Sets the current topic feature to the given topic feature, incrementing the next topic's
-        /// discussed amount. Does not reset the output buffer.
-        /// </summary>
-        /// <param name="next_topic">The next topic feature, which will become the current topic.</param>
-        private void SetNextTopic(Feature next_topic)
-        {
-            next_topic.DiscussedAmount += 1;
-            this.graph.setFeatureDiscussedAmount(next_topic.Id, next_topic.DiscussedAmount);
-            this.topic = next_topic;
-        }//end method ChangeTopic
-        /// <summary>
-        /// Sets the current topic feature to the given topic feature, incrementing the next topic's
-        /// discussed amount. Also resets the output string buffer to the given array. 
-        /// Reseting the buffer resets the buffer index, b, to 0.
-        /// </summary>
-        /// <param name="next_topic">The next topic feature, which will become the current topic.</param>
-        /// <param name="new_buffer">The string array that the output buffer will be set to.</param>
-        private void SetNextTopic(Feature next_topic, string[] new_buffer)
-        {
-            next_topic.DiscussedAmount += 1;
-            this.graph.setFeatureDiscussedAmount(next_topic.Id, next_topic.DiscussedAmount);
-            this.topic = next_topic;
-            this.buffer = new_buffer;
-        }//end method ChangeTopic
-
-        /// <summary>
-        /// Pulls an output string from the buffer according to the buffer index.
-        /// Increments the buffer index, so the next pull will be from the next item in the buffer.
-        /// Getting to the end of the buffer will result in an out of responses reply.
-        /// </summary>
-        private string PullOutputFromBuffer()
-        {
-            if (b > this.buffer.Length - 1)
-                return "I've said all I can about that topic!" + "##" + "我已经把我知道的都说完了。" + "##";
-            else
-                return this.buffer[b++];
-        }//end function PullOutputFromBuffer
 
         /// <summary>
         /// Convert a regular string to a Query object,
@@ -768,8 +553,8 @@ namespace Dialogue_Data_Entry
                 //MessageBox.Show("FindFeature returned null for input: " + input);
                 return null;
             }
-            this.topic = f;
-            mainTopic = this.topic.Name;
+            //narration_manager.Topic = f;
+            mainTopic = f.Name;
             if (string.IsNullOrEmpty(mainTopic))
             {
                 //MessageBox.Show("mainTopic IsNullOrEmpty");
@@ -834,7 +619,7 @@ namespace Dialogue_Data_Entry
                     // TODO:  Anything?  Should just talk about the topic, then.
                 }//end if
             }//end else
-            return new Query(this.graph.getFeature(mainTopic), questionType, directionType, directionWord);
+            return new Query(f, questionType, directionType, directionWord);
         }//end function BuildQuery
 
         private string PadPunctuation(string s)
@@ -856,6 +641,11 @@ namespace Dialogue_Data_Entry
         }//end function RemovePunctuation
 
         //Identifies the feature in the given input
+        /// <summary>
+        /// Takes a string and identifies which
+        /// feature, if any, appears in it. Returns the feature.
+        /// </summary>
+        /// <param name="input">A string for the function to look for a feature in.</param>
         private Feature FindFeature(string input)
         {
             Feature target = null;
@@ -887,270 +677,10 @@ namespace Dialogue_Data_Entry
             }
             //If the target is still null, check for 'that' or 'this'
             if (input.Contains("this") || input.Contains("that") || input.Contains("it") || input.Contains("something"))
-                target = this.topic;
+                target = narration_manager.Topic;
 
             return target;
         }//end function FindFeature
-
-        /// <summary>
-        /// Takes a Query object and builds a list of output strings
-        /// to talk about the query's MainTopic with its specified question
-        /// words and direction words, if any, into consideration.
-        /// </summary>
-        /// <param name="query"></param>
-        /// <returns>List of output strings.</returns>
-        public string[] ParseQuery(Query query)
-        {
-            if (query == null)
-                return new string[] { "I don't know." };
-
-            List<string> output = new List<string>();
-
-            if (query.IsQuestion)
-            {
-                switch (query.QuestionType)
-                {
-                    case Question.WHAT:
-                        if (query.HasDirection)
-                        {
-                            // e.g. What is Direction of Topic?
-                            // Find names of features that is DIRECTION of MainTopic`
-                            // Get list of <neighbor> tags
-                            string dir = query.Direction.ToString().ToLower();
-                            if (query.Direction == Direction.WON)
-                            {
-                                string[] neighbors = FindNeighborsByRelationship(query.MainTopic, dir);
-                                // If the topic has no "won" links, then it is the event
-                                if (neighbors.Length == 0)
-                                {
-                                    // So find the winner among its available neighbors
-                                    neighbors = FindNeighborsByRelationship(query.MainTopic, "");
-                                    foreach (string neighbor in neighbors)
-                                    {
-                                        // Look at ITS neighbors and see if there is a "won" whose name matches this one
-                                        Feature nf = this.graph.getFeature(neighbor);
-                                        foreach (var triple in nf.Neighbors)
-                                        {
-                                            if (triple.Item1.Id == query.MainTopic.Id && triple.Item3 == "won")
-                                                output.Add(string.Format("{0} won {1}.", neighbor, query.MainTopic.Id));
-                                        }// end foreach
-                                    }// end foreach
-                                }// end if
-                                // Otherwise it is the winner
-                                else
-                                {
-                                    output.Add(string.Format("{0} won {1}.", query.MainTopic.Id, neighbors.ToList().JoinAnd()));
-                                }// end else
-                            }//end if
-
-                            //Directional What is question (e.g., What is south of...?)
-                            else if (query.Direction == Direction.NORTH
-                                || query.Direction == Direction.SOUTH
-                                || query.Direction == Direction.EAST
-                                || query.Direction == Direction.WEST
-                                || query.Direction == Direction.NORTHEAST
-                                || query.Direction == Direction.SOUTHEAST
-                                || query.Direction == Direction.NORTHWEST
-                                || query.Direction == Direction.SOUTHWEST)
-                            {
-                                //Relationships to answer these question have the form "is <direction> of".
-                                //From the topic of the query, look for such a relationship.
-                                Feature query_topic = query.MainTopic;
-
-                                foreach (Tuple<Feature, double, string> temp_neighbor in query_topic.Neighbors)
-                                {
-                                    //The main topic's neighbor
-                                    Feature temp_feature = temp_neighbor.Item1;
-                                    if (temp_feature.getRelationshipNeighbor(query_topic.Id).ToLower().Contains(query.DirectionWord.ToLower()))
-                                    {
-                                        output.Add(string.Format("{0} " + temp_feature.getRelationshipNeighbor(query_topic.Id) + " {1}.", temp_feature.Id, query_topic.Id));
-                                        break;
-                                    }//end if
-                                }//end foreach
-                            }//end else if
-
-                            //Handles question like "what did x host?"
-                            else if (query.Direction == Direction.HOSTED)
-                            {
-                                //string[] neighbors = FindNeighborsByRelationship(query.MainTopic, dir);
-                                //These relationships signal that something was hosted
-                                string[] hosted_words = { "held", "partially held" };
-                                Feature query_topic = query.MainTopic;
-                                string for_output = "";
-                                //if (neighbors.Length > 0)
-                                //    output.Add(string.Format("{0} hosted {1}.", query.MainTopic.Id, neighbors.ToList().JoinAnd()));
-                                
-                                //Check from topic to neighbors
-                                for_output = ConstructQueryOutputByRelationship(query, hosted_words.ToList<string>());
-
-                                if (!for_output.Equals(""))
-                                {
-                                    output.Add(for_output);
-                                }//end if
-                            }//else if
-
-                            //Questions like "What is inside x?"
-                            else if (query.Direction == Direction.INSIDE)
-                            {
-                                //These relationships signal that something was inside something else (e.g., venues inside the olympic green)
-                                string[] inside_words = { "is in" };
-                                Feature query_topic = query.MainTopic;
-                                string for_output = "";
-                                //if (neighbors.Length > 0)
-                                //    output.Add(string.Format("{0} hosted {1}.", query.MainTopic.Id, neighbors.ToList().JoinAnd()));
-
-                                foreach (Tuple<Feature, double, string> temp_neighbor in query_topic.Neighbors)
-                                {
-                                    foreach (string inside_word in inside_words)
-                                    {
-                                        /*if (temp_feature.getRelationshipNeighbor(query_topic.Id).ToLower().Contains(query.DirectionWord.ToLower()))
-                                        {
-                                            output.Add(string.Format("{0} " + temp_feature.getRelationshipNeighbor(query_topic.Id) + " {1}.", temp_feature.Id, query_topic.Id));
-                                            break;
-                                        }//end if*/
-                                        //Checking from Neighbor to Topic
-                                        if (temp_neighbor.Item1.getRelationshipNeighbor(query_topic.Id).ToLower().Contains(query.DirectionWord.ToLower()))
-                                        {
-                                            //DEBUG
-                                            Console.Out.WriteLine("Inside word " + inside_word + " found.");
-                                            //END DEBUG
-                                            if (for_output.Equals(""))
-                                                for_output = string.Format("{0} " + temp_neighbor.Item3 + " {1}", temp_neighbor.Item1.Id, query_topic.Id);
-                                            else
-                                                for_output += string.Format(", {0} " + temp_neighbor.Item3 + " {1}", temp_neighbor.Item1.Id, query_topic.Id);
-                                            //for_output.Add(string.Format("{0} " + temp_neighbor.Item3 + " {1}.", query_topic.Id, temp_neighbor.Item1.Id));
-                                        }//end if
-                                    }//end foreach
-                                }//end foreach
-                                if (!for_output.Equals(""))
-                                {
-                                    for_output += ".";
-                                    output.Add(for_output);
-                                }//end if
-                            }//end else if
-
-                            else
-                            {
-                                string[] neighbors = FindNeighborsByRelationship(query.MainTopic, dir);
-                                if (neighbors.Length > 0)
-                                    output.Add(string.Format("{0} of {1} {2} {3}", dir.ToUpperFirst(), query.MainTopic.Id,
-                                        (neighbors.Length > 1) ? "are" : "is", neighbors.ToList().JoinAnd()));
-                            }
-                        }// end if
-                        //Otherwise, the WHAT question has no direction.
-                        else
-                        {
-                            // e.g. What is Topic?
-                            // Get the <speak> attribute, if able
-                            string[] speak = FindStuffToSay(query.MainTopic);
-                            if (speak.Length > 0)
-                            {
-                                //Addorn the speak value
-                                speak[0] = SpeakWithAdornments(query.MainTopic, speak[0]);
-                                
-                                output.AddRange(speak);
-                            }//end if
-                        }//end else
-                        break;
-                    case Question.WHERE:
-                        if (false)
-                        {
-
-                        }
-                        else
-                        {
-                            // e.g. Where is Topic?
-                            // Get all the neighbors from this feature and the "opposite" directions
-                            //output.AddRange((SpeakNeighborRelations(query.MainTopic.Id, FindAllNeighbors(query.MainTopic))));
-                            
-                            //Where is the main topic
-                            Feature query_topic = query.MainTopic;
-
-                            string for_output = "";
-
-                            //Check from topic to neighbors
-                            for_output = ConstructQueryOutputByRelationship(query, locational_words.ToList<string>());
-
-                            if (!for_output.Equals(""))
-                            {
-                                output.Add(for_output);
-                            }//end if
-                        }
-                        break;
-                    case Question.WHEN:
-                        // e.g. When was Topic made/built/etc.?
-                        break;
-                }
-            }
-            else
-            {
-                // e.g.:
-                // Tell me about Topic.
-                // Topic.
-                output.Add(SpeakWithAdornments(query.MainTopic, FindStuffToSay(query.MainTopic)[0]));
-            }
-
-            return output.Count() > 0 ? output.ToArray() : new string[] { IDK };
-        }// end function ParseQuery
-        //Constructs an output to a given query by examining the list of words to check against the relationships
-        //that the query's main topic has with its neighbors.
-        //Last optional parameter decides whether we are checking the relationships from the topic to its neighbors or 
-        //the relationships from the neighbors to the topic.
-        private string ConstructQueryOutputByRelationship(Query query, List<string> words_to_check, bool from_topic_to_neighbors = true)
-        {
-            string output_string = "";
-
-            //Where is the main topic
-            Feature query_topic = query.MainTopic;
-            //What topic should we change to
-            Feature topic_change = query.MainTopic;
-
-            if (from_topic_to_neighbors)
-                //Look for one of the locational words in the main topic's relationships
-                foreach (Tuple<Feature, double, string> temp_neighbor in query_topic.Neighbors)
-                {
-                    foreach (string word_to_check in words_to_check)
-                    {
-                        if (temp_neighbor.Item3.ToLower().Contains(word_to_check.ToLower()))
-                        {
-                            //DEBUG
-                            Console.Out.WriteLine("Word to check " + word_to_check + " found.");
-                            //END DEBUG
-                            if (output_string.Equals(""))
-                            {
-                                //For now, just take the first matching feature and (potentially) change the topic to that.
-                                topic_change = temp_neighbor.Item1;
-                                output_string = string.Format("{0} " + temp_neighbor.Item3 + " {1}", query_topic.Id, temp_neighbor.Item1.Id);
-                            }//end if
-                            else
-                                output_string += string.Format(", " + temp_neighbor.Item3 + " {0}", temp_neighbor.Item1.Id);
-                            //for_output.Add(string.Format("{0} " + temp_neighbor.Item3 + " {1}.", query_topic.Id, temp_neighbor.Item1.Id));
-                        }//end if
-                    }//end foreach
-                }//end foreach
-
-            if (!output_string.Equals(""))
-            {
-                //Find the last comma and put an "and" after it
-                if (output_string.LastIndexOf(",") > 0)
-                {
-                    output_string = output_string.Insert(output_string.LastIndexOf(","), " and");
-                }//end if
-                output_string += ". ";
-
-                //If the query topic and the current topic are the same, avoid
-                //repeating the current topic by changing the query topic.
-                if (query_topic.Equals(this.topic))
-                {
-                    //Change the main topic
-                    query.MainTopic = topic_change;
-                }//end if
-
-                //Whether or not the topic has changed, say something about the main topic at the end.
-                //output_string += FindStuffToSay(query.MainTopic)[0];
-            }//end if
-            return output_string;
-        }//end method ConstructQueryOutputByRelationship
 
         //Parses a bilingual output based on the language_mode passed in
         public string ParseOutput(string to_parse, int language_mode)
@@ -1175,79 +705,9 @@ namespace Dialogue_Data_Entry
         private string[] FindSpeak(Feature feature)
         {
             return feature.Speaks.ToArray();
-        }
+        }//end function FindSpeak
 
-        //From the given feature, find a collection of strings to say about it.
-        //ZEV: Should this be in FeatureSpeaker???
-        private string[] FindStuffToSay(Feature feature)
-        {
-            List<string> stuff = new List<string>();
-            string[] speaks = FindSpeak(feature);
-            //Add each of the feature's speak values to the list of things to say about it
-            if (speaks.Length > 0)
-            {
-                stuff.AddRange(speaks);
-            }// end if
-                
-            //ZEV: Do we need to call this? If there are no speaks, we speak this. (But when
-            //aren't there speaks?)
-            stuff.AddRange(SpeakNeighborRelations(feature.Name, FindAllNeighbors(feature)));
-
-            //If nothing else can be found, simply speak the feature's name
-            if (stuff.Count() == 0)
-            {
-                stuff.Add(feature.Name);
-            }//end if
-            return stuff.ToArray();
-        }// end function FindStuffToSay
-
-        private string[] FindNeighborsByRelationship(Feature feature, string relationship)
-        {
-            List<string> neighborNames = new List<string>();
-            var neighbors = feature.Neighbors;
-            for (int i = 0; i < neighbors.Count; i++)
-            {
-                var triple = neighbors[i];
-                Feature neighbor = triple.Item1;
-                string relation = triple.Item3;
-                if (relation.ToLower().Replace(' ', '_') == relationship.ToLower())
-                    neighborNames.Add(neighbor.Name);
-            }
-            return neighborNames.ToArray();
-        }
-
-        private Tuple<string, Direction>[] FindAllNeighbors(Feature feature)
-        {
-            var _neighbors = feature.Neighbors;
-            var neighbors = new List<Tuple<string, Direction>>();
-            foreach (var triple in _neighbors)
-            {
-                string neighborName = triple.Item1.Name;
-                string relationship = triple.Item3;
-                if (directionWords.Contains(relationship))
-                    neighbors.Add(new Tuple<string, Direction>(neighborName,
-                        ((Direction)Enum.Parse(typeof(Direction), relationship.ToUpper().Replace(' ', '_')))));
-            }
-            return neighbors.ToArray();
-        }
-
-        //ZEV: Should be in feature speaker? Should this exist at all??? Handled in SpeakTransform...
-        //Creates a list of strings that say the featureName passed in and its relationship to each neighbor.
-        private string[] SpeakNeighborRelations(string featureName, Tuple<string, Direction>[] neighbors)
-        {
-            string[] neighborRelations = new string[neighbors.Length];
-            if (neighborRelations.Length == 0)
-                return new string[] { };
-            for (int i = 0; i < neighborRelations.Length; i++)
-                //Creates strings of the form "(featureName or It) is (relationship) of (neighbor node)
-                neighborRelations[i] = string.Format("{0} is {1} of {2}.",
-                    (i == 0) ? featureName : "It",
-                    neighbors[i].Item2.Invert().ToString().ToLower(),
-                    neighbors[i].Item1);
-            return neighborRelations;
-        }//end function SpeakNeighborRelations
-
-    }
+    }//end class QueryHandler
 
     static class ExtensionMethods
     {

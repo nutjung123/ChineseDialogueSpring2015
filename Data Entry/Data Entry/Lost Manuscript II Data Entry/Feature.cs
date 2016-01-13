@@ -83,6 +83,23 @@ namespace Dialogue_Data_Entry
             return null;
         }//end function getNeighbor
 
+        //Finds all the neighbors of this feature that have the given relationship
+        //with this feature.
+        public Feature[] GetNeighborsByRelationship(string relationship)
+        {
+            List<Feature> temp_neighbors = new List<Feature>();
+            var neighbors = this.Neighbors;
+            for (int i = 0; i < neighbors.Count; i++)
+            {
+                var triple = neighbors[i];
+                Feature neighbor = triple.Item1;
+                string relation = triple.Item3;
+                if (relation.ToLower().Replace(' ', '_') == relationship.ToLower())
+                    temp_neighbors.Add(neighbor);
+            }
+            return temp_neighbors.ToArray();
+        }//end function FindNeighborsByRelationship
+
         // This function will get the respective edge weight along the connection between this feature and the feature with the given id
         public double getNeighborWeight(int id)
         {
@@ -185,6 +202,45 @@ namespace Dialogue_Data_Entry
             }
             return "";
         }//end function getRelationshipNeighbor
+
+        /// <summary>
+        /// Quantifies how much this feature's neighbors have been discussed.
+        /// </summary>
+        public double getNeighborDiscussAmount()
+        {
+            double sumTalk = 0.0;
+            double sumNotTalk = 0.0;
+            for (int x = 0; x < this.Parents.Count; x++)
+            {
+                List<Tuple<Feature, double, string>> neighbors = this.Parents[x].Item1.Neighbors;
+                for (int y = 0; y < neighbors.Count; y++)
+                {
+                    //check all other nodes except itself
+                    if (neighbors[y].Item1.Id != this.Id)
+                    {
+                        if (neighbors[y].Item1.DiscussedAmount >= 1)
+                        {
+                            sumTalk++;
+                        }
+                        else
+                        {
+                            sumNotTalk++;
+                        }
+                    }
+                }
+            }
+            //about itself
+            if (this.DiscussedAmount >= 1)
+            {
+                sumTalk++;
+            }
+            else
+            {
+                sumNotTalk++;
+            }
+
+            return sumNotTalk / (sumTalk + sumNotTalk);
+        }//end function getNeighborDiscussAmount
 
         public string getRelationshipParent(int parent_id)
         {
@@ -474,10 +530,6 @@ namespace Dialogue_Data_Entry
             get { return this.id; }
             set
             {
-                if (value == null)
-                {
-                    throw new Exception("Cannot set a Feature's id to null");
-                }
                 this.id = value;
             }
         }

@@ -53,6 +53,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NarrationCalculator.cs" />
+    <Compile Include="NarrationManager.cs" />
     <Compile Include="SpeakTransform.cs" />
     <Compile Include="Constant.cs" />
     <Compile Include="QueryHandler.cs" />
@@ -67,7 +69,6 @@
     <Compile Include="DeepClone.cs" />
     <Compile Include="Feature.cs" />
     <Compile Include="FeatureGraph.cs" />
-    <Compile Include="FeatureSpeaker.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
