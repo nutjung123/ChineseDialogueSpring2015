@@ -241,8 +241,16 @@ namespace Dialogue_Data_Entry
             //Treat the feature passed in as the current topic
             Feature current_topic = feat;
 
+            Feature previous_topic = null;
+
+            if (topic_history.Count < 2)
+                previous_topic = null;
+            else
+                previous_topic = topic_history[topic_history.Count - 2];
+
+
             //Create the speak transform object, initialized with history list and the previous topic
-            SpeakTransform transform = new SpeakTransform(topic_history, topic_history[topic_history.Count - 2]);
+            SpeakTransform transform = new SpeakTransform(topic_history, previous_topic);
 
             //Pass in the given feature and speak value to be transformed.
             String to_speak = transform.TransformSpeak(feat, speak);
