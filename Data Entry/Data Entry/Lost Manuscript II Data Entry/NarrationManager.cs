@@ -101,6 +101,12 @@ namespace Dialogue_Data_Entry
         {
             string return_string = "";
 
+            //From a null query, return an "I don't know" response
+            if (query == null)
+            {
+                return "I'm afraid I don't know the answer to that.";
+            }//end if
+
             bool topic_switch = false;
             Console.WriteLine("Query main topic before: " + query.MainTopic.Id);
             Feature topic_before = query.MainTopic;
