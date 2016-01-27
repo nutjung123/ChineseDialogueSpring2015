@@ -153,6 +153,7 @@ namespace Dialogue_Data_Entry
             //remember internal variables for forward projection
             List<Feature> internalTopicHistory = new List<Feature>(this.TopicHistory);
             int internalTurn = this.Turn;
+            Feature internalTopic = this.Topic;
             Feature tempCurrentTopic = currentTopic;
             List<TemporalConstraint> temp_temporal_constraint_list = new List<TemporalConstraint>();
             for (int x = 0; x < temporal_constraint_list.Count(); x++)
@@ -179,6 +180,7 @@ namespace Dialogue_Data_Entry
             this.TopicHistory = internalTopicHistory;
             this.Turn = internalTurn;
             this.temporal_constraint_list = temp_temporal_constraint_list;
+            this.Topic = internalTopic;
             for (int x = 0; x < forwardTurn; x++)
             {
                 topicList[x].DiscussedAmount -= 1;

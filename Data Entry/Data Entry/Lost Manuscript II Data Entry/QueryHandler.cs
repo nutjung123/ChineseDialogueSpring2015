@@ -523,6 +523,20 @@ namespace Dialogue_Data_Entry
                         return_string = buffered_tts;
                     }//end else
                 }//end else if
+                //FORWARD_PROJECTION command.
+                // Returns the names of the sequence of topics
+                // found by Forward Projection.
+                else if (split_input[0].Equals("FORWARD_PROJECTION"))
+                {
+                    //The second index of the command is the number of turns to
+                    //perform forward projection with.
+                    List<Feature> result_list = narration_manager.ForwardProjection(narration_manager.Topic, int.Parse(split_input[1]));
+                    return_string = "Forward Projection result:";
+                    foreach (Feature temp_feature in result_list)
+                    {
+                        return_string = return_string + " --> " + temp_feature.Name;
+                    }//end foreach
+                }//end else if
 
             return return_string;
         }//end function CommandResponse
