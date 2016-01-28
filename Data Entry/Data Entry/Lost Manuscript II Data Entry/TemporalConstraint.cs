@@ -12,13 +12,13 @@ namespace Dialogue_Data_Entry
         //third Argument is either a topic/node or turn
         private string firstArgument;   
         private string secondArgument;
-        private string thirdArgument;
+        private int thirdArgument;
         private string thirdArgumentType = null;
         private string fourthArgument;
         private string fifthArgument;
         private bool satisfied = false;
 
-        public TemporalConstraint(string first, string second, string third,string fourth,string fifth)
+        public TemporalConstraint(string first, string second, int third,string fourth,string fifth)
         {
             this.firstArgument = first;
             this.secondArgument = second;
@@ -69,7 +69,7 @@ namespace Dialogue_Data_Entry
             }
         }
 
-        public string ThirdArgument
+        public int ThirdArgument
         {
             get
             {

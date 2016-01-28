@@ -62,7 +62,7 @@
             this.featureUpdateButton = new System.Windows.Forms.Button();
             this.childrenCheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.editFeatureDataTextBox = new System.Windows.Forms.TextBox();
+            this.editFeatureNameTextBox = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.featureEditorListBox = new System.Windows.Forms.ListBox();
@@ -211,7 +211,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(146, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Enter data to create a feature";
+            this.label1.Text = "Enter id to create a feature";
             // 
             // FeatureEditor
             // 
@@ -239,7 +239,7 @@
             this.FeatureEditor.Controls.Add(this.featureUpdateButton);
             this.FeatureEditor.Controls.Add(this.childrenCheckedListBox);
             this.FeatureEditor.Controls.Add(this.label6);
-            this.FeatureEditor.Controls.Add(this.editFeatureDataTextBox);
+            this.FeatureEditor.Controls.Add(this.editFeatureNameTextBox);
             this.FeatureEditor.Controls.Add(this.label7);
             this.FeatureEditor.Controls.Add(this.label4);
             this.FeatureEditor.Controls.Add(this.featureEditorListBox);
@@ -267,7 +267,7 @@
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(128, 13);
             this.label18.TabIndex = 38;
-            this.label18.Text = "Label Pattern Data Below";
+            this.label18.Text = "Label Pattern Id Below";
             // 
             // textBox7
             // 
@@ -487,12 +487,12 @@
             this.label6.Text = "Select children to link to the editting feature.\n\"Right click\" to edit the relati" +
     "onship.";
             // 
-            // editFeatureDataTextBox
+            // editFeatureNameTextBox
             // 
-            this.editFeatureDataTextBox.Location = new System.Drawing.Point(230, 23);
-            this.editFeatureDataTextBox.Name = "editFeatureDataTextBox";
-            this.editFeatureDataTextBox.Size = new System.Drawing.Size(217, 20);
-            this.editFeatureDataTextBox.TabIndex = 7;
+            this.editFeatureNameTextBox.Location = new System.Drawing.Point(230, 23);
+            this.editFeatureNameTextBox.Name = "editFeatureNameTextBox";
+            this.editFeatureNameTextBox.Size = new System.Drawing.Size(217, 20);
+            this.editFeatureNameTextBox.TabIndex = 7;
             // 
             // label7
             // 
@@ -501,7 +501,7 @@
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(113, 13);
             this.label7.TabIndex = 6;
-            this.label7.Text = "Edit the Feature\'s data";
+            this.label7.Text = "Edit the Feature\'s id";
             // 
             // label4
             // 
@@ -1110,7 +1110,7 @@
         private System.Windows.Forms.Button featureUpdateButton;
         private System.Windows.Forms.CheckedListBox childrenCheckedListBox;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox editFeatureDataTextBox;
+        private System.Windows.Forms.TextBox editFeatureNameTextBox;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ListBox featureEditorListBox;
