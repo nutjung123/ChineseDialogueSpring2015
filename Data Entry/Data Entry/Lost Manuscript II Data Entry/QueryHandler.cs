@@ -141,13 +141,13 @@ namespace Dialogue_Data_Entry
         public QueryHandler(FeatureGraph graph, List<TemporalConstraint> myTemporalConstraintList)
         {
             // Load the AIML Bot
-            this.bot = new Bot();
+            //this.bot = new Bot();
             this.temporalConstraintList = myTemporalConstraintList;
-            bot.loadSettings();
+            /*bot.loadSettings();
             bot.isAcceptingUserInput = false;
             bot.loadAIMLFromFiles();
             bot.isAcceptingUserInput = true;
-            this.user = new User("user", this.bot);
+            this.user = new User("user", this.bot);*/
 
             // Load the Feature Graph
             this.graph = graph;
@@ -295,10 +295,8 @@ namespace Dialogue_Data_Entry
             // Check to see if the AIML Bot has anything to say.
             if (!string.IsNullOrEmpty(input))
             {
-                Request request = new Request(input, this.user, this.bot);
-                //Call the AIML Chat Bot and give it the input ParseInput was given.
-                Result result = bot.Chat(request);
-                string output = result.Output;
+                //Call the AIML Chat Bot in NarrationManager and give it the input ParseInput was given.
+                string output = narration_manager.TellChatBot(input);
                 
                 //If the chatbot has a feedback response, it will begin its
                 //response with "FORMAT"

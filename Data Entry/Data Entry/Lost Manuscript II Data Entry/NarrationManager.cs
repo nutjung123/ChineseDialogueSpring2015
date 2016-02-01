@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using AIMLbot;
 
 namespace Dialogue_Data_Entry
 {
@@ -11,6 +12,8 @@ namespace Dialogue_Data_Entry
     class NarrationManager
     {
         private FeatureGraph feature_graph;     //The data structure holding every feature in the knowledge base.
+        private Bot aiml_bot;                   //The AIML bot being used to help answer queries.
+        private User user;                 //A user to make requests of the AIML bot.
         private Feature topic;                  //The current topic of conversation.
         private int turn;                       //A count of what turn of the conversation we are on.
         private List<Feature> topic_history;    //The history of topics in this conversation. Last item is always the topic.
@@ -30,6 +33,14 @@ namespace Dialogue_Data_Entry
         public NarrationManager(FeatureGraph fg, List<TemporalConstraint> tcl)
         {
             feature_graph = fg;
+
+            //Initialize the AIML chat bot
+            this.aiml_bot = new Bot();
+            aiml_bot.loadSettings();
+            aiml_bot.isAcceptingUserInput = false;
+            aiml_bot.loadAIMLFromFiles();
+            aiml_bot.isAcceptingUserInput = true;
+            this.user = new User("user", this.aiml_bot);
 
             //Default initializations
             topic = null;
@@ -241,6 +252,24 @@ namespace Dialogue_Data_Entry
 
             return answer;
         }//end ListMostNovelFeatures
+
+        /// <summary>
+        /// Tells the input to the AIML chat bot. Returns the response from the chat bot.
+        /// </summary>
+        public string TellChatBot(string input)
+        {
+            string output = "";
+            //Create a request, which can be passed to the chatbot.
+            Request request = new Request(input, this.user, this.aiml_bot);
+            Console.WriteLine("Chatbot Input: " + input);
+            //Get the response from the chatbot
+            Result result = aiml_bot.Chat(request);
+            output = result.Output;
+            Console.WriteLine("Chatbot Output: " + output);
+            //<set name="it"><set name="that"><set name="this">
+            //<think><set name="topic"><star/></set></think>
+            return output;
+        }//end method SayToChatBot
 
         //PRIVATE UTILITY FUNCTIONS
         //Returns the speak value passed in with adornments according to the feature passed in, such as topic lead-ins and analogies.
@@ -635,6 +664,9 @@ namespace Dialogue_Data_Entry
             next_topic.DiscussedAmount += 1;
             this.feature_graph.setFeatureDiscussedAmount(next_topic.Id, next_topic.DiscussedAmount);
             this.topic = next_topic;
+            //Set the topic in the AIML chatbot
+            string temp = TellChatBot("SETTOPIC " + this.topic.Name.Split(new string[] { "##" }, StringSplitOptions.None)[0]);
+            //string temp = TellChatBot("SETTOPIC");
         }//end method ChangeTopic
         /// <summary>
         /// Sets the current topic feature to the given topic feature, incrementing the next topic's
@@ -645,12 +677,9 @@ namespace Dialogue_Data_Entry
         /// <param name="new_buffer">The string array that the output buffer will be set to.</param>
         public void SetNextTopic(Feature next_topic, string[] new_buffer)
         {
-            //Place the next topic in the history list
-            UpdateTopicHistory(next_topic);
-
-            next_topic.DiscussedAmount += 1;
-            this.feature_graph.setFeatureDiscussedAmount(next_topic.Id, next_topic.DiscussedAmount);
-            this.topic = next_topic;
+            //Set the topic
+            SetNextTopic(next_topic);
+            //Fill the passed in buffer
             this.buffer = new_buffer;
         }//end method ChangeTopic
 
