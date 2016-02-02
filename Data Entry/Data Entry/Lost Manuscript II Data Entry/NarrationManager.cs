@@ -283,7 +283,7 @@ namespace Dialogue_Data_Entry
             if (topic_history.Count < 2)
                 previous_topic = null;
             else
-                previous_topic = topic_history[topic_history.Count - 2];
+                previous_topic = topic_history[topic_history.Count - 1];
 
 
             //Create the speak transform object, initialized with history list and the previous topic

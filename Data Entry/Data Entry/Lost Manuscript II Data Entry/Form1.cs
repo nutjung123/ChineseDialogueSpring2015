@@ -37,9 +37,11 @@ namespace Dialogue_Data_Entry
         //private string defaultFilename = @"\2008_Summer_Olympic_Games_4th_simple_tag.xml";
         //private string defaultFilename = @"\2008_Summer_Olympic_Games_4th_tag10.xml";
         //private string defaultFilename = @"\2008_Summer_Olympic_Games_4th_revised.xml";
-        private string defaultFilename = @"\2008_Summer_Olympic_Games_4th_tag_complex_chinese_new.xml";
         //private string defaultFilename = @"\empac_xml.xml";
         //private string defaultFilename = @"\2008_Summer_Olympic_Games_4th_tag_simple_chinese_2.xml";
+
+        //private string defaultFilename = @"\2008_Summer_Olympic_Games_4th_tag_complex_chinese_new.xml";
+        private string defaultFilename = @"\2008_Summer_Olympic_Games_2_2_2016.xml";
 
         private string constraintFilename = @"\constraint.txt";
 
@@ -157,6 +159,8 @@ namespace Dialogue_Data_Entry
                 childrenCheckedListBox.Items.Clear();
                 clearAllTextBoxes();
                 this.Text = "Data Entry - Concept Graph : " + currentFileName;
+                //Now that there is a new featureGraph, open a new query window
+                openQueryWindow();
             }
         }
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -911,6 +915,11 @@ namespace Dialogue_Data_Entry
         //Opens the Query window
         private void openQueryWindow()
         {
+            //Close any query window already open
+            if (myQuery != null)
+            {
+                myQuery.Close();
+            }//end if
             featGraph.setMaxDepth(-1); //so that we force them to recalculate every time you call query in case of updating graph
             myQuery = new Form2(featGraph, temporalConstraintList);
             myQuery.Show();

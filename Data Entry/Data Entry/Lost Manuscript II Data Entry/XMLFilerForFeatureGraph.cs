@@ -49,22 +49,28 @@ namespace Dialogue_Data_Entry
                 {
                     writer.WriteLine("<Root id=\"" + toWrite.Root.Id + "\"/>");
                 }
+                //Start writing the Features block
+                writer.WriteLine("<Features>");
                 for (int x = 0; x < toWrite.Features.Count; x++)
                 {
                     Feature tmp = toWrite.Features[x];
                     writer.WriteLine("<Feature id=\"" + tmp.Id + "\" data=\"" + escapeInvalidXML(tmp.Name) + "\">");
                     //Neighbor
+                    writer.WriteLine("<neighbors>");
                     for (int y = 0; y < tmp.Neighbors.Count; y++)
                     {
                         int id = toWrite.getFeatureIndex(tmp.Neighbors[y].Item1.Id);
                         writer.WriteLine("<neighbor dest=\"" + id + "\" weight=\"" + tmp.Neighbors[y].Item2 + "\" relationship=\"" + escapeInvalidXML(tmp.Neighbors[y].Item3) + "\"/>");
-                    }
+                    }//end for
+                    writer.WriteLine("</neighbors>");
                     //Parent 
+                    writer.WriteLine("<parents>");
                     for (int y = 0; y < tmp.Parents.Count; y++)
                     {
                         int id = toWrite.getFeatureIndex(tmp.Parents[y].Item1.Id);
                         writer.WriteLine("<parent dest=\"" + id + "\" weight=\"" + tmp.Parents[y].Item2 + "\" relationship=\"" + escapeInvalidXML(tmp.Parents[y].Item3) + "\"/>");
-                    }
+                    }//end for
+                    writer.WriteLine("</parents>");
                     //Tag
                     List<Tuple<string, string, string>> tags = tmp.Tags;
                     for (int y = 0; y < tags.Count; y++)
@@ -81,7 +87,10 @@ namespace Dialogue_Data_Entry
                         writer.WriteLine("<speak value=\"" + escapeInvalidXML(speaks[y]) + "\"/>");
                     }
                     writer.WriteLine("</Feature>");
-                }
+                }//end for
+                //Stop writing the Features block
+                writer.WriteLine("</Features>");
+
                 writer.WriteLine("</AIMind>");
                 writer.Close();
                 return true;
@@ -102,7 +111,9 @@ namespace Dialogue_Data_Entry
                 XmlDocument doc = new XmlDocument();
                 doc.Load(toReadPath);
                 docOld = doc;
+                //Get the features
                 XmlNodeList features = doc.SelectNodes("AIMind");
+                features = features[0].SelectNodes("Features");
                 features = features[0].SelectNodes("Feature");
                 //Get each feature's name ("data" field) and each feature's id. Create a new feature
                 //in the backend using the name and id.
@@ -119,7 +130,8 @@ namespace Dialogue_Data_Entry
                     //Find the current feature in the feature graph by its id.
                     Feature tmp = result_graph.getFeature(Convert.ToInt32(node.Attributes["id"].Value));
                     //Neighbor
-                    XmlNodeList neighbors = node.SelectNodes("neighbor");
+                    XmlNodeList neighbors = node.SelectNodes("neighbors");
+                    neighbors = neighbors[0].SelectNodes("neighbor");
                     foreach (XmlNode neighborNode in neighbors)
                     {
                         int neighbor_id = Convert.ToInt32(neighborNode.Attributes["dest"].Value);
@@ -137,29 +149,37 @@ namespace Dialogue_Data_Entry
                         {
                             if (tempNode.Attributes["data"].Value == result_graph.Features[neighbor_id].Name)
                             {
-                                XmlNodeList tempParents = tempNode.SelectNodes("parent");
-                                if (tempParents.Count == 0)
+                                XmlNodeList tempParents = tempNode.SelectNodes("parents");
+                                if (tempParents.Count != 0)
                                 {
-                                    //ZEV: Check that this works!
-                                    result_graph.getFeature(neighbor_id).addParent(tmp);
-                                }
+                                    tempParents = tempParents[0].SelectNodes("parent");
+                                    if (tempParents.Count == 0)
+                                    {
+                                        //ZEV: Check that this works!
+                                        result_graph.getFeature(neighbor_id).addParent(tmp);
+                                    }
+                                }//end if
                             }
                         }
                         //result.Features[id].addNeighbor(tmp,weight);
                     }//end foreach
                     //Parent
-                    XmlNodeList parents = node.SelectNodes("parent");
-                    foreach (XmlNode parentNode in parents)
+                    XmlNodeList parents = node.SelectNodes("parents");
+                    if (parents.Count != 0)
                     {
-                        int parent_id = Convert.ToInt32(parentNode.Attributes["dest"].Value);
-                        double weight = Convert.ToDouble(parentNode.Attributes["weight"].Value);
-                        string relationship = "";
-                        if (parentNode.Attributes["relationship"] != null)
+                        parents = parents[0].SelectNodes("parent");
+                        foreach (XmlNode parentNode in parents)
                         {
-                            relationship = unEscapeInvalidXML(Convert.ToString(parentNode.Attributes["relationship"].Value));
+                            int parent_id = Convert.ToInt32(parentNode.Attributes["dest"].Value);
+                            double weight = Convert.ToDouble(parentNode.Attributes["weight"].Value);
+                            string relationship = "";
+                            if (parentNode.Attributes["relationship"] != null)
+                            {
+                                relationship = unEscapeInvalidXML(Convert.ToString(parentNode.Attributes["relationship"].Value));
+                            }
+                            tmp.addParent(result_graph.getFeature(parent_id), weight, relationship);
                         }
-                        tmp.addParent(result_graph.getFeature(parent_id), weight, relationship);
-                    }
+                    }//end if
                     //Tag
                     XmlNodeList tags = node.SelectNodes("tag");
                     foreach (XmlNode tag in tags)
@@ -203,6 +223,7 @@ namespace Dialogue_Data_Entry
                 XmlDocument doc = new XmlDocument();//doc is the second document, the one selected to merge with after a file has been opened
                 doc.Load(toReadPath);
                 XmlNodeList features = doc.SelectNodes("AIMind");
+                features = features[0].SelectNodes("Features");
                 features = features[0].SelectNodes("Feature");
                 int countUp = 0;
                 int countUp2 = 0;
@@ -236,7 +257,8 @@ namespace Dialogue_Data_Entry
                         string id = node.Attributes["data"].Value;
                         result.addFeature(new Feature(id));
                         Feature tmp = result.getFeature(node.Attributes["data"].Value);
-                         XmlNodeList neighbors = node.SelectNodes("neighbor");
+                        XmlNodeList neighbors = node.SelectNodes("neighbors");
+                        neighbors = neighbors[0].SelectNodes("neighbor");
                         foreach (XmlNode neighborNode in neighbors){
                                 int dest_number = Convert.ToInt32(neighborNode.Attributes["dest"].Value);// +countUp;// + countUp);
                                 double weight = Convert.ToDouble(neighborNode.Attributes["weight"].Value);
@@ -272,7 +294,8 @@ namespace Dialogue_Data_Entry
                         countUp++;
                         Feature tmp = result.getFeature(node.Attributes["data"].Value);
 
-                        XmlNodeList neighbors = node.SelectNodes("neighbor");
+                        XmlNodeList neighbors = node.SelectNodes("neighbors");
+                        neighbors = neighbors[0].SelectNodes("neighbor");
                         foreach (XmlNode neighborNode in neighbors)
                         {
                             int id = Convert.ToInt32(neighborNode.Attributes["dest"].Value);// +countUp;// + countUp);
@@ -309,7 +332,8 @@ namespace Dialogue_Data_Entry
                 foreach (XmlNode node in features2)///add the features from the second file
                 {
                     Feature tmp = result.getFeature(node.Attributes["data"].Value);
-                    XmlNodeList neighbors = node.SelectNodes("neighbor");
+                    XmlNodeList neighbors = node.SelectNodes("neighbors");
+                    neighbors = neighbors[0].SelectNodes("neighbor");
 
                    string secDet = Convert.ToString(Convert.ToInt32(node.Attributes["id"].Value) + countUp);
                    

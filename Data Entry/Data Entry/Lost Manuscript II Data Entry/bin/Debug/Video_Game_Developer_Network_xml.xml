@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='ASCII'?>
+<AIMind>
+  <Root id="8"/>
+  <Features>
+	  <Feature id="0" data="EmptyNode">
+		<neighbors/>
+		<speak value=""/>
+	  </Feature>
+	  <Feature id="1" data="Jack Hulick">
+		<neighbors>
+		  <neighbor dest="2" weight="0" relationship="works with"/>
+		  <neighbor dest="3" weight="0" relationship="works with"/>
+		</neighbors>
+		<speak value="Jack Hulick composes the musical score for most of InfiniteL00t's games."/>
+	  </Feature>
+	  <Feature id="2" data="Hayden Morrison">
+		<neighbors>
+		  <neighbor dest="1" weight="0" relationship="works with"/>
+		  <neighbor dest="3" weight="0" relationship="works with"/>
+		</neighbors>
+		<speak value="Hayden Morrison works on gameplay and game tools. Hayden also sometimes helps with music and speech integration."/>
+	  </Feature>
+	  <Feature id="3" data="Carl Czulak">
+		<neighbors>
+		  <neighbor dest="1" weight="0" relationship="works with"/>
+		  <neighbor dest="2" weight="0" relationship="works with"/>
+		</neighbors>
+		<speak value="Carl Czulak is the sound engineer."/>
+	  </Feature>
+	  <Feature id="4" data="Samantha Galasti">
+		<neighbors>
+		  <neighbor dest="7" weight="0" relationship="is managed by"/>
+		</neighbors>
+		<speak value="Samantha Galasti is the lead programmer for game graphics and also produces user interface elements."/>
+	  </Feature>
+	  <Feature id="5" data="Tom Cheung">
+		<neighbors>
+		  <neighbor dest="7" weight="0" relationship="is managed by"/>
+		</neighbors>
+		<speak value="Tom Cheung works with AI techniques, such as planning and scripting."/>
+	  </Feature>
+	  <Feature id="6" data="Quinn Scherban">
+		<neighbors>
+		  <neighbor dest="7" weight="0" relationship="is managed by"/>
+		</neighbors>
+		<speak value="Quinn Scherban works on physics and programs the game engine, including simulating collision and object movement."/>
+	  </Feature>
+	  <Feature id="7" data="Dave Ghosh">
+		<neighbors>
+		  <neighbor dest="4" weight="0" relationship="manages"/>
+		  <neighbor dest="5" weight="0" relationship="manages"/>
+		  <neighbor dest="6" weight="0" relationship="manages"/>
+		  <neighbor dest="8" weight="0" relationship="works closely with"/>
+		  <neighbor dest="15" weight="0" relationship="communicates with"/>
+		</neighbors>
+		<speak value="Dave Ghosh is the lead programmer for the development team. Dave manages a sizeable group of programmers who all work together to coordinate the various aspects of the game's codebase development."/>
+	  </Feature>
+	  <Feature id="8" data="Kit Boyer">
+		<neighbors>
+		  <neighbor dest="7" weight="0" relationship="works closely with"/>
+		  <neighbor dest="9" weight="0" relationship="works with"/>
+		  <neighbor dest="11" weight="0" relationship="works closely with"/>
+		</neighbors>
+		<speak value="Kit Boyer is the lead designer on the current project and the main visionary of the game in development."/>
+	  </Feature>
+	  <Feature id="9" data="Erin Goulet">
+		<neighbors>
+		  <neighbor dest="8" weight="0" relationship="gets directives from"/>
+		  <neighbor dest="10" weight="0" relationship="works with"/>
+		</neighbors>
+		<speak value="Erin Goulet is InifniteL00t's main level designer."/>
+	  </Feature>
+	  <Feature id="10" data="Hunter Bisio">
+		<neighbors>
+		  <neighbor dest="9" weight="0" relationship="works with"/>
+		  <neighbor dest="11" weight="0" relationship="communicates with"/>
+		</neighbors>
+		<speak value="Hunter Bisio is a 3D artist who usually works on animation and 3D environment."/>
+	  </Feature>
+	  <Feature id="11" data="Axl Robinson">
+		<neighbors>
+		  <neighbor dest="8" weight="0" relationship="works closely with"/>
+		  <neighbor dest="10" weight="0" relationship="manages"/>
+		  <neighbor dest="12" weight="0" relationship="manages"/>
+		  <neighbor dest="13" weight="0" relationship="manages"/>
+		  <neighbor dest="14" weight="0" relationship="manages"/>
+		  <neighbor dest="15" weight="0" relationship="communicates with"/>
+		</neighbors>
+		<speak value="As the art director, Axl Robinson's job is to manage the art team as well as coordinate with the rest of the development team."/>
+	  </Feature>
+	  <Feature id="12" data="Claire Felippe">
+		<neighbors>
+		  <neighbor dest="11" weight="0" relationship="is managed by"/>
+		  <neighbor dest="13" weight="0" relationship="works together with"/>
+		</neighbors>
+		<speak value="Claire Felippe is a 2D artist, producing concept art, backdrops and terrain images, and user interface."/>
+	  </Feature>
+	  <Feature id="13" data="Zack Pongratz">
+		<neighbors>
+		  <neighbor dest="11" weight="0" relationship="is managed by"/>
+		  <neighbor dest="12" weight="0" relationship="works together with"/>
+		</neighbors>
+		<speak value="Zack Pongratz is a 2D artist, producing concept art, backdrops and terrain images, and user interface."/>
+	  </Feature>
+	  <Feature id="14" data="Ben Pennington">
+		<neighbors>
+		  <neighbor dest="11" weight="0" relationship="communicates with"/>
+		</neighbors>
+		<speak value="Ben Pennington is a 3D artist whose primary focus is cinematics."/>
+	  </Feature>
+	  <Feature id="15" data="Ray Lillis">
+		<neighbors>
+		  <neighbor dest="7" weight="0" relationship="communicates with"/>
+		  <neighbor dest="11" weight="0" relationship="communicates with"/>
+		</neighbors>
+		<speak value="Following a game's completion, Ray Lillis is always the first to test InfiniteL00t's finished products."/>
+	  </Feature>
+  </Features>
+</AIMind>
