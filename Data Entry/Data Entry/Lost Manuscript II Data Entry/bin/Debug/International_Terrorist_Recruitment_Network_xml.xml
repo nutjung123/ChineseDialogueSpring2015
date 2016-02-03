@@ -1,0 +1,141 @@
+<?xml version='1.0' encoding='ASCII'?>
+<AIMind>
+  <Root id="7"/>
+  <Features>
+	  <Feature id="0" data="EmptyNode">
+		<neighbors/>
+		<speak value=""/>
+	  </Feature>
+	  <Feature id="1" data="Elizabeth Huxley">
+		<neighbors>
+		  <neighbor dest="2" weight="0" relationship="mother of"/>
+		  <neighbor dest="3" weight="0" relationship="mother of"/>
+		</neighbors>
+		<speak value="The mother of Thomas and Michael Huxley who, upon noticing the extreme change in the personalities of her two sons, tried to intervene but to no avail."/>
+	  </Feature>
+	  <Feature id="2" data="Thomas Huxley">
+		<neighbors>
+		  <neighbor dest="1" weight="0" relationship="son of"/>
+		  <neighbor dest="3" weight="0" relationship="brother of"/>
+		  <neighbor dest="4" weight="0" relationship="attended Salafist talks by Imam Irfhan along with"/>
+		  <neighbor dest="5" weight="0" relationship="attended Salafist talks by Imam Irfhan along with"/>
+		  <neighbor dest="6" weight="0" relationship="attended Salafist talks by Imam Irfhan along with"/>
+		  <neighbor dest="7" weight="0" relationship="attended Salafist talks by"/>
+		</neighbors>
+		<speak value="Thomas Huxley grew up Protestant, but recently converted to Islam after listening to recordings of some of Mohammed Irfhan’s more extremist material"/>
+	  </Feature>
+	  <Feature id="3" data="Michael Huxley">
+		<neighbors>
+		  <neighbor dest="1" weight="0" relationship="son of"/>
+		  <neighbor dest="2" weight="0" relationship="brother of"/>
+		  <neighbor dest="4" weight="0" relationship="attended Salafist talks by Imam Irfhan along with"/>
+		  <neighbor dest="5" weight="0" relationship="attended Salafist talks by Imam Irfhan along with"/>
+		  <neighbor dest="6" weight="0" relationship="attended Salafist talks by Imam Irfhan along with"/>
+		  <neighbor dest="7" weight="0" relationship="attended Salafist talks by"/>
+		</neighbors>
+		<speak value="Michael Huxley grew up Protestant, but recently converted to Islam after listening to recordings of some of Mohammed Irfhan’s more extremist material"/>
+	  </Feature>
+	  <Feature id="4" data="Aahil Khan">
+		<neighbors>
+		  <neighbor dest="2" weight="0" relationship="attended Salafist talks by Imam Irfhan along with"/>
+		  <neighbor dest="3" weight="0" relationship="attended Salafist talks by Imam Irfhan along with"/>
+		  <neighbor dest="5" weight="0" relationship="brother of"/>
+		  <neighbor dest="6" weight="0" relationship="friend of"/>
+		  <neighbor dest="7" weight="0" relationship="attended Salafist talks by"/>
+		</neighbors>
+		<speak value="Aahil Khan has attended Imam Irfhan's mosque for years and recently convinced his friend, Imran Bakr to join."/>
+	  </Feature>
+	  <Feature id="5" data="Sana Khan">
+		<neighbors>
+		  <neighbor dest="2" weight="0" relationship="attended Salafist talks by Imam Irfhan along with"/>
+		  <neighbor dest="3" weight="0" relationship="attended Salafist talks by Imam Irfhan along with"/>
+		  <neighbor dest="4" weight="0" relationship="sister of"/>
+		  <neighbor dest="6" weight="0" relationship="friend of"/>
+		  <neighbor dest="7" weight="0" relationship="attended Salafist talks by"/>
+		</neighbors>
+		<speak value="Sana Khan has attended Imam Irfhan's mosque for years and recently convinced her friend, Imran Bakr to join."/>
+	  </Feature>
+	  <Feature id="6" data="Imran Bakr">
+		<neighbors>
+		  <neighbor dest="2" weight="0" relationship="attended Salafist talks by Imam Irfhan along with"/>
+		  <neighbor dest="3" weight="0" relationship="attended Salafist talks by Imam Irfhan along with"/>
+		  <neighbor dest="4" weight="0" relationship="attended Salafist talks by Imam Irfhan along with"/>
+		  <neighbor dest="5" weight="0" relationship="attended Salafist talks by Imam Irfhan along with"/>
+		  <neighbor dest="7" weight="0" relationship="attended Salafist talks by"/>
+		</neighbors>
+		<speak value="Imran Bakr was recently convinced to join Imam Irfhan’s mosque by his friends."/>
+	  </Feature>
+	  <Feature id="7" data="Mohammed Irfhan">
+		<neighbors>
+		  <neighbor dest="2" weight="0" relationship="gave Salafist talks to"/>
+		  <neighbor dest="3" weight="0" relationship="gave Salafist talks to"/>
+		  <neighbor dest="4" weight="0" relationship="gave Salafist talks to"/>
+		  <neighbor dest="5" weight="0" relationship="gave Salafist talks to"/>
+		  <neighbor dest="6" weight="0" relationship="gave Salafist talks to"/>
+		  <neighbor dest="8" weight="0" relationship="former teacher of"/>
+		  <neighbor dest="15" weight="0" relationship="met and radicalized"/>
+		</neighbors>
+		<speak value="Mohammed Irfhan is a radical imam of a London mosque who has recently been recruiting young men and women to serve as foreign fighters in Iraq and Syria."/>
+	  </Feature>
+	  <Feature id="8" data="Abdullah Siddiqui">
+		<neighbors>
+		  <neighbor dest="9" weight="0" relationship="had a trip to Syria financed by"/>
+		  <neighbor dest="10" weight="0" relationship="follows Akhmadov on twitter along with"/>
+		  <neighbor dest="11" weight="0" relationship="twitter follower of"/>
+		  <neighbor dest="7" weight="0" relationship="former student of"/>
+		  <speak value="A former student of Mohammed Irfhan’s teachings, Abdullah Siddiqui has been fighting for ISIS in Syria since August 2014."/>
+		</neighbors>
+	  </Feature>
+	  <Feature id="9" data="Kamel Hussain">
+		<neighbors>
+		  <neighbor dest="8" weight="0" relationship="financed a trip to Syria for"/>
+		  <neighbor dest="10" weight="0" relationship="funded the travels of"/>
+		</neighbors>
+		<speak value="Kamel Hussain is an ISIS recruiter who has funded the travels of a few extremist recruits."/>
+	  </Feature>
+	  <Feature id="10" data="Christopher Brewster">
+		<neighbors>
+		  <neighbor dest="8" weight="0" relationship="had travels funded by"/>
+		  <neighbor dest="9" weight="0" relationship="had travels funded by"/>
+		  <neighbor dest="11" weight="0" relationship="twitter follower of"/>
+		</neighbors>
+		<speak value="Christopher Brewster is a wayward Calgary youth and twitter follower of Shamil Akhmadov."/>
+	  </Feature>
+	  <Feature id="11" data="Shamil Akhmadov">
+		<neighbors>
+		  <neighbor dest="8" weight="0" relationship="followed on twitter by"/>
+		  <neighbor dest="10" weight="0" relationship="followed on twitter by"/>
+		  <neighbor dest="13" weight="0" relationship="followed on twitter by"/>
+		  <neighbor dest="14" weight="0" relationship="often reads the blog of"/>
+		  <neighbor dest="15" weight="0" relationship="tweeted a picture of the martyred corpse of"/>
+		</neighbors>
+		<speak value="Shamil Akhmadov is a radical Chechen on the front lines of the conflict who frequently tweets pictures of the action as a means to recruit new fighters."/>
+	  </Feature>
+	  <Feature id="12" data="Samiulla Kassab">
+		<neighbors>
+			<neighbor dest="11" weight="0" relationship="twitter follower of"/>
+			<neighbor dest="13" weight="0" relationship="twitter follower of"/>
+		</neighbors>
+		<speak value="Samiulla Kassab lives in Berlin and follows the twitter accounts of Akhmadov and Authier."/>
+	  </Feature>
+	  <Feature id="13" data="Gustave Authier">
+		<neighbors>
+		  <neighbor dest="11" weight="0" relationship="twitter follower of"/>
+		</neighbors>
+		<speak value="Gustave Authier is a radical Frenchman and another follower of Akhmadov who has his own Twitter account that he uses for spouting extremist rhetoric."/>
+	  </Feature>
+	  <Feature id="14" data="Stig Osterholt">
+		<neighbors>
+		  <neighbor dest="11" weight="0" relationship="has his blog read by"/>
+		</neighbors>
+		<speak value="Stig Osterholt is a Norwegian foreign fighter in Syria who uses his blog to write eulogies for his comrades who have died while fighting in the Levant."/>
+	  </Feature>
+	  <Feature id="15" data="Harry Sudlow">
+		<neighbors>
+		  <neighbor dest="11" weight="0" relationship="had a picture of his corpse tweeted by"/>
+		  <neighbor dest="7" weight="0" relationship="was radicalized by"/>
+		</neighbors>
+		<speak value="Harry Sudlow is a 17-year old convert from London who was killed within his first week of arriving in Syria."/>
+	  </Feature>
+  </Features>
+</AIMind>
