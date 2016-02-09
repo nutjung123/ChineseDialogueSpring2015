@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using AIMLbot;
 
 namespace Dialogue_Data_Entry
 {
@@ -11,7 +12,11 @@ namespace Dialogue_Data_Entry
     class NarrationManager
     {
         private FeatureGraph feature_graph;     //The data structure holding every feature in the knowledge base.
+        private Bot aiml_bot;                   //The AIML bot being used to help answer queries.
+        private User user;                      //A user to make requests of the AIML bot.
         private Feature topic;                  //The current topic of conversation.
+        private Feature background_topic;       //The background topic.
+            //The background topic guides the flow of conversation without being mentioned too often.
         private int turn;                       //A count of what turn of the conversation we are on.
         private List<Feature> topic_history;    //The history of topics in this conversation. Last item is always the topic.
 
@@ -31,8 +36,17 @@ namespace Dialogue_Data_Entry
         {
             feature_graph = fg;
 
+            //Initialize the AIML chat bot
+            this.aiml_bot = new Bot();
+            aiml_bot.loadSettings();
+            aiml_bot.isAcceptingUserInput = false;
+            aiml_bot.loadAIMLFromFiles();
+            aiml_bot.isAcceptingUserInput = true;
+            this.user = new User("user", this.aiml_bot);
+
             //Default initializations
             topic = null;
+            background_topic = null;
             turn = 1;
             topic_history = new List<Feature>();
             temporal_constraint_list = tcl;
@@ -242,6 +256,24 @@ namespace Dialogue_Data_Entry
             return answer;
         }//end ListMostNovelFeatures
 
+        /// <summary>
+        /// Tells the input to the AIML chat bot. Returns the response from the chat bot.
+        /// </summary>
+        public string TellChatBot(string input)
+        {
+            string output = "";
+            //Create a request, which can be passed to the chatbot.
+            Request request = new Request(input, this.user, this.aiml_bot);
+            Console.WriteLine("Chatbot Input: " + input);
+            //Get the response from the chatbot
+            Result result = aiml_bot.Chat(request);
+            output = result.Output;
+            Console.WriteLine("Chatbot Output: " + output);
+            //<set name="it"><set name="that"><set name="this">
+            //<think><set name="topic"><star/></set></think>
+            return output;
+        }//end method SayToChatBot
+
         //PRIVATE UTILITY FUNCTIONS
         //Returns the speak value passed in with adornments according to the feature passed in, such as topic lead-ins and analogies.
         private string SpeakWithAdornments(Feature feat, string speak, bool use_relationships = true)
@@ -254,7 +286,7 @@ namespace Dialogue_Data_Entry
             if (topic_history.Count < 2)
                 previous_topic = null;
             else
-                previous_topic = topic_history[topic_history.Count - 2];
+                previous_topic = topic_history[topic_history.Count - 1];
 
 
             //Create the speak transform object, initialized with history list and the previous topic
@@ -635,6 +667,9 @@ namespace Dialogue_Data_Entry
             next_topic.DiscussedAmount += 1;
             this.feature_graph.setFeatureDiscussedAmount(next_topic.Id, next_topic.DiscussedAmount);
             this.topic = next_topic;
+            //Set the topic in the AIML chatbot
+            string temp = TellChatBot("SETTOPIC " + this.topic.Name.Split(new string[] { "##" }, StringSplitOptions.None)[0]);
+            //string temp = TellChatBot("SETTOPIC");
         }//end method ChangeTopic
         /// <summary>
         /// Sets the current topic feature to the given topic feature, incrementing the next topic's
@@ -645,14 +680,20 @@ namespace Dialogue_Data_Entry
         /// <param name="new_buffer">The string array that the output buffer will be set to.</param>
         public void SetNextTopic(Feature next_topic, string[] new_buffer)
         {
-            //Place the next topic in the history list
-            UpdateTopicHistory(next_topic);
-
-            next_topic.DiscussedAmount += 1;
-            this.feature_graph.setFeatureDiscussedAmount(next_topic.Id, next_topic.DiscussedAmount);
-            this.topic = next_topic;
+            //Set the topic
+            SetNextTopic(next_topic);
+            //Fill the passed in buffer
             this.buffer = new_buffer;
         }//end method ChangeTopic
+
+        /// <summary>
+        /// Sets the current background topic to the given background topic.
+        /// </summary>
+        public void SetBackgroundTopic(Feature next_background_topic)
+        {
+            Console.WriteLine("Setting background topic " + next_background_topic.Name);
+            background_topic = next_background_topic;
+        }//end method SetBackgroundTopic
 
         /// <summary>
         /// Adds the given feature to the end of the topic history list and updates any relevant
@@ -712,6 +753,22 @@ namespace Dialogue_Data_Entry
             set
             {
                 this.topic = value;
+            }//end set
+        }
+
+        /// <summary>
+        /// The feature which is currently the background topic of narration/conversation.
+        /// The background topic guides the flow of the conversation.
+        /// </summary>
+        public Feature BackgroundTopic
+        {
+            get
+            {
+                return this.background_topic;
+            }//end get
+            set
+            {
+                this.background_topic = value;
             }//end set
         }
 

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <aiml>
+<category>
+	<pattern>SETTOPIC *</pattern>
+	<template>Topic set to <star/><think><set name="it"><set name="that"><set name="this"><set name="topic"><star/></set></set></set></set></think></template>
+</category>
 
 <category>
 	<pattern>HI</pattern>
@@ -756,5 +760,4 @@
   	<pattern>I WOULD LIKE TO KNOW SOMETHING ABOUT *</pattern>
   	<template><srai>WHAT IS <star/></srai></template>
 </category>
-
 </aiml>

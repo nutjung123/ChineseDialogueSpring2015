@@ -367,7 +367,7 @@ namespace Dialogue_Data_Entry
                 return "{First, let's talk about " + first_name_en + ".} " + "##" + "{首先，让我们谈谈 " + first_name_cn + "。} " + "##";
 
 
-            Console.WriteLine("In LeadInTopic, first_name_en " + first_name_en + " first_name_cn " + first_name_cn);
+            //Console.WriteLine("In LeadInTopic, first_name_en " + first_name_en + " first_name_cn " + first_name_cn);
 
             string last_name_en = last.Name;
             string last_name_cn = last.Name;
@@ -377,7 +377,7 @@ namespace Dialogue_Data_Entry
                 last_name_cn = last.Name.Split(new string[] { "##" }, StringSplitOptions.None)[1];
             }
 
-            Console.WriteLine("In LeadInTopic, last_name_en " + last_name_en + " last_name_cn " + last_name_cn);
+            //Console.WriteLine("In LeadInTopic, last_name_en " + last_name_en + " last_name_cn " + last_name_cn);
 
             //First is the current node (the one that has just been traversed to)
             //A set of possible lead-in statements.
@@ -420,7 +420,7 @@ namespace Dialogue_Data_Entry
                 string relationship_parent_en = last.getRelationshipParent(first.Id);
                 string relationship_parent_cn = last.getRelationshipParent(first.Id);
 
-                Console.WriteLine("In LeadInTopic, relationship_neighbor_en " + relationship_neighbor_en + " relationship_neighbor_cn " + relationship_neighbor_cn);
+                //Console.WriteLine("In LeadInTopic, relationship_neighbor_en " + relationship_neighbor_en + " relationship_neighbor_cn " + relationship_neighbor_cn);
 
                 if (relationship_neighbor_en.Contains("##"))
                 {
@@ -440,6 +440,7 @@ namespace Dialogue_Data_Entry
                     return_message = "{" + last_name_en + " " + relationship_neighbor_en + " "
                         + first_name_en + ".} " + "##" + "{" + last_name_cn + " " + relationship_neighbor_cn + " "
                         + first_name_cn + ".} " + "##";
+                    Console.WriteLine("Lead-in topic result: " + return_message);
                     return return_message;
                 }//end if
                 // If last is a child node of first (first is a parent of last)
@@ -449,6 +450,7 @@ namespace Dialogue_Data_Entry
                     return_message = "{" + last_name_en + " " + relationship_parent_en + " "
                         + first_name_en + ".} " + "##" + "{" + last_name_cn + " " + relationship_parent_cn + " "
                         + first_name_cn + ".} " + "##";
+                    Console.WriteLine("Lead-in topic result: " + return_message);
                     return return_message;
                 }//end else if
             }//end if
@@ -476,7 +478,7 @@ namespace Dialogue_Data_Entry
             }//end if
 
             //!FindSpeak(first).Contains<string>(first.Id)
-
+            Console.WriteLine("Lead-in topic result: " + return_message);
             return return_message;
         }//end function LeadInTopic
 
