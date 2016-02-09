@@ -13,8 +13,10 @@ namespace Dialogue_Data_Entry
     {
         private FeatureGraph feature_graph;     //The data structure holding every feature in the knowledge base.
         private Bot aiml_bot;                   //The AIML bot being used to help answer queries.
-        private User user;                 //A user to make requests of the AIML bot.
+        private User user;                      //A user to make requests of the AIML bot.
         private Feature topic;                  //The current topic of conversation.
+        private Feature background_topic;       //The background topic.
+            //The background topic guides the flow of conversation without being mentioned too often.
         private int turn;                       //A count of what turn of the conversation we are on.
         private List<Feature> topic_history;    //The history of topics in this conversation. Last item is always the topic.
 
@@ -44,6 +46,7 @@ namespace Dialogue_Data_Entry
 
             //Default initializations
             topic = null;
+            background_topic = null;
             turn = 1;
             topic_history = new List<Feature>();
             temporal_constraint_list = tcl;
@@ -684,6 +687,15 @@ namespace Dialogue_Data_Entry
         }//end method ChangeTopic
 
         /// <summary>
+        /// Sets the current background topic to the given background topic.
+        /// </summary>
+        public void SetBackgroundTopic(Feature next_background_topic)
+        {
+            Console.WriteLine("Setting background topic " + next_background_topic.Name);
+            background_topic = next_background_topic;
+        }//end method SetBackgroundTopic
+
+        /// <summary>
         /// Adds the given feature to the end of the topic history list and updates any relevant
         /// other information. Currently, updates spatial and temporal constraint information.
         /// </summary>
@@ -741,6 +753,22 @@ namespace Dialogue_Data_Entry
             set
             {
                 this.topic = value;
+            }//end set
+        }
+
+        /// <summary>
+        /// The feature which is currently the background topic of narration/conversation.
+        /// The background topic guides the flow of the conversation.
+        /// </summary>
+        public Feature BackgroundTopic
+        {
+            get
+            {
+                return this.background_topic;
+            }//end get
+            set
+            {
+                this.background_topic = value;
             }//end set
         }
 
