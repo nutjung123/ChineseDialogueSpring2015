@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='ASCII'?>
+<AIMind>
+  <Root id="11"/>
+  <Features>
+  	  <Feature id="0" data="EmptyNode">
+		<neighbors/>
+		<speak value=""/>
+	  </Feature>
+	  <Feature id="1" data="Professor Sherry Zhang">
+		<neighbors>
+		  <neighbor dest="2" weight="0" relationship="has TA"/>
+		  <neighbor dest="3" weight="0" relationship="has TA"/>
+		</neighbors>
+		<speak value="Professor Sherry Zhang teaches an introductory biology course at Brandeis University."/>
+	  </Feature>
+	  <Feature id="2" data="Daniel Sakowich">
+		<neighbors>
+		  <neighbor dest="1" weight="0" relationship="is a TA for"/>
+		  <neighbor dest="3" weight="0" relationship="TAs with"/>
+		  <neighbor dest="4" weight="0" relationship="works with"/>
+		  <neighbor dest="5" weight="0" relationship="is working on a presentation with"/>
+		  <neighbor dest="6" weight="0" relationship="is working on a presentation with"/>
+		  <neighbor dest="7" weight="0" relationship="was helped by"/>
+		</neighbors>
+		<speak value="Daniel Sakowich is an undergraduate at Brandeis University. He is a TA and holds office hours in the library, and works in a deli."/>
+	  </Feature>
+	  <Feature id="3" data="Ali Libowitz">
+		<neighbors>
+		  <neighbor dest="1" weight="0" relationship="is a TA for"/>
+		  <neighbor dest="2" weight="0" relationship="TAs with"/>
+		  <neighbor dest="4" weight="0" relationship="is best friends with"/>
+		  <neighbor dest="5" weight="0" relationship="is best friends with"/>
+		  <neighbor dest="6" weight="0" relationship="helps"/>
+		  <neighbor dest="7" weight="0" relationship="was helped by"/>
+		</neighbors>
+		<speak value="Ali Libowitz is a rugby player and a TA at Brandeis University. She holds office hours in the library."/>
+	  </Feature>
+	  <Feature id="4" data="Farrah Golshiri">
+		<neighbors>
+		  <neighbor dest="2" weight="0" relationship="works with"/>
+		  <neighbor dest="3" weight="0" relationship="is best friends with"/>
+		  <neighbor dest="5" weight="0" relationship="is best friends with"/>
+		  <neighbor dest="6" weight="0" relationship="was in a class with"/>
+		  <neighbor dest="7" weight="0" relationship="was in a class with"/>
+		</neighbors>
+		<speak value="Farrah Golshiri is an Islamic and Middle Eastern studies major. She has taken an anthropology class, and works in a deli."/>
+	  </Feature>
+	  <Feature id="5" data="Michaela Rashad">
+		<neighbors>
+		  <neighbor dest="2" weight="0" relationship="is working on a presentation with"/>
+		  <neighbor dest="3" weight="0" relationship="is best friends with"/>
+		  <neighbor dest="4" weight="0" relationship="is best friends with"/>
+		  <neighbor dest="6" weight="0" relationship="is working on a presentation with"/>
+		  <neighbor dest="7" weight="0" relationship="works with"/>
+		</neighbors>
+		<speak value="Michaela Rashad is a sophomore majoring in behavioral psychology."/>
+	  </Feature>
+	  <Feature id="6" data="Victoria DeLorenzo">
+		<neighbors>
+		  <neighbor dest="2" weight="0" relationship="is working on a presentation with"/>
+		  <neighbor dest="3" weight="0" relationship="gets help from"/>
+		  <neighbor dest="4" weight="0" relationship="was in a class with"/>
+		  <neighbor dest="5" weight="0" relationship="is working on a presentation with"/>
+		  <neighbor dest="7" weight="0" relationship="was in a class with"/>
+		</neighbors>
+		<speak value="Victoria DeLorenzo is an undergraduate at Brandeis University. She has taken an anthropology class."/>
+	  </Feature>
+	  <Feature id="7" data="Ross Bernstein">
+		<neighbors>
+		  <neighbor dest="2" weight="0" relationship="helped"/>
+		  <neighbor dest="3" weight="0" relationship="helped"/>
+		  <neighbor dest="4" weight="0" relationship="was in a class with"/>
+		  <neighbor dest="5" weight="0" relationship="works with"/>
+		  <neighbor dest="8" weight="0" relationship="lives with"/>
+		  <neighbor dest="6" weight="0" relationship="was in a class with"/>
+		  <neighbor dest="15" weight="0" relationship="is doing a study with"/>
+		</neighbors>
+		<speak value="Ross Bernstein is a history major who works at the reference desk in the Brandeis library. He lives in an apartment off-campus, and is doing an independent study on national security."/>
+	  </Feature>
+	  <Feature id="8" data="Jun-seo Sa">
+		<neighbors>
+		  <neighbor dest="7" weight="0" relationship="lives with"/>
+		  <neighbor dest="9" weight="0" relationship="is writing a thesis for"/>
+		  <neighbor dest="11" weight="0" relationship="took a class by"/>
+		</neighbors>
+		<speak value="Jun-seo Sa is an undergraduate student at Brandeis University living in an apartment off-campus."/>
+	  </Feature>
+	  <Feature id="9" data="Professor Kathy Howard">
+		<neighbors>
+		  <neighbor dest="8" weight="0" relationship="is advising the thesis for"/>
+		  <neighbor dest="10" weight="0" relationship="is advising the thesis for"/>
+		</neighbors>
+		<speak value="Professor Kathy Howard is a professor at Brandeis University."/>
+	  </Feature>
+	  <Feature id="10" data="Dawn Larson">
+		<neighbors>
+		  <neighbor dest="9" weight="0" relationship="is writing a thesis for"/>
+		  <neighbor dest="11" weight="0" relationship="is a TA for"/>
+		</neighbors>
+		<speak value="Dawn Larson is a graduate student in the politics department."/>
+	  </Feature>
+	  <Feature id="11" data="Dr. Steven Wilcox">
+		<neighbors>
+		  <neighbor dest="10" weight="0" relationship="has TA"/>
+		  <neighbor dest="12" weight="0" relationship="teaches a class to"/>
+		  <neighbor dest="13" weight="0" relationship="teaches a class to"/>
+		  <neighbor dest="14" weight="0" relationship="was advised by"/>
+		  <neighbor dest="15" weight="0" relationship="teaches with"/>
+		</neighbors>
+		<speak value="Dr. Steven Wilcox teaches Intro to IR at Brandeis University. He attended Brandeis before deciding to teach there."/>
+	  </Feature>
+	  <Feature id="12" data="Djenaba Gilkey">
+		<neighbors>
+		  <neighbor dest="11" weight="0" relationship="takes a class by"/>
+		  <neighbor dest="13" weight="0" relationship="lives with"/>
+		</neighbors>
+		<speak value="Djenaba Gilker is a freshman at Brandeis University living in the north quad."/>
+	  </Feature>
+	  <Feature id="13" data="Mary Hartman">
+		<neighbors>
+		  <neighbor dest="11" weight="0" relationship="takes a class by"/>
+		  <neighbor dest="12" weight="0" relationship="lives with"/>
+		</neighbors>
+		<speak value="Mary Hartman is a freshman at Brandeis University living in the north quad."/>
+	  </Feature>
+	  <Feature id="14" data="Dr. Eve Flanagan">
+		<neighbors>
+		  <neighbor dest="11" weight="0" relationship="advised"/>
+		</neighbors>
+		<speak value="Dr. Eve Flanagan was a professor at Brandeis who has long since retired."/>
+	  </Feature>
+	  <Feature id="15" data="Dr. Matteo Rodriguez">
+		<neighbors>
+		  <neighbor dest="7" weight="0" relationship="is doing a study with"/>
+		  <neighbor dest="11" weight="0" relationship="teaches with"/>
+		</neighbors>
+		<speak value="Dr. Matteo Rodriguez received his Ph.D from Brandeis before becoming part of the faculty."/>
+	  </Feature>
+  </Features>
+</AIMind>
+
+
