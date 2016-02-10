@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='ASCII'?>
+<AIMind>
+  <Root id="8"/>
+  <Features>
+	  <Feature id="0" data="EmptyNode">
+		<neighbors/>
+		<speak value=""/>
+	  </Feature>
+	  <Feature id="1" data="CPL John Hull">
+		<neighbors>
+		  <neighbor dest="2" weight="0" relationship="trained with"/>
+		  <neighbor dest="3" weight="0" relationship="trained with"/>
+		</neighbors>
+		<speak value="John Hull is a Corporal in the U.S. Army. He attended basic training at Fort Benning."/>
+	  </Feature>
+	  <Feature id="2" data="PFC Will Baker">
+		<neighbors>
+		  <neighbor dest="1" weight="0" relationship="trained with"/>
+		  <neighbor dest="3" weight="0" relationship="trained with"/>
+		  <neighbor dest="4" weight="0" relationship="is on a team with"/>
+		  <neighbor dest="5" weight="0" relationship="is lead by"/>
+		  <neighbor dest="6" weight="0" relationship="is known by"/>
+		</neighbors>
+		<speak value="Will Baker is a Private First Class in the U.S. Army and is on fire team Alpha."/>
+	  </Feature>
+	  <Feature id="3" data="PFC Michael Owen">
+		<neighbors>
+		  <neighbor dest="1" weight="0" relationship="trained with"/>
+		  <neighbor dest="2" weight="0" relationship="trained with"/>
+		  <neighbor dest="4" weight="0" relationship="is on a team with"/>
+		  <neighbor dest="5" weight="0" relationship="is lead by"/>
+		  <neighbor dest="6" weight="0" relationship="is known by"/>
+		</neighbors>
+		<speak value="Michael Owen is a Private First Class in the U.S. Army and is on fire team Alpha."/>
+	  </Feature>
+	  <Feature id="4" data="PV2 Ryan Casey">
+		<neighbors>
+		  <neighbor dest="2" weight="0" relationship="is on a team with"/>
+		  <neighbor dest="3" weight="0" relationship="is on a team with"/>
+		  <neighbor dest="5" weight="0" relationship="is lead by"/>
+		  <neighbor dest="6" weight="0" relationship="is known by"/>
+		</neighbors>
+		<speak value="Ryan Casey is a Private Second Class in the U.S. Army and is on fire team Alpha."/>
+	  </Feature>
+	  <Feature id="5" data="SGT Marcus Agosto">
+		<neighbors>
+		  <neighbor dest="2" weight="0" relationship="leads"/>
+		  <neighbor dest="3" weight="0" relationship="leads"/>
+		  <neighbor dest="4" weight="0" relationship="leads"/>
+		  <neighbor dest="6" weight="0" relationship="is known by"/>
+		  <neighbor dest="7" weight="0" relationship="is lead by"/>
+		</neighbors>
+		<speak value="Sergeant Marcus Agosto is the leader of fire team Alpha."/>
+	  </Feature>
+	  <Feature id="6" data="SGT Greg Moschella">
+		<neighbors>
+		  <neighbor dest="2" weight="0" relationship="knows"/>
+		  <neighbor dest="3" weight="0" relationship="knows"/>
+		  <neighbor dest="4" weight="0" relationship="knows"/>
+		  <neighbor dest="5" weight="0" relationship="knows"/>
+		  <neighbor dest="7" weight="0" relationship="is lead by"/>
+		</neighbors>
+		<speak value="Sergeant Greg Moschella is the leader of fire team Bravo."/>
+	  </Feature>
+	  <Feature id="7" data="SSG Nikolas Terranova">
+		<neighbors>
+		  <neighbor dest="5" weight="0" relationship="leads"/>
+		  <neighbor dest="6" weight="0" relationship="leads"/>
+		  <neighbor dest="8" weight="0" relationship="reports to"/>
+		  <neighbor dest="15" weight="0" relationship="deployed with"/>
+		</neighbors>
+		<speak value="Staff Sergeant Nikolas Terranova leads a squad including fire teams Alpha and Bravo."/>
+	  </Feature>
+	  <Feature id="8" data="2LT Ryan Ginsburg">
+		<neighbors>
+		  <neighbor dest="7" weight="0" relationship="is reported to by"/>
+		  <neighbor dest="9" weight="0" relationship="went to BOLC with"/>
+		  <neighbor dest="10" weight="0" relationship="deployed with"/>
+		  <neighbor dest="11" weight="0" relationship="deployed with"/>
+		</neighbors>
+		<speak value="Second Lieutenant Ryan Ginsburg was deployed to Mosul during Operation Iraqi Freedom."/>
+	  </Feature>
+	  <Feature id="9" data="2LT Sarah Perkins">
+		<neighbors>
+		  <neighbor dest="8" weight="0" relationship="went to BOLC with"/>
+		  <neighbor dest="10" weight="0" relationship="was stationed with"/>
+		</neighbors>
+		<speak value="Second Lieutenant Sarah Perkins was stationed at Fort Knox."/>
+	  </Feature>
+	  <Feature id="10" data="1LT Ashley Davidovitz">
+		<neighbors>
+		  <neighbor dest="8" weight="0" relationship="deployed with"/>
+		  <neighbor dest="9" weight="0" relationship="was stationed with"/>
+		  <neighbor dest="11" weight="0" relationship="deployed with"/>
+		</neighbors>
+		<speak value="First Lieutenant Ashley Davidovitz was stationed at Fort Knox and deployed in Mosul during Operation Iraqi Freedom."/>
+	  </Feature>
+	  <Feature id="11" data="CPT Ian Gomez">
+		<neighbors>
+		  <neighbor dest="8" weight="0" relationship="deployed with"/>
+		  <neighbor dest="10" weight="0" relationship="deployed with"/>
+		  <neighbor dest="12" weight="0" relationship="commanded company of"/>
+		  <neighbor dest="13" weight="0" relationship="commanded company of"/>
+		  <neighbor dest="14" weight="0" relationship="commanded company of"/>
+		  <neighbor dest="15" weight="0" relationship="commanded company of"/>
+		</neighbors>
+		<speak value="Captain Iam Gomez was deployed in Mosul during Operation Iraqi Freedom and has since been promoted."/>
+	  </Feature>
+	  <Feature id="12" data="LT Sean Gardel">
+		<neighbors>
+		  <neighbor dest="11" weight="0" relationship="lead platoon for"/>
+		  <neighbor dest="13" weight="0" relationship="graduated with"/>
+		</neighbors>
+		<speak value="Lieutenant Gardel graduated West Point."/>
+	  </Feature>
+	  <Feature id="13" data="LT Jamie Nolen">
+		<neighbors>
+		  <neighbor dest="11" weight="0" relationship="lead platoon for"/>
+		  <neighbor dest="12" weight="0" relationship="graduated with"/>
+		</neighbors>
+		<speak value="Lieutenant Jamie Nolen graduated West Point."/>
+	  </Feature>
+	  <Feature id="14" data="LT Terrell Williams">
+		<neighbors>
+		  <neighbor dest="11" weight="0" relationship="lead platoon for"/>
+		</neighbors>
+		<speak value="Lieutenant Terrell Williams has lead a platoon."/>
+	  </Feature>
+	  <Feature id="15" data="LT Mikhail Zharovsky">
+		<neighbors>
+		  <neighbor dest="7" weight="0" relationship="deployed with"/>
+		  <neighbor dest="11" weight="0" relationship="lead platoon for"/>
+		</neighbors>
+		<speak value="Lieutenant Mikhail Zharovsky was deployed in Afghanistan."/>
+	  </Feature>
+  </Features>
+</AIMind>
+
