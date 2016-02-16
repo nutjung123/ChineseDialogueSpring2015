@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='ASCII'?>
+<AIMind>
+  <Root id="11"/>
+  <Features>
+    <Feature id="0" data="EmptyNode">
+	  <neighbors/>
+	  <speak value=""/>
+    </Feature>
+    <Feature id="1" data="Chelsea Foster">
+	  <neighbors>
+	    <neighbor dest="2" weight="0" relationship="arrested by"/>
+	    <neighbor dest="3" weight="0" relationship="arrested by"/>
+	  </neighbors>
+	  <speak value="A young woman who was arrested for drug posession after she was pulled over for speeding and cocaine was discovered in her car."/>
+    </Feature>
+    <Feature id="2" data="Officer Ryan Cromwell">
+	  <neighbors>
+	    <neighbor dest="1" weight="0" relationship="arrested"/>
+	    <neighbor dest="3" weight="0" relationship="teammate of"/>
+	    <neighbor dest="4" weight="0" relationship="teammate of"/>
+	    <neighbor dest="5" weight="0" relationship="teammate of"/>
+	    <neighbor dest="6" weight="0" relationship="teammate of"/>
+	  </neighbors>
+	  <speak value="Ryan Cromwell is a member of the patrol team."/>
+    </Feature>
+    <Feature id="3" data="Officer Eric Dorfman">
+	  <neighbors>
+	    <neighbor dest="1" weight="0" relationship="arrested"/>
+	    <neighbor dest="2" weight="0" relationship="teammate of"/>
+	    <neighbor dest="4" weight="0" relationship="teammate of"/>
+	    <neighbor dest="5" weight="0" relationship="teammate of"/>
+	    <neighbor dest="6" weight="0" relationship="teammate of"/>
+	  </neighbors>
+	  <speak value="Eric Dorfman is a member of the patrol team."/>
+    </Feature>
+    <Feature id="4" data="Officer Luke Birkner">
+	  <neighbors>
+	    <neighbor dest="2" weight="0" relationship="teammate of"/>
+	    <neighbor dest="3" weight="0" relationship="teammate of"/>
+	    <neighbor dest="5" weight="0" relationship="teammate of"/>
+	    <neighbor dest="6" weight="0" relationship="teammate of"/>
+	  </neighbors>
+	  <speak value="Luke Birkner is a member of the patrol team."/>
+    </Feature>
+    <Feature id="5" data="Officer Sheena Morss">
+	  <neighbors>
+	    <neighbor dest="2" weight="0" relationship="teammate of"/>
+	    <neighbor dest="3" weight="0" relationship="teammate of"/>
+	    <neighbor dest="4" weight="0" relationship="teammate of"/>
+	    <neighbor dest="6" weight="0" relationship="teammate of"/>
+	  </neighbors>
+	  <speak value="Sheena Morss is a member of the patrol team."/>
+    </Feature>
+    <Feature id="6" data="Officer Jeffrey Nowak">
+	  <neighbors>
+	    <neighbor dest="2" weight="0" relationship="teammate of"/>
+	    <neighbor dest="3" weight="0" relationship="teammate of"/>
+	    <neighbor dest="4" weight="0" relationship="teammate of"/>
+	    <neighbor dest="5" weight="0" relationship="teammate of"/>
+	  </neighbors>
+	  <speak value="Jeffrey Nowak is a member of the patrol team."/>
+    </Feature>
+    <Feature id="7" data="Lieutenant Jarett Gardel">
+	  <neighbors>
+	    <neighbor dest="8" weight="0" relationship="works closely with"/>
+	    <neighbor dest="15" weight="0" relationship="used to work with"/>
+	  </neighbors>
+	  <speak value="Lieutenant Jarett Gardel is in charge of the patrol division"/>
+    </Feature>
+    <Feature id="8" data="Chief Martin Reinhart">
+	  <neighbors>
+	    <neighbor dest="9" weight="0" relationship="reports to"/>
+	    <neighbor dest="11" weight="0" relationship="works closely with"/>
+	    <neighbor dest="7" weight="0" relationship="works closely with"/>
+	  </neighbors>
+	  <speak value="Martin Reinhart is the Chief of Police in a rural Georgia suburb."/>
+    </Feature>
+    <Feature id="9" data="Mayor Anne Goodwin">
+	  <neighbors>
+	    <neighbor dest="8" weight="0" relationship="receives reports from"/>
+	    <neighbor dest="10" weight="0" relationship="cousin of"/>
+	  </neighbors>
+	  <speak value="Anne Goodwin is the mayor of the town."/>
+    </Feature>
+    <Feature id="10" data="Detective Peter Washek">
+	  <neighbors>
+	    <neighbor dest="9" weight="0" relationship="cousin of"/>
+	    <neighbor dest="11" weight="0" relationship="works under"/>
+	    <neighbor dest="12" weight="0" relationship="has yet to meet "/>
+	    <neighbor dest="13" weight="0" relationship="has yet to meet "/>
+	  </neighbors>
+	  <speak value="Peter Washek is Mayor Goodwin’s cousin and is the newest detective in Lieutenant Nolen’s division."/>
+    </Feature>
+    <Feature id="11" data="Lieutenant Ethan Nolen">
+	  <neighbors>
+	    <neighbor dest="8" weight="0" relationship="works closely with"/>
+	    <neighbor dest="10" weight="0" relationship="is in charge of"/>
+	    <neighbor dest="12" weight="0" relationship="is in charge of"/>
+	    <neighbor dest="13" weight="0" relationship="is in charge of"/>
+	    <neighbor dest="14" weight="0" relationship="is assisted by"/>
+	    <neighbor dest="15" weight="0" relationship="used to be in charge of"/>
+	  </neighbors>
+	  <speak value="Lieutenant Ethan Nolen is in charge of the investigative division."/>
+    </Feature>
+    <Feature id="12" data="Detective Meaghan Tiberii">
+	  <neighbors>
+	    <neighbor dest="10" weight="0" relationship="has yet to meet "/>
+	    <neighbor dest="11" weight="0" relationship="works under"/>
+	    <neighbor dest="13" weight="0" relationship="partner of"/>
+	  </neighbors>
+	  <speak value="Meaghan Tiberii is one of the unit’s lead detectives."/>
+    </Feature>
+    <Feature id="13" data="Detective Bryce Zieff">
+	  <neighbors>
+	    <neighbor dest="10" weight="0" relationship="has yet to meet "/>
+	    <neighbor dest="11" weight="0" relationship="works under"/>
+	    <neighbor dest="12" weight="0" relationship="partner of"/>
+	  </neighbors>
+	  <speak value="Bryce Zieff is one of the unit’s lead detectives."/>
+    </Feature>
+    <Feature id="14" data="Audrey Lee">
+	  <neighbors>
+	    <neighbor dest="11" weight="0" relationship="administrative assistant of"/>
+	  </neighbors>
+	  <speak value="Audrey Lee works as Lieutenant Nolen’s administrative assistant."/>
+    </Feature>
+    <Feature id="15" data="Officer Amanda Dosamu">
+	  <neighbors>
+	    <neighbor dest="11" weight="0" relationship="works under"/>
+	    <neighbor dest="7" weight="0" relationship="worked under"/>
+	  </neighbors>
+	  <speak value="Amanda Dosamu used to be the local DARE officer and worked under Lieutenant Gardel; however, she recently transferred to Lieutenant Nolen’s division where she works as a juvenile officer"/>
+    </Feature>
+  </Features>
+</AIMind>

@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='ASCII'?>
+<AIMind>
+  <Root id="1"/>
+  <Features>
+    <Feature id="0" data="EmptyNode">
+	  <neighbors/>
+	  <speak value=""/>
+    </Feature>
+    <Feature id="1" data="Julian Vespucci">
+      <neighbors>
+        <neighbor dest="2" weight="0" relationship="relies on"/>
+        <neighbor dest="3" weight="0" relationship="relies on"/>
+        <neighbor dest="7" weight="0" relationship="covertly advocated by"/>
+      </neighbors>
+	  <speak value="Julian Vespucci runs a powerful crime syndicate in Providence."/>
+    </Feature>
+    <Feature id="2" data="Emmett Alesi">
+      <neighbors>
+        <neighbor dest="1" weight="0" relationship="right-hand man of"/>
+        <neighbor dest="3" weight="0" relationship="works with"/>
+        <neighbor dest="6" weight="0" relationship="frequently serviced by"/>
+        <neighbor dest="7" weight="0" relationship="hand-picked"/>
+      </neighbors>
+	  <speak value="Emmett Alesi serves as Julian Vespucci's go-between with the syndicate’s other members."/>
+    </Feature>
+    <Feature id="3" data="Tim Piro">
+      <neighbors>
+        <neighbor dest="1" weight="0" relationship="right-hand man of"/>
+        <neighbor dest="2" weight="0" relationship="works with"/>
+        <neighbor dest="6" weight="0" relationship="frequently serviced by"/>
+        <neighbor dest="7" weight="0" relationship="hand-picked"/>
+      </neighbors>
+	  <speak value="Tim Piro serves as Julian Vespucci's go-between with the syndicate’s other members."/>
+    </Feature>
+    <Feature id="4" data="Stephen Balme">
+      <neighbors>
+        <neighbor dest="5" weight="0" relationship="brother of"/>
+        <neighbor dest="7" weight="0" relationship="contributes to the campaign funds for"/>
+      </neighbors>
+	  <speak value="Stephen Balme helps finance the syndicate by laundering money through a variety of local businesses."/>
+    </Feature>
+    <Feature id="5" data="Dean Balme">
+      <neighbors>
+        <neighbor dest="4" weight="0" relationship="brother of"/>
+        <neighbor dest="7" weight="0" relationship="contributes to the campaign funds for"/>
+      </neighbors>
+	  <speak value="Dean Balme helps finance the syndicate by laundering money through a variety of local businesses."/>
+    </Feature>
+    <Feature id="6" data="Emile Marin">
+      <neighbors>
+        <neighbor dest="2" weight="0" relationship="frequently services"/>
+        <neighbor dest="3" weight="0" relationship="frequently services"/>
+        <neighbor dest="7" weight="0" relationship="contributes to the campaign funds for"/>
+      </neighbors>
+	  <speak value="Emile Marin runs a travel agency which is actually a front for a brothel."/>
+    </Feature>
+    <Feature id="7" data="Councilman Francis Petracca">
+      <neighbors>
+        <neighbor dest="1" weight="0" relationship="covertly advocates for the political interests in city affairs of"/>
+        <neighbor dest="2" weight="0" relationship="hand-picked by"/>
+        <neighbor dest="3" weight="0" relationship="hand-picked by"/>
+        <neighbor dest="4" weight="0" relationship="receives campaign funds from"/>
+        <neighbor dest="5" weight="0" relationship="receives campaign funds from"/>
+        <neighbor dest="6" weight="0" relationship="receives campaign funds from"/>
+        <neighbor dest="15" weight="0" relationship="was witnessed by"/>
+      </neighbors>
+	  <speak value="Francis Petracca is a local councilman hand-picked by Alesi and Piro to covertly advocate for Vespucci’s political interests in city affairs."/>
+    </Feature>
+    <Feature id="8" data="Norman Bibbo">
+      <neighbors>
+        <neighbor dest="9" weight="0" relationship="receives proceeds from"/>
+        <neighbor dest="11" weight="0" relationship="receives weapons from"/>
+        <neighbor dest="7" weight="0" relationship="personal assistant of"/>
+      </neighbors>
+	  <speak value="Norman Bibbo is Councilman Petracca’s personal assistant."/>
+    </Feature>
+    <Feature id="9" data="Paul Merriman">
+      <neighbors>
+        <neighbor dest="8" weight="0" relationship="delivers proceeds to"/>
+        <neighbor dest="10" weight="0" relationship="supplies drugs to"/>
+      </neighbors>
+	  <speak value="Paul Merriman, who served time in the ‘90s for drug possession, manufactures methamphetamine for the syndicate in a suburb just outside of the city limits."/>
+    </Feature>
+    <Feature id="10" data="Bastion Willis">
+      <neighbors>
+        <neighbor dest="9" weight="0" relationship="deals drugs for"/>
+        <neighbor dest="11" weight="0" relationship="sells drugs to"/>
+      </neighbors>
+	  <speak value="Bastion Willis deals methamphetamine in and around the city."/>
+    </Feature>
+    <Feature id="11" data="Clive Mooney">
+      <neighbors>
+        <neighbor dest="8" weight="0" relationship="delivers weapons to"/>
+        <neighbor dest="10" weight="0" relationship="buys drugs from"/>
+        <neighbor dest="12" weight="0" relationship="receives his gun shipments from"/>
+        <neighbor dest="13" weight="0" relationship="receives his gun shipments from"/>
+        <neighbor dest="14" weight="0" relationship="deals mostly to"/>
+        <neighbor dest="15" weight="0" relationship="was hired to kill"/>
+      </neighbors>
+	  <speak value="Clive Mooney is an arms dealer who also indirectly works for the syndicate and delivers weapons to Bibbo. In addition to arms dealing, Mooney is also sometimes contracted by the syndicate to carry out the ‘wetwork’ in extreme circumstances."/>
+    </Feature>
+    <Feature id="12" data="Greg Toombs">
+      <neighbors>
+        <neighbor dest="11" weight="0" relationship="ships guns to"/>
+      </neighbors>
+	  <speak value="Greg Toombs ships guns to Clive Mooney."/>
+    </Feature>
+    <Feature id="13" data="Kyle Lenox">
+      <neighbors>
+        <neighbor dest="11" weight="0" relationship="ships guns to"/>
+      </neighbors>
+	  <speak value="Kyle Lenox ships guns to Clive Mooney."/>
+    </Feature>
+    <Feature id="14" data="Joe Hackett">
+      <neighbors>
+        <neighbor dest="11" weight="0" relationship="buys arms from"/>
+      </neighbors>
+	  <speak value="Joe Hackett lives in Boston and buys arms from Mooney."/>
+    </Feature>
+    <Feature id="15" data="Raphael Melendez">
+      <neighbors>
+        <neighbor dest="11" weight="0" relationship="killed by"/>
+        <neighbor dest="7" weight="0" relationship="witnessed the bribery of"/>
+      </neighbors>
+	  <speak value="Raphael Melendez is a car salesman who witnessed Councilman Petracca receiving a bribe and was killed for it."/>
+    </Feature>
+  </Features>
+</AIMind>
