@@ -423,7 +423,7 @@ namespace Dialogue_Data_Entry
             //From the history list, determine what the previous directional relationship was.
             string previous_directional_relationship = "";
 
-            if (topic_history.Count() > 0)
+            if (topic_history.Count() > 1)
             {
                 //The current topic is always at the end of the history list.
                 Feature current_topic = topic_history[topic_history.Count() - 1];
