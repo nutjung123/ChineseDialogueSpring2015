@@ -17,6 +17,10 @@ namespace Dialogue_Data_Entry
         private Feature topic;                  //The current topic of conversation.
         private Feature background_topic;       //The background topic.
             //The background topic guides the flow of conversation without being mentioned too often.
+        private List<Feature> background_targets;
+            //A list of features that we wish to touch upon at regular intervals.
+        private int target_interval = 5;        //Every 5 turns of conversation, we should reach a background target.
+
         private int turn;                       //A count of what turn of the conversation we are on.
         private List<Feature> topic_history;    //The history of topics in this conversation. Last item is always the topic.
 
@@ -693,6 +697,12 @@ namespace Dialogue_Data_Entry
         {
             Console.WriteLine("Setting background topic " + next_background_topic.Name);
             background_topic = next_background_topic;
+            //Clear the target list, and add all the new background topic's neighbors to the list.
+            background_targets.Clear();
+            foreach (Tuple<Feature, double, string> temp_neighbor in background_topic.Neighbors)
+            {
+                background_targets.Add(temp_neighbor.Item1);
+            }//end foreach
         }//end method SetBackgroundTopic
 
         /// <summary>
