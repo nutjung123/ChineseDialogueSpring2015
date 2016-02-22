@@ -539,6 +539,7 @@ namespace Dialogue_Data_Entry
                 // Sets the background topic in the narration manager to the given feature, by either name or ID.
                 else if (split_input[0].Equals("BACKGROUND_TOPIC"))
                 {
+                    Console.WriteLine("In background topic command handler");
                     Feature new_background_topic = null;
 
                     String string_topic = split_input[1];
@@ -558,10 +559,12 @@ namespace Dialogue_Data_Entry
                     if (new_background_topic == null)
                     {
                         Console.WriteLine("No topic found");
+                        return_string = "No topic found, set background topic failed.";
                     }//end if
                     else
                     {
                         narration_manager.SetBackgroundTopic(new_background_topic);
+                        return_string = "Background topic set to: " + new_background_topic.Name;
                     }//end else
                 }//end else if
 

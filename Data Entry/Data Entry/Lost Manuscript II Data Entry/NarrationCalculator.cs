@@ -32,6 +32,9 @@ namespace Dialogue_Data_Entry
 
         private List<TemporalConstraint> temporal_constraint_list;  //The list for temporal constraint checking. Does not change after init.
 
+        private Feature background_topic;   //The background topic of conversation.
+        //private int maximum_background_distance; //The max distance any node can be from the background topic.
+
         //FILTERING:
         //A list of nodes to filter out of mention.
         //Nodes in this list won't be spoken explicitly unless they
@@ -59,6 +62,8 @@ namespace Dialogue_Data_Entry
                     tcl[x].FourthArgument, tcl[x].FifthArgument));
             }//end for
             //Default initializations
+            background_topic = null;
+            //maximum_background_distance = 0;
             expected_dramatic_value = new double[20] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
             SetFilterNodes();
         }//end constructor NarrationCalculator
@@ -277,6 +282,7 @@ namespace Dialogue_Data_Entry
             double spatialConstraintW = weight_array[Constant.SpatialWeightIndex] * 10;
             double hierachyConstraintW = weight_array[Constant.HierarchyWeightIndex];
             double temporalConstraintW = weight_array[Constant.TemporalWeightIndex];
+            double backgroundW = weight_array[Constant.BackgroundWeightIndex];
 
             // novelty
 
@@ -307,11 +313,15 @@ namespace Dialogue_Data_Entry
             //check mentionCount
             float DiscussedAmount = current_feature.DiscussedAmount;
 
+            //Background score
+            double background_score = BackgroundScore(current_feature);
+
             score += (DiscussedAmount * discussAmountW);
             score += (Math.Abs(expected_dramatic_value[turn_count % expected_dramatic_value.Count()] - noveltyValue) * noveltyW);
             score += spatialConstraintValue * spatialConstraintW;
             score += (hierachyConstraintValue * hierachyConstraintW);
             score += (temporalConstraintValue * temporalConstraintW);
+            score += (background_score * backgroundW);
 
             //If this is a filter node, or the same node as the focus node, artificially set its score low
             if (filter_nodes.Contains(current_feature.Name.Split(new string[] { "##" }, StringSplitOptions.None)[0])
@@ -410,6 +420,14 @@ namespace Dialogue_Data_Entry
             }//end if
             return noveltyValue;
         }//end function CalculateNovelty
+
+        public void SetBackgroundTopic(Feature bt)
+        {
+            background_topic = bt;
+            if (background_topic != null)
+            {
+            }//end if
+        }//end method SetBackgroundTopic
 
         /// <summary>
         /// Determines whether or not the spatial constraint is met between the two given features
@@ -605,6 +623,23 @@ namespace Dialogue_Data_Entry
             }//end for
             return indexList;
         }//end function temporalConstraint
+
+        //Returns how much the given feature relates to the background topic.
+        //Currently decides value by score from 1.0 to 0.0, with 1.0 being
+        //the background topic itself. The score decays the farther the node
+        //is from the background topic, as scaled by the maximum distance that
+        //any node can be from any other node in the graph.
+        private double BackgroundScore(Feature comparison_feature)
+        {
+            //If there is no background topic, then the score is always 0.
+            if (background_topic == null)
+                return 0;
+            // distance
+            double dist = comparison_feature.ShortestDistance[feature_graph.getFeatureIndex(background_topic.Id)] / feature_graph.MaxDistance;
+            double background_score = 1.0d - dist;
+
+            return background_score;
+        }//end method BackgroundScore
 
         //Using DFS, calculate the score between the previous_feature and every other feature,
         //starting from current_feature.

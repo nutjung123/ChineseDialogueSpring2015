@@ -20,6 +20,8 @@ namespace Dialogue_Data_Entry
         private List<Feature> background_targets;
             //A list of features that we wish to touch upon at regular intervals.
         private int target_interval = 5;        //Every 5 turns of conversation, we should reach a background target.
+        private int target_counter = 0;
+        private bool following_path = true;
 
         private int turn;                       //A count of what turn of the conversation we are on.
         private List<Feature> topic_history;    //The history of topics in this conversation. Last item is always the topic.
@@ -53,6 +55,7 @@ namespace Dialogue_Data_Entry
             background_topic = null;
             turn = 1;
             topic_history = new List<Feature>();
+            background_targets = new List<Feature>();
             temporal_constraint_list = tcl;
             calculator = new NarrationCalculator(feature_graph, tcl);
 
@@ -171,6 +174,14 @@ namespace Dialogue_Data_Entry
 
             return return_string;
         }//end method TalkMoreAboutTopic
+
+        //Returns the highest scoring path between two topics
+        private List<Feature> FindPath(Feature source_topic, Feature target_topic, int path_length)
+        {
+            List<Feature> return_list = new List<Feature>();
+
+            return return_list;
+        }//end method FindPath
 
         public List<Feature> ForwardProjection(Feature currentTopic, int forwardTurn)
         {
@@ -697,6 +708,8 @@ namespace Dialogue_Data_Entry
         {
             Console.WriteLine("Setting background topic " + next_background_topic.Name);
             background_topic = next_background_topic;
+            //Pass the background topic to the calculator
+            calculator.SetBackgroundTopic(background_topic);
             //Clear the target list, and add all the new background topic's neighbors to the list.
             background_targets.Clear();
             foreach (Tuple<Feature, double, string> temp_neighbor in background_topic.Neighbors)
