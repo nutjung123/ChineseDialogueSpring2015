@@ -567,6 +567,18 @@ namespace Dialogue_Data_Entry
                         return_string = "Background topic set to: " + new_background_topic.Name;
                     }//end else
                 }//end else if
+                //DUAL_PATH command
+                else if (split_input[0].Equals("DUAL_PATH"))
+                {
+                    //The ids for the start and end nodes of both paths.
+                    int start_node = 0; //2008 summer olympics
+                    int end_node = 106; //Michael Phelps
+                    //The ids for the nodes that must be visited on the first path.
+                    int[] path_nodes_1 = { 3, 30, 5 }; // , Beijing National Aquatics Center, 
+                    int[] path_nodes_2 = { 1, 5, 6 }; //Aquatics, 
+                    //Return string should be the entire story generated
+                }//end else if
+
 
             return return_string;
         }//end function CommandResponse
