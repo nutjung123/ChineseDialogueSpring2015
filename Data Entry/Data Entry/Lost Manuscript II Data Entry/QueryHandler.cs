@@ -573,10 +573,112 @@ namespace Dialogue_Data_Entry
                     //The ids for the start and end nodes of both paths.
                     int start_node = 0; //2008 summer olympics
                     int end_node = 106; //Michael Phelps
+                    //int end_node = 114; //(Swimming) Men's 4x100 m Freestyle Relay
+
+                    //Both paths have a set of nodes that must be visited on the path.
                     //The ids for the nodes that must be visited on the first path.
-                    int[] path_nodes_1 = { 3, 30, 5 }; // , Beijing National Aquatics Center, 
-                    int[] path_nodes_2 = { 1, 5, 6 }; //Aquatics, 
-                    //Return string should be the entire story generated
+                    List<int> path_nodes_1 = new List<int> { 30 }; // Beijing National Aquatics Center 
+                    //The ids for the nodes that must be visited on the second path.
+                    List<int> path_nodes_2 = new List<int> { 212 }; //Natasha Hastings 
+                    //List<int> path_nodes_2 = new List<int> { 1 };   //Aquatics
+
+                    //Add the end node to both paths
+                    path_nodes_1.Add(end_node);
+                    path_nodes_2.Add(end_node);
+
+                    //Both paths also have a set of nodes that trigger a switch.
+                    //The story begins by following the first path, going towards its path nodes. When the first switch node
+                    //  on the first path is visited, the story starts following the second path. When the first switch node
+                    //  on the second path is visited, the story starts following the first path again. If either path
+                    //  finishes before the other, the story automatically switches to the other path and follows to completion.
+                    //The ids for the nodes where switching to the other path occurs for the first path.
+                    List<int> switch_nodes_1 = new List<int> { 30 }; //Beijing National Aquatics Center
+                    //The ids for the nodes where switching to the other path occurs for the second path.
+                    List<int> switch_nodes_2 = new List<int> { 212 }; //Aquatics
+
+                    //Each path has their own narration manager
+                    NarrationManager path_manager_1 = new NarrationManager(graph, temporalConstraintList);
+                    NarrationManager path_manager_2 = new NarrationManager(graph, temporalConstraintList);
+
+                    path_manager_1.SetBackgroundTopic(start_node);
+                    path_manager_1.SetBackgroundTargets(path_nodes_1);
+                    path_manager_2.SetBackgroundTopic(start_node);
+                    path_manager_2.SetBackgroundTargets(path_nodes_2);
+
+                    bool path_finished_1 = false;
+                    bool path_finished_2 = false;
+
+                    return_string = "START PATH 1 \n";
+
+                    bool follow_path_1 = true;
+                    bool follow_path_2 = false;
+
+                    while (!path_finished_1 || !path_finished_2)
+                    {
+                        //TEST: Include switch points
+                        if (follow_path_1)
+                        {
+                            return_string += " " + path_manager_1.DefaultNextTopicResponse() + "\n";
+                            path_manager_1.Turn += 1;
+                            //Check for last topic
+                            if (path_manager_1.Topic.Id == end_node)
+                            {
+                                //If so, signal that path 1 is finished.
+                                path_finished_1 = true;
+                                return_string += "PATH 1 FINISHED \n";
+                                //If path 2 is not finished, switch to it
+                                if (!path_finished_2)
+                                {
+                                    follow_path_1 = false;
+                                    follow_path_2 = true;
+                                    return_string += "SWITCH TO PATH 2 \n";
+                                }//end if
+                            }//end if
+                            //Check for switch point
+                            if (switch_nodes_1.Count > 0)
+                                if (path_manager_1.Topic.Id == switch_nodes_1[0])
+                                {
+                                    //Pop the first member of the switch nodes list
+                                    switch_nodes_1.RemoveAt(0);
+                                    //Switch to the other path
+                                    follow_path_1 = false;
+                                    follow_path_2 = true;
+                                    return_string += "SWITCH TO PATH 2 \n";
+                                }//end if
+                        }//end if
+                        else if (follow_path_2)
+                        {
+                            return_string += " " + path_manager_2.DefaultNextTopicResponse() + "\n";
+                            path_manager_2.Turn += 1;
+                            //Check for last topic
+                            if (path_manager_2.Topic.Id == end_node)
+                            {
+                                //If so, signal that path 2 is finished.
+                                path_finished_2 = true;
+                                return_string += "PATH 2 FINISHED \n";
+                                //If path 1 is not finished, switch to it
+                                if (!path_finished_1)
+                                {
+                                    follow_path_2 = false;
+                                    follow_path_1 = true;
+                                    return_string += "SWITCH TO PATH 1 \n";
+                                }//end if
+                            }//end if
+                            //Check for switch point
+                            if (switch_nodes_2.Count > 0)
+                                if (path_manager_2.Topic.Id == switch_nodes_2[0])
+                                {
+                                    //Pop the first member of the switch nodes list
+                                    switch_nodes_2.RemoveAt(0);
+                                    //Switch to the other path
+                                    follow_path_2 = false;
+                                    follow_path_1 = true;
+                                    return_string += "SWITCH TO PATH 1 \n";
+                                }//end if
+                        }//end else if
+                    }//end while
+
+                    //Return string should be the entire generated story
                 }//end else if
 
 

@@ -685,6 +685,13 @@ namespace Dialogue_Data_Entry
             //Set the topic in the AIML chatbot
             string temp = TellChatBot("SETTOPIC " + this.topic.Name.Split(new string[] { "##" }, StringSplitOptions.None)[0]);
             //string temp = TellChatBot("SETTOPIC");
+            //Check if this topic is the background topic.
+            if (background_topic != null)
+                if (next_topic.Id.Equals(background_topic.Id))
+                {
+                    //If so, try to step to the next target
+                    NextTarget();
+                }//end if
         }//end method ChangeTopic
         /// <summary>
         /// Sets the current topic feature to the given topic feature, incrementing the next topic's
@@ -710,13 +717,37 @@ namespace Dialogue_Data_Entry
             background_topic = next_background_topic;
             //Pass the background topic to the calculator
             calculator.SetBackgroundTopic(background_topic);
-            //Clear the target list, and add all the new background topic's neighbors to the list.
-            background_targets.Clear();
-            foreach (Tuple<Feature, double, string> temp_neighbor in background_topic.Neighbors)
-            {
-                background_targets.Add(temp_neighbor.Item1);
-            }//end foreach
         }//end method SetBackgroundTopic
+        public void SetBackgroundTopic(int next_background_topic_id)
+        {
+            SetBackgroundTopic(feature_graph.getFeature(next_background_topic_id));
+        }//end method SetBackgroundTopic
+        
+        //Sets background targets by their ids
+        public void SetBackgroundTargets(List<int> background_target_ids)
+        {
+            background_targets.Clear();
+            //Go through each background target id
+            foreach(int target_id in background_target_ids)
+            {
+                //Get the feature matching this id.
+                Feature temp_feature = feature_graph.getFeature(target_id);
+                //Add it to the list of background targets
+                background_targets.Add(temp_feature);
+            }//end for
+        }//end method SetBackgroundTargets
+
+        //Starts pursuing the next target in the background targets list by setting it as the background topic.
+        public void NextTarget()
+        {
+            if (background_targets.Count > 0)
+            {
+                //Set the first item in the background targets list as the background topic.
+                SetBackgroundTopic(background_targets[0]);
+                //Remove the first item from the background targets list.
+                background_targets.RemoveAt(0);
+            }//end if
+        }//end method StartPath
 
         /// <summary>
         /// Adds the given feature to the end of the topic history list and updates any relevant
