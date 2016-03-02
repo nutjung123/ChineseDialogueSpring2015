@@ -579,7 +579,7 @@ namespace Dialogue_Data_Entry
                     //The ids for the nodes that must be visited on the first path.
                     List<int> path_nodes_1 = new List<int> { 30 }; // Beijing National Aquatics Center 
                     //The ids for the nodes that must be visited on the second path.
-                    List<int> path_nodes_2 = new List<int> { 212 }; //Natasha Hastings 
+                    List<int> path_nodes_2 = new List<int> { 1 }; //Natasha Hastings 
                     //List<int> path_nodes_2 = new List<int> { 1 };   //Aquatics
 
                     //Add the end node to both paths
@@ -594,16 +594,36 @@ namespace Dialogue_Data_Entry
                     //The ids for the nodes where switching to the other path occurs for the first path.
                     List<int> switch_nodes_1 = new List<int> { 30 }; //Beijing National Aquatics Center
                     //The ids for the nodes where switching to the other path occurs for the second path.
-                    List<int> switch_nodes_2 = new List<int> { 212 }; //Aquatics
+                    List<int> switch_nodes_2 = new List<int> { 1 }; //Aquatics
 
                     //Each path has their own narration manager
+                    FeatureGraph temp_graph_1 = ObjectCopier.Clone<FeatureGraph>(graph);
+                    FeatureGraph temp_graph_2 = ObjectCopier.Clone<FeatureGraph>(graph);
+                    //NarrationManager path_manager_1 = new NarrationManager(temp_graph_1, temporalConstraintList);
+                    //NarrationManager path_manager_2 = new NarrationManager(temp_graph_2, temporalConstraintList);
                     NarrationManager path_manager_1 = new NarrationManager(graph, temporalConstraintList);
                     NarrationManager path_manager_2 = new NarrationManager(graph, temporalConstraintList);
 
+                    //Set each path manager's initial target, path nodes, and forbidden targets.
                     path_manager_1.SetBackgroundTopic(start_node);
                     path_manager_1.SetBackgroundTargets(path_nodes_1);
+                    foreach (int temp_index in path_nodes_2)
+                    {
+                        //Make sure the first path doesn't go over path nodes in the second path
+                        //UNLESS they are also path nodes in the first path
+                        if (!path_nodes_1.Contains(temp_index))
+                            path_manager_1.AddForbiddenTopic(graph.getFeature(temp_index));
+                    }//end foreach
+
                     path_manager_2.SetBackgroundTopic(start_node);
                     path_manager_2.SetBackgroundTargets(path_nodes_2);
+                    foreach (int temp_index in path_nodes_1)
+                    {
+                        //Make sure the second path doesn't go over path nodes in the first path
+                        //UNLESS they are also path nodes in the second path
+                        if (!path_nodes_2.Contains(temp_index))
+                            path_manager_2.AddForbiddenTopic(graph.getFeature(temp_index));
+                    }//end foreach
 
                     bool path_finished_1 = false;
                     bool path_finished_2 = false;

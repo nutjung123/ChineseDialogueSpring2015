@@ -6,6 +6,7 @@ using System.Diagnostics;
 
 namespace Dialogue_Data_Entry
 {
+    [Serializable()]
     public class FeatureGraph
     {
         private List<Feature> features;
@@ -40,7 +41,7 @@ namespace Dialogue_Data_Entry
             weight_array[Constant.HierarchyWeightIndex] = 100.0;
             weight_array[Constant.TemporalWeightIndex] = 0.2;
             //Background weight relates to mentioning topics close to a background topic.
-            weight_array[Constant.BackgroundWeightIndex] = 1.0f;
+            weight_array[Constant.BackgroundWeightIndex] = 250.0f;
         }
 
         private void helperMaxDepthDSF(Feature current, int depth, bool[] checkEntry)
@@ -191,6 +192,11 @@ namespace Dialogue_Data_Entry
                 {
                     int ind = this.getFeatureIndex(this.Features[x].Parents[y].Item1.Id);
                     double dist = this.Features[x].Parents[y].Item2;
+                    //if dist = 0, set it to 1. This is because the default weight of edge used to be 0.
+                    if (dist == 0)
+                    {
+                        dist = 1;
+                    }
                     this.Features[x].ShortestDistance[ind] = dist;
                 }
             }

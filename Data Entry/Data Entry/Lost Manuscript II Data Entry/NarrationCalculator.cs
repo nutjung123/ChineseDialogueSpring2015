@@ -32,6 +32,9 @@ namespace Dialogue_Data_Entry
 
         private List<TemporalConstraint> temporal_constraint_list;  //The list for temporal constraint checking. Does not change after init.
 
+        private List<Feature> path_constraint_list; //The list of nodes in the conversation path in the order they must be visited.
+        public int path_counter;
+
         private Feature background_topic;   //The background topic of conversation.
         //private int maximum_background_distance; //The max distance any node can be from the background topic.
 
@@ -65,6 +68,10 @@ namespace Dialogue_Data_Entry
             background_topic = null;
             //maximum_background_distance = 0;
             expected_dramatic_value = new double[20] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
+
+            path_constraint_list = new List<Feature>();
+            path_counter = 1;
+            
             SetFilterNodes();
         }//end constructor NarrationCalculator
         private void SetFilterNodes()
@@ -140,8 +147,15 @@ namespace Dialogue_Data_Entry
                 int maxIndex = 0;
                 for (int x = 1; x < listScore.Count; x++)
                 {
+                    //DEBUG
+                    if (previous_topic.Id == 30 && listScore[x].Item1.Id == 106)
+                    {
+                        Console.Out.WriteLine("asdas?");
+                    }//end if
                     if (listScore[x].Item2 > maxScore)
                     {
+
+
                         //FILTERING:
                         //If the item in this list is one of the filter nodes,
                         //do not include it in max score determination.
@@ -150,6 +164,15 @@ namespace Dialogue_Data_Entry
                         {
                             //If it is a filter node, take another step.
                             Console.WriteLine("Filtering out " + listScore[x].Item1.Id);
+                            continue;
+                        }//end if
+                        
+                        //PATH CONSTRAINT:
+                        //If the item is on the path constraint list, then we are following
+                        //a path and it is not yet its turn to be visited.
+                        if (path_constraint_list.Contains(listScore[x].Item1))
+                        {
+                            Console.WriteLine("Skipping path node " + listScore[x].Item1.Id);
                             continue;
                         }//end if
 
@@ -192,6 +215,7 @@ namespace Dialogue_Data_Entry
             double spatialConstraintW = weight_array[Constant.SpatialWeightIndex];
             double hierachyConstraintW = weight_array[Constant.HierarchyWeightIndex];
             double temporalConstraintW = weight_array[Constant.TemporalWeightIndex];
+            double backgroundW = weight_array[Constant.BackgroundWeightIndex];
 
             // novelty
 
@@ -223,11 +247,18 @@ namespace Dialogue_Data_Entry
             //check mentionCount
             float DiscussedAmount = current_feature.DiscussedAmount;
 
+            //PATH FOLLOWING: The longer we go without hitting a path node, the less DiscussedAmount counts.
+            DiscussedAmount = DiscussedAmount / (path_counter * 20);
+
+            //Background score
+            double background_score = BackgroundScore(current_feature);
+
             score += (DiscussedAmount * discussAmountW);
             score += (Math.Abs(expected_dramatic_value[turn_count % expected_dramatic_value.Count()] - noveltyValue) * noveltyW);
             score += spatialConstraintValue * spatialConstraintW;
             score += (hierachyConstraintValue * hierachyConstraintW);
             score += (temporalConstraintValue * temporalConstraintW);
+            score += (background_score * backgroundW);
 
             if (print_calculation)
             {
@@ -241,6 +272,7 @@ namespace Dialogue_Data_Entry
                 scoreFormula += " + spatialConstraint*" + spatialConstraintW;
                 scoreFormula += " + hierachyConstraint*" + hierachyConstraintW;
                 scoreFormula += " + temporalConstraint*" + temporalConstraintW;
+                scoreFormula += " + backgroundScore*" + backgroundW;
                 scoreFormula += " = " + score;
                 System.Console.WriteLine(scoreFormula);
             }//end if
@@ -313,8 +345,12 @@ namespace Dialogue_Data_Entry
             //check mentionCount
             float DiscussedAmount = current_feature.DiscussedAmount;
 
+            //PATH FOLLOWING: The longer we go without hitting a path node, the less DiscussedAmount counts.
+            //DiscussedAmount = DiscussedAmount / (path_counter * 20);
+
             //Background score
-            double background_score = BackgroundScore(current_feature);
+            //PATH FOLLOWING: The longer we go without hitting our background node, the more the background score counts.
+            double background_score = BackgroundScore(current_feature) * path_counter;
 
             score += (DiscussedAmount * discussAmountW);
             score += (Math.Abs(expected_dramatic_value[turn_count % expected_dramatic_value.Count()] - noveltyValue) * noveltyW);
@@ -322,6 +358,13 @@ namespace Dialogue_Data_Entry
             score += (hierachyConstraintValue * hierachyConstraintW);
             score += (temporalConstraintValue * temporalConstraintW);
             score += (background_score * backgroundW);
+
+            //DEBUG
+            if (last_feature.Id == 30 && current_feature.Id == 106
+                || last_feature.Id == 30 && current_feature.Id == 107)
+            {
+                Console.WriteLine("asdasd");
+            }//end if
 
             //If this is a filter node, or the same node as the focus node, artificially set its score low
             if (filter_nodes.Contains(current_feature.Name.Split(new string[] { "##" }, StringSplitOptions.None)[0])
@@ -624,6 +667,22 @@ namespace Dialogue_Data_Entry
             return indexList;
         }//end function temporalConstraint
 
+        //Sets the path constraint list. All nodes are in the order that they must be
+        //visited. Visting any node on the path but the first is disallowed, and when
+        //the first path node is visited it is removed from the list.
+        public void SetPathConstraint(List<Feature> path_nodes)
+        {
+            path_constraint_list = path_nodes;
+        }//end method SetPathConstraint
+        public void AddPathConstraintNode(Feature to_add)
+        {
+            path_constraint_list.Add(to_add);
+        }//end method AddPathConstraintNode
+        public void RemovePathConstraintNode(Feature to_remove)
+        {
+            path_constraint_list.Remove(to_remove);
+        }//end method RemovePathNode
+
         //Returns how much the given feature relates to the background topic.
         //Currently decides value by score from 1.0 to 0.0, with 1.0 being
         //the background topic itself. The score decays the farther the node
@@ -637,6 +696,12 @@ namespace Dialogue_Data_Entry
             // distance
             double dist = comparison_feature.ShortestDistance[feature_graph.getFeatureIndex(background_topic.Id)] / feature_graph.MaxDistance;
             double background_score = 1.0d - dist;
+
+            //DEBUG
+            if (comparison_feature.Id == 107 && background_topic.Id == 106)
+            {
+                Console.Out.WriteLine("asdasd!");
+            }//end if
 
             return background_score;
         }//end method BackgroundScore
@@ -684,6 +749,8 @@ namespace Dialogue_Data_Entry
                 TravelGraph(current_feature.Parents[x].Item1, previous_feature, h + 1, isCalculatedScore, checkEntry, turn_count, topic_history, ref listScore);
             }//end for
         }//end method TravelGraph
+
+
 
     }//end class NarrationCalculator
 }

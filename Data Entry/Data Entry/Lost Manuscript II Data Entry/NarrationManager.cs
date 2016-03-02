@@ -19,6 +19,10 @@ namespace Dialogue_Data_Entry
             //The background topic guides the flow of conversation without being mentioned too often.
         private List<Feature> background_targets;
             //A list of features that we wish to touch upon at regular intervals.
+
+        //A list of topics that should never be mentioned.
+        private List<Feature> forbidden_topics;
+
         private int target_interval = 5;        //Every 5 turns of conversation, we should reach a background target.
         private int target_counter = 0;
         private bool following_path = true;
@@ -56,6 +60,7 @@ namespace Dialogue_Data_Entry
             turn = 1;
             topic_history = new List<Feature>();
             background_targets = new List<Feature>();
+            forbidden_topics = new List<Feature>();
             temporal_constraint_list = tcl;
             calculator = new NarrationCalculator(feature_graph, tcl);
 
@@ -90,7 +95,10 @@ namespace Dialogue_Data_Entry
 
             //Adorn the answer, which sends it through speak transforms.
             //The answer will be used later on in the function.
-            return_string = SpeakWithAdornments(this.topic, return_string);
+            //UNCOMMENT THIS LATER!
+            //return_string = SpeakWithAdornments(this.topic, return_string);
+
+            return_string = " :" + this.topic.Id.ToString() + ": ";
 
             return return_string;
         }//end function DefaultNextTopic
@@ -279,11 +287,11 @@ namespace Dialogue_Data_Entry
             string output = "";
             //Create a request, which can be passed to the chatbot.
             Request request = new Request(input, this.user, this.aiml_bot);
-            Console.WriteLine("Chatbot Input: " + input);
+            //Console.WriteLine("Chatbot Input: " + input);
             //Get the response from the chatbot
             Result result = aiml_bot.Chat(request);
             output = result.Output;
-            Console.WriteLine("Chatbot Output: " + output);
+            //Console.WriteLine("Chatbot Output: " + output);
             //<set name="it"><set name="that"><set name="this">
             //<think><set name="topic"><star/></set></think>
             return output;
@@ -301,7 +309,7 @@ namespace Dialogue_Data_Entry
             if (topic_history.Count < 2)
                 previous_topic = null;
             else
-                previous_topic = topic_history[topic_history.Count - 1];
+                previous_topic = topic_history[topic_history.Count - 2];
 
 
             //Create the speak transform object, initialized with history list and the previous topic
@@ -689,9 +697,24 @@ namespace Dialogue_Data_Entry
             if (background_topic != null)
                 if (next_topic.Id.Equals(background_topic.Id))
                 {
+                    Console.WriteLine("Background topic " + background_topic.Name + " reached");
+                    //Check to see if there are any other targets. If not, then we have reached the end
+                    //of the path.
+                    if (background_targets.Count == 0)
+                    {
+                        //This last topic was a goal topic. Set its previously visited to 0 to
+                        //prevent it from being blocked out.
+                        next_topic.DiscussedAmount = 0;
+                    }//end if
                     //If so, try to step to the next target
+                    calculator.path_counter = 1;
                     NextTarget();
                 }//end if
+                else
+                {
+                    //Otherwise, increment the counter.
+                    calculator.path_counter += 1;
+                }//end else
         }//end method ChangeTopic
         /// <summary>
         /// Sets the current topic feature to the given topic feature, incrementing the next topic's
@@ -735,7 +758,25 @@ namespace Dialogue_Data_Entry
                 //Add it to the list of background targets
                 background_targets.Add(temp_feature);
             }//end for
+            //Set the background targets as path constraints
+            calculator.SetPathConstraint(background_targets);
         }//end method SetBackgroundTargets
+
+        //Add a forbidden topic to the list of forbidden topics
+        public void AddForbiddenTopic(Feature topic_to_add)
+        {
+            //Only add if the topic is not already in the list
+            if (!forbidden_topics.Contains(topic_to_add))
+            {
+                forbidden_topics.Add(topic_to_add);
+                calculator.AddPathConstraintNode(topic_to_add);
+            }//end if
+        }//end method AddForbiddenTopic
+        //Remove a forbidden topic from the list of forbidden topics
+        public void RemoveForbiddenTopic(Feature topic_to_remove)
+        {
+            forbidden_topics.Remove(topic_to_remove);
+        }//end method RemoveForbiddenTopic
 
         //Starts pursuing the next target in the background targets list by setting it as the background topic.
         public void NextTarget()
@@ -744,8 +785,10 @@ namespace Dialogue_Data_Entry
             {
                 //Set the first item in the background targets list as the background topic.
                 SetBackgroundTopic(background_targets[0]);
+                //Remove the first item from the path constraint list in narration calculator
+                //calculator.RemovePathNode(background_targets[0]);
                 //Remove the first item from the background targets list.
-                background_targets.RemoveAt(0);
+                background_targets.RemoveAt(0); //Removing here removes for the path constraint list in calculator
             }//end if
         }//end method StartPath
 

@@ -340,9 +340,6 @@ namespace Dialogue_Data_Entry
             return_message += sentencePatterns[random_int];
             //}
 
-            //DEBUG
-            Console.WriteLine("analogy builder return_message: " + return_message);
-
             return return_message;
         }//end method RelationshipAnalogyBuilder
 
@@ -440,7 +437,7 @@ namespace Dialogue_Data_Entry
                     return_message = "{" + last_name_en + " " + relationship_neighbor_en + " "
                         + first_name_en + ".} " + "##" + "{" + last_name_cn + " " + relationship_neighbor_cn + " "
                         + first_name_cn + ".} " + "##";
-                    Console.WriteLine("Lead-in topic result: " + return_message);
+                    //Console.WriteLine("Lead-in topic result: " + return_message);
                     return return_message;
                 }//end if
                 // If last is a child node of first (first is a parent of last)
@@ -450,7 +447,7 @@ namespace Dialogue_Data_Entry
                     return_message = "{" + last_name_en + " " + relationship_parent_en + " "
                         + first_name_en + ".} " + "##" + "{" + last_name_cn + " " + relationship_parent_cn + " "
                         + first_name_cn + ".} " + "##";
-                    Console.WriteLine("Lead-in topic result: " + return_message);
+                    //Console.WriteLine("Lead-in topic result: " + return_message);
                     return return_message;
                 }//end else if
             }//end if
@@ -478,7 +475,7 @@ namespace Dialogue_Data_Entry
             }//end if
 
             //!FindSpeak(first).Contains<string>(first.Id)
-            Console.WriteLine("Lead-in topic result: " + return_message);
+            //Console.WriteLine("Lead-in topic result: " + return_message);
             return return_message;
         }//end function LeadInTopic
 
