@@ -142,6 +142,10 @@ class AIMind:
         print(narrative)
 
     def topological_sort(self):
+        """
+        for every directed edge uv from vertex u
+        to vertex v, u comes before v in the ordering.
+        """
         def explore(feature,node_list):
             if feature.marked:
                 return
@@ -222,52 +226,17 @@ class AIMind:
 
 
 
-"""
-for every directed edge uv from vertex u
-to vertex v, u comes before v in the ordering.
-"""
-
-
-##a1 = AIMind('atom-solar.xml')
-##pprint(a1.find_best_analogy("Sun"))
-##a1.elaborate_on_analogy(a1.find_best_analogy("Sun"))
-##pprint(a1.features)
-
-
-#a1 = AIMind('frogtest.xml')
-#pprint(a1.find_best_analogy("Sweden"))
 
 
 
 
-##a1.elaborate_on_analogy(a1.find_best_analogy("Finland"))
+a1 = AIMind('../data files/googledata.xml')
+pprint(a1.find_best_analogy("Python (programming language)"))
+##a1.elaborate_on_analogy(a1.find_best_analogy("Python (programming language)"))
 
 
-a1 = AIMind('googledata.xml')
-##pprint(a1.find_best_analogy("Google"))
-##a1.elaborate_on_analogy(a1.find_best_analogy("Google")[1])
-
-##a1 = AIMind('contrast.xml')
-
-##out = []
-##for feature in a1.features:
-##    tmp = a1.find_best_analogy(feature)
-##    if not tmp:
-##        continue
-##    score,hypo,evidence = tmp
-##    out.append((score,a1.features[hypo[1]],a1.features[hypo[0]]))
-##
-##
-##for x in sorted(out, key=lambda x: x[0]):
-##    print(x)
-
-##a1.topological_sort()
-##x = [(feature.value, feature.name) for feature in a1.features.values()]
-##pprint(x)
-#pprint(sorted(x))
-
-
-a1.elaborate_on_analogy(a1.find_best_analogy("Python (programming language)"))
+##a1 = AIMind('../data files/contrast.xml')
+##pprint(a1.find_best_analogy("Toronto"))
 
 
 
