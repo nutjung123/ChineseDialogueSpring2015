@@ -8,7 +8,7 @@ to start:
 	run analogyserver.py
 
 to request an analogy:
-	<server_address>:<port>/get_analogy?id=<feature_id>
+	<server_address>:<port>/get_analogy?id=<feature_id>&port=<callback_port>
 
 return data:
 	JSON object of format:

@@ -11,10 +11,12 @@ app = Flask(__name__)
 @app.route('/get_analogy', methods=['GET'])
 def get_analogy():
     try:
-        feature_id = request.args.get("id")
+        port = request.args["port"]
+        feature_id = request.args["id"]
+        return_address = "%s:%s"%(request.remote_addr, port)
 
         #get graph data from knowledge explorer
-        graphdata = urllib.request.urlopen("%s/generate/xml"%request.remote_addr)
+        graphdata = urllib.request.urlopen("%s/generate/xml"%return_address)
         a1 = AIMind(rawdata=graphdata)
         analogyData = a1.find_best_analogy(a1.get_feature(feature_id))
 
@@ -30,21 +32,17 @@ def get_analogy():
                 "connections":connections, #direct connections
                 "explanation":explanation #text explanation
             }
+        else:
+            data = {}
 
-            #post data back to knowledge explorer
-            req = urllib.request.Request(
-                        "%s/callback/analogy"%request.remote_addr,
+        #post data back to knowledge explorer
+        req = urllib.request.Request(
+                        "%s/callback/analogy"%return_address,
                         data=json.dumps(data).encode('utf8'),
                         headers={'content-type': 'application/json'})
-            urllib.request.urlopen(req)
-            return "Success"
-        else:
-            req = urllib.request.Request(
-                        "%s/callback/analogy"%request.remote_addr,
-                        data='{}'.encode('utf8'),
-                        headers={'content-type': 'application/json'})
-            urllib.request.urlopen(req)
-            return "No analogy found"
+        urllib.request.urlopen(req)
+
+        return "Success"
 
     except Exception as e:
         return "Exception: ",e
