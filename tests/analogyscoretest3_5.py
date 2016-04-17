@@ -29,33 +29,42 @@ class Feature:
         return "<%s>(%d,%.d)"%(self.name,self.knowledge_level,self.value)
 
 class AIMind:
-    def __init__(self,filename):
+    def __init__(self,filename=None,rawdata=None):
         self.features = {}
         self.usage_map = {}
 
 
         self.topo_sorted_features = []
 
-        tree = ET.parse(filename)
+        if filename:
+            tree = ET.parse(filename)
+        elif rawdata:
+            tree = ET.fromstring(rawdata)
+        else:
+            raise Exception("No data given")
         root = tree.getroot()
         features = root.find("Features")
         relations = root.find("Relations")
 
-        feature_id_table = {}
+        #map id to feature name
+        self.feature_id_table = {}
 
         #map all feature ids to name
         for feature in features.iter('Feature'):
-            feature_id_table[feature.attrib["id"]] = feature.attrib["data"]
+            self.feature_id_table[feature.attrib["id"]] = feature.attrib["data"]
 
         #build relation structure
         for feature in features.iter('Feature'):
             fobj = Feature(feature.attrib["data"])
             neighbors = feature.find('neighbors')
             for neighbor in neighbors.iter('neighbor'):
-                #print(neighbor.attrib)
                 fobj.add_relation(neighbor.attrib['relationship'],
-                                  feature_id_table[neighbor.attrib['dest']])
+                                  self.feature_id_table[neighbor.attrib['dest']])
             self.features[fobj.name] = (fobj)
+
+
+        #map feature name to id
+        self.r_feature_id_table = {b:a for a,b in self.feature_id_table.items()}
 
         for feature in self.features.values():
             for rtype, dest in feature.relations:
@@ -65,7 +74,6 @@ class AIMind:
 
         def val(v,visited):
             visited.add(v)
-            children = self.features[v].connections
             return 1 + sum([val(w,visited) for w in self.features[v].predecessors if not w in visited])
 
         #calculate values
@@ -73,82 +81,47 @@ class AIMind:
             self.features[feature].value = val(feature,set())
 
 
+    def get_id(self,feature):
+        return self.r_feature_id_table[feature]
 
-    def generate_candidates(self, feature):
-        #generate src candidates
-        return {a for rtype in self.features[feature].rtypes for a,b in self.usage_map[rtype]  if not a == feature}
+    def get_feature(self,fid):
+        return self.feature_id_table[fid]
+
+
+
+    def generate_candidates(self, feature, rtypes=None):
+        if rtypes == None:
+            #generate src candidates
+            return {a for rtype in self.features[feature].rtypes for a,b in self.usage_map[rtype] if not a == feature}
+        else:
+            good = {r for r in rtypes if r in self.usage_map}
+            return {a for rtype in good for a,b in self.usage_map[rtype] if not a == feature}
+
 
     def generate_candidates2(self,rtype):
         #generate dest candidates based on type
         return {b for a,b in self.usage_map[rtype]}
 
-    def find_best_analogy(self,feature):
-        #find candidates based on immediate relations, ignore self
-        candidates = self.generate_candidates(feature)
-        results = []
-        node = self.features[feature]
-        #score each candidate hypothesis
-        for c in candidates:
-            cnode = self.features[c]
-            main_comparison = (feature,c)
-            hypotheses = {} #source --> target mapping
-            r_hypotheses = {} #target --> source mapping
-            score = 0
-            #for each relation in the candidate relations
-            for rtype,dest in cnode.relations:
-                destval = self.features[dest].value
-                if (rtype,dest) in node.relations:#if exact match
-                    score += cnode.value
-                elif rtype in node.rtypes:#otherwise try to find another mapping
-                    for c2 in self.generate_candidates2(rtype):
-                        if (rtype,c2) in node.relations:
-                            c2val = self.features[c2].value
-                            #if potential match
-                            #check source --> target consistency
-                            if dest in hypotheses:#if already source --> target mapping
-                                #check if better
-                                tmpval = hypotheses[dest][1]
-                                if c2val > tmpval:
-                                    score -= tmpval
-                                    hypotheses[dest] = (c2,c2val,rtype)
-                                    r_hypotheses[c2] = (dest, destval,rtype)
-                                    score += c2val
-
-                            #check target --> source consistency
-                            elif c2 in r_hypotheses:
-                                #check if better
-                                tmpval = r_hypotheses[c2][1]
-                                if destval > tmpval:
-                                    score -= tmpval
-                                    del hypotheses[r_hypotheses[c2][0]]
-                                    hypotheses[dest] = (c2,c2val,rtype)
-                                    r_hypotheses[c2] = (dest, destval,rtype)
-                                    score += c2val
-
-                            else:#else make new mapping
-                                hypotheses[dest] = (c2,c2val,rtype)
-                                r_hypotheses[c2] = (dest, destval,rtype)
-                                score += c2val
-                else:
-                    score -= cnode.value
-            results.append((score,main_comparison,r_hypotheses))
-
-        if not results:
-            return None
-
-        ##pprint(sorted(results))
-        best = sorted(results)[-1]
-        return best
-
-    def briefly_explain_analogy(self, analogy):
+    def briefly_explain_analogy(self, analogy, target_domain=None):
         #only explain main relation
-        score, (h1,h2), evidence = analogy
+        if not analogy:
+            return
+
+        score, (h1,h2), evidence, direct_connections = analogy
         narrative = ""
         narrative += "\t%s is like %s. "%(h1,h2)
-        narrative += "This is because"
+
+        dclist = [(b,a) for a,b in direct_connections.items()]
+
+        narrative += "Both %s and %s"%(h1,h2)
+        for i,(r,d) in enumerate(dclist):
+            if i == len(dclist)-1:
+                narrative += " and %s %s.\n"%(r,d)
+            else:
+                narrative += " %s %s,"%(r,d)
+
+        narrative += "\t%s and %s are also similar because" %(h1,h2)
         nchunks = []
-        anode = self.features[h1]
-        bnode = self.features[h2]
         for a,(b,c,d) in evidence.items():
             nchunks.append((h1,d,a,h2,d,b))
         for i,nc in enumerate(nchunks):
@@ -157,10 +130,12 @@ class AIMind:
                 narrative += " and %s %s %s in the same way that %s %s %s.\n"%(a,b,c,d,e,f)
             else:
                 narrative += " %s %s %s in the same way that %s %s %s,"%(a,b,c,d,e,f)
-        print(narrative)
+        return narrative
 
     def elaborate_on_analogy(self, analogy):
         #go ham with the explanation
+        if not analogy:
+            return
 
         score, (h1,h2), evidence = analogy
 
@@ -275,54 +250,106 @@ class AIMind:
                 yield set(component(feature))
 
 
+    def find_best_analogy(self,feature,target_domain=None):
+        if target_domain == None:
+            target_domain = self
 
-"""
-for every directed edge uv from vertex u
-to vertex v, u comes before v in the ordering.
-"""
+        if not feature in self.features:
+            return None
+        #find target candidates based on immediate relations
+        node = self.features[feature]
+        candidates = target_domain.generate_candidates(feature,node.rtypes)
+        results = []
+        #score each candidate hypothesis
+        for c in candidates:
+            cnode = target_domain.features[c]
+            main_comparison = (feature,c)
+            hypotheses = {} #source --> target mapping
+            r_hypotheses = {} #target --> source mapping
+            exact_matches = {}
+            failures = {}
+            score = cnode.value
+            #for each relation in the candidate relations
+            for rtype,dest in cnode.relations:
+                destval = target_domain.features[dest].value
+                if (rtype,dest) in node.relations:#if exact match
+                    score += destval##cnode.value
+                    exact_matches[dest] = rtype
+                    if dest in r_hypotheses: #correct false inference
+                        score -= r_hypotheses[dest][1]
+                        del hypotheses[r_hypotheses[dest][0]]
+                        del r_hypotheses[dest]
+                elif rtype in node.rtypes:#otherwise try to find another mapping
+                    for c2 in target_domain.generate_candidates2(rtype):
+                        if c2 in exact_matches:
+                            continue
+                        if (rtype,c2) in node.relations:
+                            c2val = target_domain.features[c2].value
+                            #if potential match
+
+                            #check source --> target consistency
+                            if dest in hypotheses:#if already source --> target mapping
+                                #check if better
+                                tmpval = hypotheses[dest][1]
+                                if c2val > tmpval:
+                                    score -= tmpval
+                                    del r_hypotheses[hypotheses[dest][0]]
+                                    hypotheses[dest] = (c2, c2val, rtype)
+                                    r_hypotheses[c2] = (dest, destval, rtype)
+                                    score += c2val
+
+                            #check target --> source consistency
+                            elif c2 in r_hypotheses:#if already target --> source mapping
+                                #check if better
+                                tmpval = r_hypotheses[c2][1]
+                                if destval > tmpval:
+                                    score -= tmpval
+                                    del hypotheses[r_hypotheses[c2][0]]
+                                    hypotheses[dest] = (c2, c2val, rtype)
+                                    r_hypotheses[c2] = (dest, destval, rtype)
+                                    score += c2val
+
+                            else:
+                                #else make new mapping
+                                hypotheses[dest] = (c2,c2val,rtype)
+                                r_hypotheses[c2] = (dest, destval,rtype)
+                                score += c2val
+                else:
+                    score -= destval##cnode.value
+                    failures[dest] = (rtype,destval)
+            results.append((score,main_comparison,r_hypotheses,exact_matches))#,failures))
+
+        if not results:
+            return None
+
+        ##pprint(sorted(results))
+        best = sorted(results)[-1]
+        return best
 
 
-##a1 = AIMind('atom-solar.xml')
-##pprint(a1.find_best_analogy("Sun"))
-##a1.elaborate_on_analogy(a1.find_best_analogy("Sun"))
-##pprint(a1.features)
 
-
-a1 = AIMind('music.xml')
-pprint(a1.briefly_explain_analogy(a1.find_best_analogy("Rock music")))
+#a1 = AIMind('atom-solar.xml')
 
 
 
+a1 = AIMind('music_small.xml')
+#a2 = AIMind('plang_small.xml')
+##a2 = AIMind('music.xml')
+##a1 = AIMind('googledata.xml')
+##a1 = AIMind('frogtest.xml')
 
-##a1.elaborate_on_analogy(a1.find_best_analogy("Finland"))
-
-
-#a1 = AIMind('googledata.xml')
-#pprint(a1.find_best_analogy("Google"))
-
-#a1.elaborate_on_analogy(a1.find_best_analogy("Python (programming language)"))
-#a1.briefly_explain_analogy(a1.find_best_analogy("Python (programming language)"))
-
-#a1.briefly_explain_analogy(a1.find_best_analogy("Google"))
-
-
-##a = a1.features['Java (programming language)']
-##b = a1.features['Python (programming language)']
-
-##a1 = AIMind('atom-solar.xml')
-##a1.elaborate_on_analogy(a1.find_best_analogy("Sun"))
-
-
-##a1 = AIMind('music_small.xml')
-##a2 = AIMind('plang_small.xml')
-##
-##
-##pprint(a1.cross_domain_analogy('Singing',a2))
+#a1.find_best_analogy('Nucleus')
 
 ##all_best_analogies = [a1.find_best_analogy(f) for f in a1.features]
 ##all_best_analogies = [x for x in all_best_analogies if x]
-##
 ##pprint(sorted(all_best_analogies))
+
+a1.briefly_explain_analogy(a1.find_best_analogy("Folk rock",a1),a1)
+
+
+
+#pprint(a1.usage_map.keys())
+#pprint(a2.usage_map.keys())
 
 
 
