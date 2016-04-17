@@ -332,7 +332,7 @@ class AIMind:
 
 
 
-a1 = AIMind('music_small.xml')
+##a1 = AIMind('music_small.xml')
 #a2 = AIMind('plang_small.xml')
 ##a2 = AIMind('music.xml')
 ##a1 = AIMind('googledata.xml')
@@ -344,7 +344,7 @@ a1 = AIMind('music_small.xml')
 ##all_best_analogies = [x for x in all_best_analogies if x]
 ##pprint(sorted(all_best_analogies))
 
-a1.briefly_explain_analogy(a1.find_best_analogy("Folk rock",a1),a1)
+##a1.briefly_explain_analogy(a1.find_best_analogy("Folk rock",a1),a1)
 
 
 
