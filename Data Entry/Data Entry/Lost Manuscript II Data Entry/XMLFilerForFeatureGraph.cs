@@ -193,7 +193,7 @@ namespace Dialogue_Data_Entry
                     XmlNodeList speaks = node.SelectNodes("speak");
                     foreach (XmlNode speak in speaks)
                     {
-                        tmp.addSpeak(unEscapeInvalidXML(speak.Attributes["value"].Value));
+                        tmp.addSpeak(unEscapeInvalidXML(speak.InnerText));
                     }
                 }
                 int rootId = -1;
