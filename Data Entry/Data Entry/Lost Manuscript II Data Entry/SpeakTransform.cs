@@ -108,6 +108,8 @@ namespace Dialogue_Data_Entry
             return analogy;
         }//end method MakeAnalogy
 
+        
+
         //Creates an analogy based on the history of nodes traversed and relationships between nodes.
         //Returns the empty string if no analogy can be made.
         private string RelationshipAnalogy(Feature feat)

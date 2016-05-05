@@ -58,6 +58,8 @@ namespace Dialogue_Data_Entry
                     tcl[x].SecondArgument, tcl[x].ThirdArgument,
                     tcl[x].FourthArgument, tcl[x].FifthArgument));
             }//end for
+            //Create the hierarchy key from the feature graph
+            hierarchy_key = CreateHierarchyKey(feature_graph);
             //Default initializations
             expected_dramatic_value = new double[20] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 };
             SetFilterNodes();
@@ -378,6 +380,32 @@ namespace Dialogue_Data_Entry
         }//end method getProximal
 
         //PRIVATE UTILITY FUNCTIONS
+        //Make the hierarchy key from the relationships in the feature graph.
+        private String[] CreateHierarchyKey(FeatureGraph source_graph)
+        {
+            String[] return_key = null;
+
+            List<String> return_list = new List<String>();
+            //Go through each node in the feature graph
+            foreach (Feature temp_feat in feature_graph.Features)
+            {
+                //Go through each of the node's relationships
+                foreach (Tuple<Feature, double, string> temp_neighbor_tuple in temp_feat.Neighbors)
+                {
+                    //Third member of each tuple is the relationship type.
+                    String relationship = temp_neighbor_tuple.Item3;
+                    //Add it to the return key if it isn't already there.
+                    if (!return_list.Contains<String>(relationship))
+                    {
+                        return_list.Add(relationship);
+                    }//end if
+                }//end foreach
+            }//end foreach
+
+            return_key = return_list.ToArray();
+            return return_key;
+        }//end method CreateHierarchyKey
+
         /// <summary>
         /// Calculate the novelty of the given current feature against the given
         /// previous feature.
