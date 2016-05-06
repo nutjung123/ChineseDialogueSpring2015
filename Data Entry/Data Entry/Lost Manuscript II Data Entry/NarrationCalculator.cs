@@ -379,6 +379,49 @@ namespace Dialogue_Data_Entry
             return listScore;
         }//end method getProximal
 
+        //Returns the feature that would serve best as a switch point given
+        // the input storyline.
+        //Motivated by measure of proximity in paper by Leal, Rodrigues, and Queiros, 2012.
+        public Feature IdentifySwitchPoint(List<Feature> storyline)
+        {
+            //Each feature will have a count of how many other features
+            //in the storyline it is directly connected to.
+            List<Tuple<Feature, int>> connectedness = new List<Tuple<Feature, int>>();
+            foreach (Feature story_feature in storyline)
+            {
+                int number_of_connections = 0;
+                foreach (Feature feature_to_compare in storyline)
+                {
+                    //Check if there is a relationship in either direction between the two.
+                    if ((!story_feature.getRelationshipNeighbor(feature_to_compare.Id).Equals("")
+                        && !(story_feature.getRelationshipNeighbor(feature_to_compare.Id) == null))
+                        || (!feature_to_compare.getRelationshipNeighbor(story_feature.Id).Equals("")
+                        && !(feature_to_compare.getRelationshipNeighbor(story_feature.Id) == null)))
+                    {
+                        //If so, then increment the connections count.
+                        number_of_connections += 1;
+                    }//end if
+                }//end foreach
+                //We now have how many other features in the storyline this feature is connected to.
+                //Store it as a tuple in the connectedness list.
+                connectedness.Add(new Tuple<Feature, int>(story_feature, number_of_connections));
+            }//end foreach
+
+            //Find the tuple with the highest connectedness.
+            Feature return_feature = null;
+            int highest_connectedness = 0;
+            foreach (Tuple<Feature, int> connectedness_pair in connectedness)
+            {
+                if (connectedness_pair.Item2 > highest_connectedness)
+                {
+                    return_feature = connectedness_pair.Item1;
+                    highest_connectedness = connectedness_pair.Item2;
+                }//end if
+            }//end foreach
+
+            return return_feature;
+        }//end method IdentifySwitchPoint
+
         //Calculate the relatedness between two features
         public double CalculateRelatedness(Feature feature_1, Feature feature_2)
         {

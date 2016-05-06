@@ -564,6 +564,82 @@ namespace Dialogue_Data_Entry
                         narration_manager.SetBackgroundTopic(new_background_topic);
                     }//end else
                 }//end else if
+                //INTERWEAVE command.
+                // Creates two interwoven storylines.
+                else if (split_input[0].Equals("INTERWEAVE"))
+                {
+                    List<String> return_string_1_components = new List<String>();
+                    List<String> return_string_2_components = new List<String>();
+                    string return_string_1 = "";
+                    string return_string_2 = "";
+
+                    //Create the first story in its entirety
+                    //Set the node that the story will start at
+                    graph.Root = graph.getFeature(1);
+                    NarrationManager manager_1 = new NarrationManager(graph, temporalConstraintList);
+                    for (int i = 0; i < 10; i++)
+                    {
+                        return_string_1_components.Add(" " + manager_1.DefaultNextTopicResponse() + "\n");
+                        manager_1.Turn += 1;
+                    }//end for
+                    //Get the topic history from the first narration as the refernce list for the second narration.
+                    List<Feature> storyline_1 = manager_1.TopicHistory;
+
+                    //Ask the manager for the first narration which node would be best as a switch point.
+                    Feature switch_point = manager_1.IdentifySwitchPoint(storyline_1);
+                    
+
+                    //Create the reference list from the first storyline up through the switch point.
+                    List<Feature> reference_list = new List<Feature>();
+                    foreach (Feature story_feature in storyline_1)
+                    {
+                        reference_list.Add(story_feature);
+                        if (story_feature.Id.Equals(switch_point.Id))
+                            break;
+                    }//end foreach
+
+                    //Create the second story in its entirety
+                    //Set the node that the story will start at
+                    graph.Root = graph.getFeature(20);
+                    NarrationManager manager_2 = new NarrationManager(graph, temporalConstraintList);
+                    for (int i = 0; i < 10; i++)
+                    {
+                        return_string_2_components.Add(" " + manager_2.DefaultNextTopicResponse(reference_list) + "\n");
+                        manager_2.Turn += 1;
+                    }//end for
+                    List<Feature> storyline_2 = manager_2.TopicHistory;
+
+                    bool after_switch_point = false;
+                    //Compile both return strings from their components
+                    foreach (string component_1 in return_string_1_components)
+                    {
+                        //At the switch point, add all of the second storyline.
+                        int component_index = return_string_1_components.IndexOf(component_1);
+                        int switch_point_index = storyline_1.IndexOf(switch_point);
+                        if (component_index == switch_point_index)
+                        {
+                            //Foreshadow future switch point information.
+                            return_string += " " + manager_1.Foreshadow(switch_point, storyline_1) + "\n";
+
+                            return_string += " SWITCH TO STORYLINE 2 \n {But now, let's talk about something else.}";
+                            foreach (string component_2 in return_string_2_components)
+                            {
+                                return_string += component_2;
+                            }//end foreach
+                            return_string += " SWITCH TO STORYLINE 1 \n";
+                            after_switch_point = true;
+                        }//end if
+                        return_string += component_1;
+                        if (after_switch_point && component_index < storyline_1.Count)
+                        {
+                            List<Feature> temp_list = new List<Feature>();
+                            temp_list.Add(switch_point);
+                            return_string += " " + manager_1.TieBack(storyline_1.ElementAt(component_index + 1), temp_list, storyline_1.ElementAt(component_index - 1)) + "\n";
+                        }//end if
+                    }//end foreach
+
+                    return_string += " : switch point: " + switch_point.Name + " \n";
+                }//end else if
 
             return return_string;
         }//end function CommandResponse

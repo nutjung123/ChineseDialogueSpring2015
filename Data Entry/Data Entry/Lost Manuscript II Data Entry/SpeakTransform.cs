@@ -15,16 +15,21 @@ namespace Dialogue_Data_Entry
         //A list of relationships that should not be used to make analogies
         private List<String> no_analogy_relationships;
 
+        //A list of features that can be referred back to, different from the history list.
+        private List<Feature> reference_list;
 
         //Instantiate the SpeakTransform with both a history list and the previous topic.
         //The history list includes, at its last element, the current feature.
-        public SpeakTransform(List<Feature> history_in, Feature previous_topic_in)
+        public SpeakTransform(List<Feature> history_in, Feature previous_topic_in, List<Feature> ref_list = null)
         {
             history_list = history_in;
             if (previous_topic_in != null)
                 previous_topic = previous_topic_in;
             else
                 previous_topic = null;
+
+            if (ref_list != null)
+                reference_list = ref_list;
 
             equivalent_relationships = new List<List<String>>();
             //Build lists of relationships that should be considered the same
@@ -89,7 +94,8 @@ namespace Dialogue_Data_Entry
                 transformed_speak = LeadInTopic(previous_topic, feat) + speak;
             }//end if
 
-            transformed_speak = transformed_speak + TieBack(feat, history_list, previous_topic);
+            if (reference_list != null)
+                transformed_speak = transformed_speak + TieBack(feat, reference_list, previous_topic);
 
             return transformed_speak;
         }//end method TransformSpeak
@@ -500,11 +506,58 @@ namespace Dialogue_Data_Entry
             return return_message;
         }//end function LeadInTopic
 
+        //Foreshadow information about a feature based on a list of other features as reference.
+        public string Foreshadow(Feature feature_to_foreshadow, List<Feature> reference_list)
+        {
+            //First member is the direction of the relationship.
+            //0 is AWAY FROM feature to foreshadow, 1 is TOWARD feature to foreshadow.
+            List<Tuple<int, string>> relationship_list = new List<Tuple<int, string>>();
+
+            //Create tuples consisting of this feature's relationships to all other features.
+            foreach (Feature feature_to_compare in reference_list)
+            {
+                //Check if there is a relationship in either direction between the two.
+                if ((!feature_to_foreshadow.getRelationshipNeighbor(feature_to_compare.Id).Equals("")
+                    && !(feature_to_foreshadow.getRelationshipNeighbor(feature_to_compare.Id) == null)))
+                {
+                    //If so, then add the relationship to the list.
+                    relationship_list.Add(new Tuple<int, string>(0, feature_to_foreshadow.getRelationshipNeighbor(feature_to_compare.Id)));
+                }//end if
+                else if (!feature_to_compare.getRelationshipNeighbor(feature_to_foreshadow.Id).Equals("")
+                    && !(feature_to_compare.getRelationshipNeighbor(feature_to_foreshadow.Id) == null))
+                {
+                    relationship_list.Add(new Tuple<int, string>(1, feature_to_compare.getRelationshipNeighbor(feature_to_foreshadow.Id)));
+                }//end else if
+            }//end foreach
+
+            string return_string = "";
+
+            return_string = "{We'll hear more about ";
+
+            foreach (Tuple<int, string> relationship_entry in relationship_list)
+            {
+                //Relationship away from feature to foreshadow
+                if (relationship_entry.Item1 == 0)
+                {
+                    return_string += feature_to_foreshadow.Name + " " + relationship_entry.Item2 + ", ";
+                }//end if
+                else if (relationship_entry.Item1 == 1)
+                {
+                    //Relationship towards feature to foreshadow
+                    return_string += " what " + relationship_entry.Item2 + " " + feature_to_foreshadow.Name + ", ";
+                }//end else if
+            }//end foreach
+
+            return_string += "soon.}";
+
+            return return_string;
+        }//end method Foreshadow
+
         //This function takes a feature and a list of previously mentioned topics.
         //It then tries to state a relationship with one of them.
         //Search for a related topic is done from least recent to most recent, with the
         //exception of the previous node.
-        private string TieBack(Feature feature_to_check, List<Feature> previously_mentioned_features, Feature previous_feature)
+        public string TieBack(Feature feature_to_check, List<Feature> previously_mentioned_features, Feature previous_feature)
         {
             string return_message = "";
 
