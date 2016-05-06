@@ -3,7 +3,9 @@
   <Root id="1"/>
   <Features>
     <Feature data="Arctic exploration" zh-data="" id="1" uri="http://dbpedia.org/resource/Arctic_exploration">
-      <neighbors/>
+      <neighbors>
+		<neighbor dest="2" relationship="is occupation of" weight="0"/>
+	  </neighbors>
       <speak>Arctic exploration is the physical exploration of the Arctic region of the Earth.</speak>
       <zh-speak/>
     </Feature>
