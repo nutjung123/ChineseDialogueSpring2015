@@ -89,6 +89,8 @@ namespace Dialogue_Data_Entry
                 transformed_speak = LeadInTopic(previous_topic, feat) + speak;
             }//end if
 
+            transformed_speak = transformed_speak + TieBack(feat, history_list, previous_topic);
+
             return transformed_speak;
         }//end method TransformSpeak
 
@@ -414,6 +416,8 @@ namespace Dialogue_Data_Entry
 
             Random rand = new Random();
 
+            Feature rel_last_to_first = last.getNeighbor(first.Id);
+            Feature rel_first_to_last = first.getNeighbor(last.Id);
             // Check if there is a relationship between two nodes
             if ((last.getNeighbor(first.Id) != null || first.getNeighbor(last.Id) != null) && use_relationships)
             {
@@ -435,7 +439,7 @@ namespace Dialogue_Data_Entry
                     relationship_parent_cn = relationship_parent_cn.Split(new string[] { "##" }, StringSplitOptions.None)[1];
                 }//end if
 
-                // Check if last has first as its neighbor
+                // Check if last has first as its neighbor and their relationship is not blank
                 if (!last.getRelationshipNeighbor(first.Id).Equals("")
                     && !(last.getRelationshipNeighbor(first.Id) == null))
                 {
@@ -445,6 +449,18 @@ namespace Dialogue_Data_Entry
                     Console.WriteLine("Lead-in topic result: " + return_message);
                     return return_message;
                 }//end if
+                // If not, check if first has last as its neighbor and their relationship is not blank
+                else if (!first.getRelationshipNeighbor(last.Id).Equals("")
+                        && !(first.getRelationshipNeighbor(last.Id) == null))
+                {
+                    //TODO: Chinese part isn't fixed yet, we need to get the relationship from first to last.
+                    //Right now, it's still the relationship from last to first.
+                    return_message = "{" + first_name_en + " " + first.getRelationshipNeighbor(last.Id) + " "
+                        + last_name_en + ".} " + "##" + "{" + first_name_cn + " " + relationship_neighbor_cn + " "
+                        + last_name_cn + ".} " + "##";
+                    Console.WriteLine("Lead-in topic result: " + return_message);
+                    return return_message;
+                }//end else if
                 // If last is a child node of first (first is a parent of last)
                 else if (!last.getRelationshipParent(first.Id).Equals("")
                             && !(last.getRelationshipParent(first.Id) == null))
@@ -483,6 +499,50 @@ namespace Dialogue_Data_Entry
             Console.WriteLine("Lead-in topic result: " + return_message);
             return return_message;
         }//end function LeadInTopic
+
+        //This function takes a feature and a list of previously mentioned topics.
+        //It then tries to state a relationship with one of them.
+        //Search for a related topic is done from least recent to most recent, with the
+        //exception of the previous node.
+        private string TieBack(Feature feature_to_check, List<Feature> previously_mentioned_features, Feature previous_feature)
+        {
+            string return_message = "";
+
+            string feature_name = feature_to_check.Name;
+
+            List<Feature> reverse_history = previously_mentioned_features;
+            reverse_history.Reverse();
+
+            // Check if there is a relationship between two nodes
+            foreach (Feature history_feature in reverse_history)
+            {
+                //Don't talk about node directly prior to this one
+                if (history_feature.Id.Equals(previous_feature.Id))
+                    continue;
+                if (feature_to_check.getNeighbor(history_feature.Id) != null || history_feature.getNeighbor(feature_to_check.Id) != null)
+                {
+                    // Check both directions for a non-blank relationship to use
+                    if (!feature_to_check.getRelationshipNeighbor(history_feature.Id).Equals("")
+                        && !(feature_to_check.getRelationshipNeighbor(history_feature.Id) == null))
+                    {
+                        return_message = "{And do you remember " + history_feature.Name + "? Well, " + feature_name + " " + feature_to_check.getRelationshipNeighbor(history_feature.Id) + " "
+                            + history_feature.Name + ".} ";
+                        Console.WriteLine("Tie back result: " + return_message);
+                        return return_message;
+                    }//end if
+                    else if (!history_feature.getRelationshipNeighbor(feature_to_check.Id).Equals("")
+                        && !(history_feature.getRelationshipNeighbor(feature_to_check.Id) == null))
+                    {
+                        return_message = "{And do you remember " + history_feature.Name + "? Well, " + history_feature.Name + " " + history_feature.getRelationshipNeighbor(feature_to_check.Id) + " "
+                            + feature_name + ".} ";
+                        Console.WriteLine("Tie back result: " + return_message);
+                        return return_message;
+                    }//end if
+                }//end if
+            }//end foreach
+
+            return return_message;
+        }//end function TieBack
 
     } //end class SpeakTransform
 }

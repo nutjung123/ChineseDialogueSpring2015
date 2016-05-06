@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="NarrationCalculator.cs" />
     <Compile Include="NarrationManager.cs" />
+    <Compile Include="Path.cs" />
     <Compile Include="SpeakTransform.cs" />
     <Compile Include="Constant.cs" />
     <Compile Include="QueryHandler.cs" />
