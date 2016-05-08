@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 from flask import Flask
 from flask import request
+import urllib
 import urllib.request
 import json
 
@@ -13,11 +14,17 @@ def get_analogy():
     try:
         port = request.args["port"]
         feature_id = request.args["id"]
+        filename = request.args.get("filename")
         return_address = "%s:%s"%(request.remote_addr, port)
 
-        #get graph data from knowledge explorer
-        graphdata = urllib.request.urlopen("%s/generate/xml"%return_address)
-        a1 = AIMind(rawdata=graphdata)
+        if not filename:
+            #get graph data from knowledge explorer
+            graphdata = urllib.request.urlopen("%s/generate/xml"%return_address)
+            graphdata_buffer = graphdata.read().decode("utf-8")
+            a1 = AIMind(rawdata=graphdata)
+        else:
+            #else read specified file
+            a1 = AIMind(filename=urllib.unquote(filename).decode('utf8') )
         analogyData = a1.find_best_analogy(a1.get_feature(feature_id))
 
         if analogyData:

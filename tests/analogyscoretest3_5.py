@@ -39,7 +39,7 @@ class AIMind:
         if filename:
             tree = ET.parse(filename)
         elif rawdata:
-            tree = ET.fromstring(rawdata)
+            tree = ET.ElementTree(ET.fromstring(rawdata))
         else:
             raise Exception("No data given")
         root = tree.getroot()
