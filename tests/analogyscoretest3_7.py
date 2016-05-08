@@ -233,7 +233,7 @@ class AIMind:
                 best = {}
                 rating = node.value
                 #for each mh, pick the best then pick the next best non-conflicting
-                for score,src,target,r1,r2 in hypotheses:
+                for score,src,target,r1,r2 in sorted(hypotheses,reverse=True):
                     if r1 == r2 or rassert.get(r1) == r2:
                         if src not in hmap.keys() and target not in hmap.values():
                             hmap[src] = target
