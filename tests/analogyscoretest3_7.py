@@ -269,8 +269,8 @@ class AIMind:
 #a1 = AIMind('plang_small.xml')
 #a2 = AIMind('music_small.xml')
 
-a1 = AIMind('googledata.xml')
-a2 = AIMind('music.xml')
+a1 = AIMind('../data files/googledata.xml')
+a2 = AIMind('../data files/music.xml')
 
 ##for f in a1.features:
 ##    a1.find_best_analogy(f,a2)
