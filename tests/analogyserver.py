@@ -4,39 +4,41 @@ from flask import request
 import urllib
 import urllib.request
 import json
+import cgi
 
-from analogyscoretest3_5 import AIMind
+from analogyscoretest3_7 import AIMind
 
 app = Flask(__name__)
 
 @app.route('/get_analogy', methods=['GET'])
 def get_analogy():
-    try:
+    #try:
         port = request.args["port"]
         feature_id = request.args["id"]
         filename = request.args.get("filename")
-        return_address = "%s:%s"%(request.remote_addr, port)
+        return_address = "http://%s:%s"%(request.remote_addr, port)
+
+        print("ret: ",return_address)
 
         if not filename:
             #get graph data from knowledge explorer
             graphdata = urllib.request.urlopen("%s/generate/xml"%return_address)
-            graphdata_buffer = graphdata.read().decode("utf-8")
-            a1 = AIMind(rawdata=graphdata)
-        else:
-            #else read specified file
-            a1 = AIMind(filename=urllib.unquote(filename).decode('utf8') )
-        analogyData = a1.find_best_analogy(a1.get_feature(feature_id))
+            graphdata_buffer = graphdata.read()#.decode("utf-8")
+            a1 = AIMind(rawdata=graphdata_buffer)
+##        else:
+##            #else read specified file
+##            a1 = AIMind(filename=urllib.unquote(filename).decode('utf8') )
+        analogyData = a1.find_best_analogy(a1.get_feature(feature_id),a1)
 
         if analogyData:
-            _, (src, trg), hypotheses, matches = analogyData
-            connections = [a1.get_id(a) for a in matches]
-            evidence = [(a1.get_id(a),a1.get_id(b[0])) for a,b in hypotheses.items()]
-            explanation = a1.briefly_explain_analogy(analogyData)
+            score, (src, trg), mapping, hypotheses = analogyData
+            evidence = [(a1.get_id(a[1]),a1.get_id(b[1])) for a,b in hypotheses.items()]
+            explanation = cgi.escape(a1.explain_analogy(analogyData))
             data = {
                 "source":a1.get_id(src), #source topic
                 "target":a1.get_id(trg), #target topic
                 "evidence":evidence, #analogous mappings
-                "connections":connections, #direct connections
+                "connections":[], #direct connections
                 "explanation":explanation #text explanation
             }
         else:
@@ -51,7 +53,7 @@ def get_analogy():
 
         return "Success"
 
-    except Exception as e:
+    #except Exception as e:
         return "Exception: ",e
 
 if __name__ == '__main__':

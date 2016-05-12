@@ -51,23 +51,28 @@ class Feature:
         return "<%s>(%d,%.d)"%(self.name,self.knowledge_level,self.value)
 
 class AIMind:
-    def __init__(self,filename):
+    def __init__(self,filename=None,rawdata=None):
         self.features = {}
         self.usage_map = {}
 
 
         self.topo_sorted_features = []
 
-        tree = ET.parse(filename)
+        if filename:
+            tree = ET.parse(filename)
+        elif rawdata:
+            tree = ET.ElementTree(ET.fromstring(rawdata))
+        else:
+            raise Exception("No data given")
         root = tree.getroot()
         features = root.find("Features")
         relations = root.find("Relations")
 
-        feature_id_table = {}
+        self.feature_id_table = {}
 
         #map all feature ids to name
         for feature in features.iter('Feature'):
-            feature_id_table[feature.attrib["id"]] = feature.attrib["data"]
+            self.feature_id_table[feature.attrib["id"]] = feature.attrib["data"]
 
         #build relation structure
         for feature in features.iter('Feature'):
@@ -75,8 +80,11 @@ class AIMind:
             neighbors = feature.find('neighbors')
             for neighbor in neighbors.iter('neighbor'):
                 fobj.add_relation(neighbor.attrib['relationship'],
-                                  feature_id_table[neighbor.attrib['dest']])
+                                  self.feature_id_table[neighbor.attrib['dest']])
             self.features[fobj.name] = (fobj)
+
+        #map feature name to id
+        self.r_feature_id_table = {b:a for a,b in self.feature_id_table.items()}
 
         for feature in self.features.values():
             for rtype, dest in feature.relations:
@@ -94,12 +102,19 @@ class AIMind:
         #calculate rtype jaccard index
         self.rtype_index = self.index_rtypes()
 
+
+    def get_id(self,feature):
+        return self.r_feature_id_table[feature]
+
+    def get_feature(self,fid):
+        return self.feature_id_table[fid]
+
     def explain_analogy(self, analogy, verbose=False):
         #only explain main relation
         if not analogy:
             return
 
-        score, (src,trg), rassert, evidence = analogy
+        score, (src,trg), mapping, hypotheses = analogy
         narrative = ""
         narrative += "\t%s is like %s. "%(src,trg)
 
@@ -108,7 +123,7 @@ class AIMind:
 
         mentioned = set()
 
-        for (a,b),(c,d) in evidence.items():
+        for (a,b),(c,d) in hypotheses.items():
             if not verbose and a in mentioned:
                 continue
             nchunks.append((src,a,b,trg,c,d))
@@ -202,12 +217,10 @@ class AIMind:
                 ret.append((rscore,mhs))
 
             bijections = sorted(ret)
-            ##print(n,len(bijections))
+
             if not len(bijections):
                 continue
             basescore = bijections[0][0]
-
-            ##results = []
 
             #keep track of the best result only
             bestrating = 0
@@ -243,47 +256,9 @@ class AIMind:
                 if rating > bestrating:
                     bestrating = rating
                     bestresult = (rating,(feature,n),rassert,best)
-                ##results.append((rating,(feature,n),rassert,best))
 
-
-##            if len(results):
-##                candidate_results.append(sorted(results,key=lambda x:x[0])[-1])#best local analogy
-##            else:
-##                return None
             if bestresult:
                 candidate_results.append(bestresult)
 
         return sorted(candidate_results,key=lambda x:x[0])[-1]#best global analogy
-
-
-
-
-##a1 = AIMind('atom-solar.xml')
-##
-##tmp = a1.find_best_analogy("Sun",a1)
-##pprint(tmp)
-##print(a1.explain_analogy(tmp))
-
-
-
-#a1 = AIMind('plang_small.xml')
-#a2 = AIMind('music_small.xml')
-
-a1 = AIMind('../data files/googledata.xml')
-a2 = AIMind('../data files/music.xml')
-
-##for f in a1.features:
-##    a1.find_best_analogy(f,a2)
-#pprint(a1.find_best_analogy("C (programming language)",a2))
-##pprint(a1.find_best_analogy("California",a2))
-##pprint(a2.find_best_analogy("Mister Maker Comes to Town",a1))
-
-tmp = a1.find_best_analogy("C (programming language)",a2)
-pprint(tmp)
-print(a1.explain_analogy(tmp,True))
-
-
-##tmp = a2.find_best_analogy("Rock music",a1)
-##pprint(tmp)
-##print(a1.explain_analogy(tmp))
 
