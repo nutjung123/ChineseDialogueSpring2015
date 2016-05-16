@@ -384,6 +384,51 @@ namespace Dialogue_Data_Entry
         //Motivated by measure of proximity in paper by Leal, Rodrigues, and Queiros, 2012.
         public Feature IdentifySwitchPoint(List<Feature> storyline)
         {
+            //How connected the set of features up to the index in Item1 is.
+            List<Tuple<Feature, int>> sum_edge_counts = new List<Tuple<Feature, int>>();
+            //the list of features that come before the current index
+            List<Feature> prior_list = new List<Feature>();
+            //the list of features that come after the current index
+            List<Feature> future_list = new List<Feature>();
+            Feature switch_point = null;
+            int largest_count = -1;
+            int current_count = 0;
+            for (int i = 0; i < storyline.Count; i++)
+            {
+                prior_list = storyline.GetRange(0, i + 1);
+                future_list = storyline.GetRange(i + 1, storyline.Count - i - 1);
+                current_count = 0;
+                //Count all edges from previous nodes to future nodes
+                foreach (Feature prior_feature in prior_list)
+                {
+                    foreach (Feature future_feature in future_list)
+                    {
+                        //Check if there is a relationship in either direction between the two.
+                        if ((!prior_feature.getRelationshipNeighbor(future_feature.Id).Equals("")
+                            && !(prior_feature.getRelationshipNeighbor(future_feature.Id) == null))
+                            || (!future_feature.getRelationshipNeighbor(prior_feature.Id).Equals("")
+                            && !(future_feature.getRelationshipNeighbor(prior_feature.Id) == null)))
+                        {
+                            //If so, then increment the connections count.
+                            current_count += 1;
+                        }//end if
+                    }//end foreach
+                }//end foreach
+                //Make a tuple entry
+                sum_edge_counts.Add(new Tuple<Feature, int>(storyline[i], current_count));
+                if (current_count >= largest_count)
+                {
+                    largest_count = current_count;
+                    switch_point = storyline[i];
+                }//end if
+            }//end for
+
+            if (largest_count == 0)
+                switch_point = storyline[storyline.Count - 1];
+
+            return switch_point;
+
+            /*
             //Each feature will have a count of how many other features
             //in the storyline it is directly connected to.
             List<Tuple<Feature, int>> connectedness = new List<Tuple<Feature, int>>();
@@ -419,7 +464,7 @@ namespace Dialogue_Data_Entry
                 }//end if
             }//end foreach
 
-            return return_feature;
+            return return_feature;*/
         }//end method IdentifySwitchPoint
 
         //Calculate the relatedness between two features

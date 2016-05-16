@@ -573,17 +573,24 @@ namespace Dialogue_Data_Entry
                     string return_string_1 = "";
                     string return_string_2 = "";
 
+                    int storyline_length = 10;
+                    //1 Arctic exploration, 20 Desert exploration
+                    int story_1_root = 200;
+                    int story_2_root = 1;
+
                     //Create the first story in its entirety
                     //Set the node that the story will start at
-                    graph.Root = graph.getFeature(1);
+                    graph.Root = graph.getFeature(story_1_root);
                     NarrationManager manager_1 = new NarrationManager(graph, temporalConstraintList);
-                    for (int i = 0; i < 10; i++)
+                    for (int i = 0; i < storyline_length; i++)
                     {
                         return_string_1_components.Add(" " + manager_1.DefaultNextTopicResponse() + "\n");
                         manager_1.Turn += 1;
                     }//end for
                     //Get the topic history from the first narration as the refernce list for the second narration.
                     List<Feature> storyline_1 = manager_1.TopicHistory;
+                    //Remove 1st node, it is a duplicate.
+                    storyline_1.RemoveAt(0);
 
                     //Ask the manager for the first narration which node would be best as a switch point.
                     Feature switch_point = manager_1.IdentifySwitchPoint(storyline_1);
@@ -600,26 +607,36 @@ namespace Dialogue_Data_Entry
 
                     //Create the second story in its entirety
                     //Set the node that the story will start at
-                    graph.Root = graph.getFeature(20);
+                    graph.Root = graph.getFeature(story_2_root);
                     NarrationManager manager_2 = new NarrationManager(graph, temporalConstraintList);
-                    for (int i = 0; i < 10; i++)
+                    for (int i = 0; i < storyline_length; i++)
                     {
                         return_string_2_components.Add(" " + manager_2.DefaultNextTopicResponse(reference_list) + "\n");
                         manager_2.Turn += 1;
                     }//end for
                     List<Feature> storyline_2 = manager_2.TopicHistory;
+                    //Remove 1st node, it is a duplicate
+                    storyline_2.RemoveAt(0);
 
                     bool after_switch_point = false;
                     //Compile both return strings from their components
+                    int switch_point_index = storyline_1.IndexOf(switch_point);
+                    //Get the part of storyline 1 up to the switch point
+                    List<Feature> storyline_1_first_half = storyline_1.GetRange(0, switch_point_index + 1);
+                    //Get part of storyline 1 after the switch point
+                    List<Feature> storyline_1_second_half = storyline_1.GetRange(switch_point_index + 1, storyline_1.Count - switch_point_index - 1);
                     foreach (string component_1 in return_string_1_components)
                     {
                         //At the switch point, add all of the second storyline.
                         int component_index = return_string_1_components.IndexOf(component_1);
-                        int switch_point_index = storyline_1.IndexOf(switch_point);
                         if (component_index == switch_point_index)
                         {
                             //Foreshadow future switch point information.
-                            return_string += " " + manager_1.Foreshadow(switch_point, storyline_1) + "\n";
+                            foreach (Feature first_half_node in storyline_1_first_half)
+                            {
+                                return_string += " " + manager_1.Foreshadow(first_half_node, storyline_1_second_half) + "\n";
+                            }//end foreach
+                            //return_string += " " + manager_1.Foreshadow(switch_point, storyline_1_second_half) + "\n";
 
                             return_string += " SWITCH TO STORYLINE 2 \n {But now, let's talk about something else.}";
                             foreach (string component_2 in return_string_2_components)
@@ -632,13 +649,83 @@ namespace Dialogue_Data_Entry
                         return_string += component_1;
                         if (after_switch_point && component_index < storyline_1.Count)
                         {
-                            List<Feature> temp_list = new List<Feature>();
-                            temp_list.Add(switch_point);
-                            return_string += " " + manager_1.TieBack(storyline_1.ElementAt(component_index + 1), temp_list, storyline_1.ElementAt(component_index - 1)) + "\n";
+                            //List<Feature> temp_list = new List<Feature>();
+                            //temp_list.Add(switch_point);
+                            return_string += " " + manager_1.TieBack(storyline_1.ElementAt(component_index), storyline_1_first_half, storyline_1.ElementAt(component_index - 1)) + "\n";
                         }//end if
                     }//end foreach
 
                     return_string += " : switch point: " + switch_point.Name + " \n";
+                }//end else if
+                else if (split_input[0].Equals("COUNT_CONNECTIONS"))
+                {
+                    //Count the total number of edges in the graph.
+                    //Count pairs of forward and backward edges as one.
+
+                    //Nodes that have already been checked
+                    List<Feature> features_checked = new List<Feature>();
+                    //Relationships that have been seen
+                    List<string> relationships = new List<string>();
+                    int connection_count = 0;
+                    foreach (Feature feat_to_check in graph.Features)
+                    {
+                        features_checked.Add(feat_to_check);
+                        foreach (Tuple<Feature, double, string> temp_neighbor in feat_to_check.Neighbors)
+                        {
+                            //If this neighbor has already been checked, don't count the connection.
+                            if (features_checked.Contains(temp_neighbor.Item1))
+                            {
+                                continue;
+                            }//end if
+                            //If the relationship has not been seen, add it to the list of relationships
+                            if (!relationships.Contains(temp_neighbor.Item3))
+                            {
+                                relationships.Add(temp_neighbor.Item3);
+                            }//end if
+                            connection_count += 1;
+                        }//end foreach
+                    }//end foreach
+
+                    return_string = "Number of connections: " + connection_count + ", unique relationships: " + relationships.Count;
+                }//end else if
+                else if (split_input[0].Equals("FIND_WELL_CONNECTED_ROOTS"))
+                {
+                    FeatureGraph original_feature_graph = graph;
+
+                    //Root node, root node id, switch point, switch point id.
+                    List<Tuple<Feature, int, Feature, int>> interesting_roots = new List<Tuple<Feature, int, Feature, int>>();
+                    foreach (Feature feat_to_check in original_feature_graph.Features)
+                    {
+                        //Make a deep copy of the original feature graph so we can make changes
+                        //without changing the original.
+                        FeatureGraph temp_graph = DeepClone.DeepCopy<FeatureGraph>(original_feature_graph);
+                        NarrationManager temp_manager = new NarrationManager(temp_graph, temporalConstraintList);
+
+                        //Create the first story in its entirety
+                        //Set the node that the story will start at
+                        graph.Root = graph.getFeature(feat_to_check.Id);
+                        NarrationManager manager_1 = new NarrationManager(graph, temporalConstraintList);
+                        for (int i = 0; i < 10; i++)
+                        {
+                            manager_1.DefaultNextTopicResponse();
+                            manager_1.Turn += 1;
+                        }//end for
+                        //Get the topic history from the first narration as the refernce list for the second narration.
+                        List<Feature> storyline_1 = manager_1.TopicHistory;
+                        //Remove 1st node, it is a duplicate.
+                        storyline_1.RemoveAt(0);
+
+                        //Ask the manager for the first narration which node would be best as a switch point.
+                        Feature switch_point = manager_1.IdentifySwitchPoint(storyline_1);
+
+                        //If switch point is neither the first nor last nodes, mark this as an interesting root.
+                        if (!(switch_point.Id == storyline_1[0].Id) && !(switch_point.Id == storyline_1[storyline_1.Count - 1].Id))
+                        {
+                            interesting_roots.Add(new Tuple<Feature, int, Feature, int>(feat_to_check, feat_to_check.Id, switch_point, switch_point.Id));
+                        }//end if
+                    }//end foreach
+
+                    //return_string = "Number of connections: " + connection_count + ", unique relationships: " + relationships.Count;
                 }//end else if
 
             return return_string;

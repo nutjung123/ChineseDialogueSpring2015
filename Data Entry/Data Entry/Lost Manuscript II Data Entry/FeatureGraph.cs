@@ -6,6 +6,7 @@ using System.Diagnostics;
 
 namespace Dialogue_Data_Entry
 {
+    [Serializable]
     public class FeatureGraph
     {
         private List<Feature> features;
