@@ -445,6 +445,18 @@ namespace Dialogue_Data_Entry
                     Console.WriteLine("Lead-in topic result: " + return_message);
                     return return_message;
                 }//end if
+                // If not, check if first has last as its neighbor and their relationship is not blank
+                else if (!first.getRelationshipNeighbor(last.Id).Equals("")
+                        && !(first.getRelationshipNeighbor(last.Id) == null))
+                {
+                    //TODO: Chinese part isn't fixed yet, we need to get the relationship from first to last.
+                    //Right now, it's still the relationship from last to first.
+                    return_message = "{" + first_name_en + " " + first.getRelationshipNeighbor(last.Id) + " "
+                        + last_name_en + ".} " + "##" + "{" + first_name_cn + " " + relationship_neighbor_cn + " "
+                        + last_name_cn + ".} " + "##";
+                    Console.WriteLine("Lead-in topic result: " + return_message);
+                    return return_message;
+                }//end else if
                 // If last is a child node of first (first is a parent of last)
                 else if (!last.getRelationshipParent(first.Id).Equals("")
                             && !(last.getRelationshipParent(first.Id) == null))
