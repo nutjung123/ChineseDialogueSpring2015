@@ -115,10 +115,9 @@ namespace Dialogue_Data_Entry
 
 				//relation code
 				//map of Tuple(name,src,dest)
-				Dictionary<string, Tuple<string, string, string>> usage_map = new Dictionary<string, Tuple<string, string, string>>();
-				XmlNodeList relations = features[0].SelectNodes("Relations");
-				relations = relations[0].SelectNodes("Relation");
-
+				//Dictionary<string, Tuple<string, string, string>> usage_map = new Dictionary<string, Tuple<string, string, string>>();
+				//XmlNodeList relations = features[0].SelectNodes("Relations");
+				//relations = relations[0].SelectNodes("Relation");
 
 				features = features[0].SelectNodes("Features");
 				features = features[0].SelectNodes("Feature");
@@ -132,7 +131,7 @@ namespace Dialogue_Data_Entry
 					result_graph.addFeature(new Feature(name, id));
 
 					//relation code
-					usage_map["f" + node.Attributes["id"].Value] = new Tuple<string, string, string>(name, null, null);
+					//usage_map["f" + node.Attributes["id"].Value] = new Tuple<string, string, string>(name, null, null);
 
 
 				}//end foreach
@@ -215,7 +214,7 @@ namespace Dialogue_Data_Entry
 
 
 				//analogy relation code
-				foreach (XmlNode relation in relations) {
+				/*foreach (XmlNode relation in relations) {
 					string rid = relation.Attributes["id"].Value;
 					foreach (XmlNode relUsage in relation.SelectNodes("usages")[0].SelectNodes("usage")) {
 						string uid = relUsage.Attributes["id"].Value;
@@ -255,7 +254,7 @@ namespace Dialogue_Data_Entry
 
 				//set the dictionaries
 				result_graph.relationMap = relMap;
-				result_graph.inverse_relationMap = i_relMap;
+				result_graph.inverse_relationMap = i_relMap;*/
 
 				return result_graph;
 			}
