@@ -117,8 +117,8 @@ namespace Dialogue_Data_Entry
             //using the remote analogy code.
             if (history_list.Count % 6 == 5)
                 analogy = RemoteAnalogy(feat);
-            else
-                analogy = RelationshipAnalogy(feat);
+            //else
+                //analogy = RelationshipAnalogy(feat);
 
 
             /*var best_analogy = analogy_builder.find_best_analogy(feat);
