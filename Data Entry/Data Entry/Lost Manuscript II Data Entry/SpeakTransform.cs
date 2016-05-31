@@ -5,6 +5,8 @@ using System.Text;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Dialogue_Data_Entry
 {
@@ -110,8 +112,14 @@ namespace Dialogue_Data_Entry
 
             //Make an analogy based on the feature passed in, the previous topic, and the history list
             //and the relationships bewteen nodes.
-            //analogy = RelationshipAnalogy(feat);
-            analogy = RemoteAnalogy(feat);
+
+            //Every fifth node (starting from the 5th), try to make an analogy
+            //using the remote analogy code.
+            if (history_list.Count % 6 == 5)
+                analogy = RemoteAnalogy(feat);
+            else
+                analogy = RelationshipAnalogy(feat);
+
 
             /*var best_analogy = analogy_builder.find_best_analogy(feat);
 			if(best_analogy != null) analogy = analogy_builder.elaborate_on_analogy(best_analogy);*/
@@ -125,8 +133,8 @@ namespace Dialogue_Data_Entry
 
             using (var client = new HttpClient())
             {
-                string url = "http://localhost:5000/get_analogy";
-                string url_parameters = "?id=" + feat.Id.ToString() + "&port=9000";
+                string url = "http://localhost:5000/get_analogy_narration";
+                string url_parameters = "?id=" + feat.Id.ToString() + "&filename=" + @"C:\Users\Zev\Documents\GitHub\ChineseDialogueSpring2015\data files\2008_Summer_Olympic_Games_2_2_2016.xml";// +"&port=9000";
 
                 client.BaseAddress = new Uri(url);
                 client.DefaultRequestHeaders.Accept.Clear();
@@ -136,9 +144,25 @@ namespace Dialogue_Data_Entry
 
                 HttpResponseMessage response = client.GetAsync(url_parameters).Result;
 
-                if (response.IsSuccessStatusCode)
+                //Read the json string from the http response content
+                Task<string> read_string_task = response.Content.ReadAsStringAsync();
+                read_string_task.Wait(100000);
+
+                string content_string = read_string_task.Result;
+                JObject json_response = JObject.Parse(content_string);
+
+                string explanation = json_response["explanation"].ToString();
+                
+                //JsonSerializer temp_serializer = new JsonSerializer();
+                //var deserialized_response = temp_serializer.Deserialize(json_response);
+
+                Console.WriteLine("Response to remote analogy: " + explanation);
+
+                analogy = explanation;
+
+                /*if (response.IsSuccessStatusCode)
                 {
-                }//end if
+                }//end if*/
             }//end using
 
             return analogy;
@@ -525,7 +549,7 @@ namespace Dialogue_Data_Entry
             }//end if
 
             //!FindSpeak(first).Contains<string>(first.Id)
-            Console.WriteLine("Lead-in topic result: " + return_message);
+            Console.WriteLine("Lead-in topic no relationship result: " + return_message);
             return return_message;
         }//end function LeadInTopic
 

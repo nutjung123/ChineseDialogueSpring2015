@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 from flask import Flask
 from flask import request
+from flask import Response
 import urllib
 import urllib.request
 import json
@@ -52,6 +53,51 @@ def get_analogy():
         urllib.request.urlopen(req)
 
         return "Success"
+
+    #except Exception as e:
+        return "Exception: ",e
+
+@app.route('/get_analogy_narration', methods=['GET'])
+def get_analogy_narration():
+    #try:
+        feature_id = request.args["id"]
+        filename = request.args["filename"]
+        return_address = "http://%s"%request.remote_addr
+
+        print("ret: ",return_address)
+
+        if not filename:
+            #get graph data from knowledge explorer
+            graphdata = urllib.request.urlopen("%s/generate/xml"%return_address)
+            graphdata_buffer = graphdata.read()#.decode("utf-8")
+            a1 = AIMind(rawdata=graphdata_buffer)
+        else:
+            #else read specified file
+            a1 = AIMind(filename)
+        analogyData = a1.find_best_analogy(a1.get_feature(feature_id),a1)
+
+        if analogyData:
+            score, (src, trg), mapping, hypotheses = analogyData
+            evidence = [(a1.get_id(a[1]),a1.get_id(b[1])) for a,b in hypotheses.items()]
+            explanation = cgi.escape(a1.explain_analogy(analogyData))
+            data = {
+                "source":a1.get_id(src), #source topic
+                "target":a1.get_id(trg), #target topic
+                "evidence":evidence, #analogous mappings
+                "connections":[], #direct connections
+                "explanation":explanation #text explanation
+            }
+        else:
+            data = {}
+
+        #construct response
+        print("source: " + data["source"])
+        print("target: " + data["target"])
+        data=json.dumps(data).encode('utf8')
+        resp = Response(data,
+                        mimetype='application/json')
+
+        return resp
 
     #except Exception as e:
         return "Exception: ",e
