@@ -113,12 +113,6 @@ namespace Dialogue_Data_Entry
 				//Get the features
 				XmlNodeList features = doc.SelectNodes("AIMind");
 
-				//relation code
-				//map of Tuple(name,src,dest)
-				Dictionary<string, Tuple<string, string, string>> usage_map = new Dictionary<string, Tuple<string, string, string>>();
-				XmlNodeList relations = features[0].SelectNodes("Relations");
-				relations = relations[0].SelectNodes("Relation");
-
 
 				features = features[0].SelectNodes("Features");
 				features = features[0].SelectNodes("Feature");
@@ -130,10 +124,6 @@ namespace Dialogue_Data_Entry
 					string name = unEscapeInvalidXML(node.Attributes["data"].Value);
 					int id = Convert.ToInt32(node.Attributes["id"].Value);
 					result_graph.addFeature(new Feature(name, id));
-
-					//relation code
-					usage_map["f" + node.Attributes["id"].Value] = new Tuple<string, string, string>(name, null, null);
-
 
 				}//end foreach
 				foreach (XmlNode node in features) {
@@ -210,52 +200,6 @@ namespace Dialogue_Data_Entry
 				}
 				catch (Exception) { }
 				if (rootId != -1) { result_graph.Root = result_graph.getFeature(rootId); }
-
-
-
-
-				//analogy relation code
-				foreach (XmlNode relation in relations) {
-					string rid = relation.Attributes["id"].Value;
-					foreach (XmlNode relUsage in relation.SelectNodes("usages")[0].SelectNodes("usage")) {
-						string uid = relUsage.Attributes["id"].Value;
-						usage_map[rid + "," + uid] = new Tuple<string, string, string>(relation.Attributes["type"].Value,
-																					   relUsage.Attributes["src"].Value,
-																					   relUsage.Attributes["dest"].Value);
-					}
-				}
-
-				//get relations into dictionary 
-				Dictionary<string, HashSet<Tuple<string, string>>> relMap = new Dictionary<string, HashSet<Tuple<string, string>>>();
-				foreach (var usage in usage_map) {
-					string key = usage.Key;
-					string rtype = usage.Value.Item1;
-					string src = usage.Value.Item2;
-					string dest = usage.Value.Item3;
-					if (!String.IsNullOrEmpty(src)) {
-						HashSet <Tuple<string, string>> value;
-						if (!relMap.TryGetValue(usage_map[src].Item1, out value)) {
-							relMap.Add(usage_map[src].Item1, new HashSet<Tuple<string, string>>());
-						}
-						relMap[usage_map[src].Item1].Add(new Tuple<string, string>(usage_map[key].Item1, usage_map[dest].Item1));
-					}
-				}
-
-				//invert relations for fast lookup
-				Dictionary<string, HashSet<Tuple<string, string>>> i_relMap = new Dictionary<string, HashSet<Tuple<string, string>>>();
-				foreach(var kvp in relMap) {
-					foreach(Tuple<string,string> r in kvp.Value) {
-						HashSet<Tuple<string, string>> value;
-						if (!i_relMap.TryGetValue(r.Item1, out value)) {
-							i_relMap.Add(r.Item1, new HashSet<Tuple<string, string>>());
-						}
-						i_relMap[r.Item1].Add(new Tuple<string, string>(kvp.Key, r.Item2));
-					}
-				}
-
-				//set the dictionaries
-				result_graph.relationMap = relMap;
-				result_graph.inverse_relationMap = i_relMap;
 
 				return result_graph;
 			}
