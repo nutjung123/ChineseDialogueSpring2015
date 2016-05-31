@@ -103,10 +103,10 @@ class AIMind:
         self.rtype_index = self.index_rtypes()
 
 
-    def get_id(self,feature):
+    def get_id(self, feature):
         return self.r_feature_id_table[feature]
 
-    def get_feature(self,fid):
+    def get_feature(self, fid):
         return self.feature_id_table[fid]
 
     def explain_analogy(self, analogy, verbose=False):
@@ -164,7 +164,7 @@ class AIMind:
             out[rtype] = score
         return out
 
-    def find_best_analogy(self,feature,target_domain):
+    def find_best_analogy(self, feature, target_domain, filter_list=None):
 
         if not feature in self.features:
             return None
@@ -185,10 +185,13 @@ class AIMind:
         node = self.features[feature]
         f1 = [r for r in node.rtypes if r in useful]
 
+        candidate_pool = filter_list if filter_list != None else target_domain.features
+
         candidate_results = []
-        for n,c in target_domain.features.items():
+        for n in candidate_pool:
             if n == feature:
                 continue
+            c = target_domain.features[n]
             f2 = [r for r in c.rtypes if r in useful]
             # number of relation mappings is equal to smallest
             # number of relation types, because one-to-one

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AIMind>
+	<Root id="1"/>
+	<Features>
+		<Feature id="0" data="EmptyNode">
+			<neighbors/>
+			<speak/>
+		</Feature>
+		<Feature data="Electron" id="1">
+			<neighbors>
+				<neighbor dest="2" relationship="revolves around" weight="0"/>
+				<neighbor dest="2" relationship="attracts" weight="0"/>
+				<neighbor dest="3" relationship="has" weight="0"/>
+				<neighbor dest="2" relationship="distance" weight="0"/>
+			</neighbors>
+			<speak>The electron is a subatomic particle with a negative elementary electric charge.</speak>
+		</Feature>
+		<Feature data="Nucleus" id="2">
+			<neighbors>
+				<neighbor dest="1" relationship="more massive than" weight="0"/>
+				<neighbor dest="1" relationship="attracts" weight="0"/>
+				<neighbor dest="3" relationship="has" weight="0"/>
+				<neighbor dest="1" relationship="distance" weight="0"/>
+			</neighbors>
+			<speak>The nucleus is the very dense region consisting of protons and neutrons at the center of an atom.</speak>
+		</Feature>
+		<Feature data="Electric charge" id="3">
+			<neighbors/>
+			<speak>Electric charge is the physical property of matter that causes it to experience a force when placed in an electromagnetic field.</speak>
+		</Feature>
+		<Feature data="Rutherford Model" id="4">
+			<neighbors>
+				<neighbor dest="2" relationship="comprised of" weight="0"/>
+				<neighbor dest="1" relationship="comprised of" weight="0"/>
+			</neighbors>
+			<speak>The Rutherford model is a model of the atom devised by Ernest Rutherford.</speak>
+		</Feature>
+	</Features>
+</AIMind>
