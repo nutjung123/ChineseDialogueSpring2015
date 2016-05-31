@@ -294,8 +294,8 @@ namespace Dialogue_Data_Entry
 
 
 			//Create the speak transform object, initialized with history list and the previous topic
-			AnalogyBuilder ab = new AnalogyBuilder(feature_graph);
-			SpeakTransform transform = new SpeakTransform(topic_history, previous_topic, ab);
+			//AnalogyBuilder ab = new AnalogyBuilder(feature_graph);
+			SpeakTransform transform = new SpeakTransform(topic_history, previous_topic); //, ab);
 
 			//Pass in the given feature and speak value to be transformed.
 			String to_speak = transform.TransformSpeak(feat, speak);
