@@ -130,7 +130,6 @@ C:\Users\zevsm_000\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data En
 C:\Users\zevsm_000\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Dialogue Data Entry.exe
 C:\Users\zevsm_000\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Dialogue Data Entry.pdb
 C:\Users\zevsm_000\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Zeno Data Entry.csprojResolveAssemblyReference.cache
-C:\Users\Zev\Documents\GitHub\ChineseDialogueSpring2015\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Zeno Data Entry.csprojResolveAssemblyReference.cache
 E:\Documents\Schoolwork\Spring 2016\Research\backend\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Dialogue Data Entry.exe
 E:\Documents\Schoolwork\Spring 2016\Research\backend\Data Entry\Data Entry\Lost Manuscript II Data Entry\obj\x86\Debug\Dialogue Data Entry.pdb
 E:\Documents\Schoolwork\Spring 2016\Research\backend\Data Entry\Data Entry\Lost Manuscript II Data Entry\bin\Debug\Dialogue Data Entry.exe
