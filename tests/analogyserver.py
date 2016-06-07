@@ -7,7 +7,7 @@ import urllib.parse
 import json
 import cgi
 
-from analogyscoretest3_7 import AIMind
+from analogyscoretest3_9 import AIMind
 
 app = Flask(__name__)
 
@@ -39,18 +39,22 @@ def get_analogy():
         if id_filter: #convert list of id to list of names
             id_filter = [a1.get_feature(fid) for fid in id_filter]
 
+
         analogyData = a1.find_best_analogy(a1.get_feature(feature_id), a1, id_filter)
 
         if analogyData:
-            score, (src, trg), mapping, hypotheses = analogyData
-            evidence = [(a1.get_id(a[1]),a1.get_id(b[1])) for a,b in hypotheses.items()]
+            nrating, rating, total_rating, (src,trg), rassert, mapping = analogyData
+            evidence = [(a1.get_id(a[1]),a1.get_id(b[1])) for a,b in mapping.items()]
             explanation = cgi.escape(a1.explain_analogy(analogyData))
             data = {
                 "source":a1.get_id(src), #source topic
                 "target":a1.get_id(trg), #target topic
                 "evidence":evidence, #analogous mappings
                 "connections":[], #direct connections
-                "explanation":explanation #text explanation
+                "explanation":explanation, #text explanation,
+                "n_rating":nrating,
+                "rating":rating,
+
             }
         else:
             data = {}
