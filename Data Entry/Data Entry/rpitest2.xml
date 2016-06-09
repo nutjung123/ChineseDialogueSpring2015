@@ -1,0 +1,11 @@
+<AIMind>
+<Root id="0"/>
+<Feature id="0" data="rpi">
+<neighbor dest="2" weight="0"/>
+<neighbor dest="1" weight="0"/>
+</Feature>
+<Feature id="1" data="sage">
+</Feature>
+<Feature id="2" data="empac">
+</Feature>
+</AIMind>

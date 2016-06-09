@@ -7,6 +7,8 @@ using AIMLbot;
 namespace Dialogue_Data_Entry
 {
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
     //Narration Manager manages the flow of narration.
     //It keeps all memory of the conversation, such as what topics have been visited. 
     //It also has functions that provide what to say under different circumstances.
@@ -884,6 +886,7 @@ namespace Dialogue_Data_Entry
 
     }//end class NarrationManager
 =======
+>>>>>>> origin/for_study_may_16
 	//Narration Manager manages the flow of narration.
 	//It keeps all memory of the conversation, such as what topics have been visited. 
 	//It also has functions that provide what to say under different circumstances.
@@ -969,6 +972,33 @@ namespace Dialogue_Data_Entry
 
 			return return_string;
 		}//end function DefaultNextTopic
+        //Input a list of nodes that this narration can refer back to, outside
+        //of the history.
+        public string DefaultNextTopicResponse(List<Feature> reference_nodes)
+        {
+            Feature nextTopic = this.topic;
+            string[] newBuffer;
+            string return_string = "";
+            // Can't guarantee it'll actually move on to anything...
+
+            //Have the calculator decide on the next topic.
+            nextTopic = calculator.GetNextTopic(nextTopic, "", this.turn, this.TopicHistory);
+            //Gets a list of things to say about the topic (speak values or neighbor relations)
+            newBuffer = FindStuffToSay(nextTopic);
+
+            //Set the next topic and reset the buffer to the list
+            //of output strings from function FindStuffToSay
+            SetNextTopic(nextTopic, newBuffer);
+
+            //Get an output string from the buffer.
+            return_string = PullOutputFromBuffer();
+
+            //Adorn the answer, which sends it through speak transforms.
+            //The answer will be used later on in the function.
+            return_string = SpeakWithAdornments(this.topic, return_string, reference_nodes);
+
+            return return_string;
+        }//end function DefaultNextTopic
 
 		/// <summary>
 		/// Returns the next thing to say about the current topic. Does not change topics,
@@ -1156,6 +1186,25 @@ namespace Dialogue_Data_Entry
 			return output;
 		}//end method SayToChatBot
 
+        //Returns the feature that would serve best as a switch point given
+        // the input storyline.
+        public Feature IdentifySwitchPoint(List<Feature> storyline)
+        {
+            return calculator.IdentifySwitchPoint(storyline);
+        }//end method IdentifySwitchPoint
+
+        public string Foreshadow(Feature feature_to_foreshadow, List<Feature> reference_list)
+        {
+            SpeakTransform temp_transform = new SpeakTransform(topic_history, topic_history[topic_history.Count - 1]);
+            return temp_transform.Foreshadow(feature_to_foreshadow, reference_list);
+        }//end method Foreshadow
+
+        public string TieBack(Feature feature_to_tie_back, List<Feature> reference_list, Feature previous_feature)
+        {
+            SpeakTransform temp_transform = new SpeakTransform(topic_history, topic_history[topic_history.Count - 1]);
+            return temp_transform.TieBack(feature_to_tie_back, reference_list, previous_feature);
+        }//end method TieBack
+
 		//PRIVATE UTILITY FUNCTIONS
 		//Returns the speak value passed in with adornments according to the feature passed in, such as topic lead-ins and analogies.
 		private string SpeakWithAdornments(Feature feat, string speak, bool use_relationships = true)
@@ -1174,6 +1223,27 @@ namespace Dialogue_Data_Entry
 			//Create the speak transform object, initialized with history list and the previous topic
 			//AnalogyBuilder ab = new AnalogyBuilder(feature_graph);
 			SpeakTransform transform = new SpeakTransform(topic_history, previous_topic); //, ab);
+            //Pass in the given feature and speak value to be transformed.
+            String to_speak = transform.TransformSpeak(feat, speak);
+
+            return to_speak;
+        }//end method AdornMessage
+        private string SpeakWithAdornments(Feature feat, string speak, List<Feature> reference_list)
+        {
+            bool use_relationships = true;
+            //Treat the feature passed in as the current topic
+            Feature current_topic = feat;
+
+            Feature previous_topic = null;
+
+            if (topic_history.Count < 2)
+                previous_topic = null;
+            else
+                previous_topic = topic_history[topic_history.Count - 2];
+
+
+            //Create the speak transform object, initialized with history list and the previous topic
+            SpeakTransform transform = new SpeakTransform(topic_history, previous_topic, reference_list);
 
 			//Pass in the given feature and speak value to be transformed.
 			String to_speak = transform.TransformSpeak(feat, speak);
@@ -1693,5 +1763,8 @@ namespace Dialogue_Data_Entry
 		}
 
 	}//end class NarrationManager
+<<<<<<< HEAD
+=======
 >>>>>>> refs/remotes/origin/master
+>>>>>>> origin/for_study_may_16
 }//end namespace

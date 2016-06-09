@@ -1,0 +1,15 @@
+<AIMind>
+<Root id="3"/>
+<Feature id="0" data="a">
+</Feature>
+<Feature id="1" data="b">
+</Feature>
+<Feature id="2" data="c">
+</Feature>
+<Feature id="3" data="letters">
+<neighbor dest="0" weight="0"/>
+<neighbor dest="1" weight="0"/>
+<neighbor dest="2" weight="0"/>
+<tag key="Start" value="pi" type="is"/>
+</Feature>
+</AIMind>

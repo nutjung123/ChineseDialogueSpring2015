@@ -114,6 +114,8 @@ namespace Dialogue_Data_Entry
 				XmlNodeList features = doc.SelectNodes("AIMind");
 
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
                         //pre-process in case no parent exist
                         foreach (XmlNode tempNode in features)
                         {
@@ -219,6 +221,7 @@ namespace Dialogue_Data_Entry
         }
 =======
 >>>>>>> refs/remotes/origin/master
+>>>>>>> origin/for_study_may_16
 
 				features = features[0].SelectNodes("Features");
 				features = features[0].SelectNodes("Feature");
@@ -255,7 +258,6 @@ namespace Dialogue_Data_Entry
 								if (tempParents.Count != 0) {
 									tempParents = tempParents[0].SelectNodes("parent");
 									if (tempParents.Count == 0) {
-										//ZEV: Check that this works!
 										result_graph.getFeature(neighbor_id).addParent(tmp);
 									}
 								}//end if
@@ -289,16 +291,50 @@ namespace Dialogue_Data_Entry
 					XmlNodeList speaks = node.SelectNodes("speak");
 					foreach (XmlNode speak in speaks) {
 						try {
-							//try old format
-							tmp.addSpeak(unEscapeInvalidXML(speak.Attributes["value"].Value));
-						}
+                            tmp.addSpeak(unEscapeInvalidXML(speak.InnerText));
+                        }
 						catch {
 							//use new format
 							tmp.addSpeak(speak.InnerText);
 						}
+                    }
+                }//end foreach
 
-					}
-				}
+                //Connectedness check: check each node's neighbor. If the neighbor does not have
+                //this node on its list of neighbors, place it there.
+                //This is here because knowledge explorer does not add some inverse relationships.
+                //From 5/5/2016, added by Zev Battad.
+                //Go over each feature.
+                foreach (Feature feature_to_check in result_graph.Features)
+                {
+                    //Go over each neighbor in this feature
+                    foreach (Tuple<Feature, double, string> neighbor_to_check in feature_to_check.Neighbors)
+                    {
+                        //Check this neighbor's neighbor list for this feature.
+                        bool feature_found = false;
+                        foreach (Tuple<Feature, double, string> neighbor_of_neighbor in neighbor_to_check.Item1.Neighbors)
+                        {
+                            //If this neighbor's neighbor is the feature to check, we are done.
+                            if (neighbor_of_neighbor.Item1.Id.Equals(feature_to_check.Id))
+                            {
+                                feature_found = true;
+                                break;
+                            }//end if
+                        }//end foreach
+
+                        //If the neighbor has the feature to check as a neighbor, continue to the next neighbor.
+                        if (feature_found)
+                            continue;
+                        //Otherwise, we must add an inverse relationship.
+                        else
+                        {
+                            //Leave the relationship blank to signal that the relationship going the other direction
+                            //should be used.
+                            neighbor_to_check.Item1.addNeighbor(feature_to_check, 0);
+                        }//end else
+                    }//end foreach
+                }//end foreach
+
 				int rootId = -1;
 				try {
 					features = doc.SelectNodes("AIMind");
