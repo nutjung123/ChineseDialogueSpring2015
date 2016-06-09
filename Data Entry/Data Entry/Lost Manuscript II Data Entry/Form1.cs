@@ -12,70 +12,6 @@ using Dialogue_Data_Entry;
 
 namespace Dialogue_Data_Entry
 {
-<<<<<<< HEAD
-    public partial class Form1 : Form
-    {
-        private FeatureGraph featGraph;
-        private Feature toChange;
-        private string editorFeatureSelected;
-        private string editorKeySelected;
-        private string currentFileName;
-        private string currentConstraintFileName="";
-        private string currentQueryFolderName;
-        private int queryCounter;
-        private int selectedIndex;
-        private const string BAD_CHARS = "";
-        //private const string BAD_CHARS = "<>()\"\'";
-        private int tIndex = -1;
-        private ToolTip toolTip1;
-        private bool shouldIgnoreCheckEvent;
-        private Form2 myQuery;
-        private bool updateFlag;
-        private TextBox lastFocused;
-        private List<TemporalConstraint> temporalConstraintList;
-        //Change this to change which file is loaded at program startup
-        //private string defaultFilename = @"\2008_Summer_Olympic_Games.xml";
-        //private string defaultFilename = @"\2008_Summer_Olympic_Games_4th_simple_tag.xml";
-        //private string defaultFilename = @"\2008_Summer_Olympic_Games_4th_tag10.xml";
-        //private string defaultFilename = @"\2008_Summer_Olympic_Games_4th_revised.xml";
-        //private string defaultFilename = @"\empac_xml.xml";
-        //private string defaultFilename = @"\2008_Summer_Olympic_Games_4th_tag_simple_chinese_2.xml";
-
-        //private string defaultFilename = @"\2008_Summer_Olympic_Games_4th_tag_complex_chinese_new.xml";
-        //private string defaultFilename = @"\2008_Summer_Olympic_Games_2_2_2016.xml";
-        private string defaultFilename = @"\arctic_exploration_500.xml";
-
-        private string constraintFilename = @"\constraint.txt";
-
-        public Form1()
-        {
-            queryCounter = 0;
-            selectedIndex = -1;
-            featGraph = new FeatureGraph();
-            toChange = null;
-            currentFileName = "";
-            updateFlag = false;
-            
-            InitializeComponent();
-
-            //set up tooltip
-            toolTip1 = new ToolTip();
-            toolTip1.AutoPopDelay = 5000;
-            toolTip1.InitialDelay = 1000;
-            toolTip1.ReshowDelay = 500;
-            toolTip1.ShowAlways = true;
-
-            //Add enter method
-            textBox1.KeyDown += new KeyEventHandler(this.featureCreateTextBox1_KeyDown);
-            //Add tooltip method to childrenCheckedListBox
-            childrenCheckedListBox.MouseHover += new EventHandler(childrenCheckedListBox_MouseHover);
-            childrenCheckedListBox.MouseMove += new MouseEventHandler(childrenCheckedListBox_MouseMove);
-            //check event handle
-            childrenCheckedListBox.ItemCheck += new ItemCheckEventHandler(childrenCheckedListBox_ItemCheck);
-            //right click event for adding relationship
-            childrenCheckedListBox.MouseDown += new MouseEventHandler(childrenCheckedListBox_RightClick);
-            //Add shortcuts
-=======
 	public partial class Form1 : Form
 	{
 		private FeatureGraph featGraph;
@@ -139,7 +75,6 @@ namespace Dialogue_Data_Entry
 			//right click event for adding relationship
 			childrenCheckedListBox.MouseDown += new MouseEventHandler(childrenCheckedListBox_RightClick);
 			//Add shortcuts
->>>>>>> refs/remotes/origin/master
 			textBox7.KeyUp += new KeyEventHandler(this.textBox7_KeyUp);
 
 			//Add lostFocuse Method
