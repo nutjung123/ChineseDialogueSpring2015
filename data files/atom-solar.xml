@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AIMind>
+	<Root id="1"/>
+	<Features>
+		<Feature id="0" data="EmptyNode">
+			<neighbors/>
+			<speak/>
+		</Feature>
+		<Feature data="Solar System" id="1">
+			<neighbors>
+				<neighbor dest="2" relationship="comprised of" weight="0"/>
+				<neighbor dest="6" relationship="comprised of" weight="0"/>
+			</neighbors>
+			<speak>The Solar System comprises the Sun and the objects that orbit it, whether they orbit it directly or by orbiting other objects that orbit it directly.</speak>
+		</Feature>
+		<Feature data="Sun" id="2">
+			<neighbors>
+				<neighbor dest="3" relationship="is" weight="0"/>
+				<neighbor dest="4" relationship="has" weight="0"/>
+				<neighbor dest="5" relationship="has" weight="0"/>
+				<neighbor dest="6" relationship="hotter than" weight="0"/>
+				<neighbor dest="6" relationship="more massive than" weight="0"/>
+				<neighbor dest="6" relationship="attracts" weight="0"/>
+				<neighbor dest="6" relationship="distance" weight="0"/>
+			</neighbors>
+			<speak>The Sun is the star at the center of the Solar System.</speak>
+		</Feature>
+		<Feature data="Yellow" id="3">
+			<neighbors/>
+			<speak>Yellow is the color of gold, butter, and ripe lemons. In the spectrum of visible light, and in the traditional color wheel used by painters, yellow is found between green and orange.</speak>
+		</Feature>
+		<Feature data="Heat" id="4">
+			<neighbors/>
+			<speak>In physics, heat is energy in transfer other than as work or by transfer of matter.</speak>
+		</Feature>	
+		<Feature data="Mass" id="5">
+			<neighbors/>
+			<speak>In physics, mass is a property of a physical body. It is generally a measure of an object's resistance to changing its state of motion when a force is applied</speak>
+		</Feature>
+		<Feature data="Planet" id="6">
+			<neighbors>
+				<neighbor dest="4" relationship="has" weight="0"/>
+				<neighbor dest="5" relationship="has" weight="0"/>
+				<neighbor dest="2" relationship="revolves around" weight="0"/>
+				<neighbor dest="2" relationship="attracts" weight="0"/>
+				<neighbor dest="6" relationship="attracts" weight="0"/>
+				<neighbor dest="2" relationship="distance" weight="0"/>
+			</neighbors>
+			<speak>A planet is an astronomical object orbiting a star or stellar remnant that is massive enough to be rounded by its own gravity, is not massive enough to cause thermonuclear fusion, and has cleared its neighbouring region of planetesimals.</speak>
+		</Feature>
+		<Feature data="Gravitation" id="7">
+			<neighbors/>
+			<speak>Gravitation, or gravity, is a natural phenomenon by which physical bodies attract with a force proportional to their masses.</speak>
+		</Feature>
+		<Feature data="Electron" id="8">
+			<neighbors>
+				<neighbor dest="9" relationship="revolves around" weight="0"/>
+				<neighbor dest="9" relationship="attracts" weight="0"/>
+				<neighbor dest="10" relationship="has" weight="0"/>
+				<neighbor dest="9" relationship="distance" weight="0"/>
+			</neighbors>
+			<speak>The electron is a subatomic particle with a negative elementary electric charge.</speak>
+		</Feature>
+		<Feature data="Nucleus" id="9">
+			<neighbors>
+				<neighbor dest="8" relationship="more massive than" weight="0"/>
+				<neighbor dest="8" relationship="attracts" weight="0"/>
+				<neighbor dest="10" relationship="has" weight="0"/>
+				<neighbor dest="8" relationship="distance" weight="0"/>
+			</neighbors>
+			<speak>The nucleus is the very dense region consisting of protons and neutrons at the center of an atom.</speak>
+		</Feature>
+		<Feature data="Electric charge" id="10">
+			<neighbors/>
+			<speak>Electric charge is the physical property of matter that causes it to experience a force when placed in an electromagnetic field.</speak>
+		</Feature>
+		<Feature data="Rutherford Model" id="11">
+			<neighbors>
+				<neighbor dest="9" relationship="comprised of" weight="0"/>
+				<neighbor dest="8" relationship="comprised of" weight="0"/>
+			</neighbors>
+			<speak>The Rutherford model is a model of the atom devised by Ernest Rutherford.</speak>
+		</Feature>
+		
+		
+		
+		
+		<!-- If the sun is yellow, that implies the sun has color. Why?
+		Because yellow is a color.
+		
+		
+		How represent?
+			
+		-->
+		
+		
+		
+		<Feature data="Entity" id="12">
+			<neighbors/>
+			<speak>An entity is something that exists in itself, actually or potentially, concretely or abstractly, physically or not.</speak>
+		</Feature>
+		
+		<Feature data="Color" id="13">
+			<neighbors/>
+			<speak>Color is the visual perceptual property corresponding in humans to the categories called red, blue, yellow, and others.</speak>
+		</Feature>
+		
+		
+	
+		
+	</Features>
+	
+	<!-- 
+		
+		high level relations between features 
+		each relation has a set of usages		
+		
+		usage abstraction score:
+			score = score(src) + score(dest)
+			if src is feature, score(src) = 1
+			if dest is feature, score(dest) = 1
+			
+		is abstraction difference between src and dest a useful metric?
+	
+	-->
+	<Relations>
+		<Relation type="has" id="1">
+			<usages>
+				<!-- sun has mass -->
+				<usage id="1" src="f2" dest="f5"/>
+				<!-- planet has mass -->
+				<usage id="2" src="f6" dest="f5"/>
+				<!-- sun has heat -->
+				<usage id="3" src="f2" dest="f4"/>
+				<!-- planet has heat -->
+				<usage id="4" src="f6" dest="f4"/>
+				<!-- electron has mass -->
+				<usage id="5" src="f8" dest="f5"/>
+				<!-- nucleus has mass -->
+				<usage id="6" src="f9" dest="f5"/>
+				<!-- electron has charge -->
+				<usage id="7" src="f8" dest="f10"/>
+				<!-- nucleus has charge -->
+				<usage id="8" src="f9" dest="f10"/>
+			</usages>
+		</Relation>	
+	
+		<Relation type="gravity" id="2">
+			<usages>
+				<!-- gravity between sun mass and planet mass -->
+				<usage id="1" src="1,1" dest="1,2"/>
+			</usages>
+		</Relation>
+		
+		<Relation type="is greater than" id="3">
+			<usages>
+				<!-- sun mass greater than planet mass -->
+				<usage id="1" src="1,1" dest="1,2"/>
+				<!-- sun heat greater than planet heat -->
+				<usage id="2" src="1,3" dest="1,4"/>
+				<!-- nucleus mass greater than electron mass -->
+				<usage id="3" src="1,6" dest="1,5"/>
+			</usages>
+		</Relation>
+		
+		<Relation type="attracts" id="4">
+			<usages>
+				<!-- sun attracts planet -->
+				<usage id="1" src="f2" dest="f6"/>
+				<!-- nucleus attracts electron -->
+				<usage id="2" src="f9" dest="f8"/>
+			</usages>
+		</Relation>
+		
+		<Relation type="causes" id="5">
+			<usages>
+				<!-- sun/planet gravity causes sun/planet attraction -->
+				<usage id="1" src="2,1" dest="4,1"/>
+				<!-- mass difference + attraction = revolve -->
+				<usage id="2" src="6,1" dest="7,1"/>
+				<!-- opposite charge causes attraction -->
+				<usage id="3" src="8,1" dest="4,2"/>
+			</usages>
+		</Relation>
+		
+		<Relation type="and" id="6">
+			<usages>
+				<!-- (sun/planet attraction) and (sun mass > planet mass)-->
+				<usage id="1" src="4,1" dest="3,1"/>
+			</usages>
+		</Relation>
+		
+		<Relation type="revolves around" id="7">
+			<usages>
+				<!-- planet revolves around sun)-->
+				<usage id="1" src="f6" dest="f2"/>
+				<!-- electron revolves around nucleus)-->
+				<usage id="2" src="f8" dest="f9"/>
+			</usages>
+		</Relation>
+		
+		<Relation type="opposite" id="8">
+			<usages>
+				<!-- electron charge opposite of nucleus charge -->
+				<usage id="1" src="1,7" dest="1,8"/>
+			</usages>
+		</Relation>
+		
+		<Relation type="is" id="9">
+			<usages>
+				<!-- the sun is yellow -->
+				<usage id="1" src="f2" dest="f3"/>
+			</usages>
+		</Relation>
+		
+	</Relations>
+	
+</AIMind>
