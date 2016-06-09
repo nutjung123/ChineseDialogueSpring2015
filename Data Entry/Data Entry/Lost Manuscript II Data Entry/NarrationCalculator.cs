@@ -379,6 +379,187 @@ namespace Dialogue_Data_Entry
             return listScore;
         }//end method getProximal
 
+        //Returns the feature that would serve best as a switch point given
+        // the input storyline.
+        //Motivated by measure of proximity in paper by Leal, Rodrigues, and Queiros, 2012.
+        public Feature IdentifySwitchPoint(List<Feature> storyline)
+        {
+            //How connected the set of features up to the index in Item1 is.
+            List<Tuple<Feature, int>> sum_edge_counts = new List<Tuple<Feature, int>>();
+            //the list of features that come before the current index
+            List<Feature> prior_list = new List<Feature>();
+            //the list of features that come after the current index
+            List<Feature> future_list = new List<Feature>();
+            Feature switch_point = null;
+            int largest_count = -1;
+            int current_count = 0;
+            for (int i = 0; i < storyline.Count; i++)
+            {
+                prior_list = storyline.GetRange(0, i + 1);
+                future_list = storyline.GetRange(i + 1, storyline.Count - i - 1);
+                current_count = 0;
+                //Count all edges from previous nodes to future nodes
+                foreach (Feature prior_feature in prior_list)
+                {
+                    foreach (Feature future_feature in future_list)
+                    {
+                        //Check if there is a relationship in either direction between the two.
+                        if ((!prior_feature.getRelationshipNeighbor(future_feature.Id).Equals("")
+                            && !(prior_feature.getRelationshipNeighbor(future_feature.Id) == null))
+                            || (!future_feature.getRelationshipNeighbor(prior_feature.Id).Equals("")
+                            && !(future_feature.getRelationshipNeighbor(prior_feature.Id) == null)))
+                        {
+                            //If so, then increment the connections count.
+                            current_count += 1;
+                        }//end if
+                    }//end foreach
+                }//end foreach
+                //Make a tuple entry
+                sum_edge_counts.Add(new Tuple<Feature, int>(storyline[i], current_count));
+                if (current_count >= largest_count)
+                {
+                    largest_count = current_count;
+                    switch_point = storyline[i];
+                }//end if
+            }//end for
+
+            if (largest_count == 0)
+                switch_point = storyline[storyline.Count - 1];
+
+            return switch_point;
+
+            /*
+            //Each feature will have a count of how many other features
+            //in the storyline it is directly connected to.
+            List<Tuple<Feature, int>> connectedness = new List<Tuple<Feature, int>>();
+            foreach (Feature story_feature in storyline)
+            {
+                int number_of_connections = 0;
+                foreach (Feature feature_to_compare in storyline)
+                {
+                    //Check if there is a relationship in either direction between the two.
+                    if ((!story_feature.getRelationshipNeighbor(feature_to_compare.Id).Equals("")
+                        && !(story_feature.getRelationshipNeighbor(feature_to_compare.Id) == null))
+                        || (!feature_to_compare.getRelationshipNeighbor(story_feature.Id).Equals("")
+                        && !(feature_to_compare.getRelationshipNeighbor(story_feature.Id) == null)))
+                    {
+                        //If so, then increment the connections count.
+                        number_of_connections += 1;
+                    }//end if
+                }//end foreach
+                //We now have how many other features in the storyline this feature is connected to.
+                //Store it as a tuple in the connectedness list.
+                connectedness.Add(new Tuple<Feature, int>(story_feature, number_of_connections));
+            }//end foreach
+
+            //Find the tuple with the highest connectedness.
+            Feature return_feature = null;
+            int highest_connectedness = 0;
+            foreach (Tuple<Feature, int> connectedness_pair in connectedness)
+            {
+                if (connectedness_pair.Item2 > highest_connectedness)
+                {
+                    return_feature = connectedness_pair.Item1;
+                    highest_connectedness = connectedness_pair.Item2;
+                }//end if
+            }//end foreach
+
+            return return_feature;*/
+        }//end method IdentifySwitchPoint
+
+        //Calculate the relatedness between two features
+        public double CalculateRelatedness(Feature feature_1, Feature feature_2)
+        {
+            double relatedness = 0;
+
+            //SHORTEST PATH METRIC
+            //Relatedness is equal to the inverse shortest path length between two features.
+            relatedness = 1 / (feature_1.ShortestDistance[feature_2.Id]);
+
+            return relatedness;
+        }//end method CalculateRelatedness
+
+        //Calculate the proximity between two features.
+        //Proximity calculation based on paper by Leal, Rodrigues, and Queiros, 2012.
+        //In the method from the paper described above, DBPedia nodes were being used as
+        //proxies for similarity between terms. However, if DBPedia nodes are being taken
+        //as the subject of proximity in the first place, this measure is even more accurate.
+        public int CalculateProximity(Feature feature_1, Feature feature_2)
+        {
+            HashSet<Path> paths_from_1 = new HashSet<Path>();
+            HashSet<Path> paths_from_2 = new HashSet<Path>();
+
+            paths_from_1.Add(new Path(feature_1, 0));
+            paths_from_2.Add(new Path(feature_2, 0));
+
+            return Proximity(paths_from_1, paths_from_2, 1);
+        }//end method CalculateProximity
+
+        //Private recursive part of proximity function. Performs BFS from source and destination
+        //to find path between the two.
+        private int Proximity(HashSet<Path> paths_from_1, HashSet<Path> paths_from_2, int step)
+        {
+            int proximity = 0;
+
+            //If either paths are empty, return the default proximity value.
+            if (paths_from_1.Count == 0 || paths_from_2.Count == 0)
+            {
+                return proximity;
+            }//end if
+
+            HashSet<Path> unused_1 = new HashSet<Path>(paths_from_1);
+            HashSet<Path> unused_2 = new HashSet<Path>(paths_from_2);
+
+            foreach (Path path_1 in paths_from_1)
+            {
+                foreach (Path path_2 in paths_from_2)
+                {
+                    //If any path nodes are equal to each other, the paths connect
+                    if (path_1.feature.Id.Equals(path_2.feature.Id))
+                    {
+                        int step3 = step * step * step;
+                        proximity += (path_1.distance + path_2.distance) / step3;
+                        unused_1.Remove(path_1);
+                        unused_2.Remove(path_2);
+                    }//end if
+                }//end foreach
+            }//end foreach
+
+            //The maximum number of steps we're allowed to go.
+            int MAX_STEP = 5;
+            if (step < MAX_STEP)
+            {
+                HashSet<Path> related_1 = RelatedPaths(unused_1);
+                HashSet<Path> related_2 = RelatedPaths(unused_2);
+
+                proximity += Proximity(related_1, related_2, step + 1);
+            }//end if
+
+            return proximity;
+        }//end method proximity
+
+        private HashSet<Path> RelatedPaths(HashSet<Path> paths)
+        {
+            HashSet<Path> related = new HashSet<Path>();
+
+            foreach (Path path in paths)
+            {
+                foreach (Tuple<Feature, double, string> temp_neighbor in path.feature.Neighbors)
+                {
+                    //Property property = arc.property <-- The relationship between these nodes.
+                    //Node target = arc.target <-- the neighboring feature itself.
+                    int relationship_weight = 1; //<-- In the future, relationships will be appropriately weighted.
+                    //For now, it is assumed all weights are 1.
+
+                    int distance = path.distance + relationship_weight;
+
+                    related.Add(new Path(temp_neighbor.Item1, distance));
+                }//end foreach
+            }//end foreach
+
+            return related;
+        }//end method RelatedPaths
+
         //PRIVATE UTILITY FUNCTIONS
         //Make the hierarchy key from the relationships in the feature graph.
         private String[] CreateHierarchyKey(FeatureGraph source_graph)
