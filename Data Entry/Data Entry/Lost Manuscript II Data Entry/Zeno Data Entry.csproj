@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnalogyBuilder.cs" />
     <Compile Include="NarrationCalculator.cs" />
     <Compile Include="NarrationManager.cs" />
     <Compile Include="Path.cs" />
