@@ -6,10 +6,7 @@ using System.Diagnostics;
 
 namespace Dialogue_Data_Entry
 {
-<<<<<<< HEAD
     [Serializable]
-=======
->>>>>>> refs/remotes/origin/master
 	public class FeatureGraph
 	{
 		private List<Feature> features;
@@ -18,7 +15,6 @@ namespace Dialogue_Data_Entry
 		private double maxDistance;
 
 <<<<<<< HEAD
-=======
 		/*
 		//map of specific relation usages and their ID
 		private Dictionary<string,RelationUsage> relation_usages;
@@ -37,7 +33,6 @@ namespace Dialogue_Data_Entry
 		//  2 - spatial constraint weight
 		//  3 - hierarchy constraint weight
 		private double[] weight_array;
-
 		public FeatureGraph()
 		{
 			features = new List<Feature>();
@@ -62,7 +57,6 @@ namespace Dialogue_Data_Entry
 			relationMap = new Dictionary<string, HashSet<Tuple<string, string>>>();
 			inverse_relationMap = new Dictionary<string, HashSet<Tuple<string, string>>>();
 		}
-
 		private void helperMaxDepthDSF(Feature current, int depth, bool[] checkEntry)
 		{
 			if (current.Neighbors.Count == 0)
@@ -79,13 +73,11 @@ namespace Dialogue_Data_Entry
 				return;
 			}
 			checkEntry[index] = true;
-
 			for (int x = 0; x < current.Neighbors.Count; x++)
 			{
 				helperMaxDepthDSF(current.Neighbors[x].Item1, depth + 1,checkEntry);
 			}
 		}
-
 		private void helperMaxDepthBFS()
 		{
 			Feature current = this.Root;
@@ -112,7 +104,6 @@ namespace Dialogue_Data_Entry
 				}
 			}
 		}
-
 		//find max shortest path from the giving node and set shortestDistance 
 		private double maxDistBFS(Feature node)
 		{
@@ -127,14 +118,12 @@ namespace Dialogue_Data_Entry
 			{
 				this.Features[x].Dist = 0;
 			}
-
 			//initialize node's ShortestDistance to zero
 			node.ShortestDistance.Clear();
 			for (int x = 0; x < this.Count;x++)
 			{
 				node.ShortestDistance.Add(0.0);
 			}
-
 			while (queue.Count > index)
 			{
 				current = queue[index]; index++;
@@ -167,7 +156,6 @@ namespace Dialogue_Data_Entry
 			}
 			return maxDistance;
 		}
-
 		//update all features' shortestDistance 
 		//shortestDistance has to be empty list
 		private void allPairShortestPath()
@@ -176,7 +164,6 @@ namespace Dialogue_Data_Entry
 			{
 				this.Features[x].ShortestDistance.Clear();
 			}
-
 			//initialize all distance to infinity
 			for (int x = 0; x < this.Count;x++)
 			{
@@ -185,7 +172,6 @@ namespace Dialogue_Data_Entry
 					this.Features[x].ShortestDistance.Add(2147483646); //maxint -1
 				}
 			}
-
 			//distance to itself is zero
 			for (int x = 0; x < this.Count; x++)
 			{
@@ -214,7 +200,6 @@ namespace Dialogue_Data_Entry
 					this.Features[x].ShortestDistance[ind] = dist;
 				}
 			}
-
 			//All-pair shortest path
 			for (int k = 0; k < this.Count; k++)
 			{
@@ -230,7 +215,6 @@ namespace Dialogue_Data_Entry
 				}
 			}
 		}
-
 		private void printShortestDistance()
 		{
 			for (int x = 0; x < this.Count; x++)
@@ -243,7 +227,6 @@ namespace Dialogue_Data_Entry
 			}
 			Console.WriteLine();
 		}
-
 		public void getMaxDistance()
 		{
 			//var sw = new Stopwatch();
@@ -267,7 +250,6 @@ namespace Dialogue_Data_Entry
 			}
 			//printShortestDistance();
 		}
-
 		public int getMaxDepth()
 		{
 			if(maxDepth==-1)
@@ -285,7 +267,6 @@ namespace Dialogue_Data_Entry
 		{
 			maxDepth = h;
 		}
-
 		//Get a single weight from the weight array
 		public double getSingleWeight(int weight_index)
 		{
@@ -305,7 +286,6 @@ namespace Dialogue_Data_Entry
 				return;
 			weight_array[weight_index] = weight_to_set;
 		}//end method setWeight
-
 		public bool addFeature(Feature toAdd)
 		{
 			features.Add(toAdd);
@@ -327,7 +307,6 @@ namespace Dialogue_Data_Entry
 			}
 			return false;
 		}
-
 		public bool setFeatureDiscussedAmount(int id, float amount)
 		{
 			int i = getFeatureIndex(id);
@@ -338,7 +317,6 @@ namespace Dialogue_Data_Entry
 			}
 			return false;
 		}
-
 		public bool setFeatureId(int index, int new_id)
 		{
 			if (index >= 0 && index < features.Count)
@@ -357,7 +335,6 @@ namespace Dialogue_Data_Entry
 			}
 			return false;
 		}//end function setFeatureName
-
 		public bool setFeatureNeighbors(int index, List<Tuple<Feature, double,string>> newNeighbors)
 		{
 			if (index >= 0 && index < features.Count)
@@ -376,7 +353,6 @@ namespace Dialogue_Data_Entry
 			}
 			return false;
 		}
-
 		public Feature getFeature(string name)
 		{
 			for (int x = 0; x < features.Count; x++)
@@ -393,7 +369,6 @@ namespace Dialogue_Data_Entry
 			}
 			return null;
 		}//end function getFeature
-
 		/*public Feature getFeature(int index)
 		{
 			return features[index];
@@ -410,7 +385,6 @@ namespace Dialogue_Data_Entry
 			return -1;
 			throw new Exception("If you see this msg when you save the file. Please report and don't close your program.");
 		}//end function getFeatureIndex
-
 		public bool hasNode(int id)
 		{
 			for (int x = 0; x < features.Count; x++)
@@ -427,7 +401,6 @@ namespace Dialogue_Data_Entry
 			}
 			return false;
 		}//whether or not the feature graph has this node
-
 		public bool connect(string A, string B, double weight = 1.0)
 		{
 			if (A == null || B == null) { throw new Exception("You cannot create a connection between two features if one is null"); }
@@ -462,7 +435,6 @@ namespace Dialogue_Data_Entry
 			}
 			return names;
 		}
-
 		public bool removeFeature(string name)
 		{
 			for (int x = 0; x < features.Count; x++)
@@ -495,14 +467,11 @@ namespace Dialogue_Data_Entry
 			}
 			return false;
 		}//end function removeFeature
-
 		public bool removeDouble(int id)
 		{
-
 			bool xyz = false;
 			for (int x = 0; x < features.Count; x++)
 			{
-
 				if (features[x].Id == id && xyz == false)
 				{
 					xyz = true;
@@ -512,12 +481,10 @@ namespace Dialogue_Data_Entry
 			}
 			return false;
 		}
-
 		public double MaxDistance
 		{
 			get { return this.maxDistance; }
 		}
-
 		public int Count
 		{
 			get { return this.features.Count; }
@@ -545,5 +512,6 @@ namespace Dialogue_Data_Entry
 			get { return this.features; }
 		}
 	}
->>>>>>> refs/remotes/origin/master
+=======
+>>>>>>> origin/for_study_may_16
 }
