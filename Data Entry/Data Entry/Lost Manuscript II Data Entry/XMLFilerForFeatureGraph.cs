@@ -182,13 +182,12 @@ namespace Dialogue_Data_Entry
 					XmlNodeList speaks = node.SelectNodes("speak");
 					foreach (XmlNode speak in speaks) {
 						try {
-                        tmp.addSpeak(unEscapeInvalidXML(speak.InnerText));
+                            tmp.addSpeak(unEscapeInvalidXML(speak.InnerText));
+                        }
 						catch {
 							//use new format
 							tmp.addSpeak(speak.InnerText);
 						}
-
-					}
                     }
                 }//end foreach
 
