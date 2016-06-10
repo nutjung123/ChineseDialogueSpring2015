@@ -7,7 +7,7 @@ import urllib.parse
 import json
 import cgi
 
-from analogyscoretest3_9 import AIMind
+from analogyscoretest3_9a1 import AIMind
 
 app = Flask(__name__)
 
@@ -20,8 +20,9 @@ def get_analogy():
         port = idata.get("port")
         feature_id = idata.get("id")
         filename = idata.get("filename")
+        target_id = idata.get("target_id")
 
-        if not feature_id and not feature_name:
+        if not feature_id:
             return "Error: must specify a feature"
         if not port and not filename:
             return "Error: must supply callback port or filename"
@@ -40,7 +41,10 @@ def get_analogy():
             id_filter = [a1.get_feature(fid) for fid in id_filter]
 
 
-        analogyData = a1.find_best_analogy(a1.get_feature(feature_id), a1, id_filter)
+        if not target_id:
+            analogyData = a1.find_best_analogy(a1.get_feature(feature_id), a1, id_filter)
+        else:
+            analogyData = a1.get_analogy(a1.get_feature(feature_id), a1.get_feature(target_id), a1)
 
         if analogyData:
             nrating, rating, total_rating, (src,trg), rassert, mapping = analogyData
