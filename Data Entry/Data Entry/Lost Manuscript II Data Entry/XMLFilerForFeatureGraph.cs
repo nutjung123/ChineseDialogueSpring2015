@@ -143,7 +143,7 @@ namespace Dialogue_Data_Entry
 						tmp.addNeighbor(result_graph.getFeature(neighbor_id), weight, relationship);
 
 						//pre-process in case no parent exist
-						foreach (XmlNode tempNode in features) {
+						/*foreach (XmlNode tempNode in features) {
 							if (tempNode.Attributes["data"].Value == result_graph.Features[neighbor_id].Name) {
 								XmlNodeList tempParents = tempNode.SelectNodes("parents");
 								if (tempParents.Count != 0) {
@@ -153,7 +153,7 @@ namespace Dialogue_Data_Entry
 									}
 								}//end if
 							}
-						}
+						}*/
 						//result.Features[id].addNeighbor(tmp,weight);
 					}//end foreach
 					 //Parent

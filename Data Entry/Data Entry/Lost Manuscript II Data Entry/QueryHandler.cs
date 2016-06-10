@@ -320,7 +320,7 @@ namespace Dialogue_Data_Entry
 			// CASE: Nothing / Move on to next topic
 			if (string.IsNullOrEmpty(input))
 			{
-				answer = narration_manager.DefaultNextTopicResponse();
+                answer = narration_manager.NextTopicResponse();
 			}//end if
 			// CASE: Tell me more / Continue speaking
 			else if (input.Contains("more") && input.Contains("tell"))
@@ -388,10 +388,16 @@ namespace Dialogue_Data_Entry
 		{
 			string return_string = "";
 
+                //LIST_COMMANDS command from query window
+                //  Lists the commands that can be typed in to the query window
+                if (split_input[0].Equals("LIST_COMMANDS"))
+                {
+
+                }//end if
 				//Step-through command from Query window.
 				// Calls ParseInput with the empty string several times, stepping
 				// through with default responses.
-				if (split_input[0].Equals("STEP"))
+				else if (split_input[0].Equals("STEP"))
 				{
 					//Step through the program with blank inputs a certain number of times, 
 					//specified by the second argument in the command
@@ -535,35 +541,90 @@ namespace Dialogue_Data_Entry
 						return_string = return_string + " --> " + temp_feature.Name;
 					}//end foreach
 				}//end else if
-				//BACKGROUND_TOPIC command.
-				// Sets the background topic in the narration manager to the given feature, by either name or ID.
-				else if (split_input[0].Equals("BACKGROUND_TOPIC"))
+                //ADD_ANCHOR command.
+				// Add a set of anchor nodes to the narration manager by either feature name or ID.
+				else if (split_input[0].Equals("ADD_ANCHOR"))
 				{
-					Feature new_background_topic = null;
+					Feature new_anchor_node = null;
+                    return_string = "Added anchor nodes: ";
 
-					String string_topic = split_input[1];
-					//Try to convert the topic to an int to check if it's an id.
-					int int_topic = -1;
-					bool parse_success = int.TryParse(string_topic, out int_topic);
-					if (parse_success)
-					{
-						//Check that the new integer topic is a valid id.
-						new_background_topic = graph.getFeature(int_topic);
-					}//end if
-					else
-					{
-						new_background_topic = FindFeature(string_topic);
-					}//end else
+                    for (int i = 1; i < split_input.Length; i++)
+                    {
+                        String string_topic = split_input[i];
+                        //Try to convert the topic to an int to check if it's an id.
+                        int int_topic = -1;
+                        bool parse_success = int.TryParse(string_topic, out int_topic);
+                        if (parse_success)
+                        {
+                            //Check that the new integer topic is a valid id.
+                            new_anchor_node = graph.getFeature(int_topic);
+                        }//end if
+                        else
+                        {
+                            new_anchor_node = FindFeature(string_topic);
+                        }//end else
+                        if (new_anchor_node != null)
+                        {
+                            narration_manager.AddAnchorNode(new_anchor_node);
+                            return_string += new_anchor_node.Name + " (" + new_anchor_node.Id + ")" + ", ";
+                        }//end if
 
-					if (new_background_topic == null)
-					{
-						Console.WriteLine("No topic found");
-					}//end if
-					else
-					{
-						narration_manager.SetBackgroundTopic(new_background_topic);
-					}//end else
+                    }//end for
+
 				}//end else if
+                //LIST_ANCHORS command.
+                //  Returns the list of anchor nodes, by name, to the chat window.
+                else if (split_input[0].Equals("LIST_ANCHORS"))
+                {
+                    return_string = "Anchor nodes: ";
+                    foreach (Feature anchor_node in narration_manager.anchor_nodes)
+                    {
+                        return_string += anchor_node.Name += " (" + anchor_node.Id + "), ";
+                    }//end foreach
+                }//end else if
+                //SET_TURN_LIMIT command.
+                //  Sets the maximum number of turns the conversation can go for.
+                else if (split_input[0].Equals("SET_TURN_LIMIT"))
+                {
+                    return_string = "";
+
+                    int turn_limit = 0;
+                    bool parse_success = int.TryParse(split_input[1], out turn_limit);
+                    if (parse_success)
+                    {
+                        narration_manager.SetTurnLimit(turn_limit);
+                        return_string = "Turn limit set to " + turn_limit;
+                    }//end if
+                    else
+                        return_string = "Could not set turn limit.";
+                }//end else if
+                //START_NARRATION command.
+                //  Makes the system narrate. A turn limit may be specified after the command.
+                //  It tries to visit all anchor nodes within the turn limit. 
+                else if (split_input[0].Equals("START_NARRATION"))
+                {
+                    return_string = "";
+
+                    if (split_input[1] != null)
+                    {
+                        int turn_limit = 0;
+                        bool parse_success = int.TryParse(split_input[1], out turn_limit);
+                        if (parse_success)
+                        {
+                            narration_manager.SetTurnLimit(turn_limit);
+                            Console.Out.WriteLine("Turn limit set to " + turn_limit);
+                        }//end if
+                        else
+                            Console.Out.WriteLine("Could not set turn limit.");
+                    }//end if
+
+                    bool start_success = narration_manager.StartNarration();
+                    if (start_success)
+                        return_string = "Narration started.";
+                    else
+                        return_string = "Failed to start narration.";
+                }//end else if
+
                 //INTERWEAVE command.
                 // Creates two interwoven storylines.
                 else if (split_input[0].Equals("INTERWEAVE"))
@@ -587,14 +648,14 @@ namespace Dialogue_Data_Entry
                         return_string_1_components.Add(" " + manager_1.DefaultNextTopicResponse() + "\n");
                         manager_1.Turn += 1;
                     }//end for
-                    //Get the topic history from the first narration as the refernce list for the second narration.
+                    //Get the topic history from the first narration as the reference list for the second narration.
                     List<Feature> storyline_1 = manager_1.TopicHistory;
                     //Remove 1st node, it is a duplicate.
                     storyline_1.RemoveAt(0);
 
                     //Ask the manager for the first narration which node would be best as a switch point.
                     Feature switch_point = manager_1.IdentifySwitchPoint(storyline_1);
-                    
+
 
                     //Create the reference list from the first storyline up through the switch point.
                     List<Feature> reference_list = new List<Feature>();

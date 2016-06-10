@@ -105,12 +105,12 @@ namespace Dialogue_Data_Entry
         //Returns the next topic feature.
         public Feature GetNextTopic(Feature previous_topic, string query, int turn, List<Feature> topic_history)
         {
-            if (turn == 1)
+            if (turn == 0)
             {
                 //initial case
                 return previous_topic;
             }
-            else if (turn > 1 && query == "")
+            else if (turn > 0 && query == "")
             {
                 //next topic case
                 /*if (currentNovelty == null)
@@ -468,13 +468,17 @@ namespace Dialogue_Data_Entry
         }//end method IdentifySwitchPoint
 
         //Calculate the relatedness between two features
-        public double CalculateRelatedness(Feature feature_1, Feature feature_2)
+        public double CalculateRelatedness(Feature feature_1, Feature feature_2, int turn_count, List<Feature> topic_history)
         {
             double relatedness = 0;
 
             //SHORTEST PATH METRIC
             //Relatedness is equal to the inverse shortest path length between two features.
-            relatedness = 1 / (feature_1.ShortestDistance[feature_2.Id]);
+            //relatedness = 1 / (feature_1.ShortestDistance[feature_2.Id]);
+
+            //WEIGHTED SUM METRIC
+            //Relatedness is equal to the score of the weighted sum calculated according to narrative constraints
+            relatedness = CalculateScore(feature_2, feature_1, turn_count, topic_history);
 
             return relatedness;
         }//end method CalculateRelatedness

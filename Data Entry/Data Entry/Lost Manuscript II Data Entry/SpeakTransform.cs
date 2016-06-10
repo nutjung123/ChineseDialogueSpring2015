@@ -115,6 +115,13 @@ namespace Dialogue_Data_Entry
 
             return analogy;
         }//end method MakeAnalogy
+        //Make an analogy between the two given features
+        public string MakeAnalogy(Feature current_feature, Feature past_feature)
+        {
+            string analogy = "Analogy between " + current_feature.Name + " and " + past_feature.Name;
+
+            return analogy;
+        }//end method MakeAnalogy
 
         
 
@@ -534,21 +541,28 @@ namespace Dialogue_Data_Entry
 
             return_string = "{We'll hear more about ";
 
+            bool foreshadowed = false;
+
             foreach (Tuple<int, string> relationship_entry in relationship_list)
             {
                 //Relationship away from feature to foreshadow
                 if (relationship_entry.Item1 == 0)
                 {
                     return_string += feature_to_foreshadow.Name + " " + relationship_entry.Item2 + ", ";
+                    foreshadowed = true;
                 }//end if
                 else if (relationship_entry.Item1 == 1)
                 {
                     //Relationship towards feature to foreshadow
                     return_string += " what " + relationship_entry.Item2 + " " + feature_to_foreshadow.Name + ", ";
+                    foreshadowed = true;
                 }//end else if
             }//end foreach
 
             return_string += "soon.}";
+
+            if (!foreshadowed)
+                return_string = "";
 
             return return_string;
         }//end method Foreshadow
