@@ -14,6 +14,7 @@ namespace Dialogue_Data_Entry
 		private int maxDepth;
 		private double maxDistance;
 
+<<<<<<< HEAD
 		/*
 		//map of specific relation usages and their ID
 		private Dictionary<string,RelationUsage> relation_usages;
@@ -511,4 +512,6 @@ namespace Dialogue_Data_Entry
 			get { return this.features; }
 		}
 	}
+=======
+>>>>>>> origin/for_study_may_16
 }
