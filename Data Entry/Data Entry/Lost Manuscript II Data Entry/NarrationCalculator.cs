@@ -105,12 +105,12 @@ namespace Dialogue_Data_Entry
         //Returns the next topic feature.
         public Feature GetNextTopic(Feature previous_topic, string query, int turn, List<Feature> topic_history)
         {
-            if (turn == 1)
+            if (turn == 0)
             {
                 //initial case
                 return previous_topic;
             }
-            else if (turn > 1 && query == "")
+            else if (turn > 0 && query == "")
             {
                 //next topic case
                 /*if (currentNovelty == null)
@@ -378,6 +378,110 @@ namespace Dialogue_Data_Entry
 
             return listScore;
         }//end method getProximal
+
+        //Returns the feature that would serve best as a switch point given
+        // the input storyline.
+        //Motivated by measure of proximity in paper by Leal, Rodrigues, and Queiros, 2012.
+        public Feature IdentifySwitchPoint(List<Feature> storyline)
+        {
+            //How connected the set of features up to the index in Item1 is.
+            List<Tuple<Feature, int>> sum_edge_counts = new List<Tuple<Feature, int>>();
+            //the list of features that come before the current index
+            List<Feature> prior_list = new List<Feature>();
+            //the list of features that come after the current index
+            List<Feature> future_list = new List<Feature>();
+            Feature switch_point = null;
+            int largest_count = -1;
+            int current_count = 0;
+            for (int i = 0; i < storyline.Count; i++)
+            {
+                prior_list = storyline.GetRange(0, i + 1);
+                future_list = storyline.GetRange(i + 1, storyline.Count - i - 1);
+                current_count = 0;
+                //Count all edges from previous nodes to future nodes
+                foreach (Feature prior_feature in prior_list)
+                {
+                    foreach (Feature future_feature in future_list)
+                    {
+                        //Check if there is a relationship in either direction between the two.
+                        if ((!prior_feature.getRelationshipNeighbor(future_feature.Id).Equals("")
+                            && !(prior_feature.getRelationshipNeighbor(future_feature.Id) == null))
+                            || (!future_feature.getRelationshipNeighbor(prior_feature.Id).Equals("")
+                            && !(future_feature.getRelationshipNeighbor(prior_feature.Id) == null)))
+                        {
+                            //If so, then increment the connections count.
+                            current_count += 1;
+                        }//end if
+                    }//end foreach
+                }//end foreach
+                //Make a tuple entry
+                sum_edge_counts.Add(new Tuple<Feature, int>(storyline[i], current_count));
+                if (current_count >= largest_count)
+                {
+                    largest_count = current_count;
+                    switch_point = storyline[i];
+                }//end if
+            }//end for
+
+            if (largest_count == 0)
+                switch_point = storyline[storyline.Count - 1];
+
+            return switch_point;
+
+            /*
+            //Each feature will have a count of how many other features
+            //in the storyline it is directly connected to.
+            List<Tuple<Feature, int>> connectedness = new List<Tuple<Feature, int>>();
+            foreach (Feature story_feature in storyline)
+            {
+                int number_of_connections = 0;
+                foreach (Feature feature_to_compare in storyline)
+                {
+                    //Check if there is a relationship in either direction between the two.
+                    if ((!story_feature.getRelationshipNeighbor(feature_to_compare.Id).Equals("")
+                        && !(story_feature.getRelationshipNeighbor(feature_to_compare.Id) == null))
+                        || (!feature_to_compare.getRelationshipNeighbor(story_feature.Id).Equals("")
+                        && !(feature_to_compare.getRelationshipNeighbor(story_feature.Id) == null)))
+                    {
+                        //If so, then increment the connections count.
+                        number_of_connections += 1;
+                    }//end if
+                }//end foreach
+                //We now have how many other features in the storyline this feature is connected to.
+                //Store it as a tuple in the connectedness list.
+                connectedness.Add(new Tuple<Feature, int>(story_feature, number_of_connections));
+            }//end foreach
+
+            //Find the tuple with the highest connectedness.
+            Feature return_feature = null;
+            int highest_connectedness = 0;
+            foreach (Tuple<Feature, int> connectedness_pair in connectedness)
+            {
+                if (connectedness_pair.Item2 > highest_connectedness)
+                {
+                    return_feature = connectedness_pair.Item1;
+                    highest_connectedness = connectedness_pair.Item2;
+                }//end if
+            }//end foreach
+
+            return return_feature;*/
+        }//end method IdentifySwitchPoint
+
+        //Calculate the relatedness between two features
+        public double CalculateRelatedness(Feature feature_1, Feature feature_2, int turn_count, List<Feature> topic_history)
+        {
+            double relatedness = 0;
+
+            //SHORTEST PATH METRIC
+            //Relatedness is equal to the inverse shortest path length between two features.
+            //relatedness = 1 / (feature_1.ShortestDistance[feature_2.Id]);
+
+            //WEIGHTED SUM METRIC
+            //Relatedness is equal to the score of the weighted sum calculated according to narrative constraints
+            relatedness = CalculateScore(feature_2, feature_1, turn_count, topic_history);
+
+            return relatedness;
+        }//end method CalculateRelatedness
 
         //PRIVATE UTILITY FUNCTIONS
         //Make the hierarchy key from the relationships in the feature graph.

@@ -15,14 +15,22 @@ namespace Dialogue_Data_Entry
 		private Bot aiml_bot;                   //The AIML bot being used to help answer queries.
 		private User user;                      //A user to make requests of the AIML bot.
 		private Feature topic;                  //The current topic of conversation.
-		private Feature background_topic;       //The background topic.
-			//The background topic guides the flow of conversation without being mentioned too often.
-		private List<Feature> background_targets;
-			//A list of features that we wish to touch upon at regular intervals.
-		private int target_interval = 5;        //Every 5 turns of conversation, we should reach a background target.
+
+        //Anchor Node variables
+        public List<Feature> anchor_nodes;      //The list of anchor nodes that must be visited.
+        private List<Feature> anchor_nodes_visited; //The list of anchor nodes that have already been visited.
+        private Feature current_anchor_node;    //The anchor node that was most recently talked about.
+        private int current_anchor_turn_count;  //How many turns we have been talking about the current anchor node.
+        private double current_transition_score;
+        private int turns_per_anchor;           //The maximum number of turns we can talk about a single anchor node.
+
+        private int turn_limit;                 //The maximum number of turns this narration is allowed to go for.
+                                                //If maximum_turn_count <= 0, then assume no turn limit.
 
 		private int turn;                       //A count of what turn of the conversation we are on.
 		private List<Feature> topic_history;    //The history of topics in this conversation. Last item is always the topic.
+
+        private bool narrating;                 //Whether or not the narration manager is in the middle of an ongoing narration.
 
 		private List<TemporalConstraint> temporal_constraint_list;  //The list for temporal constraint checking. Does not change after init.
 
@@ -50,10 +58,20 @@ namespace Dialogue_Data_Entry
 
 			//Default initializations
 			topic = null;
-			background_topic = null;
 			turn = 1;
 			topic_history = new List<Feature>();
 			temporal_constraint_list = tcl;
+
+            //Anchor node initializations
+            anchor_nodes = new List<Feature>();
+            anchor_nodes_visited = new List<Feature>();
+            current_anchor_node = null;
+            current_anchor_turn_count = 0;
+            turns_per_anchor = 0;
+            turn_limit = 0;
+
+            narrating = false;
+
 			calculator = new NarrationCalculator(feature_graph, tcl);
 
 			//The first topic should be the root node of the feature graph
@@ -61,7 +79,333 @@ namespace Dialogue_Data_Entry
 				SetNextTopic(this.feature_graph.Root);
 		}//end method DialogueManager
 
-		//ACCESSIBLE FUNCTIONS
+		//ACCESSIBLE FUNCTIONS 
+        /// <summary>
+        /// Begins a narration.
+        /// The goal of a narration is to visit every anchor node within the set turn limit.
+        /// Returns whether narration was successfully started or not.
+        /// </summary>
+        public bool StartNarration()
+        {
+            //Check that there are anchor nodes to visit
+            //Check that there is a turn limit
+            if (anchor_nodes.Count < 1 || turn_limit <= 0)
+                return false;
+            else
+            {
+                //Start narration
+                narrating = true;
+
+                //Clear history and reset turn count
+                topic_history = new List<Feature>();
+                anchor_nodes_visited = new List<Feature>();
+                turn = 0;
+
+                //Pick the first anchor node.
+                //For now, just use the first in the anchor node list.
+                current_anchor_node = anchor_nodes[0];
+
+                //Based on the number of anchor nodes and the turn limit, set the number of
+                //turns we can talk about each anchor node.
+                //Split turns evenly amongst each anchor node.
+                double turns_per_anchor_decimal = (double)(turn_limit - turn) / (double)anchor_nodes.Count;
+                turns_per_anchor = (int)Math.Floor(turns_per_anchor_decimal);
+
+
+                //Initialize turn counts
+                //We start on turn 1.
+                turn = 1;
+                current_anchor_turn_count = 1;
+
+                return true;
+            }//end else
+        }//end method StartNarration
+        public string Narrate()
+        {
+            string return_string = "";
+
+            //Generate a sequence from the current anchor node.
+            int sequence_1_start_turn = turn;
+            List<Feature> sequence_1 = GenerateSequence(current_anchor_node);
+            //How the last node of this sequence and the first node of the next one
+            //scores according to the narration calculator
+            double sequence_1_transition_score = current_transition_score;
+            int sequence_1_end_turn = turn;
+            /*//Check the turn count against the turns per anchor.
+            if (current_anchor_turn_count <= turns_per_anchor)
+            {
+                //If the sequence ended with fewer turns than alotted, then the
+                //sequence ran into another anchor node and stopped early.
+            }//end if
+             * */
+
+            //Generate another sequence from the next anchor node identified by the last sequence.
+            int sequence_2_start_turn = turn;
+            List<Feature> sequence_2 = GenerateSequence(current_anchor_node);
+            double sequence_2_transition_score = current_transition_score;
+            int sequence_2_end_turn = turn;
+
+            //Decide whether or not to interweave the two sequences.
+            //Decide based on the transition score from the first sequence to the second
+            double transition_threshold = 0;
+            //If the score is worst than the threshold, try to interweave.
+            if (sequence_1_transition_score < transition_threshold)
+            {
+                //Identify the best switchpoint for the first sequence
+                Feature switch_point = IdentifySwitchPoint(sequence_1);
+                //Split the first sequence at the switch point.
+                List<Feature> first_part_sequence_1 = new List<Feature>();
+                List<Feature> second_part_sequence_1 = new List<Feature>();
+                foreach (Feature sequence_node in sequence_1)
+                {
+                    //Past the switch point, place the feature in the second part.
+                    if (sequence_1.IndexOf(sequence_node) > sequence_1.IndexOf(switch_point))
+                        second_part_sequence_1.Add(sequence_node);
+                    else
+                        first_part_sequence_1.Add(sequence_node);
+                }//end foreach
+
+                //The history list up until we created either sequence.
+                List<Feature> sequence_history = topic_history.GetRange(0, sequence_1_start_turn - 1);
+                //Present the first part of the first sequence
+                foreach (Feature sequence_node in first_part_sequence_1)
+                {
+                    //Reset the buffer with output for this feature
+                    string[] new_buffer;
+                    new_buffer = FindStuffToSay(sequence_node);
+                    this.buffer = new_buffer;
+
+                    string to_add = PullOutputFromBuffer();
+                    to_add = SpeakWithAdornments(sequence_node, to_add, sequence_history);
+
+                    return_string += " " + to_add + "\n";
+                    //If this is the switch point, additionally foreshadow the second half of the first sequence.
+                    if (sequence_node.Id == switch_point.Id)
+                    {
+                        foreach (Feature first_part_node in first_part_sequence_1)
+                        {
+                            return_string += " " + Foreshadow(first_part_node, second_part_sequence_1) + "\n";
+                        }//end foreach
+                    }//end if
+
+                    //Add the node to the sequence history
+                    sequence_history.Add(sequence_node);
+                }//end foreach
+                //Present the second sequence
+                foreach (Feature sequence_node in sequence_2)
+                {
+                    //Reset the buffer with output for this feature
+                    string[] new_buffer;
+                    new_buffer = FindStuffToSay(sequence_node);
+                    this.buffer = new_buffer;
+
+                    string to_add = PullOutputFromBuffer();
+                    to_add = SpeakWithAdornmentsReference(sequence_node, to_add, first_part_sequence_1, sequence_history);
+
+                    //If this is the first node of sequence 2, then add a storyline transition phrase to the beginning.
+                    if (sequence_node.Equals(sequence_2[0]))
+                    {
+                        to_add = "{But now, let's talk about something else.} " + to_add;
+                    }//end if
+
+                    return_string += " " + to_add + "\n";
+
+                    //Add the node to the sequence history
+                    sequence_history.Add(sequence_node);
+                }//end foreach
+                //Present the second part of the first sequence
+                foreach (Feature sequence_node in second_part_sequence_1)
+                {
+                    //Reset the buffer with output for this feature
+                    string[] new_buffer;
+                    new_buffer = FindStuffToSay(sequence_node);
+                    this.buffer = new_buffer;
+
+                    string to_add = PullOutputFromBuffer();
+                    to_add = SpeakWithAdornments(sequence_node, to_add, sequence_history);
+
+                    //If this is the first node of sequence 2, then add a storyline transition phrase.
+                    if (sequence_node.Equals(sequence_2[0]))
+                    {
+                        to_add = "{Let's get back to what we were discussing before with " + sequence_1[0].Name 
+                            + ". When we left off, we were talking about " + switch_point.Name + ".}";
+                    }//end if
+
+                    return_string += " " + to_add + "\n";
+                    //Try to tie back to the first part of the first sequence
+                    return_string += " " + TieBack(sequence_node, first_part_sequence_1, sequence_history[sequence_history.Count - 1]) + "\n";
+
+                    //Add the node to the sequence history
+                    sequence_history.Add(sequence_node);
+                }//end foreach
+            }//end if
+            //If not interweaving, present each story one after the other.
+            else
+            {
+                //The history list up until we created either sequence.
+                List<Feature> sequence_history = topic_history.GetRange(0, sequence_1_start_turn - 1);
+                //Present the first sequence
+                foreach (Feature sequence_node in sequence_1)
+                {
+                    //Reset the buffer with output for this feature
+                    string[] new_buffer;
+                    new_buffer = FindStuffToSay(sequence_node);
+                    this.buffer = new_buffer;
+
+                    string to_add = PullOutputFromBuffer();
+                    to_add = SpeakWithAdornments(sequence_node, to_add, sequence_history);
+
+                    return_string += " " + to_add + "\n";
+
+                    //Add the node to the sequence history
+                    sequence_history.Add(sequence_node);
+                }//end foreach
+
+                //Present the second sequence
+                foreach (Feature sequence_node in sequence_2)
+                {
+                    //Reset the buffer with output for this feature
+                    string[] new_buffer;
+                    new_buffer = FindStuffToSay(sequence_node);
+                    this.buffer = new_buffer;
+
+                    string to_add = PullOutputFromBuffer();
+                    to_add = SpeakWithAdornments(sequence_node, to_add, sequence_history);
+
+                    return_string += " " + to_add + "\n";
+
+                    //If this is the first node of sequence 2, then it is an anchor node.
+                    //Try to draw an analogy between it and the first node of sequence 1.
+                    if (sequence_node.Equals(sequence_2[0]))
+                    {
+                        SpeakTransform temp_transform = new SpeakTransform(sequence_history, sequence_history[sequence_history.Count]);
+                        string analogy = temp_transform.MakeAnalogy(sequence_node, sequence_1[0]);
+                        return_string += " " + analogy + "\n";
+                    }//end if
+
+                    //Add the node to the sequence history
+                    sequence_history.Add(sequence_node);
+                }//end foreach
+            }//end else
+
+
+            //Go through the sequence and decide how to talk about it.
+            foreach (Feature sequence_node in sequence_1)
+            {
+                //First, see if the current sequence node is an anchor.
+                if (anchor_nodes.Contains(sequence_node))
+                {
+                    //If so, check against the previous anchor node talked about (if there is one).
+                    if (anchor_nodes_visited.Count > 0)
+                    {
+
+                    }//end if
+                }//end if
+            }//end foreach
+            
+
+            /*
+            //At each step of narration, look at the previous steps, decide which topic
+            //to talk about next, then present that topic. Then, update history and check turn limits.
+            Feature next_topic = null;
+            string[] buffer;
+
+            //Check the current anchor node. If we have not talked about it yet, it is the next topic.
+            if (!anchor_nodes_visited.Contains(current_anchor_node))
+            {
+                next_topic = current_anchor_node;
+            }//end if
+            */
+
+            return return_string;
+        }//end method Narrate
+        //Generate a story sequence based on a given anchor node.
+        public List<Feature> GenerateSequence(Feature input_anchor_node)
+        {
+            List<Feature> sequence = new List<Feature>();
+            //Re-calculate turns per anchor
+            double turns_per_anchor_decimal = (double)(turn_limit - (turn - 1)) / (double)anchor_nodes.Count;
+            turns_per_anchor = (int)Math.Floor(turns_per_anchor_decimal);
+            //Look at current anchor node.
+            Feature current_topic = input_anchor_node;
+            //Add it to the start of the sequence. Also acts as local history.
+            sequence.Add(current_topic);
+            //Add it as our next topic. Updates graph and global history.
+            SetNextTopic(current_topic);
+
+            //Now that it's in a story sequence, remove it from the list of anchor nodes
+            //and add it to the list of anchor nodes visited.
+            anchor_nodes.Remove(input_anchor_node);
+            anchor_nodes_visited.Add(input_anchor_node);
+
+            //We are now on turn 1 for this anchor node.
+            current_anchor_turn_count = 1;
+
+            Feature next_topic = null;
+
+            for (current_anchor_turn_count = 1; current_anchor_turn_count < turns_per_anchor; current_anchor_turn_count++)
+            {
+                //For each turn for this anchor node, use the calculator to find the next topic.
+                next_topic = calculator.GetNextTopic(current_topic, "", current_anchor_turn_count, sequence);
+
+                //If the next topic is another anchor node, we should stop the current sequence.
+                if (anchor_nodes.Contains(next_topic))
+                {
+                    //Note the anchor node we found as the current anchor node
+                    current_anchor_node = next_topic;
+                    //Calculate the score of this transition
+                    current_transition_score = calculator.CalculateRelatedness(sequence[sequence.Count - 1], current_anchor_node, turn, topic_history);
+                    //Return the current sequence as is.
+                    return sequence;
+                }//end if
+
+                //Add it to the sequence
+                sequence.Add(next_topic);
+                SetNextTopic(next_topic);
+                //Set it as the current topic
+                current_topic = next_topic;
+                //Increment total turn count
+                turn += 1;
+            }//end for
+
+            //The sequence is done. Decide on the next anchor node.
+            double highest_score = -double.MaxValue;
+            Feature next_best_anchor = null;
+            double current_score = 0;
+            Feature last_sequence_node = sequence[sequence.Count - 1];
+            foreach (Feature potential_next_anchor in anchor_nodes)
+            {
+                //Find score between last sequence node and this potential next anchor
+                current_score = calculator.CalculateRelatedness(last_sequence_node, potential_next_anchor, turn, topic_history);
+                if (current_score > highest_score)
+                {
+                    highest_score = current_score;
+                    next_best_anchor = potential_next_anchor;
+                }//end if
+            }//end for
+
+            //Set the next current anchor node to the one found in the loop above
+            current_anchor_node = next_best_anchor;
+            current_transition_score = highest_score;
+            //Return the sequence
+            return sequence;
+        }//end method GenerateSequence
+
+        public string NextTopicResponse()
+        {
+            if (narrating)
+                return NextTopicNarration();
+            else
+                return DefaultNextTopicResponse();
+        }//end method NextTopicResponse
+        public string NextTopicNarration()
+        {
+            string return_string = "";
+
+            return_string = Narrate();
+
+            return return_string;
+        }//end method NextTopicNarration
 		/// <summary>
 		/// Decides on the next topic automatically.
 		/// Returns something to say about the next topic, with the addition of speak adornments (metaphor, lead-in statements, etc.)
@@ -91,6 +435,33 @@ namespace Dialogue_Data_Entry
 
 			return return_string;
 		}//end function DefaultNextTopic
+        //Input a list of nodes that this narration can refer back to, outside
+        //of the history.
+        public string DefaultNextTopicResponse(List<Feature> reference_nodes)
+        {
+            Feature nextTopic = this.topic;
+            string[] newBuffer;
+            string return_string = "";
+            // Can't guarantee it'll actually move on to anything...
+
+            //Have the calculator decide on the next topic.
+            nextTopic = calculator.GetNextTopic(nextTopic, "", this.turn, this.TopicHistory);
+            //Gets a list of things to say about the topic (speak values or neighbor relations)
+            newBuffer = FindStuffToSay(nextTopic);
+
+            //Set the next topic and reset the buffer to the list
+            //of output strings from function FindStuffToSay
+            SetNextTopic(nextTopic, newBuffer);
+
+            //Get an output string from the buffer.
+            return_string = PullOutputFromBuffer();
+
+            //Adorn the answer, which sends it through speak transforms.
+            //The answer will be used later on in the function.
+            return_string = SpeakWithAdornmentsReference(this.topic, return_string, reference_nodes);
+
+            return return_string;
+        }//end function DefaultNextTopic
 
 		/// <summary>
 		/// Returns the next thing to say about the current topic. Does not change topics,
@@ -156,7 +527,8 @@ namespace Dialogue_Data_Entry
 				String[] temp_buffer = FindStuffToSay(this.topic);
 				String topic_speak = temp_buffer[0];
 				//If there is no topic switch, use relationships during adornment. If there is, don't use relationships.
-				topic_speak = SpeakWithAdornments(this.topic, topic_speak, !topic_switch);
+                //Zev: 6/10/16 use_relationships parameter removed
+				topic_speak = SpeakWithAdornments(this.topic, topic_speak);
 
 				return_string = return_string + " " + topic_speak;
 			}//end if
@@ -171,6 +543,25 @@ namespace Dialogue_Data_Entry
 
 			return return_string;
 		}//end method TalkMoreAboutTopic
+
+        /// <summary>
+        /// Adds the given feature to the list of Anchor nodes
+        /// if it isn't already an anchor node.
+        /// </summary>
+        public void AddAnchorNode(Feature new_anchor_node)
+        {
+            //Don't add the feature if it's already an anchor node.
+            if (!anchor_nodes.Contains(new_anchor_node))
+                anchor_nodes.Add(new_anchor_node);
+        }//end method AddAnchorNode
+        /// <summary>
+        /// Sets the conversation turn limit to the given number.
+        /// If set to 0 or less, turn limit is infinite.
+        /// </summary>
+        public void SetTurnLimit(int input_limit)
+        {
+            turn_limit = input_limit;
+        }//end method SetTurnLimit
 
 		public List<Feature> ForwardProjection(Feature currentTopic, int forwardTurn)
 		{
@@ -278,27 +669,96 @@ namespace Dialogue_Data_Entry
 			return output;
 		}//end method SayToChatBot
 
+        //Returns the feature that would serve best as a switch point given
+        // the input storyline.
+        public Feature IdentifySwitchPoint(List<Feature> storyline)
+        {
+            return calculator.IdentifySwitchPoint(storyline);
+        }//end method IdentifySwitchPoint
+
+        public string Foreshadow(Feature feature_to_foreshadow, List<Feature> reference_list)
+        {
+            SpeakTransform temp_transform = new SpeakTransform(topic_history, topic_history[topic_history.Count - 1]);
+            return temp_transform.Foreshadow(feature_to_foreshadow, reference_list);
+        }//end method Foreshadow
+
+        public string TieBack(Feature feature_to_tie_back, List<Feature> reference_list, Feature previous_feature)
+        {
+            SpeakTransform temp_transform = new SpeakTransform(topic_history, topic_history[topic_history.Count - 1]);
+            return temp_transform.TieBack(feature_to_tie_back, reference_list, previous_feature);
+        }//end method TieBack
+
 		//PRIVATE UTILITY FUNCTIONS
 		//Returns the speak value passed in with adornments according to the feature passed in, such as topic lead-ins and analogies.
-		private string SpeakWithAdornments(Feature feat, string speak, bool use_relationships = true)
+        private string SpeakWithAdornments(Feature feat, string speak, List<Feature> input_history = null)
 		{
-			//Treat the feature passed in as the current topic
-			Feature current_topic = feat;
+            String to_speak = "";
+            bool use_relationships = true;
+            //Treat the feature passed in as the current topic
+            Feature current_topic = feat;
 
-			Feature previous_topic = null;
+            Feature previous_topic = null;
 
-			if (topic_history.Count < 3)
-				previous_topic = null;
-			else
-				previous_topic = topic_history[topic_history.Count - 2];
+            //If there is no input history, use the narration manager's history
+            if (input_history == null)
+            {
+                if (topic_history.Count < 2)
+                    previous_topic = null;
+                else
+                    previous_topic = topic_history[topic_history.Count - 2];
+                //Create the speak transform object, initialized with history list and the previous topic
+                SpeakTransform transform = new SpeakTransform(topic_history, previous_topic);
+                //Pass in the given feature and speak value to be transformed.
+                to_speak = transform.TransformSpeak(feat, speak);
+            }//end if
+            else
+            {
+                Feature input_previous_topic;
+                if (input_history.Count < 1)
+                    input_previous_topic = null;
+                else
+                    input_previous_topic = input_history[input_history.Count - 1];
+                //Create the speak transform object, initialized with the input history list and the previous topic
+                SpeakTransform transform = new SpeakTransform(input_history, input_previous_topic);
+                //Pass in the given feature and speak value to be transformed.
+                to_speak = transform.TransformSpeak(feat, speak);
+            }//end if
 
+            return to_speak;
+        }//end method AdornMessage
+        private string SpeakWithAdornmentsReference(Feature feat, string speak, List<Feature> reference_list, List<Feature> input_history = null)
+        {
+            String to_speak = "";
+            bool use_relationships = true;
+            //Treat the feature passed in as the current topic
+            Feature current_topic = feat;
 
-			//Create the speak transform object, initialized with history list and the previous topic
-			//AnalogyBuilder ab = new AnalogyBuilder(feature_graph);
-			SpeakTransform transform = new SpeakTransform(topic_history, previous_topic); //, ab);
+            Feature previous_topic = null;
 
-			//Pass in the given feature and speak value to be transformed.
-			String to_speak = transform.TransformSpeak(feat, speak);
+            //If there is no input history, use the narration manager's history
+            if (input_history == null)
+            {
+                if (topic_history.Count < 2)
+                    previous_topic = null;
+                else
+                    previous_topic = topic_history[topic_history.Count - 2];
+                //Create the speak transform object, initialized with history list and the previous topic
+                SpeakTransform transform = new SpeakTransform(topic_history, previous_topic, reference_list);
+                //Pass in the given feature and speak value to be transformed.
+                to_speak = transform.TransformSpeak(feat, speak);
+            }//end if
+            else
+            {
+                Feature input_previous_topic;
+                if (input_history.Count < 1)
+                    input_previous_topic = null;
+                else
+                    input_previous_topic = input_history[input_history.Count - 1];
+                //Create the speak transform object, initialized with the input history list and the previous topic
+                SpeakTransform transform = new SpeakTransform(input_history, input_previous_topic, reference_list);
+                //Pass in the given feature and speak value to be transformed.
+                to_speak = transform.TransformSpeak(feat, speak);
+            }//end if
 
 			return to_speak;
 		}//end method AdornMessage
@@ -692,21 +1152,6 @@ namespace Dialogue_Data_Entry
 		}//end method ChangeTopic
 
 		/// <summary>
-		/// Sets the current background topic to the given background topic.
-		/// </summary>
-		public void SetBackgroundTopic(Feature next_background_topic)
-		{
-			Console.WriteLine("Setting background topic " + next_background_topic.Name);
-			background_topic = next_background_topic;
-			//Clear the target list, and add all the new background topic's neighbors to the list.
-			background_targets.Clear();
-			foreach (Tuple<Feature, double, string> temp_neighbor in background_topic.Neighbors)
-			{
-				background_targets.Add(temp_neighbor.Item1);
-			}//end foreach
-		}//end method SetBackgroundTopic
-
-		/// <summary>
 		/// Adds the given feature to the end of the topic history list and updates any relevant
 		/// other information. Currently, updates spatial and temporal constraint information.
 		/// </summary>
@@ -764,22 +1209,6 @@ namespace Dialogue_Data_Entry
 			set
 			{
 				this.topic = value;
-			}//end set
-		}
-
-		/// <summary>
-		/// The feature which is currently the background topic of narration/conversation.
-		/// The background topic guides the flow of the conversation.
-		/// </summary>
-		public Feature BackgroundTopic
-		{
-			get
-			{
-				return this.background_topic;
-			}//end get
-			set
-			{
-				this.background_topic = value;
 			}//end set
 		}
 

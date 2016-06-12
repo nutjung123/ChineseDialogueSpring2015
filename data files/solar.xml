@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AIMind>
+	<Root id="1"/>
+	<Features>
+		<Feature id="0" data="EmptyNode">
+			<neighbors/>
+			<speak/>
+		</Feature>
+		<Feature data="Solar System" id="1">
+			<neighbors>
+				<neighbor dest="2" relationship="comprised of" weight="0"/>
+				<neighbor dest="6" relationship="comprised of" weight="0"/>
+			</neighbors>
+			<speak>The Solar System comprises the Sun and the objects that orbit it, whether they orbit it directly or by orbiting other objects that orbit it directly.</speak>
+		</Feature>
+		<Feature data="Sun" id="2">
+			<neighbors>
+				<neighbor dest="3" relationship="is" weight="0"/>
+				<neighbor dest="4" relationship="has" weight="0"/>
+				<neighbor dest="5" relationship="has" weight="0"/>
+				<neighbor dest="6" relationship="hotter than" weight="0"/>
+				<neighbor dest="6" relationship="more massive than" weight="0"/>
+				<neighbor dest="6" relationship="attracts" weight="0"/>
+				<neighbor dest="6" relationship="distance" weight="0"/>
+			</neighbors>
+			<speak>The Sun is the star at the center of the Solar System.</speak>
+		</Feature>
+		<Feature data="Yellow" id="3">
+			<neighbors/>
+			<speak>Yellow is the color of gold, butter, and ripe lemons. In the spectrum of visible light, and in the traditional color wheel used by painters, yellow is found between green and orange.</speak>
+		</Feature>
+		<Feature data="Heat" id="4">
+			<neighbors/>
+			<speak>In physics, heat is energy in transfer other than as work or by transfer of matter.</speak>
+		</Feature>	
+		<Feature data="Mass" id="5">
+			<neighbors/>
+			<speak>In physics, mass is a property of a physical body. It is generally a measure of an object's resistance to changing its state of motion when a force is applied</speak>
+		</Feature>
+		<Feature data="Planet" id="6">
+			<neighbors>
+				<neighbor dest="4" relationship="has" weight="0"/>
+				<neighbor dest="5" relationship="has" weight="0"/>
+				<neighbor dest="2" relationship="revolves around" weight="0"/>
+				<neighbor dest="2" relationship="attracts" weight="0"/>
+				<neighbor dest="6" relationship="attracts" weight="0"/>
+				<neighbor dest="2" relationship="distance" weight="0"/>
+			</neighbors>
+			<speak>A planet is an astronomical object orbiting a star or stellar remnant that is massive enough to be rounded by its own gravity, is not massive enough to cause thermonuclear fusion, and has cleared its neighbouring region of planetesimals.</speak>
+		</Feature>
+		<Feature data="Gravitation" id="7">
+			<neighbors/>
+			<speak>Gravitation, or gravity, is a natural phenomenon by which physical bodies attract with a force proportional to their masses.</speak>
+		</Feature>	
+	</Features>
+</AIMind>
