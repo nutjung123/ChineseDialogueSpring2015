@@ -63,17 +63,17 @@
         <neighbor dest="88" relationship="last monarch" weight="0"/>
         <neighbor dest="89" relationship="last monarch" weight="0"/>
       </neighbors>
-      <speak>The Roman emperor was the ruler of the Roman State during the imperial period  until the Ottoman Empire ended in 1922. A Byzantine group of claimant Roman Emperors existed in the Empire of Trebizond until its conquest by the Ottomans in 1461. In western Europe the title of Roman Emperor was revived by Germanic rulers, the "Holy Roman Emperors", in 800, and was used until 1806.</speak>
+      <speak>The Roman emperor was the ruler of the Roman State during the imperial period  until the Ottoman Empire ended in 1922.</speak>
       <zh-speak/>
     </Feature>
     <Feature data="Mixed government" zh-data="" id="6" uri="http://dbpedia.org/resource/Mixed_government">
       <neighbors/>
-      <speak>Mixed government, also known as a mixed constitution, defines a constitution in which the form of government is a combination of democracy, aristocracy, and monarchy, making impossible their respective degenerations .The concept of a mixed government was studied during the Renaissance and the Age of Reason, by Macchiavelli, Vico, Kant, Hobbes and others.</speak>
+      <speak>Mixed government, also known as a mixed constitution, defines a constitution in which the form of government is a combination of democracy, aristocracy, and monarchy, making impossible their respective degenerations.</speak>
       <zh-speak/>
     </Feature>
     <Feature data="Sestertius" zh-data="" id="7" uri="http://dbpedia.org/resource/Sestertius">
       <neighbors/>
-      <speak>The Sestertius, or Sesterce, .</speak>
+      <speak>The Sestertius, or Sesterce.</speak>
       <zh-speak/>
     </Feature>
     <Feature data="Fourth Crusade" zh-data="" id="8" uri="http://dbpedia.org/resource/Fourth_Crusade">
@@ -102,7 +102,7 @@
         <neighbor dest="121" relationship="combatant" weight="0"/>
         <neighbor dest="122" relationship="commander" weight="0"/>
       </neighbors>
-      <speak>The Fourth Crusade  with crusader support.</speak>
+      <speak>The Fourth Crusade with crusader support.</speak>
       <zh-speak/>
     </Feature>
     <Feature data="Senate of the Roman Empire" zh-data="" id="9" uri="http://dbpedia.org/resource/Senate_of_the_Roman_Empire">
@@ -122,7 +122,7 @@
         <neighbor dest="142" relationship="commander" weight="0"/>
         <neighbor dest="143" relationship="commander" weight="0"/>
       </neighbors>
-      <speak>The Fall of Constantinople  marked the end of the Roman Empire, an imperial state which had lasted for nearly 1,500 years.</speak>
+      <speak>The Fall of Constantinople marked the end of the Roman Empire, an imperial state which had lasted for nearly 1,500 years.</speak>
       <zh-speak/>
     </Feature>
     <Feature data="Western Roman Empire" zh-data="西羅馬帝國" id="11" uri="http://dbpedia.org/resource/Western_Roman_Empire">
@@ -146,7 +146,7 @@
         <neighbor dest="157" relationship="title representative" weight="0"/>
         <neighbor dest="158" relationship="Representative" weight="0"/>
       </neighbors>
-      <speak>In historiography, the Western Roman Empire consists of the western provinces of the Roman Empire at any one time during which they were administered by a separate independent Imperial court, coequal with  after the death of Western Emperor Julius Nepos, and proclaimed himself sole emperor of the Roman Empire.The rise of Odoacer of the Foederati to rule over Italy in 476 was popularized by eighteenth-century historian Edward Gibbon as a demarcating event for the end of the Western Empire and is sometimes used to mark the transition from Antiquity to the Middle Ages.Imperial rule was reimposed in large parts of the West in the sixth century by the armies of the Eastern Roman Empire but political upheaval in the East Roman heartlands saw the Western provinces slip away once more, this time for good.</speak>
+      <speak>In historiography, the Western Roman Empire consists of the western provinces of the Roman Empire at any one time during which they were administered by a separate independent Imperial court, coequal with  after the death of Western Emperor Julius Nepos, and proclaimed himself sole emperor of the Roman Empire.</speak>
       <zh-speak>西羅馬帝國是羅馬帝國於286年被戴克里先分為兩部份後把政權一分為二建立四帝共治制，羅馬開始有東西兩部的概念，位處西部的即最後分裂的西羅馬帝國；而東部最後成為東羅馬帝國（即拜占庭帝國）。正式名稱與東羅馬帝國相同，均用羅馬共和時代的元老院與羅馬人民（Senatus Populusque Romanus），帝國最後在480年東羅馬皇帝芝諾冊封義大利國王取代之而覆亡，但是在這段期間左右西羅馬帝國已無足輕重。西羅馬帝國皇帝之位斷斷續續的在3世紀到5世紀間存在，隨著戴克里先建立的四帝共治制，君士坦丁大帝和尤利安（324－363年）遷都拜占廷後重新統一羅馬，但是在狄奧多西一世在395年過世後又把帝國分割分別給兩個兒子繼承，八十五年之後芝諾體認到西羅馬帝國消亡的事實，故在西羅馬皇帝尼波斯過世後冊封東哥徳人迪奧多里克為義大利國王。隨著奧多亞塞於476年控制義大利全境後，歷史學者愛德華·吉本將西羅馬帝國的滅亡定於476年9月4日皇帝羅慕路斯·奧古斯都被奧多亞塞威迫退位之時，或定於西元480年皇帝尼波斯死後，由於羅馬帝國的在欧洲历史上中的巨大影响力，所以於西元476年西羅馬帝國灭亡时，一般也被劃分為古代歐洲的終結，並進入了中古時代。800年法蘭克國王查理曼被教宗利奧三世加冕為羅馬人的皇帝，因此被稱作查理大帝繼承西羅馬帝國，從此以後又多一個新的皇室，之後演變成神聖羅馬帝國，所以之後的德意志皇帝都以繼承西羅馬皇帝自居。</zh-speak>
     </Feature>
     <Feature data="Constantine the Great" zh-data="" id="12" uri="http://dbpedia.org/resource/Constantine_the_Great">
@@ -175,7 +175,7 @@
         <neighbor dest="192" relationship="issue" weight="0"/>
         <neighbor dest="193" relationship="venerated in" weight="0"/>
       </neighbors>
-      <speak>Constantine the Great —is a significant figure in the history of Christianity.</speak>
+      <speak>Constantine the Great is a significant figure in the history of Christianity.</speak>
       <zh-speak/>
     </Feature>
     <Feature data="Diocletian" zh-data="" id="13" uri="http://dbpedia.org/resource/Diocletian">
@@ -196,7 +196,7 @@
         <neighbor dest="228" relationship="birth place" weight="0"/>
         <neighbor dest="229" relationship="title" weight="0"/>
       </neighbors>
-      <speak>Diocletian /ˌdaɪ.əˈkliːʃən/ , the empire's last, largest, and bloodiest official persecution of Christianity, did not destroy the empire's Christian community; indeed, after 324 Christianity became the empire's preferred religion under its first Christian emperor, Constantine.In spite of his failures, Diocletian's reforms fundamentally changed the structure of Roman imperial government and helped stabilize the empire economically and militarily, enabling the empire to remain essentially intact for another hundred years despite being near the brink of collapse in Diocletian's youth.</speak>
+      <speak>Diocletian /ˌdaɪ.əˈkliːʃən/, the empire's last, largest, and bloodiest official persecution of Christianity, did not destroy the empire's Christian community; indeed, after 324 Christianity became the empire's preferred religion under its first Christian emperor, Constantine.</speak>
       <zh-speak/>
     </Feature>
     <Feature data="Justinian I" zh-data="" id="14" uri="http://dbpedia.org/resource/Justinian_I">
@@ -212,7 +212,7 @@
         <neighbor dest="242" relationship="successor" weight="0"/>
         <neighbor dest="243" relationship="birth place" weight="0"/>
       </neighbors>
-      <speak>Justinian I  in the early 540s marked the end of an age of splendour.</speak>
+      <speak>Justinian I in the early 540s marked the end of an age of splendour.</speak>
       <zh-speak/>
     </Feature>
     <Feature data="Rome" zh-data="" id="15" uri="http://dbpedia.org/resource/Rome">
@@ -230,7 +230,7 @@
         <neighbor dest="267" relationship="postal code type" weight="0"/>
         <neighbor dest="268" relationship="region" weight="0"/>
       </neighbors>
-      <speak>Rome .</speak>
+      <speak>Rome.</speak>
       <zh-speak/>
     </Feature>
     <Feature data="Basil II" zh-data="巴西尔二世" id="16" uri="http://dbpedia.org/resource/Basil_II">
@@ -243,12 +243,12 @@
         <neighbor dest="325" relationship="successor" weight="0"/>
         <neighbor dest="326" relationship="predecessor" weight="0"/>
       </neighbors>
-      <speak>Basil II , by which he is popularly known.</speak>
+      <speak>Basil II, by which he is popularly known.</speak>
       <zh-speak>巴西尔二世「保加利亚人屠夫」，（希腊语：Βασίλειος ό Βουλγαροκτόνος，958年～1025年12月15日）马其顿王朝的东罗马帝国（拜占廷）皇帝（976年～1025年在位）。在他统治时期，中世纪的拜占廷帝国达到极盛状态。</zh-speak>
     </Feature>
     <Feature data="Tetrarchy" zh-data="四帝共治制" id="17" uri="http://dbpedia.org/resource/Tetrarchy">
       <neighbors/>
-      <speak>The term "tetrarchy"  describes any form of government where power is divided among four individuals, but in modern usage usually refers to the system instituted by Roman Emperor Diocletian in 293, marking the end of the Crisis of the Third Century and the recovery of the Roman Empire.</speak>
+      <speak>The term "tetrarchy" describes any form of government where power is divided among four individuals, but in modern usage usually refers to the system instituted by Roman Emperor Diocletian in 293, marking the end of the Crisis of the Third Century and the recovery of the Roman Empire.</speak>
       <zh-speak>四帝共治制（英语：Tetrarchy）是羅馬皇帝戴克里先創立的一個治理模式。由於他看出羅馬帝國過去兩、三百年間世襲制度的缺點，整個國家積弱不振，甚至引發空前絕後的三世紀危機。於是他大規模地將全國的政治體制整個翻轉，即廢除了帝位世襲及君王獨裁的制度，創新一個四帝共治制的治理模式：兩位最高級的領導人（或稱皇帝）任職為奧古斯都及兩位次級領導人（或稱副皇帝）任職為凯撒，即全境共有四位領導人去分治東、西羅馬帝國。而奧古斯都的任期是有期限的，屆滿後得自動退位由統帥繼任之。</zh-speak>
     </Feature>
     <Feature data="Trajan" zh-data="" id="18" uri="http://dbpedia.org/resource/Trajan">
@@ -268,7 +268,7 @@
         <neighbor dest="350" relationship="death place" weight="0"/>
         <neighbor dest="351" relationship="resting place" weight="0"/>
       </neighbors>
-      <speak>Trajan , Trajan is remembered as a successful soldier-emperor who presided over the greatest military expansion in Roman history, leading the empire to attain its maximum territorial extent by the time of his death.</speak>
+      <speak>Trajan is remembered as a successful soldier-emperor who presided over the greatest military expansion in Roman history, leading the empire to attain its maximum territorial extent by the time of his death.</speak>
       <zh-speak/>
     </Feature>
     <Feature data="Greek East and Latin West" zh-data="" id="19" uri="http://dbpedia.org/resource/Greek_East_and_Latin_West">
@@ -278,7 +278,7 @@
     </Feature>
     <Feature data="Constantinople" zh-data="" id="20" uri="http://dbpedia.org/resource/Constantinople">
       <neighbors/>
-      <speak>Constantinople  to the west of the first wall.</speak>
+      <speak>Constantinople to the west of the first wall.</speak>
       <zh-speak/>
     </Feature>
     <Feature data="Absolute monarchy" zh-data="君主專制" id="21" uri="http://dbpedia.org/resource/Absolute_monarchy">
@@ -293,7 +293,7 @@
     </Feature>
     <Feature data="Solidus (coin)" zh-data="苏勒德斯 (钱币)" id="23" uri="http://dbpedia.org/resource/Solidus_(coin)">
       <neighbors/>
-      <speak>The solidus  was originally a gold coin issued in the Late Roman Empire, and a weight for gold more generally, corresponding to 4.5 grams.</speak>
+      <speak>The solidus was originally a gold coin issued in the Late Roman Empire, and a weight for gold more generally, corresponding to 4.5 grams.</speak>
       <zh-speak>苏勒德斯或苏币，又译索里达（拉丁语：Solidus）是一种最初由古罗马发明的金币，更经常被用于金的量重单位，1苏等于4.5克。</zh-speak>
     </Feature>
     <Feature data="Theodosius I" zh-data="" id="24" uri="http://dbpedia.org/resource/Theodosius_I">
@@ -315,7 +315,7 @@
         <neighbor dest="412" relationship="predecessor" weight="0"/>
         <neighbor dest="413" relationship="father" weight="0"/>
       </neighbors>
-      <speak>Theodosius I , also known as Theodosius the Great, was Roman Emperor from 379 to 395. Theodosius was the last emperor to rule over both the eastern and the western halves of the Roman Empire.</speak>
+      <speak>Theodosius I, also known as Theodosius the Great, was Roman Emperor from 379 to 395.</speak>
       <zh-speak/>
     </Feature>
     <Feature data="Ankara Castle" zh-data="" id="25" uri="http://dbpedia.org/resource/Ankara_Castle">
@@ -327,7 +327,7 @@
         <neighbor dest="422" relationship="controlledby" weight="0"/>
         <neighbor dest="423" relationship="location" weight="0"/>
       </neighbors>
-      <speak>Ankara Castle .: Its southern and western walls intersect in a right angle, the eastern walls follow the ledges of the hill and the northern side was protected with a different type of defensive walls.Tr_Tr23</speak>
+      <speak>Ankara Castle: Its southern and western walls intersect in a right angle, the eastern walls follow the ledges of the hill and the northern side was protected with a different type of defensive walls.</speak>
       <zh-speak/>
     </Feature>
     <Feature data="Dağlı Castle" zh-data="" id="26" uri="http://dbpedia.org/resource/Dağlı_Castle">
@@ -355,7 +355,7 @@
         <neighbor dest="429" relationship="builder" weight="0"/>
         <neighbor dest="430" relationship="builder" weight="0"/>
       </neighbors>
-      <speak>The Walls of Constantinople are a series of defensive stone walls that have surrounded and protected the city of Constantinople . The advent of gunpowder siege cannons rendered the fortifications vulnerable, but cannon technology was not sufficiently advanced to capture the city on its own, and the walls could be repaired between reloading.</speak>
+      <speak>The Walls of Constantinople are a series of defensive stone walls that have surrounded and protected the city of Constantinople.</speak>
       <zh-speak>君士坦丁堡城牆（土耳其語：İstanbul Surları、英語：Walls of Constantinople）是一道圍繞並保護君士坦丁堡（今土耳其伊斯坦堡）的石牆，城牆自羅馬帝國君士坦丁一世建都以來已存在。君士坦丁堡城牆經歷過無數的加建及修補，是現存的古代要塞體系，也是世上最複雜及最精密的要塞體系之一。城牆最初是在君士坦丁一世在位時興建，全方位地環繞著新都，防禦來自陸路及海路的攻擊。隨著城市擴張，一道被稱為狄奧多西的新城牆在五世紀動工興建。雖然城牆的某些部分略欠精巧，在部署得當的情況下，君士坦丁堡城牆在任何中世紀時代的圍攻下都堅不可破，有效地在阿瓦爾人、阿拉伯人、羅斯人（Rus'）、保加利亞人等的圍攻下保護君士坦丁堡及拜占庭帝國。直至攻城火炮的出現，使得君士坦丁堡城牆不再是神話般難以攻破。1453年5月29日，奧斯曼帝國攻陷君士坦丁堡，似乎是因為奧斯曼帝國軍打通了其中一道城門，而不是城牆被突破。在奧斯曼帝國統治時期，君士坦丁堡城牆大抵都能維持原狀。直至十九世紀，城市的發展已超出中世紀時的城界，部分城牆被移除。縱使君士坦丁堡城牆在此後日久失修，城牆的許多部分至今依然屹立。1980年代，一個大規模的復原計劃開始啟動，使遊客能夠鑑賞其原貌。</zh-speak>
     </Feature>
     <Feature data="Trabzon Castle" zh-data="" id="28" uri="http://dbpedia.org/resource/Trabzon_Castle">
@@ -370,7 +370,7 @@
         <neighbor dest="434" relationship="builder" weight="0"/>
         <neighbor dest="435" relationship="builder" weight="0"/>
       </neighbors>
-      <speak>The Trabzon Castle  and İskender Pasha fountains.The most of the city walls are still standing and are among the city's oldest buildings.</speak>
+      <speak>The Trabzon Castle and İskender Pasha fountains.</speak>
       <zh-speak/>
     </Feature>
     <Feature data="Žrnov" zh-data="" id="29" uri="http://dbpedia.org/resource/Žrnov">
@@ -379,7 +379,7 @@
         <neighbor dest="436" relationship="location" weight="0"/>
         <neighbor dest="437" relationship="location" weight="0"/>
       </neighbors>
-      <speak>Žrnov or Žrnovan , in Belgrade, Serbia.</speak>
+      <speak>Žrnov or Žrnovan, in Belgrade, Serbia.</speak>
       <zh-speak/>
     </Feature>
     <Feature data="Anavarza Castle" zh-data="" id="30" uri="http://dbpedia.org/resource/Anavarza_Castle">
@@ -395,7 +395,7 @@
       <neighbors>
         <neighbor dest="1" relationship="citizenship" weight="0"/>
       </neighbors>
-      <speak>Pontius Pilate  was the fifth prefect of the Roman province of Judaea from AD 26–36. He served under Emperor Tiberius, and is best known from the biblical account of the trial and crucifixion of Jesus.The sources for Pilate's life are an inscription known as the Pilate Stone, which confirms his historicity and establishes his title as prefect; a brief mention by Tacitus; Philo of Alexandria; Josephus; the four canonical gospels; the Gospel of Nicodemus; the Gospel of Marcion; and other apocryphal works.</speak>
+      <speak>Pontius Pilate was the fifth prefect of the Roman province of Judaea from AD 26–36.</speak>
       <zh-speak/>
     </Feature>
     <Feature data="Quintus Curtius Rufus" zh-data="" id="32" uri="http://dbpedia.org/resource/Quintus_Curtius_Rufus">
@@ -404,7 +404,7 @@
         <neighbor dest="39" relationship="movement" weight="0"/>
         <neighbor dest="442" relationship="occupation" weight="0"/>
       </neighbors>
-      <speak>Quintus Curtius Rufus  was a Roman historian, probably of the 1st century, author of his only known and only surviving work, Historiae Alexandri Magni, "Histories of Alexander the Great," or more fully Historiarum Alexandri Magni Macedonis Libri Qui Supersunt, "All the Books That Survive of the Histories of Alexander the Great of Macedon." Much of it is missing.</speak>
+      <speak>Quintus Curtius Rufus was a Roman historian, probably of the 1st century, author of his only known and only surviving work, Historiae Alexandri Magni, "Histories of Alexander the Great," or more fully Historiarum Alexandri Magni Macedonis Libri Qui Supersunt, "All the Books That Survive of the Histories of Alexander the Great of Macedon."</speak>
       <zh-speak/>
     </Feature>
     <Feature data="Avdat" zh-data="" id="33" uri="http://dbpedia.org/resource/Avdat">
