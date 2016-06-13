@@ -618,6 +618,15 @@ namespace Dialogue_Data_Entry
                             Console.Out.WriteLine("Could not set turn limit.");
                     }//end if
 
+                    //Check if the narration manager has any anchor nodes.
+                    if (narration_manager.anchor_nodes.Count <= 0)
+                    {
+                        //If not, initialize some default anchor nodes.
+                        string temp_input = "";
+                        temp_input = "ADD_ANCHOR:78:1:117:115";
+                        ParseInput(temp_input);
+                    }//end if
+
                     bool start_success = narration_manager.StartNarration();
                     if (start_success)
                         return_string = "Narration started.";

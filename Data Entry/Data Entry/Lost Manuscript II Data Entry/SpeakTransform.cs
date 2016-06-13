@@ -20,7 +20,6 @@ namespace Dialogue_Data_Entry
         //A list of relationships that should not be used to make analogies
         private List<String> no_analogy_relationships;
 
-        private AnalogyBuilder analogy_builder;
         //A list of features that can be referred back to, different from the history list.
         private List<Feature> reference_list;
 
@@ -78,9 +77,11 @@ namespace Dialogue_Data_Entry
             no_analogy_relationships.Add("had");
             no_analogy_relationships.Add("");
 
-            if (ab != null)
-                analogy_builder = ab;
         }//end constructor SpeakTransform
+        public SpeakTransform()
+        {
+            //Default constructor
+        }//end method SpeakTransform
 
         //Takes a feature and its speak value. Using the history list and feature graph, 
         //attempts to add to the speak value (e.g. lead-in statements, analogies, etc.)
@@ -123,10 +124,10 @@ namespace Dialogue_Data_Entry
 
             //Every fifth node (starting from the 5th), try to make an analogy
             //using the remote analogy code.
-            if (history_list.Count % 6 == 5)
-                analogy = RemoteAnalogy(feat);
+            //if (history_list.Count % 6 == 5)
+            //    analogy = RemoteAnalogy(feat);
             //else
-                //analogy = RelationshipAnalogy(feat);
+            analogy = RelationshipAnalogy(feat);
 
 
             /*var best_analogy = analogy_builder.find_best_analogy(feat);
@@ -142,14 +143,20 @@ namespace Dialogue_Data_Entry
             return analogy;
         }//end method MakeAnalogy
 
-        private string RemoteAnalogy(Feature feat)
+        //Make an analogy using the remote python-based analogy code.
+        //Source feature is the feature currently being talked about in
+        //the presentation. Target feature is the feature not currently being
+        //talked about that we wish to draw an analogy with. 
+        public string RemoteAnalogy(Feature source, Feature target)
         {
             string analogy = "";
 
             using (var client = new HttpClient())
             {
-                string url = "http://localhost:5000/get_analogy_narration";
-                string url_parameters = "?id=" + feat.Id.ToString() + "&filename=" + @"C:\Users\Zev\Documents\GitHub\ChineseDialogueSpring2015\data files\2008_Summer_Olympic_Games_2_2_2016.xml";// +"&port=9000";
+                string url = "http://localhost:5000/get_analogy";
+                string url_parameters = "?id=" + source.Id.ToString() 
+                    + "&filename=" + @"C:\Users\Zev\Documents\GitHub\ChineseDialogueSpring2015\data files\roman_empire_500.xml"
+                    + "&target_id=" + target.Id.ToString();// +"&port=9000";
 
                 client.BaseAddress = new Uri(url);
                 client.DefaultRequestHeaders.Accept.Clear();
@@ -165,6 +172,11 @@ namespace Dialogue_Data_Entry
 
                 string content_string = read_string_task.Result;
                 JObject json_response = JObject.Parse(content_string);
+
+                //Check for empty evidence.
+                JToken evidence_list = json_response["evidence"];
+                if (!evidence_list.HasValues)
+                    return "";
 
                 string explanation = json_response["explanation"].ToString();
                 

@@ -124,6 +124,12 @@ namespace Dialogue_Data_Entry
         {
             string return_string = "";
 
+            //Do not narrate if we are above the turn limit or if we're out of anchor points
+            if ((turn >= turn_limit) || (anchor_nodes.Count <= 0))
+            {
+                return "End narration. Turn: " + turn;
+            }//end if
+
             //Generate a sequence from the current anchor node.
             int sequence_1_start_turn = turn;
             List<Feature> sequence_1 = GenerateSequence(current_anchor_node);
@@ -179,6 +185,14 @@ namespace Dialogue_Data_Entry
                     to_add = SpeakWithAdornments(sequence_node, to_add, sequence_history);
 
                     return_string += " " + to_add + "\n";
+
+                    //If this is the first node in the sequence, then it is the anchor node.
+                    //Try to relate it to the anchor node presented before this one.
+                    if (sequence_node.Equals(first_part_sequence_1[0]))
+                    {
+                        return_string += RelateAnchorNodeToPrevious(sequence_node);
+                    }//end if
+
                     //If this is the switch point, additionally foreshadow the second half of the first sequence.
                     if (sequence_node.Id == switch_point.Id)
                     {
@@ -206,6 +220,8 @@ namespace Dialogue_Data_Entry
                     if (sequence_node.Equals(sequence_2[0]))
                     {
                         to_add = "{But now, let's talk about something else.} " + to_add;
+                        //Try to relate it to the previous anchor node
+                        to_add = to_add + RelateAnchorNodeToPrevious(sequence_node);
                     }//end if
 
                     return_string += " " + to_add + "\n";
@@ -255,6 +271,13 @@ namespace Dialogue_Data_Entry
                     string to_add = PullOutputFromBuffer();
                     to_add = SpeakWithAdornments(sequence_node, to_add, sequence_history);
 
+                    //Check if this is the anchor node
+                    if (sequence_node.Equals(sequence_1[0]))
+                    {
+                        //Try to relate it to the previous anchor node
+                        to_add = to_add + RelateAnchorNodeToPrevious(sequence_node);
+                    }//end if
+
                     return_string += " " + to_add + "\n";
 
                     //Add the node to the sequence history
@@ -272,37 +295,19 @@ namespace Dialogue_Data_Entry
                     string to_add = PullOutputFromBuffer();
                     to_add = SpeakWithAdornments(sequence_node, to_add, sequence_history);
 
-                    return_string += " " + to_add + "\n";
-
-                    //If this is the first node of sequence 2, then it is an anchor node.
-                    //Try to draw an analogy between it and the first node of sequence 1.
+                    //Check if this is the anchor node
                     if (sequence_node.Equals(sequence_2[0]))
                     {
-                        SpeakTransform temp_transform = new SpeakTransform(sequence_history, sequence_history[sequence_history.Count]);
-                        string analogy = temp_transform.MakeAnalogy(sequence_node, sequence_1[0]);
-                        return_string += " " + analogy + "\n";
+                        //Try to relate it to the previous anchor node
+                        to_add = to_add + RelateAnchorNodeToPrevious(sequence_node);
                     }//end if
+
+                    return_string += " " + to_add + "\n";
 
                     //Add the node to the sequence history
                     sequence_history.Add(sequence_node);
                 }//end foreach
             }//end else
-
-
-            //Go through the sequence and decide how to talk about it.
-            foreach (Feature sequence_node in sequence_1)
-            {
-                //First, see if the current sequence node is an anchor.
-                if (anchor_nodes.Contains(sequence_node))
-                {
-                    //If so, check against the previous anchor node talked about (if there is one).
-                    if (anchor_nodes_visited.Count > 0)
-                    {
-
-                    }//end if
-                }//end if
-            }//end foreach
-            
 
             /*
             //At each step of narration, look at the previous steps, decide which topic
@@ -319,6 +324,52 @@ namespace Dialogue_Data_Entry
 
             return return_string;
         }//end method Narrate
+
+        //Try to relate the given anchor node to the anchor node visited before it.
+        private string RelateAnchorNodeToPrevious(Feature anchor_node)
+        {
+            //If there are no anchor nodes previously visited, return nothing.
+            if (anchor_nodes_visited.Count == 0)
+            {
+                return "";
+            }//end if
+            //Check if the anchor node appears in the list of anchor nodes previously visited.
+            else if (anchor_nodes_visited.Contains(anchor_node))
+            {
+                //If so, then relate it to the anchor node before it in the list (if there is one)
+                if (anchor_nodes_visited.IndexOf(anchor_node) != 0)
+                {
+                    return RelateAnchorNodes(anchor_node, anchor_nodes_visited[anchor_nodes_visited.IndexOf(anchor_node) - 1]);
+                }//end if
+                else
+                {
+                    return "";
+                }//end else
+            }//end if
+            //If not, then try to relate it to the last item in the list of anchor nodes previously visited
+            else
+            {
+                return RelateAnchorNodes(anchor_node, anchor_nodes_visited[anchor_nodes_visited.Count - 1]);
+            }//end else
+        }//end method RelateAnchorNodeToPrevious
+        //Try to relate the given anchor node to the given previous anchor node.
+        private string RelateAnchorNodes(Feature anchor_node, Feature previous_anchor_node)
+        {
+            string return_string = "";
+
+            //Try to make a remote analogy between one anchor node and the other.
+            SpeakTransform temp_transform = new SpeakTransform();
+            string analogy = temp_transform.RemoteAnalogy(anchor_node, previous_anchor_node);
+            //If the analogy is not blank, relate the anchor nodes with it
+            if (!analogy.Equals(""))
+            {
+                return_string += " We were talking about " + previous_anchor_node.Name
+                    + " earlier, and I want to highlight it again. " + analogy + "\n";
+            }//end if
+
+            return return_string;
+        }//end method PresentAnchorNode
+
         //Generate a story sequence based on a given anchor node.
         public List<Feature> GenerateSequence(Feature input_anchor_node)
         {
@@ -390,6 +441,79 @@ namespace Dialogue_Data_Entry
             //Return the sequence
             return sequence;
         }//end method GenerateSequence
+
+        //Generate a story sequence of nodes related to the given anchor
+        public List<Feature> GenerateSequenceRelated(Feature input_anchor_node)
+        {
+            List<Feature> sequence = new List<Feature>();
+            //Re-calculate turns per anchor
+            double turns_per_anchor_decimal = (double)(turn_limit - (turn - 1)) / (double)anchor_nodes.Count;
+            turns_per_anchor = (int)Math.Floor(turns_per_anchor_decimal);
+            //Look at current anchor node.
+            Feature current_topic = input_anchor_node;
+            //Add it to the start of the sequence. Also acts as local history.
+            sequence.Add(current_topic);
+            //Add it as our next topic. Updates graph and global history.
+            SetNextTopic(current_topic);
+
+            //Now that it's in a story sequence, remove it from the list of anchor nodes
+            //and add it to the list of anchor nodes visited.
+            anchor_nodes.Remove(input_anchor_node);
+            anchor_nodes_visited.Add(input_anchor_node);
+
+            //We are now on turn 1 for this anchor node.
+            current_anchor_turn_count = 1;
+
+            Feature next_topic = null;
+
+            for (current_anchor_turn_count = 1; current_anchor_turn_count < turns_per_anchor; current_anchor_turn_count++)
+            {
+                //For each turn for this anchor node, use the calculator to find the next topic.
+                //Use the anchor node as the current topic each time.
+                next_topic = calculator.GetNextTopic(input_anchor_node, "", current_anchor_turn_count, sequence);
+
+                //If the next topic is another anchor node, we should stop the current sequence.
+                if (anchor_nodes.Contains(next_topic))
+                {
+                    //Note the anchor node we found as the current anchor node
+                    current_anchor_node = next_topic;
+                    //Calculate the score of this transition
+                    current_transition_score = calculator.CalculateRelatedness(sequence[sequence.Count - 1], current_anchor_node, turn, topic_history);
+                    //Return the current sequence as is.
+                    return sequence;
+                }//end if
+
+                //Add it to the sequence
+                sequence.Add(next_topic);
+                SetNextTopic(next_topic);
+                //Set it as the current topic
+                current_topic = next_topic;
+                //Increment total turn count
+                turn += 1;
+            }//end for
+
+            //The sequence is done. Decide on the next anchor node.
+            double highest_score = -double.MaxValue;
+            Feature next_best_anchor = null;
+            double current_score = 0;
+            Feature last_sequence_node = sequence[sequence.Count - 1];
+            foreach (Feature potential_next_anchor in anchor_nodes)
+            {
+                //Find score between last sequence node and this potential next anchor
+                current_score = calculator.CalculateRelatedness(last_sequence_node, potential_next_anchor, turn, topic_history);
+                if (current_score > highest_score)
+                {
+                    highest_score = current_score;
+                    next_best_anchor = potential_next_anchor;
+                }//end if
+            }//end for
+
+            //Set the next current anchor node to the one found in the loop above
+            current_anchor_node = next_best_anchor;
+            current_transition_score = highest_score;
+            //Return the sequence
+            return sequence;
+        }//end method GenerateSequenceRelated
 
         public string NextTopicResponse()
         {
@@ -482,11 +606,21 @@ namespace Dialogue_Data_Entry
 			return return_string;
 		}//end method TalkMoreAboutTopic
 
+        public string TalkFromQuery(Query query)
+        {
+            if (!narrating)
+                return DefaultTalkFromQuery(query);
+            else if (narrating)
+                return TalkFromQueryNarration(query);
+
+            return "";
+        }//end method TalkFromQuery
+
 		/// <summary>
 		/// Uses the given query to get the next topic. Returns something to say about
 		/// the topic in the query.
 		/// </summary>
-		public string TalkFromQuery(Query query)
+		public string DefaultTalkFromQuery(Query query)
 		{
 			string return_string = "";
 
@@ -542,7 +676,65 @@ namespace Dialogue_Data_Entry
 			return_string = PullOutputFromBuffer();
 
 			return return_string;
-		}//end method TalkMoreAboutTopic
+		}//end method DefaultTalkFromQuery
+
+        //Talk from a query in the middle of a narration
+        private string TalkFromQueryNarration(Query query)
+        {
+            string return_string = "";
+
+            //From a null query, return an "I don't know" response
+            if (query == null)
+            {
+                return "I'm afraid I don't know the answer to that.";
+            }//end if
+
+            bool topic_switch = false;
+            Console.WriteLine("Query main topic before: " + query.MainTopic.Id);
+            Feature topic_before = query.MainTopic;
+            Feature next_topic;
+            string[] new_buffer;
+
+            //The buffer should be filled with the output strings from ParseQuery
+            new_buffer = ParseQuery(query);
+
+            //The next topic is the topic identified by the query.
+            next_topic = query.MainTopic;
+
+            //Add the topic of the query as an anchor node in the front of the list.
+            anchor_nodes.Insert(0, next_topic);
+            //Using the topic from the query, generate a sequence
+            int sequence_start_turn = turn;
+            //Generate a sequence related to this main node.
+            List<Feature> query_sequence = GenerateSequenceRelated(next_topic);
+
+            //Present the sequence
+            //The history list up until we created either sequence.
+            List<Feature> sequence_history = topic_history.GetRange(0, sequence_start_turn - 1);
+            foreach (Feature sequence_node in query_sequence)
+            {
+                //Reset the buffer with output for this feature
+                new_buffer = FindStuffToSay(sequence_node);
+                this.buffer = new_buffer;
+
+                string to_add = PullOutputFromBuffer();
+                to_add = SpeakWithAdornments(sequence_node, to_add, sequence_history);
+
+                //Check if this is the anchor node
+                if (sequence_node.Equals(query_sequence[0]))
+                {
+                    //Try to relate it to the previous anchor node
+                    to_add = to_add + RelateAnchorNodeToPrevious(sequence_node);
+                }//end if
+
+                return_string += " " + to_add + "\n";
+
+                //Add the node to the sequence history
+                sequence_history.Add(sequence_node);
+            }//end foreach
+
+            return return_string;
+        }//end method TalkFromQueryNarration
 
         /// <summary>
         /// Adds the given feature to the list of Anchor nodes
