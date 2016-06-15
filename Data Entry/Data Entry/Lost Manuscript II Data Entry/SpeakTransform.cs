@@ -173,6 +173,14 @@ namespace Dialogue_Data_Entry
                 string content_string = read_string_task.Result;
                 JObject json_response = JObject.Parse(content_string);
 
+                //Check the n_rating
+                JToken n_rating = json_response["n_rating"];
+                //If it is less than 0.7, don't use this analogy.
+                double n_rating_numerical = 0;
+                double.TryParse(n_rating.ToString(), out n_rating_numerical);
+                if (n_rating_numerical < 0.5)
+                    return "";
+
                 //Check for empty evidence.
                 JToken evidence_list = json_response["evidence"];
                 if (!evidence_list.HasValues)

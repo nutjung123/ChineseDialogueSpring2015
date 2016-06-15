@@ -188,10 +188,13 @@ namespace Dialogue_Data_Entry
 
                     //If this is the first node in the sequence, then it is the anchor node.
                     //Try to relate it to the anchor node presented before this one.
-                    if (sequence_node.Equals(first_part_sequence_1[0]))
+                    /*if (sequence_node.Equals(first_part_sequence_1[0]))
                     {
                         return_string += RelateAnchorNodeToPrevious(sequence_node);
-                    }//end if
+                    }//end if*/
+
+                    //If this is an anchor node, try to relate it to the previous one.
+                    to_add = to_add + RelateAnchorNodeToPrevious(sequence_node);
 
                     //If this is the switch point, additionally foreshadow the second half of the first sequence.
                     if (sequence_node.Id == switch_point.Id)
@@ -220,9 +223,10 @@ namespace Dialogue_Data_Entry
                     if (sequence_node.Equals(sequence_2[0]))
                     {
                         to_add = "{But now, let's talk about something else.} " + to_add;
-                        //Try to relate it to the previous anchor node
-                        to_add = to_add + RelateAnchorNodeToPrevious(sequence_node);
                     }//end if
+
+                    //If this is an anchor node, try to relate it to the previous one.
+                    to_add = to_add + RelateAnchorNodeToPrevious(sequence_node);
 
                     return_string += " " + to_add + "\n";
 
@@ -240,12 +244,16 @@ namespace Dialogue_Data_Entry
                     string to_add = PullOutputFromBuffer();
                     to_add = SpeakWithAdornments(sequence_node, to_add, sequence_history);
 
-                    //If this is the first node of sequence 2, then add a storyline transition phrase.
-                    if (sequence_node.Equals(sequence_2[0]))
+                    //If this is the first node of the second part of sequence 1, then add a storyline transition phrase.
+                    if (sequence_node.Equals(second_part_sequence_1[0]))
                     {
                         to_add = "{Let's get back to what we were discussing before with " + sequence_1[0].Name 
-                            + ". When we left off, we were talking about " + switch_point.Name + ".}";
+                            + ". When we left off, we were talking about " + switch_point.Name + ".}"
+                            + to_add;
                     }//end if
+
+                    //If this is an anchor node, try to relate it to the previous one.
+                    to_add = to_add + RelateAnchorNodeToPrevious(sequence_node);
 
                     return_string += " " + to_add + "\n";
                     //Try to tie back to the first part of the first sequence
@@ -271,12 +279,15 @@ namespace Dialogue_Data_Entry
                     string to_add = PullOutputFromBuffer();
                     to_add = SpeakWithAdornments(sequence_node, to_add, sequence_history);
 
-                    //Check if this is the anchor node
+                    /*//Check if this is the anchor node
                     if (sequence_node.Equals(sequence_1[0]))
                     {
                         //Try to relate it to the previous anchor node
                         to_add = to_add + RelateAnchorNodeToPrevious(sequence_node);
-                    }//end if
+                    }//end if*/
+
+                    //If this is an anchor node, try to relate it to the previous one.
+                    to_add = to_add + RelateAnchorNodeToPrevious(sequence_node);
 
                     return_string += " " + to_add + "\n";
 
@@ -296,11 +307,14 @@ namespace Dialogue_Data_Entry
                     to_add = SpeakWithAdornments(sequence_node, to_add, sequence_history);
 
                     //Check if this is the anchor node
-                    if (sequence_node.Equals(sequence_2[0]))
+                    /*if (sequence_node.Equals(sequence_2[0]))
                     {
                         //Try to relate it to the previous anchor node
                         to_add = to_add + RelateAnchorNodeToPrevious(sequence_node);
-                    }//end if
+                    }//end if*/
+
+                    //If this is an anchor node, try to relate it to the previous one.
+                    to_add = to_add + RelateAnchorNodeToPrevious(sequence_node);
 
                     return_string += " " + to_add + "\n";
 
@@ -326,8 +340,12 @@ namespace Dialogue_Data_Entry
         }//end method Narrate
 
         //Try to relate the given anchor node to the anchor node visited before it.
+        //If the given node is not an anchor node, will return the empty string.
         private string RelateAnchorNodeToPrevious(Feature anchor_node)
         {
+            //If this is not an anchor node, return the empty string.
+            if (!anchor_nodes.Contains(anchor_node) && !anchor_nodes_visited.Contains(anchor_node))
+                return "";
             //If there are no anchor nodes previously visited, return nothing.
             if (anchor_nodes_visited.Count == 0)
             {
@@ -375,7 +393,7 @@ namespace Dialogue_Data_Entry
         {
             List<Feature> sequence = new List<Feature>();
             //Re-calculate turns per anchor
-            double turns_per_anchor_decimal = (double)(turn_limit - (turn - 1)) / (double)anchor_nodes.Count;
+            double turns_per_anchor_decimal = (double)(turn_limit - (turn + 1)) / (double)(anchor_nodes.Count);
             turns_per_anchor = (int)Math.Floor(turns_per_anchor_decimal);
             //Look at current anchor node.
             Feature current_topic = input_anchor_node;
@@ -447,7 +465,7 @@ namespace Dialogue_Data_Entry
         {
             List<Feature> sequence = new List<Feature>();
             //Re-calculate turns per anchor
-            double turns_per_anchor_decimal = (double)(turn_limit - (turn - 1)) / (double)anchor_nodes.Count;
+            double turns_per_anchor_decimal = (double)(turn_limit - (turn + 1)) / (double)(anchor_nodes.Count);
             turns_per_anchor = (int)Math.Floor(turns_per_anchor_decimal);
             //Look at current anchor node.
             Feature current_topic = input_anchor_node;
